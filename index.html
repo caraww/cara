@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="img/beads.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap"><link rel="stylesheet" href="css/home.css" />
+    <meta name="description" content="دستبند منجوقی دست‌باف با منجوق‌های دلیکای میوکی. طرحت رو خودت بکش یا از روی عکس بساز." />
+    <title>cara — دستبند منجوقی دست‌باف</title>
+  </head>
+  <body>
+    <div class="thread" aria-hidden="true"><i id="threadBar"></i></div>
+    <header class="top">
+      <a href="index.html" class="logo">cara</a>
+      <nav>
+        <a href="#paths">شروع</a><a href="gallery.html">نمونه‌ها</a><a href="#steps">مراحل</a
+        ><a href="#beads">منجوق‌ها</a
+        ><a class="cta" href="builder.html">طراحی دستبند</a>
+      </nav>
+    </header>
+    <main>
+      <section class="hero">
+        <canvas id="heroCanvas" aria-hidden="true"></canvas>
+        <div class="hero-copy">
+          <h1>طرحش رو تو می‌کشی، <span class="gilt">منجوق‌به‌منجوق</span> من می‌بافمش.</h1>
+          <p>
+            دو راه داری: یا از صفر طرح می‌کشی، یا یه عکس می‌دی و سایت تبدیلش
+            می‌کنه به الگو. آخرش یه الگوی خونه‌به‌خونه دستته؛ هر خونه یه منجوقه
+            و از رنگ‌ها گرفته تا تعدادشون، همه‌چی از قبل معلومه.
+          </p>
+          <div class="btns">
+            <a class="btn light" href="builder.html">طراحی دستبند</a
+            ><a class="btn ghost" href="upload.html">ساخت الگو از عکس</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="sec" id="paths">
+        <h2>از کجا شروع کنیم؟</h2>
+        <p class="lead">
+          هر راهی بری، آخرش یه الگوی کامل دستته و می‌دونی هر منجوقش چه رنگیه.
+        </p>
+        <div class="paths">
+          <article class="path tint">
+            <div>
+              <h3>از صفر بکش</h3>
+              <p>
+                رنگ برمی‌داری و خونه‌به‌خونه پر می‌کنی. اشتباه کردی؟ پاک‌کن هست،
+                برگشت هم هست. همین‌جور که جلو می‌ری، تعداد منجوق هر رنگ و اندازه‌ی
+                دستبند رو هم می‌بینی.
+              </p>
+            </div>
+            <a class="btn plum" href="builder.html">برو سراغ استودیو</a>
+          </article>
+          <article class="path">
+            <div>
+              <h3>از عکس بساز</h3>
+              <p>
+                یه عکس بده؛ هر قسمتش به نزدیک‌ترین رنگ از منجوق‌های موجود تبدیل
+                می‌شه. بعدش هر خونه‌ای که خوشت نیومد رو خودت عوض می‌کنی.
+              </p>
+            </div>
+            <a class="btn line" href="upload.html">انتخاب عکس</a>
+          </article>
+        </div>
+      </section>
+
+      <section class="sec" id="samples">
+        <h2>ببین چی می‌شه بافت</h2>
+        <p class="lead">
+          چندتا الگوی آماده. هر کدوم رو می‌تونی همون‌طور که هست سفارش بدی، یا
+          ببریش توی استودیو و رنگ و طرحش رو عوض کنی.
+        </p>
+        <div class="mini-gal" id="miniGal"></div>
+        <a class="btn line" href="gallery.html" style="margin-top:36px">همه‌ی نمونه‌ها</a>
+      </section>
+
+      <section class="sec" id="steps">
+        <h2>از الگو تا مچ دستت</h2>
+        <ol class="steps">
+          <li>
+            <h3>الگو رو بساز</h3>
+            <p>دستی بکش یا از عکس بساز. خودکار ذخیره می‌شه، نگران از دست رفتنش نباش.</p>
+          </li>
+          <li>
+            <h3>سفارش بده</h3>
+            <p>اسم و آدرس و شماره‌ت رو بنویس و آنلاین پرداخت کن.</p>
+          </li>
+          <li>
+            <h3>می‌بافم و می‌فرستم</h3>
+            <p>
+              دستبند رو خودم با دست می‌بافم، بسته‌بندی می‌کنم و برات پست می‌کنم.
+            </p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="sec" id="beads">
+        <h2>منجوق‌هایی که باهاشون می‌بافم</h2>
+        <p class="lead">
+          دلیکای میوکی، توی ۲۹ رنگ. هر رنگی که توی استودیو انتخاب می‌کنی
+          همونیه که دستبندت باهاش بافته می‌شه. روی کد هر رنگ بزنی، کپی می‌شه.
+        </p>
+        <ul class="chips" id="chips"></ul>
+      </section>
+    </main>
+    <footer class="foot">
+      <span>cara</span><span>دستبند منجوقی دست‌باف</span>
+    </footer>
+    <script src="js/palette.js"></script>
+    <script src="js/patterns.js"></script>
+    <script src="js/home.js"></script>
+  </body>
+</html>
