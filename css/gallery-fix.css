@@ -1,0 +1,123 @@
+/* اصلاح گالری: همه‌ی عکس‌ها هم‌اندازه، بدون بریدگی و بدون کشیدگی + دکمه‌های قشنگ‌تر.
+   توی gallery.html بعد از css/works.css لود می‌شه، پس روی استایل‌های قبلی می‌شینه. */
+:root{--gold:#b8975a;--wk-tint:#ece6f2}
+
+/* ===== شبکه‌ی هم‌اندازه ===== */
+.wk-grid{
+  display:grid !important;column-count:auto !important;
+  grid-template-columns:repeat(auto-fill,minmax(min(100%,220px),1fr)) !important;
+  grid-auto-rows:auto !important;gap:18px !important;margin-top:26px;
+}
+.wk-grid>*{
+  margin:0 !important;width:auto !important;min-width:0;overflow:hidden;
+  border-radius:18px;border:1px solid var(--line);
+  background:radial-gradient(circle at 50% 35%,#fff,var(--wk-tint));
+  transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s,border-color .3s;
+}
+.wk-grid>*:hover{transform:translateY(-5px);box-shadow:0 22px 44px rgba(59,38,80,.16);border-color:var(--gold)}
+/* همه‌ی عکس‌ها یه قاب مربعی ثابت دارن؛ contain یعنی کامل دیده می‌شن و کش نمیان */
+.wk-grid img{
+  display:block;width:100% !important;height:auto !important;
+  aspect-ratio:1/1 !important;object-fit:contain !important;
+  padding:14px;margin:0 !important;transition:transform .5s cubic-bezier(.2,.7,.2,1);
+  filter:drop-shadow(0 8px 10px rgba(34,26,44,.16));
+}
+.wk-grid>*:hover img{transform:scale(1.05)}
+.wk-grid [style*="aspect-ratio"]{aspect-ratio:1/1 !important}
+@media(max-width:560px){.wk-grid{grid-template-columns:1fr 1fr !important;gap:12px !important}.wk-grid img{padding:8px}}
+
+/* ===== نوار ابزار و دکمه‌ها ===== */
+.gal-tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin:22px 0 4px}
+.gal-tools #q{
+  flex:1 1 200px;min-width:0;max-width:280px;height:44px;padding:0 20px;
+  border:1px solid var(--line);border-radius:999px;background:#fff;font:inherit;font-size:16px;
+  box-shadow:0 2px 6px rgba(34,26,44,.05);transition:border-color .2s,box-shadow .2s;
+}
+.gal-tools #q:focus{outline:0;border-color:var(--accent-2);box-shadow:0 0 0 4px rgba(122,52,196,.14)}
+.chipbar{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 auto}
+.chipbar>*{
+  appearance:none;cursor:pointer;height:40px;padding:0 18px;border-radius:999px;
+  border:1px solid var(--line);background:#fff;color:var(--ink);font:inherit;font-size:15px;line-height:1;
+  transition:background .2s,color .2s,border-color .2s,transform .2s,box-shadow .2s;
+}
+.chipbar>*:hover{border-color:var(--accent-2);color:var(--accent);transform:translateY(-2px)}
+.chipbar>[aria-pressed="true"],.chipbar>.on,.chipbar>.active,.chipbar>.sel,.chipbar>[aria-selected="true"]{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border-color:transparent;
+  box-shadow:0 6px 16px rgba(91,31,154,.28);
+}
+.gal-tools .tool{
+  height:44px;padding:0 22px;border-radius:999px;font-size:16px;cursor:pointer;
+  transition:transform .2s,box-shadow .2s,background .2s,color .2s,border-color .2s;
+}
+.gal-tools .tool:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(34,26,44,.12)}
+#favOnly[aria-pressed="true"]{background:var(--hot);border-color:var(--hot);color:#fff;box-shadow:0 6px 16px rgba(226,74,43,.3)}
+#surprise{border-color:transparent;color:#fff;background:linear-gradient(135deg,#cfae6c,#a7853f);box-shadow:0 6px 16px rgba(167,133,63,.32)}
+#surprise:hover{box-shadow:0 10px 22px rgba(167,133,63,.42)}
+.wk-count{font-size:15px;color:var(--muted);background:#fff;border:1px solid var(--line);border-radius:999px;padding:2px 16px;align-self:center;white-space:nowrap}
+
+/* ===== نمایش بزرگ ===== */
+.wk-lb{
+  width:min(1040px,94vw);max-width:none;max-height:92vh;padding:0;border:0;border-radius:24px;
+  overflow:hidden;background:#fff;color:var(--ink);box-shadow:0 40px 90px rgba(20,10,30,.45);
+}
+.wk-lb::backdrop{background:rgba(29,21,39,.72);backdrop-filter:blur(6px)}
+.wk-lb[open]{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+.wk-stage{
+  position:relative;display:grid;place-items:center;height:min(78vh,680px);
+  background:radial-gradient(circle at 50% 40%,#fff,var(--wk-tint));
+}
+.wk-stage #lbImg{
+  width:100%;height:100%;max-width:100%;max-height:100%;object-fit:contain;padding:28px;
+  filter:drop-shadow(0 14px 18px rgba(34,26,44,.2));
+}
+.wk-x,.wk-nav{
+  position:absolute;z-index:2;display:grid;place-items:center;width:44px;height:44px;padding:0;
+  border:1px solid var(--line);border-radius:50%;background:rgba(255,255,255,.92);color:var(--ink);
+  font-size:22px;line-height:1;cursor:pointer;box-shadow:0 6px 16px rgba(34,26,44,.14);
+  transition:transform .2s,background .2s,color .2s;
+}
+.wk-x{top:14px;inset-inline-start:14px}
+.wk-nav{top:50%;translate:0 -50%}
+.wk-nav.prev{inset-inline-end:14px}.wk-nav.next{inset-inline-start:14px}
+.wk-x:hover,.wk-nav:hover{background:var(--ink);color:#fff;transform:scale(1.08)}
+.wk-info{padding:34px 30px;display:flex;flex-direction:column;gap:12px;overflow:auto;max-height:min(78vh,680px)}
+.wk-info h2{font-size:26px;line-height:1.5;margin:0}
+.wk-info .tags{display:flex;flex-wrap:wrap;gap:6px}
+.wk-info .tags>*{padding:0 12px;border-radius:999px;background:var(--wk-tint);color:var(--accent);font-size:14px;line-height:1.9}
+.wk-info .btns{display:grid;gap:10px;margin-top:auto;padding-top:10px}
+.wk-info .btn{width:100%;border-radius:14px;min-height:50px;transition:transform .2s,box-shadow .2s,background .2s,color .2s}
+.wk-info .btn:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(34,26,44,.14)}
+#lbMake{background:linear-gradient(135deg,var(--accent),var(--accent-2));border-color:transparent;color:#fff}
+#lbFav[aria-pressed="true"]{background:var(--hot);border-color:var(--hot);color:#fff}
+@media(max-width:760px){
+  .wk-lb[open]{display:block;overflow:auto}
+  .wk-stage{height:min(52vh,420px)}
+  .wk-info{max-height:none;padding:22px 20px 26px}
+}
+@media(prefers-reduced-motion:reduce){.wk-grid>*,.wk-grid img,.chipbar>*,.gal-tools .tool,.wk-info .btn{transition:none !important}}
+
+/* ===== دکمه‌ی قلب روی عکس‌ها ===== */
+@keyframes wk-pop{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+.wk-grid>*{position:relative}
+.wk-grid>* button:not(:has(img)),
+.wk-grid>* [class*="fav"],.wk-grid>* [class*="heart"]{
+  position:absolute !important;top:10px;inset-inline-end:10px;inset-inline-start:auto !important;z-index:3;
+  display:grid !important;place-items:center;width:40px !important;height:40px !important;min-height:0 !important;
+  margin:0 !important;padding:0 !important;border:0 !important;border-radius:50% !important;
+  background:rgba(255,255,255,.88) !important;backdrop-filter:blur(8px);
+  color:#a99db8 !important;font-size:20px !important;line-height:1 !important;cursor:pointer;
+  box-shadow:0 4px 14px rgba(34,26,44,.16),inset 0 0 0 1px rgba(255,255,255,.7);
+  transition:transform .2s,background .2s,color .2s,box-shadow .2s;
+}
+.wk-grid>* button:not(:has(img)):hover,
+.wk-grid>* [class*="fav"]:hover,.wk-grid>* [class*="heart"]:hover{transform:scale(1.14);color:var(--hot) !important;background:#fff !important}
+.wk-grid>* [aria-pressed="true"]:not(:has(img)),
+.wk-grid>* [class*="fav"].on,.wk-grid>* [class*="fav"].active,.wk-grid>* [class*="fav"].is-fav,.wk-grid>* [class*="fav"].liked,
+.wk-grid>* [class*="heart"].on,.wk-grid>* [class*="heart"].active,.wk-grid>* [class*="heart"].liked{
+  color:#fff !important;background:linear-gradient(135deg,#f0664a,var(--hot)) !important;
+  box-shadow:0 6px 16px rgba(226,74,43,.42);animation:wk-pop .35s ease;
+}
+/* قلب توی نمایش بزرگ */
+#lbFav{display:flex;align-items:center;justify-content:center;gap:8px}
+#lbFav[aria-pressed="true"]{background:linear-gradient(135deg,#f0664a,var(--hot));box-shadow:0 8px 20px rgba(226,74,43,.35);animation:wk-pop .35s ease}
+@media(prefers-reduced-motion:reduce){.wk-grid>* [aria-pressed="true"],#lbFav{animation:none !important}}

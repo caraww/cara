@@ -4,13 +4,29 @@
   let img = null, t;
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
+  function show(im, revoke) {
+    img = im; if (revoke) URL.revokeObjectURL(revoke); convert();
+    out.classList.remove("reveal"); void out.offsetWidth; out.classList.add("reveal");
+  }
   function load(file) {
     if (!file || !file.type.startsWith("image/")) { msg.textContent = "این فایل عکس نیست."; return; }
     const im = new Image(), url = URL.createObjectURL(file);
-    im.onload = () => { img = im; URL.revokeObjectURL(url); convert(); out.classList.remove("reveal"); void out.offsetWidth; out.classList.add("reveal"); };
+    im.onload = () => show(im, url);
     im.onerror = () => { msg.textContent = "این عکس باز نشد، یه فایل دیگه امتحان کن."; };
     im.src = url;
   }
+  /* از گالری: upload.html?src=beadworks/eye.jpg (فقط عکس‌های هم‌دامنه، وگرنه بوم خراب می‌شه) */
+  (function fromGallery() {
+    const s = new URLSearchParams(location.search).get("src");
+    if (!s) return;
+    let u; try { u = new URL(s, location.href); } catch { return; }
+    if (u.origin !== location.origin) return;
+    msg.textContent = "دارم عکس رو باز می‌کنم…";
+    const im = new Image();
+    im.onload = () => show(im);
+    im.onerror = () => { msg.textContent = "عکس گالری باز نشد؛ می‌تونی خودت یه عکس انتخاب کنی."; };
+    im.src = u.href;
+  })();
   $("file").onchange = (e) => load(e.target.files[0]);
   ["dragenter", "dragover"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add("over"); }));
   ["dragleave", "drop"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("over"); }));

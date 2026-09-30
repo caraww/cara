@@ -15,12 +15,16 @@
     <path d="M22 45c1 5 5 8 10 10" stroke="rgba(255,255,255,.55)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
   CARA.palette.forEach((p, i) => chips.insertAdjacentHTML("beforeend", `<li><div class="bead">${PHOTOS.has(p.code) ? `<img src="img/beads/${p.code}.jpg" alt="${p.name}" loading="lazy">` : beadSVG(p.hex, i)}</div><b>${p.code}</b><span>${p.name}</span></li>`));
 
-  /* چند نمونه‌ی تصادفی از گالری */
-  const mg = document.getElementById("miniGal");
-  if (mg && CARA.samples) {
-    const pick = [...CARA.samples].sort(() => Math.random() - 0.5).slice(0, 4);
-    mg.innerHTML = pick.map((s) => `<a href="gallery.html"><canvas data-s="${s.id}"></canvas><b>${s.title}</b><span>${s.tags[0]}</span></a>`).join("");
-    pick.forEach((s) => CARA.drawRing(mg.querySelector(`[data-s="${s.id}"]`), s.data, 220));
+  /* چند عکس تصادفی از کارهای خودم (js/works.js با tools/build-works.js ساخته می‌شه) */
+  const mg = document.getElementById("miniGal"), works = CARA.works || [];
+  const esc = (t) => String(t).replace(/[&<>"]/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[m]);
+  if (mg) {
+    if (!works.length) { const s = document.getElementById("samples"); if (s) s.hidden = true; }
+    else {
+      const pick = [...works].sort(() => Math.random() - 0.5).slice(0, 4);
+      mg.innerHTML = pick.map((s) => `<a href="gallery.html#${encodeURIComponent(s.id)}"><img src="${esc(s.thumb)}" alt="${esc(s.title)}"${s.w ? ` width="${s.w}" height="${s.h}"` : ""} loading="lazy" decoding="async"><b>${esc(s.title)}</b>${s.note || (s.tags && s.tags[0]) ? `<span>${esc(s.note || s.tags[0])}</span>` : ""}</a>`).join("");
+      mg.addEventListener("error", (e) => { if (e.target.tagName === "IMG") e.target.closest("a").hidden = true; }, true);
+    }
   }
 
   /* هیرو: زمین مهره؛ با اسکرول، مهره‌ها از وسط به دو طرف کنار می‌روند */
