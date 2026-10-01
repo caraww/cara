@@ -342,7 +342,11 @@ export default {
       if (p === "/api/admin/debug") return await debug(request, env, url);
       if (p === "/api/admin/orders") return await admin(request, env, url);
       if (p.startsWith("/api/")) return json({ error: "not found" }, 404);
-      return fetch(request); /* هر چیز دیگه‌ای (خود سایت) عادی از GitHub Pages می‌آد */
+      /* مسیر غیر از /api: فقط روی دامنه‌ی خود سایت (routeهای caraw.ir/api/*) به GitHub Pages پاس داده می‌شه.
+         روی ساب‌دامین api.caraw.ir مبدأیی وجود نداره و پاس دادن همون خطای ۵۲۲ می‌شد. */
+      const siteHost = new URL(cfg(env).site).hostname;
+      if (url.hostname === siteHost || url.hostname === "www." + siteHost) return fetch(request);
+      return json({ error: "not found" }, 404);
     } catch (e) {
       console.error(e);
       return json({ error: "یه مشکل پیش اومد، دوباره امتحان کن." }, 500);
