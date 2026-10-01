@@ -1,8 +1,9 @@
 /* API سایت cara روی Cloudflare Worker (جایگزین server.js).
-   مسیرها: /api/config  /api/work  /api/create-payment  /api/payment-callback  /api/admin/orders
+   مسیرها: /api/config  /api/works  /api/work  /api/create-payment  /api/payment-callback  /api/admin/orders
    تنظیمات (توی داشبورد Cloudflare → Worker → Settings):
      Variables:  PRICE_PER_BEAD=1500   BASE_FEE=150000   BASE_URL=https://caraw.ir
-                 WORK_PRICE=1500000 (قیمت پیش‌فرض هر دستبند گالری، به تومان؛ اگه نذاری همین ۱٬۵۰۰٬۰۰۰ می‌شه)
+                 WORK_PRICE=1700000 (قیمت پیش‌فرض هر دستبند گالری، به تومان؛ اگه نذاری همین ۱٬۷۰۰٬۰۰۰ می‌شه)
+                 HEZAR_CHESHM_PRICE=3000000 (قیمت دستبند «هزار چشم»؛ اگه نذاری همین ۳٬۰۰۰٬۰۰۰ می‌شه)
      Secrets:    SEPAL_API_KEY (کلید اصلی سپال؛ اگه نذاری حالت test/سندباکس می‌شه)
                  ADMIN_TOKEN (یه رمز دلخواه؛ توی هدر Authorization: Bearer فرستاده می‌شه)
      KV binding: ORDERS  (یه KV namespace بساز و با همین اسم وصلش کن) */
@@ -18,7 +19,8 @@ const VALID = new Set([
 ]);
 /* SYNC:END */
 const LIM = { MAX_W: 40, MAX_H: 200 };
-const DEFAULT_WORK_PRICE = 1500000; /* تومان */
+const DEFAULT_WORK_PRICE = 1700000; /* تومان */
+const DEFAULT_HEZAR_CHESHM_PRICE = 3000000; /* تومان */
 
 const ok = (j) => !!j && (j.status === true || j.status === 1 || j.status === "1");
 const json = (obj, code = 200) =>
@@ -98,7 +100,21 @@ async function loadWorks(C) {
   }
 }
 const findWork = async (C, id) => (await loadWorks(C)).find((w) => String(w.id) === String(id)) || null;
-const workPrice = (env, w) => Math.round(Number(w.price) || Number(env.WORK_PRICE) || DEFAULT_WORK_PRICE);
+const isHezarCheshm = (w) => String((w.title || "") + (w.id || "")).replace(/[\s\u200c_-]/g, "").includes("هزارچشم");
+/* اولویت: price دقیق توی works.js، بعد «هزار چشم» (۳ میلیون)، بعد قیمت پیش‌فرض (۱.۷ میلیون) */
+const workPrice = (env, w) =>
+  Math.round(
+    Number(w.price) ||
+      (isHezarCheshm(w)
+        ? Number(env.HEZAR_CHESHM_PRICE) || DEFAULT_HEZAR_CHESHM_PRICE
+        : Number(env.WORK_PRICE) || DEFAULT_WORK_PRICE),
+  );
+
+/* قیمت همه‌ی کارها برای نمایش توی گالری (فقط نمایشه؛ مبلغ پرداخت همیشه دوباره سمت سرور حساب می‌شه) */
+async function worksInfo(env) {
+  const list = await loadWorks(cfg(env));
+  return json(list.map((w) => ({ id: String(w.id), title: w.title || "", price: workPrice(env, w) })));
+}
 
 async function workInfo(env, url) {
   const w = await findWork(cfg(env), url.searchParams.get("id"));
@@ -247,6 +263,7 @@ export default {
         const C = cfg(env);
         return json({ pricePerBead: C.price, baseFee: C.base });
       }
+      if (p === "/api/works" && request.method === "GET") return await worksInfo(env);
       if (p === "/api/work" && request.method === "GET") return await workInfo(env, url);
       if (p === "/api/create-payment" && request.method === "POST") return await createPayment(request, env);
       if (p === "/api/payment-callback") return await paymentCallback(request, env, url);
