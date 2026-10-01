@@ -11,7 +11,6 @@
       if (!p || !cap || cap.querySelector(".wk-price")) return;
       const s = document.createElement("span");
       s.className = "wk-price";
-      s.style.cssText = "display:block;font-weight:700;margin-top:4px";
       s.textContent = fa(p) + " تومان";
       cap.appendChild(s);
     });

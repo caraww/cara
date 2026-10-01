@@ -121,3 +121,39 @@
 #lbFav{display:flex;align-items:center;justify-content:center;gap:8px}
 #lbFav[aria-pressed="true"]{background:linear-gradient(135deg,#f0664a,var(--hot));box-shadow:0 8px 20px rgba(226,74,43,.35);animation:wk-pop .35s ease}
 @media(prefers-reduced-motion:reduce){.wk-grid>* [aria-pressed="true"],#lbFav{animation:none !important}}
+
+/* ===== لیبل زیر عکس‌ها: وسط‌چین و مرتب ===== */
+.wk-grid>*{aspect-ratio:auto !important;display:flex;flex-direction:column}
+.wk-grid figcaption{
+  position:static !important;inset:auto !important;transform:none !important;
+  display:flex !important;flex-direction:column;align-items:center;justify-content:flex-start;gap:5px;
+  margin:0 !important;padding:2px 14px 18px !important;background:none !important;
+  text-align:center !important;color:var(--ink);
+}
+.wk-grid figcaption b{
+  display:block;width:100%;font-size:16px;font-weight:700;line-height:1.7;text-align:center;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.wk-grid figcaption span{
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  font-size:14px;line-height:1.7;color:var(--muted);text-align:center;
+}
+.wk-grid figcaption .wk-price{
+  display:inline-block;margin-top:4px;padding:2px 16px;border-radius:999px;
+  font-size:15px;font-weight:700;color:#7a5a1e;background:#f6efe0;border:1px solid #e5d6b3;
+}
+@media(max-width:560px){
+  .wk-grid figcaption{padding:0 8px 14px !important}
+  .wk-grid figcaption b{font-size:14.5px}
+  .wk-grid figcaption .wk-price{font-size:13.5px;padding:2px 12px}
+}
+
+/* ===== قیمت و دکمه‌ی سفارش توی نمایش بزرگ ===== */
+#lbPrice{display:block;font-size:24px;font-weight:900;color:#7a5a1e;line-height:1.4}
+#lbPrice:empty{display:none}
+#lbNum{text-align:center}
+#lbOrder{
+  background:linear-gradient(135deg,#cfae6c,#a7853f);border-color:transparent;color:#fff;
+  box-shadow:0 8px 20px rgba(167,133,63,.34);font-weight:700;
+}
+#lbOrder:hover{box-shadow:0 12px 26px rgba(167,133,63,.46)}

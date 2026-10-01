@@ -51,7 +51,7 @@
       });
       const j = await r.json().catch(() => ({}));
       if (j.paymentUrl) return (location.href = j.paymentUrl);
-      showErr(j.error || "یه مشکل پیش اومد، دوباره امتحان کن.");
+      showErr(j.error || `یه مشکل پیش اومد، دوباره امتحان کن. (کد ${r.status})`);
     } catch {
       showErr("اتصال برقرار نشد، دوباره امتحان کن.");
     }
@@ -59,10 +59,10 @@
   }, true);
 
   fetch("/api/work?id=" + encodeURIComponent(id))
-    .then((r) => (r.ok ? r.json() : Promise.reject()))
+    .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
     .then((w) => {
       work = w;
       if (document.readyState === "loading") addEventListener("DOMContentLoaded", render); else render();
     })
-    .catch(() => showErr("این دستبند پیدا نشد؛ از گالری دوباره انتخابش کن."));
+    .catch((s) => showErr("این دستبند پیدا نشد؛ از گالری دوباره انتخابش کن." + (s ? ` (کد ${s})` : "")));
 })();

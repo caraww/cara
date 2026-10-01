@@ -37,7 +37,7 @@ function cfg(env) {
   const key = env.SEPAL_API_KEY || "test";
   return {
     key,
-    sandbox: key === "test",
+    sandbox: key === "test" || key === "5028824063", /* هر دو کلید آزمایشی */
     price: Number(env.PRICE_PER_BEAD) || 0,
     base: Number(env.BASE_FEE) || 0,
     site: (env.BASE_URL || "https://caraw.ir").replace(/\/+$/, "").replace(/^(?!https?:\/\/)/, "https://"),
@@ -87,15 +87,37 @@ const getOrder = async (env, id) => {
 
 /* کارهای گالری: از js/works.js خود سایت خونده می‌شه (فایل خودکار ساخته می‌شه؛ قیمت رو این‌جا کنترل می‌کنیم).
    اگه توی works.js برای یه اثر فیلد price (تومان) باشه همون استفاده می‌شه، وگرنه WORK_PRICE. */
+function extractArray(text) {
+  const m = text.match(/\bworks\s*=\s*\[/);
+  if (!m) return null;
+  const start = m.index + m[0].length - 1;
+  let depth = 0, str = null, esc = false;
+  for (let j = start; j < text.length; j++) {
+    const ch = text[j];
+    if (str) { if (esc) esc = false; else if (ch === "\\") esc = true; else if (ch === str) str = null; continue; }
+    if (ch === '"' || ch === "'" || ch === "`") { str = ch; continue; }
+    if (ch === "[") depth++;
+    else if (ch === "]" && --depth === 0) return text.slice(start, j + 1);
+  }
+  return null;
+}
+function parseLoose(src) {
+  try { return JSON.parse(src); } catch {}
+  const fixed = src
+    .replace(/,\s*([\]}])/g, "$1")
+    .replace(/([{,]\s*)([A-Za-z_$][\w$]*)\s*:/g, '$1"$2":')
+    .replace(/'([^'\\\n]*)'/g, (_, t) => JSON.stringify(t));
+  return JSON.parse(fixed);
+}
 async function loadWorks(C) {
   try {
-    const r = await fetch(`${C.site}/js/works.js`, { cf: { cacheTtl: 300, cacheEverything: true } });
-    if (!r.ok) return [];
-    const m = (await r.text()).match(/\.works\s*=\s*(\[[\s\S]*\])\s*;?\s*$/);
-    const list = m ? JSON.parse(m[1]) : [];
+    const r = await fetch(`${C.site}/js/works.js`, { cf: { cacheTtl: 60, cacheEverything: true } });
+    if (!r.ok) { console.error("works.js status", r.status); return []; }
+    const a = extractArray(await r.text());
+    const list = a ? parseLoose(a) : [];
     return Array.isArray(list) ? list : [];
   } catch (e) {
-    console.error("works load failed", e);
+    console.error("works load failed", String(e));
     return [];
   }
 }
@@ -182,7 +204,7 @@ async function createPayment(request, env) {
   order.error = j && j.message;
   await saveOrder(env, order);
   console.error("sepal request failed", JSON.stringify(j), "callback:", `${C.site}/api/payment-callback`);
-  return json({ error: "درگاه درخواست رو قبول نکرد، یه کم بعد دوباره امتحان کن." }, 502);
+  return json({ error: "درگاه درخواست رو قبول نکرد، یه کم بعد دوباره امتحان کن." + (j && typeof j.message === "string" && j.message ? " (" + j.message.slice(0, 120) + ")" : "") }, 502);
 }
 
 async function paymentCallback(request, env, url) {
@@ -254,6 +276,28 @@ async function admin(request, env, url) {
   return json(rows);
 }
 
+/* عیب‌یابی (فقط با ADMIN_TOKEN):
+   curl -H "Authorization: Bearer ADMIN_TOKEN" "https://caraw.ir/api/admin/debug"
+   با ?sepal=1 یه درخواست آزمایشی به سپال هم می‌فرسته و جواب خامش رو نشون می‌ده */
+async function debug(request, env, url) {
+  const t = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
+  if (!env.ADMIN_TOKEN || !same(t, env.ADMIN_TOKEN)) return json({ error: "unauthorized" }, 401);
+  const C = cfg(env);
+  const out = { sandbox: C.sandbox, hasSepalKey: !!env.SEPAL_API_KEY, kv: !!env.ORDERS, site: C.site,
+    pricePerBead: C.price, baseFee: C.base, callback: `${C.site}/api/payment-callback` };
+  try {
+    const r = await fetch(`${C.site}/js/works.js`);
+    const txt = await r.text();
+    out.works = { status: r.status, finalUrl: r.url, redirected: r.redirected, length: txt.length, head: txt.slice(0, 160), tail: txt.slice(-120) };
+    try { const a = extractArray(txt); out.works.arrayFound = !!a; out.works.count = a ? parseLoose(a).length : 0; }
+    catch (e) { out.works.parseError = String(e).slice(0, 200); }
+  } catch (e) { out.works = { error: String(e) }; }
+  if (url.searchParams.get("sepal"))
+    out.sepal = await sepal(C, "request", { apiKey: C.key, amount: 10000, callbackUrl: out.callback,
+      invoiceNumber: "debug", payerName: "test", payerMobile: "09123456789" });
+  return json(out);
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -267,6 +311,7 @@ export default {
       if (p === "/api/work" && request.method === "GET") return await workInfo(env, url);
       if (p === "/api/create-payment" && request.method === "POST") return await createPayment(request, env);
       if (p === "/api/payment-callback") return await paymentCallback(request, env, url);
+      if (p === "/api/admin/debug") return await debug(request, env, url);
       if (p === "/api/admin/orders") return await admin(request, env, url);
       if (p.startsWith("/api/")) return json({ error: "not found" }, 404);
       return fetch(request); /* هر چیز دیگه‌ای (خود سایت) عادی از GitHub Pages می‌آد */
