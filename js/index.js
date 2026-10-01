@@ -37,6 +37,7 @@ function cfg(env) {
     sandbox: key === "test",
     price: Number(env.PRICE_PER_BEAD) || 0,
     base: Number(env.BASE_FEE) || 0,
+    callback: String(env.CALLBACK_URL || "").trim(), /* اختیاری: اگه سپال آدرس بازگشت رو فقط با http:// قبول می‌کنه، اینجا بذار */
     site: (env.BASE_URL || "https://caraw.ir").replace(/\/+$/, "").replace(/^(?!https?:\/\/)/, "https://"),
   };
 }
@@ -217,7 +218,7 @@ async function createPayment(request, env) {
   const j = await sepal(C, "request", {
     apiKey: C.key,
     amount: priceToman * 10 /* سپال ریال می‌گیره */,
-    callbackUrl: `${C.site}/api/payment-callback`,
+    callbackUrl: C.callback || `${C.site}/api/payment-callback`,
     invoiceNumber: order.id.slice(0, 8),
     payerName: `${customer.firstName} ${customer.lastName}`,
     payerMobile: customer.phone,
@@ -231,7 +232,7 @@ async function createPayment(request, env) {
   order.status = "failed";
   order.error = j && j.message;
   await saveOrder(env, order);
-  console.error("sepal request failed", JSON.stringify(j), "callback:", `${C.site}/api/payment-callback`);
+  console.error("sepal request failed", JSON.stringify(j), "callback:", C.callback || `${C.site}/api/payment-callback`);
   return json({ error: "درگاه درخواست رو قبول نکرد، یه کم بعد دوباره امتحان کن." + (j && typeof j.message === "string" && j.message ? " (" + j.message.slice(0, 120) + ")" : "") }, 502);
 }
 
@@ -313,7 +314,7 @@ async function debug(request, env, url) {
   const C = cfg(env);
   const rawKey = String(env.SEPAL_API_KEY || "");
   const out = { sandbox: C.sandbox, hasSepalKey: !!rawKey, key: { length: rawKey.length, trimmedLength: rawKey.trim().length, masked: rawKey.trim().slice(0, 2) + "…" + rawKey.trim().slice(-2) }, kv: !!env.ORDERS, site: C.site,
-    pricePerBead: C.price, baseFee: C.base, callback: `${C.site}/api/payment-callback` };
+    pricePerBead: C.price, baseFee: C.base, callback: C.callback || `${C.site}/api/payment-callback` };
   try {
     const r = await fetch(`${C.site}/js/works.js`);
     const txt = await r.text();

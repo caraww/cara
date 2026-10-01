@@ -9,16 +9,16 @@
   "vars": {
     "BASE_URL": "https://caraw.ir",
     "PRICE_PER_BEAD": "1500",
-    "BASE_FEE": "150000"
+    "BASE_FEE": "150000",
+    "CALLBACK_URL": "http://caraw.ir/api/payment-callback",
   },
 
   // بدون id: Wrangler موقع دیپلوی خودش KV رو می‌سازه و وصل می‌کنه
-  "kv_namespaces": [{ "binding": "ORDERS" }]
+  "kv_namespaces": [{ "binding": "ORDERS" }],
 
-  ,
   // فقط /api/* به Worker می‌رسه؛ بقیه‌ی سایت مثل قبل از GitHub Pages می‌آد
   "routes": [
     { "pattern": "caraw.ir/api/*", "zone_name": "caraw.ir" },
-    { "pattern": "www.caraw.ir/api/*", "zone_name": "caraw.ir" }
-  ]
+    { "pattern": "www.caraw.ir/api/*", "zone_name": "caraw.ir" },
+  ],
 }
