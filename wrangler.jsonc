@@ -9,9 +9,7 @@
   "vars": {
     "BASE_URL": "https://caraw.ir",
     "PRICE_PER_BEAD": "1500",
-    "BASE_FEE": "150000",
-    "WORK_PRICE": "1700000",
-    "HEZAR_CHESHM_PRICE": "3000000"
+    "BASE_FEE": "150000"
   },
 
   // بدون id: Wrangler موقع دیپلوی خودش KV رو می‌سازه و وصل می‌کنه

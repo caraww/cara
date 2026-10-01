@@ -2,8 +2,6 @@
    مسیرها: /api/config  /api/works  /api/work  /api/create-payment  /api/payment-callback  /api/admin/orders
    تنظیمات (توی داشبورد Cloudflare → Worker → Settings):
      Variables:  PRICE_PER_BEAD=1500   BASE_FEE=150000   BASE_URL=https://caraw.ir
-                 WORK_PRICE=1700000 (قیمت پیش‌فرض هر دستبند گالری، به تومان؛ اگه نذاری همین ۱٬۷۰۰٬۰۰۰ می‌شه)
-                 HEZAR_CHESHM_PRICE=3000000 (قیمت دستبند «هزار چشم»؛ اگه نذاری همین ۳٬۰۰۰٬۰۰۰ می‌شه)
      Secrets:    SEPAL_API_KEY (کلید اصلی سپال؛ اگه نذاری حالت test/سندباکس می‌شه)
                  ADMIN_TOKEN (یه رمز دلخواه؛ توی هدر Authorization: Bearer فرستاده می‌شه)
      KV binding: ORDERS  (یه KV namespace بساز و با همین اسم وصلش کن) */
@@ -19,8 +17,6 @@ const VALID = new Set([
 ]);
 /* SYNC:END */
 const LIM = { MAX_W: 40, MAX_H: 200 };
-const DEFAULT_WORK_PRICE = 1700000; /* تومان */
-const DEFAULT_HEZAR_CHESHM_PRICE = 3000000; /* تومان */
 
 const ok = (j) => !!j && (j.status === true || j.status === 1 || j.status === "1");
 const json = (obj, code = 200) =>
@@ -34,10 +30,10 @@ const digits = (s) =>
     .replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
 
 function cfg(env) {
-  const key = env.SEPAL_API_KEY || "test";
+  const key = String(env.SEPAL_API_KEY || "test").trim();
   return {
     key,
-    sandbox: key === "test" || key === "5028824063", /* هر دو کلید آزمایشی */
+    sandbox: key === "test",
     price: Number(env.PRICE_PER_BEAD) || 0,
     base: Number(env.BASE_FEE) || 0,
     site: (env.BASE_URL || "https://caraw.ir").replace(/\/+$/, "").replace(/^(?!https?:\/\/)/, "https://"),
@@ -86,7 +82,7 @@ const getOrder = async (env, id) => {
 };
 
 /* کارهای گالری: از js/works.js خود سایت خونده می‌شه (فایل خودکار ساخته می‌شه؛ قیمت رو این‌جا کنترل می‌کنیم).
-   اگه توی works.js برای یه اثر فیلد price (تومان) باشه همون استفاده می‌شه، وگرنه WORK_PRICE. */
+   اگه توی works.js برای یه اثر فیلد price (تومان) باشه همون استفاده می‌شه، وگرنه قیمت خودکار (PRICE_OVERRIDES بالای همین بخش). */
 function extractArray(text) {
   const m = text.match(/\bworks\s*=\s*\[/);
   if (!m) return null;
@@ -122,26 +118,56 @@ async function loadWorks(C) {
   }
 }
 const findWork = async (C, id) => (await loadWorks(C)).find((w) => String(w.id) === String(id)) || null;
-const isHezarCheshm = (w) => String((w.title || "") + (w.id || "")).replace(/[\s\u200c_-]/g, "").includes("هزارچشم");
-/* اولویت: price دقیق توی works.js، بعد «هزار چشم» (۳ میلیون)، بعد قیمت پیش‌فرض (۱.۷ میلیون) */
-const workPrice = (env, w) =>
-  Math.round(
-    Number(w.price) ||
-      (isHezarCheshm(w)
-        ? Number(env.HEZAR_CHESHM_PRICE) || DEFAULT_HEZAR_CHESHM_PRICE
-        : Number(env.WORK_PRICE) || DEFAULT_WORK_PRICE),
-  );
+
+/* ===== قیمت دستبندها (تومان) =====
+   اولویت: ۱) PRICE_OVERRIDES  ۲) ریک و مورتی  ۳) فیلد price توی works.js  ۴) قیمت خودکار غیررند که برای هر دستبند فرق داره
+   برای تغییر قیمت یه دستبند، شناسه یا بخشی از عنوانش رو اینجا بنویس، مثلاً:  "هزار چشم": 2987000 */
+const PRICE_OVERRIDES = {};
+const RICK_MORTY_PRICE = 4000000;
+const norm = (s) => String(s || "").replace(/ي/g, "ی").replace(/ك/g, "ک").replace(/[\s\u200c_-]/g, "").toLowerCase();
+const isRickMorty = (w) => /ریک|مورتی|rick|morty/.test(norm([w.title, w.id, w.file, w.src].join("|")));
+function fixedPrice(w) {
+  const key = norm((w.title || "") + "|" + (w.id || ""));
+  for (const [k, v] of Object.entries(PRICE_OVERRIDES)) if (norm(k) && key.includes(norm(k))) return Math.round(Number(v));
+  if (isRickMorty(w)) return RICK_MORTY_PRICE;
+  return Math.round(Number(w.price)) || 0;
+}
+/* قیمت خودکار: از شناسه‌ی دستبند ساخته می‌شه، پس همیشه ثابته (بین ۱٬۴۵۰٬۰۰۰ تا ۲٬۹۵۰٬۰۰۰ و غیررند) */
+function autoPrice(id) {
+  let h = 2166136261;
+  for (const ch of String(id)) { h ^= ch.codePointAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  let p = Math.round((1450000 + (h % 1500000)) / 1000) * 1000;
+  if (p % 5000 === 0) p += 3000;
+  return p;
+}
+function priceMap(list) {
+  const out = {}, used = new Set();
+  for (const w of list) { const f = fixedPrice(w); if (f) { out[String(w.id)] = f; used.add(f); } }
+  for (const w of list) {
+    const id = String(w.id);
+    if (out[id]) continue;
+    let p = autoPrice(id);
+    while (used.has(p)) p += 7000; /* دو دستبند هیچ‌وقت قیمت یکسان نمی‌گیرن */
+    used.add(p); out[id] = p;
+  }
+  return out;
+}
+async function pricedWorks(env) {
+  const list = await loadWorks(cfg(env));
+  return { list, prices: priceMap(list) };
+}
 
 /* قیمت همه‌ی کارها برای نمایش توی گالری (فقط نمایشه؛ مبلغ پرداخت همیشه دوباره سمت سرور حساب می‌شه) */
 async function worksInfo(env) {
-  const list = await loadWorks(cfg(env));
-  return json(list.map((w) => ({ id: String(w.id), title: w.title || "", price: workPrice(env, w) })));
+  const { list, prices } = await pricedWorks(env);
+  return json(list.map((w) => ({ id: String(w.id), title: w.title || "", price: prices[String(w.id)] })));
 }
 
 async function workInfo(env, url) {
-  const w = await findWork(cfg(env), url.searchParams.get("id"));
+  const { list, prices } = await pricedWorks(env);
+  const w = list.find((x) => String(x.id) === String(url.searchParams.get("id")));
   if (!w) return json({ error: "not found" }, 404);
-  return json({ id: String(w.id), title: w.title || "", src: w.src, price: workPrice(env, w) });
+  return json({ id: String(w.id), title: w.title || "", src: w.src, price: prices[String(w.id)] });
 }
 
 async function createPayment(request, env) {
@@ -163,9 +189,10 @@ async function createPayment(request, env) {
   let priceToman, extra;
   if (body.workId != null && body.workId !== "") {
     /* سفارش مستقیم از گالری؛ قیمت همیشه سمت سرور تعیین می‌شه */
-    const work = await findWork(C, body.workId);
+    const { list, prices } = await pricedWorks(env);
+    const work = list.find((x) => String(x.id) === String(body.workId));
     if (!work) return json({ error: "این دستبند پیدا نشد؛ از گالری دوباره انتخابش کن." }, 404);
-    priceToman = workPrice(env, work);
+    priceToman = prices[String(work.id)];
     extra = { kind: "work", work: { id: String(work.id), title: work.title || "", src: work.src } };
   } else {
     if (!C.price) return json({ error: "قیمت هنوز تنظیم نشده، بعداً امتحان کن." }, 503);
@@ -283,7 +310,8 @@ async function debug(request, env, url) {
   const t = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
   if (!env.ADMIN_TOKEN || !same(t, env.ADMIN_TOKEN)) return json({ error: "unauthorized" }, 401);
   const C = cfg(env);
-  const out = { sandbox: C.sandbox, hasSepalKey: !!env.SEPAL_API_KEY, kv: !!env.ORDERS, site: C.site,
+  const rawKey = String(env.SEPAL_API_KEY || "");
+  const out = { sandbox: C.sandbox, hasSepalKey: !!rawKey, key: { length: rawKey.length, trimmedLength: rawKey.trim().length, masked: rawKey.trim().slice(0, 2) + "…" + rawKey.trim().slice(-2) }, kv: !!env.ORDERS, site: C.site,
     pricePerBead: C.price, baseFee: C.base, callback: `${C.site}/api/payment-callback` };
   try {
     const r = await fetch(`${C.site}/js/works.js`);
