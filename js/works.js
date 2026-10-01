@@ -1,152 +1,152 @@
 /* خودکار ساخته شده با tools/build-works.js؛ دستی ویرایشش نکن. */
 (window.CARA = window.CARA || {}).works = [
  {
-  "id": "1",
-  "src": "img/bead%20works/1.jpg",
-  "thumb": "img/bead%20works/1.jpg",
-  "w": 615,
-  "h": 820,
-  "title": "1",
-  "note": "",
-  "tags": []
- },
- {
-  "id": "2",
-  "src": "img/bead%20works/2.jpg",
-  "thumb": "img/bead%20works/2.jpg",
+  "id": "آبشار رنگی ",
+  "src": "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C%20.png",
+  "thumb": "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C%20.png",
   "w": 720,
   "h": 960,
-  "title": "2",
+  "title": "آبشار رنگی",
   "note": "",
   "tags": []
  },
  {
-  "id": "3",
-  "src": "img/bead%20works/3.jpg",
-  "thumb": "img/bead%20works/3.jpg",
+  "id": "آبشار رنگی",
+  "src": "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.JPG",
+  "thumb": "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.JPG",
   "w": 615,
   "h": 820,
-  "title": "3",
+  "title": "آبشار رنگی",
   "note": "",
   "tags": []
  },
  {
-  "id": "4",
-  "src": "img/bead%20works/4.jpg",
-  "thumb": "img/bead%20works/4.jpg",
-  "w": 750,
-  "h": 750,
-  "title": "4",
-  "note": "",
-  "tags": []
- },
- {
-  "id": "5",
-  "src": "img/bead%20works/5.jpg",
-  "thumb": "img/bead%20works/5.jpg",
-  "w": 1125,
-  "h": 1125,
-  "title": "5",
-  "note": "",
-  "tags": []
- },
- {
-  "id": "6",
-  "src": "img/bead%20works/6.jpg",
-  "thumb": "img/bead%20works/6.jpg",
-  "w": 1310,
-  "h": 1200,
-  "title": "6",
-  "note": "",
-  "tags": []
- },
- {
-  "id": "7",
-  "src": "img/bead%20works/7.jpg",
-  "thumb": "img/bead%20works/7.jpg",
-  "w": 750,
-  "h": 750,
-  "title": "7",
-  "note": "",
-  "tags": []
- },
- {
-  "id": "8",
-  "src": "img/bead%20works/8.jpg",
-  "thumb": "img/bead%20works/8.jpg",
-  "w": 750,
-  "h": 750,
-  "title": "8",
-  "note": "",
-  "tags": []
- },
- {
-  "id": "9",
-  "src": "img/bead%20works/9.JPG",
-  "thumb": "img/bead%20works/9.JPG",
-  "w": 3024,
-  "h": 4032,
-  "title": "9",
-  "note": "",
-  "tags": []
- },
- {
-  "id": "10",
-  "src": "img/bead%20works/10.JPG",
-  "thumb": "img/bead%20works/10.JPG",
-  "w": 3527,
-  "h": 1847,
-  "title": "10",
-  "note": "",
-  "tags": []
- },
- {
-  "id": "11",
-  "src": "img/bead%20works/11.PNG",
-  "thumb": "img/bead%20works/11.PNG",
-  "w": 1194,
-  "h": 896,
-  "title": "11",
-  "note": "",
-  "tags": []
- },
- {
-  "id": "12",
-  "src": "img/bead%20works/12.JPG",
-  "thumb": "img/bead%20works/12.JPG",
+  "id": "اسب",
+  "src": "img/works-cutouts/%D8%A7%D8%B3%D8%A8.png",
+  "thumb": "img/works-cutouts/%D8%A7%D8%B3%D8%A8.png",
   "w": 892,
   "h": 1191,
-  "title": "12",
+  "title": "اسب",
   "note": "",
   "tags": []
  },
  {
-  "id": "13",
-  "src": "img/bead%20works/13.JPG",
-  "thumb": "img/bead%20works/13.JPG",
-  "w": 3024,
-  "h": 4032,
-  "title": "13",
-  "note": "",
-  "tags": []
- },
- {
-  "id": "14",
-  "src": "img/bead%20works/14.JPG",
-  "thumb": "img/bead%20works/14.JPG",
-  "w": 3024,
-  "h": 4032,
-  "title": "14",
-  "note": "",
-  "tags": []
- },
- {
-  "id": "15",
-  "src": "img/bead%20works/15.JPG",
-  "thumb": "img/bead%20works/15.JPG",
+  "id": "درفش کاویانی",
+  "src": "img/works-cutouts/%D8%AF%D8%B1%D9%81%D8%B4%20%DA%A9%D8%A7%D9%88%DB%8C%D8%A7%D9%86%DB%8C.png",
+  "thumb": "img/works-cutouts/%D8%AF%D8%B1%D9%81%D8%B4%20%DA%A9%D8%A7%D9%88%DB%8C%D8%A7%D9%86%DB%8C.png",
   "w": 3024,
   "h": 3023,
-  "title": "15",
+  "title": "درفش کاویانی",
+  "note": "",
+  "tags": []
+ },
+ {
+  "id": "ریک اند مورتی",
+  "src": "img/works-cutouts/%D8%B1%DB%8C%DA%A9%20%D8%A7%D9%86%D8%AF%20%D9%85%D9%88%D8%B1%D8%AA%DB%8C.png",
+  "thumb": "img/works-cutouts/%D8%B1%DB%8C%DA%A9%20%D8%A7%D9%86%D8%AF%20%D9%85%D9%88%D8%B1%D8%AA%DB%8C.png",
+  "w": 3024,
+  "h": 4032,
+  "title": "ریک اند مورتی",
+  "note": "",
+  "tags": []
+ },
+ {
+  "id": "زنجیر",
+  "src": "img/works-cutouts/%D8%B2%D9%86%D8%AC%DB%8C%D8%B1.png",
+  "thumb": "img/works-cutouts/%D8%B2%D9%86%D8%AC%DB%8C%D8%B1.png",
+  "w": 750,
+  "h": 750,
+  "title": "زنجیر",
+  "note": "",
+  "tags": []
+ },
+ {
+  "id": "قالی",
+  "src": "img/works-cutouts/%D9%82%D8%A7%D9%84%DB%8C.png",
+  "thumb": "img/works-cutouts/%D9%82%D8%A7%D9%84%DB%8C.png",
+  "w": 750,
+  "h": 750,
+  "title": "قالی",
+  "note": "",
+  "tags": []
+ },
+ {
+  "id": "قلب طلا",
+  "src": "img/works-cutouts/%D9%82%D9%84%D8%A8%20%D8%B7%D9%84%D8%A7.png",
+  "thumb": "img/works-cutouts/%D9%82%D9%84%D8%A8%20%D8%B7%D9%84%D8%A7.png",
+  "w": 1194,
+  "h": 896,
+  "title": "قلب طلا",
+  "note": "",
+  "tags": []
+ },
+ {
+  "id": "کوکا",
+  "src": "img/works-cutouts/%DA%A9%D9%88%DA%A9%D8%A7.png",
+  "thumb": "img/works-cutouts/%DA%A9%D9%88%DA%A9%D8%A7.png",
+  "w": 3527,
+  "h": 1847,
+  "title": "کوکا",
+  "note": "",
+  "tags": []
+ },
+ {
+  "id": "لابستر",
+  "src": "img/works-cutouts/%D9%84%D8%A7%D8%A8%D8%B3%D8%AA%D8%B1.png",
+  "thumb": "img/works-cutouts/%D9%84%D8%A7%D8%A8%D8%B3%D8%AA%D8%B1.png",
+  "w": 615,
+  "h": 820,
+  "title": "لابستر",
+  "note": "",
+  "tags": []
+ },
+ {
+  "id": "ماریو",
+  "src": "img/works-cutouts/%D9%85%D8%A7%D8%B1%DB%8C%D9%88.png",
+  "thumb": "img/works-cutouts/%D9%85%D8%A7%D8%B1%DB%8C%D9%88.png",
+  "w": 3024,
+  "h": 4032,
+  "title": "ماریو",
+  "note": "",
+  "tags": []
+ },
+ {
+  "id": "و من یتق ..",
+  "src": "img/works-cutouts/%D9%88%20%D9%85%D9%86%20%DB%8C%D8%AA%D9%82%20...png",
+  "thumb": "img/works-cutouts/%D9%88%20%D9%85%D9%86%20%DB%8C%D8%AA%D9%82%20...png",
+  "w": 3024,
+  "h": 4032,
+  "title": "و من یتق ..",
+  "note": "",
+  "tags": []
+ },
+ {
+  "id": "هزار چشم  ",
+  "src": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20%20.png",
+  "thumb": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20%20.png",
+  "w": 750,
+  "h": 750,
+  "title": "هزار چشم",
+  "note": "",
+  "tags": []
+ },
+ {
+  "id": "هزار چشم ",
+  "src": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20.png",
+  "thumb": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20.png",
+  "w": 1310,
+  "h": 1200,
+  "title": "هزار چشم",
+  "note": "",
+  "tags": []
+ },
+ {
+  "id": "هزار چشم",
+  "src": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85.png",
+  "thumb": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85.png",
+  "w": 1125,
+  "h": 1125,
+  "title": "هزار چشم",
   "note": "",
   "tags": []
  }

@@ -21,8 +21,11 @@
     if (res === "success") { $("formCard").hidden = true; $("sumCard").hidden = true; burst(); }
   }
 
+  const workMode = q.get("work") && !res; /* سفارش مستقیم از گالری: checkout-work.js مدیریتش می‌کنه */
   let total = 0;
-  if (p) {
+  if (workMode) {
+    /* خلاصه‌ی سفارش رو checkout-work.js پر می‌کنه */
+  } else if (p) {
     total = p.data.flat().filter(Boolean).length;
     const cw = Math.max(4, Math.min(10, Math.floor(160 / p.width))), ch = Math.round(cw / C.L.BEAD_ASPECT);
     $("sum").innerHTML = `<canvas id="mini"></canvas><dl><dt>ابعاد</dt><dd>${C.faNum(p.width)} × ${C.faNum(p.height)}</dd><dt>تعداد منجوق</dt><dd>${C.faNum(total)}</dd><dt>هزینه</dt><dd id="price">…</dd></dl>`;
@@ -37,6 +40,7 @@
 
   $("form").addEventListener("submit", async (e) => {
     e.preventDefault(); showErr("");
+    if (workMode) return;
     const f = e.currentTarget, fd = Object.fromEntries(new FormData(f));
     fd.phone = digits(fd.phone.trim());
     if (!p || !total) return showErr("اول یه الگو بساز و چندتا منجوق بچین.");

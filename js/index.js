@@ -1,7 +1,8 @@
 /* API سایت cara روی Cloudflare Worker (جایگزین server.js).
-   مسیرها: /api/config  /api/create-payment  /api/payment-callback  /api/admin/orders
+   مسیرها: /api/config  /api/work  /api/create-payment  /api/payment-callback  /api/admin/orders
    تنظیمات (توی داشبورد Cloudflare → Worker → Settings):
      Variables:  PRICE_PER_BEAD=1500   BASE_FEE=150000   BASE_URL=https://caraw.ir
+                 WORK_PRICE=1500000 (قیمت پیش‌فرض هر دستبند گالری، به تومان؛ اگه نذاری همین ۱٬۵۰۰٬۰۰۰ می‌شه)
      Secrets:    SEPAL_API_KEY (کلید اصلی سپال؛ اگه نذاری حالت test/سندباکس می‌شه)
                  ADMIN_TOKEN (یه رمز دلخواه؛ توی هدر Authorization: Bearer فرستاده می‌شه)
      KV binding: ORDERS  (یه KV namespace بساز و با همین اسم وصلش کن) */
@@ -17,6 +18,7 @@ const VALID = new Set([
 ]);
 /* SYNC:END */
 const LIM = { MAX_W: 40, MAX_H: 200 };
+const DEFAULT_WORK_PRICE = 1500000; /* تومان */
 
 const ok = (j) => !!j && (j.status === true || j.status === 1 || j.status === "1");
 const json = (obj, code = 200) =>
@@ -81,10 +83,32 @@ const getOrder = async (env, id) => {
   return t ? JSON.parse(t) : null;
 };
 
+/* کارهای گالری: از js/works.js خود سایت خونده می‌شه (فایل خودکار ساخته می‌شه؛ قیمت رو این‌جا کنترل می‌کنیم).
+   اگه توی works.js برای یه اثر فیلد price (تومان) باشه همون استفاده می‌شه، وگرنه WORK_PRICE. */
+async function loadWorks(C) {
+  try {
+    const r = await fetch(`${C.site}/js/works.js`, { cf: { cacheTtl: 300, cacheEverything: true } });
+    if (!r.ok) return [];
+    const m = (await r.text()).match(/\.works\s*=\s*(\[[\s\S]*\])\s*;?\s*$/);
+    const list = m ? JSON.parse(m[1]) : [];
+    return Array.isArray(list) ? list : [];
+  } catch (e) {
+    console.error("works load failed", e);
+    return [];
+  }
+}
+const findWork = async (C, id) => (await loadWorks(C)).find((w) => String(w.id) === String(id)) || null;
+const workPrice = (env, w) => Math.round(Number(w.price) || Number(env.WORK_PRICE) || DEFAULT_WORK_PRICE);
+
+async function workInfo(env, url) {
+  const w = await findWork(cfg(env), url.searchParams.get("id"));
+  if (!w) return json({ error: "not found" }, 404);
+  return json({ id: String(w.id), title: w.title || "", src: w.src, price: workPrice(env, w) });
+}
+
 async function createPayment(request, env) {
   const C = cfg(env);
   if (!env.ORDERS) return json({ error: "ذخیره‌ساز سفارش (KV) به Worker وصل نشده." }, 500);
-  if (!C.price) return json({ error: "قیمت هنوز تنظیم نشده، بعداً امتحان کن." }, 503);
   let body;
   try { body = await request.json(); } catch { return json({ error: "درخواست معتبر نیست." }, 400); }
   const c = (body && body.customer) || {};
@@ -97,10 +121,22 @@ async function createPayment(request, env) {
   if (!customer.firstName || !customer.lastName || !customer.address)
     return json({ error: "اسم، فامیلی و آدرس رو کامل بنویس." }, 400);
   if (!/^09\d{9}$/.test(customer.phone)) return json({ error: "شماره موبایل باید شبیه 09123456789 باشه." }, 400);
-  const pattern = cleanPattern(body.pattern);
-  if (!pattern) return json({ error: "الگو معتبر نیست. دوباره توی استودیو بازش کن." }, 400);
 
-  const priceToman = Math.round(C.base + pattern.total * C.price);
+  let priceToman, extra;
+  if (body.workId != null && body.workId !== "") {
+    /* سفارش مستقیم از گالری؛ قیمت همیشه سمت سرور تعیین می‌شه */
+    const work = await findWork(C, body.workId);
+    if (!work) return json({ error: "این دستبند پیدا نشد؛ از گالری دوباره انتخابش کن." }, 404);
+    priceToman = workPrice(env, work);
+    extra = { kind: "work", work: { id: String(work.id), title: work.title || "", src: work.src } };
+  } else {
+    if (!C.price) return json({ error: "قیمت هنوز تنظیم نشده، بعداً امتحان کن." }, 503);
+    const pattern = cleanPattern(body.pattern);
+    if (!pattern) return json({ error: "الگو معتبر نیست. دوباره توی استودیو بازش کن." }, 400);
+    priceToman = Math.round(C.base + pattern.total * C.price);
+    extra = { kind: "pattern", pattern };
+  }
+
   const order = {
     id: crypto.randomUUID(),
     status: "pending",
@@ -108,7 +144,7 @@ async function createPayment(request, env) {
     sandbox: C.sandbox,
     priceToman,
     customer,
-    pattern,
+    ...extra,
   };
   await saveOrder(env, order);
 
@@ -179,7 +215,7 @@ function same(a, b) {
 
 /* دیدن سفارش‌ها (توکن فقط توی هدر، نه توی آدرس):
    curl -H "Authorization: Bearer ADMIN_TOKEN" https://caraw.ir/api/admin/orders
-   و برای الگوی کامل یه سفارش:  .../api/admin/orders?id=<کد کامل سفارش> */
+   و برای جزئیات کامل یه سفارش:  .../api/admin/orders?id=<کد کامل سفارش> */
 async function admin(request, env, url) {
   const t = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
   if (!env.ADMIN_TOKEN || !same(t, env.ADMIN_TOKEN)) return json({ error: "unauthorized" }, 401);
@@ -190,10 +226,12 @@ async function admin(request, env, url) {
   for (const k of list.keys) {
     const o = JSON.parse((await env.ORDERS.get(k.name)) || "null");
     if (!o || o.status !== "paid") continue;
+    const pt = o.pattern; /* سفارش‌های گالری الگو ندارن */
     rows.push({
       id: o.id, code: o.id.slice(0, 8), paidAt: o.paidAt, sandbox: o.sandbox, priceToman: o.priceToman,
       name: `${o.customer.firstName} ${o.customer.lastName}`, phone: o.customer.phone, address: o.customer.address,
-      size: `${o.pattern.width}x${o.pattern.height}`, beads: o.pattern.total, colors: o.pattern.counts,
+      kind: o.kind || "pattern", work: o.work || null,
+      size: pt ? `${pt.width}x${pt.height}` : "", beads: pt ? pt.total : 0, colors: pt ? pt.counts : null,
     });
   }
   rows.sort((a, b) => String(b.paidAt).localeCompare(String(a.paidAt)));
@@ -209,6 +247,7 @@ export default {
         const C = cfg(env);
         return json({ pricePerBead: C.price, baseFee: C.base });
       }
+      if (p === "/api/work" && request.method === "GET") return await workInfo(env, url);
       if (p === "/api/create-payment" && request.method === "POST") return await createPayment(request, env);
       if (p === "/api/payment-callback") return await paymentCallback(request, env, url);
       if (p === "/api/admin/orders") return await admin(request, env, url);

@@ -25,13 +25,18 @@ const { CARA_PALETTE, CARA_LIMITS: L } = require(palettePath);
 
 const PORT = Number(process.env.PORT) || 3000;
 const API_KEY = process.env.SEPAL_API_KEY || "test";
-const SANDBOX = API_KEY === "test"; /* کلید test فقط روی سندباکس کار می‌کند */
-const PRICE_PER_BEAD = Number(process.env.PRICE_PER_BEAD) || 0; /* تومان */
-const BASE_FEE = Number(process.env.BASE_FEE) || 0; /* تومان */
-const WORK_PRICE = Number(process.env.WORK_PRICE) || 0; /* قیمت پیش‌فرض سفارش مستقیم یه دستبند گالری (تومان) */
+const SANDBOX =
+  API_KEY === "5028824063"; /* کلید test فقط روی سندباکس کار می‌کند */
+const PRICE_PER_BEAD = Number(process.env.PRICE_PER_BEAD) || 1500; /* تومان */
+const BASE_FEE = Number(process.env.BASE_FEE) || 150000; /* تومان */
+const WORK_PRICE =
+  Number(process.env.WORK_PRICE) ||
+  0; /* قیمت پیش‌فرض سفارش مستقیم یه دستبند گالری (تومان) */
 const SEPAL = "https://sepal.ir";
 /* آدرسی که سپال بعد از پرداخت کاربر رو بهش برمی‌گردونه. روی هاست واقعی BASE_URL رو دامنه‌ی خودت بذار. */
-const BASE_URL = (process.env.BASE_URL || "https://caraw.ir").replace(/\/+$/, "").replace(/^(?!https?:\/\/)/, "https://");
+const BASE_URL = (process.env.BASE_URL || "https://caraw.ir")
+  .replace(/\/+$/, "")
+  .replace(/^(?!https?:\/\/)/, "https://");
 const CALLBACK_URL = `${BASE_URL}/api/payment-callback`;
 const ok = (j) =>
   !!j && (j.status === true || j.status === 1 || j.status === "1");
@@ -59,7 +64,9 @@ const byPaymentNumber = (pn) =>
 /* کارهای گالری: tools/build-works.js فایل data/works.json رو می‌سازه */
 function findWork(id) {
   try {
-    const list = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "works.json"), "utf8"));
+    const list = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "data", "works.json"), "utf8"),
+    );
     return list.find((w) => w.id === String(id)) || null;
   } catch {
     return null;
@@ -219,7 +226,13 @@ async function createPayment(req, res) {
       priceToman = Math.round(w.price || WORK_PRICE);
       if (!priceToman)
         return json(res, 503, { error: "قیمت این دستبند هنوز تعیین نشده." });
-      work = { id: w.id, file: w.file, title: w.title, src: w.src, price: priceToman };
+      work = {
+        id: w.id,
+        file: w.file,
+        title: w.title,
+        src: w.src,
+        price: priceToman,
+      };
     } else {
       if (!PRICE_PER_BEAD)
         return json(res, 503, {
