@@ -30,6 +30,7 @@
         `<div>${work.title && !NUM.test(work.title) ? `<b>${esc(work.title)}</b>` : ""}<div class="muted" style="font-size:16px">دقیقاً همین دستبند برات بافته می‌شه.</div></div></div>` +
         `<div class="stat"><span>قیمت</span><strong>${fa(work.price)} تومان</strong></div>`;
     }
+    if (pay) pay.textContent = `پرداخت ${fa(work.price)} تومان`;
   }
 
   form.addEventListener("submit", async (e) => {

@@ -17,5 +17,7 @@
   // بدون id: Wrangler موقع دیپلوی خودش KV رو می‌سازه و وصل می‌کنه
   "kv_namespaces": [{ "binding": "ORDERS" }]
 
-  // مسیر روی دامنه (routes) رو عمداً نذاشتم؛ بعد از اولین دیپلوی موفق اضافه‌ش می‌کنیم
+  ,
+  // فقط /api/* به Worker می‌رسه؛ بقیه‌ی سایت مثل قبل از GitHub Pages می‌آد
+  "routes": [{ "pattern": "caraw.ir/api/*", "zone_name": "caraw.ir" }]
 }
