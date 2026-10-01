@@ -30,7 +30,8 @@ const digits = (s) =>
     .replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
 
 function cfg(env) {
-  const key = String(env.SEPAL_API_KEY || "test").trim();
+  /* اگه کلید از صفحه‌ی راست‌به‌چپ کپی شده باشه ممکنه رقم‌هاش فارسی (۵۸۰) یا کاراکتر نامرئی داشته باشه؛ اینجا درستش می‌کنیم */
+  const key = digits(String(env.SEPAL_API_KEY || "test")).replace(/[\s\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g, "");
   return {
     key,
     sandbox: key === "test",
