@@ -24,8 +24,8 @@
   "id": "اسب",
   "src": "img/works-cutouts/%D8%A7%D8%B3%D8%A8.png",
   "thumb": "img/works-cutouts/%D8%A7%D8%B3%D8%A8.png",
-  "w": 892,
-  "h": 1191,
+  "w": 2560,
+  "h": 1920,
   "title": "اسب",
   "note": "",
   "tags": []
@@ -54,9 +54,19 @@
   "id": "زنجیر",
   "src": "img/works-cutouts/%D8%B2%D9%86%D8%AC%DB%8C%D8%B1.png",
   "thumb": "img/works-cutouts/%D8%B2%D9%86%D8%AC%DB%8C%D8%B1.png",
-  "w": 750,
-  "h": 750,
+  "w": 2560,
+  "h": 1920,
   "title": "زنجیر",
+  "note": "",
+  "tags": []
+ },
+ {
+  "id": "قالی ",
+  "src": "img/works-cutouts/%D9%82%D8%A7%D9%84%DB%8C%20.png",
+  "thumb": "img/works-cutouts/%D9%82%D8%A7%D9%84%DB%8C%20.png",
+  "w": 2560,
+  "h": 1920,
+  "title": "قالی",
   "note": "",
   "tags": []
  },
@@ -94,8 +104,8 @@
   "id": "لابستر",
   "src": "img/works-cutouts/%D9%84%D8%A7%D8%A8%D8%B3%D8%AA%D8%B1.png",
   "thumb": "img/works-cutouts/%D9%84%D8%A7%D8%A8%D8%B3%D8%AA%D8%B1.png",
-  "w": 615,
-  "h": 820,
+  "w": 2560,
+  "h": 1920,
   "title": "لابستر",
   "note": "",
   "tags": []
@@ -121,31 +131,11 @@
   "tags": []
  },
  {
-  "id": "هزار چشم  ",
-  "src": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20%20.png",
-  "thumb": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20%20.png",
-  "w": 750,
-  "h": 750,
-  "title": "هزار چشم",
-  "note": "",
-  "tags": []
- },
- {
   "id": "هزار چشم ",
   "src": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20.png",
   "thumb": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20.png",
   "w": 1310,
   "h": 1200,
-  "title": "هزار چشم",
-  "note": "",
-  "tags": []
- },
- {
-  "id": "هزار چشم",
-  "src": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85.png",
-  "thumb": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85.png",
-  "w": 1125,
-  "h": 1125,
   "title": "هزار چشم",
   "note": "",
   "tags": []
