@@ -1,0 +1,18 @@
+/* استایل پایه‌ی گالری (کارت‌ها و نمایش بزرگ). gallery-fix.css بعد از این لود می‌شه و روش می‌شینه. */
+.wk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin-top:26px}
+.wk-card{position:relative;margin:0;cursor:pointer;border:1px solid var(--line);border-radius:18px;background:#fff;overflow:hidden}
+.wk-card:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
+.wk-card img{display:block;width:100%;height:auto;opacity:0;transition:opacity .4s}
+.wk-card img.in{opacity:1}
+.wk-card figcaption{padding:10px 14px 14px;text-align:center}
+.wk-card figcaption b{display:block}
+.wk-card figcaption span{display:block;color:var(--muted);font-size:14px}
+.wk-fav{position:absolute;top:10px;inset-inline-end:10px;border:0;background:rgba(255,255,255,.9);width:36px;height:36px;border-radius:50%;cursor:pointer;color:#a99db8;font-size:18px}
+.wk-fav[aria-pressed="true"]{color:var(--hot)}
+.wk-count{color:var(--muted)}
+.wk-lb{border:0;padding:0;border-radius:24px;background:#fff;color:var(--ink)}
+.wk-lb::backdrop{background:rgba(29,21,39,.7)}
+.wk-stage{position:relative}
+.wk-stage #lbImg{display:block;opacity:0;transition:opacity .3s}
+.wk-stage #lbImg.in{opacity:1}
+.wk-info .tags{display:flex;flex-wrap:wrap;gap:6px}
