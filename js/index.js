@@ -2,11 +2,10 @@
    مسیرها: /api/config  /api/works  /api/work  /api/create-payment  /api/payment-callback  /api/admin/orders
    تنظیمات (توی داشبورد Cloudflare → Worker → Settings):
      Variables:  PRICE_PER_BEAD=1500   BASE_FEE=150000   BASE_URL=https://caraw.ir
-     Secrets:    SEPAL_API_KEY (کلید اصلی سپال؛ اگه نذاری حالت test/سندباکس می‌شه)
+     Secrets:    SEPAL_API_KEY (کلید وب‌سرویس درگاه تأییدشده‌ی سپال؛ اجباریه)
                  ADMIN_TOKEN (یه رمز دلخواه؛ توی هدر Authorization: Bearer فرستاده می‌شه)
+     اختیاری:    SEPAL_BASE (پیش‌فرض https://payment.sepal.ir)   CALLBACK_URL
      KV binding: ORDERS  (یه KV namespace بساز و با همین اسم وصلش کن) */
-
-const SEPAL = "https://sepal.ir";
 
 /* کدهای معتبر منجوق؛ باید با js/palette.js یکی باشه. بعد از هر تغییر توی palette.js این رو بزن:  node tools/sync-valid.js <مسیر این فایل> */
 /* SYNC:START (خودکار؛ دستی ویرایش نکن: node tools/sync-valid.js) */
@@ -31,10 +30,10 @@ const digits = (s) =>
 
 function cfg(env) {
   /* اگه کلید از صفحه‌ی راست‌به‌چپ کپی شده باشه ممکنه رقم‌هاش فارسی (۵۸۰) یا کاراکتر نامرئی داشته باشه؛ اینجا درستش می‌کنیم */
-  const key = digits(String(env.SEPAL_API_KEY || "test")).replace(/[\s\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g, "");
+  const key = digits(String(env.SEPAL_API_KEY || "")).replace(/[\s\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g, "");
   return {
     key,
-    sandbox: key === "test",
+    sepal: String(env.SEPAL_BASE || "https://payment.sepal.ir").trim().replace(/\/+$/, "").replace(/^(?!https?:\/\/)/, "https://"),
     price: Number(env.PRICE_PER_BEAD) || 0,
     base: Number(env.BASE_FEE) || 0,
     callback: String(env.CALLBACK_URL || "").trim(), /* اختیاری: اگه سپال آدرس بازگشت رو فقط با http:// قبول می‌کنه، اینجا بذار */
@@ -67,7 +66,7 @@ function cleanPattern(p) {
 }
 
 async function sepal(C, endpoint, body) {
-  const r = await fetch(`${SEPAL}/api/${C.sandbox ? "sandbox/" : ""}${endpoint}.json`, {
+  const r = await fetch(`${C.sepal}/api/${endpoint}.json`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -204,11 +203,13 @@ async function createPayment(request, env) {
     extra = { kind: "pattern", pattern };
   }
 
+  if (!C.key) return json({ error: "کلید درگاه (SEPAL_API_KEY) روی Worker تنظیم نشده." }, 503);
+  if (!(priceToman * 10 >= 100000)) return json({ error: "مبلغ کمتر از حداقل مجاز درگاه (۱۰٬۰۰۰ تومان) است." }, 400);
+
   const order = {
     id: crypto.randomUUID(),
     status: "pending",
     createdAt: new Date().toISOString(),
-    sandbox: C.sandbox,
     priceToman,
     customer,
     ...extra,
@@ -227,7 +228,7 @@ async function createPayment(request, env) {
     order.paymentNumber = String(j.paymentNumber);
     await saveOrder(env, order);
     await env.ORDERS.put("pn:" + order.paymentNumber, order.id, { expirationTtl: 60 * 60 * 24 * 30 });
-    return json({ paymentUrl: `${SEPAL}${C.sandbox ? "/sandbox/payment" : "/payment"}/${order.paymentNumber}` });
+    return json({ paymentUrl: `${C.sepal}/api/payment/${order.paymentNumber}/` });
   }
   order.status = "failed";
   order.error = j && j.message;
@@ -313,7 +314,7 @@ async function debug(request, env, url) {
   if (!env.ADMIN_TOKEN || !same(t, env.ADMIN_TOKEN)) return json({ error: "unauthorized" }, 401);
   const C = cfg(env);
   const rawKey = String(env.SEPAL_API_KEY || "");
-  const out = { sandbox: C.sandbox, hasSepalKey: !!rawKey, key: { length: rawKey.length, trimmedLength: rawKey.trim().length, masked: rawKey.trim().slice(0, 2) + "…" + rawKey.trim().slice(-2) }, kv: !!env.ORDERS, site: C.site,
+  const out = { sepalBase: C.sepal, hasSepalKey: !!rawKey, key: { length: rawKey.length, trimmedLength: rawKey.trim().length, masked: rawKey.trim().slice(0, 2) + "…" + rawKey.trim().slice(-2) }, kv: !!env.ORDERS, site: C.site,
     pricePerBead: C.price, baseFee: C.base, callback: C.callback || `${C.site}/api/payment-callback` };
   try {
     const r = await fetch(`${C.site}/js/works.js`);
@@ -323,7 +324,7 @@ async function debug(request, env, url) {
     catch (e) { out.works.parseError = String(e).slice(0, 200); }
   } catch (e) { out.works = { error: String(e) }; }
   if (url.searchParams.get("sepal"))
-    out.sepal = await sepal(C, "request", { apiKey: C.key, amount: 10000, callbackUrl: out.callback,
+    out.sepal = await sepal(C, "request", { apiKey: C.key, amount: 100000 /* حداقل مجاز سپال: ۱۰۰٬۰۰۰ ریال */, callbackUrl: out.callback,
       invoiceNumber: "debug", payerName: "test", payerMobile: "09123456789" });
   return json(out);
 }
