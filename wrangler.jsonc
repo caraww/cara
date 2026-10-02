@@ -12,8 +12,6 @@
     "BASE_FEE": "150000",
     "CALLBACK_URL": "http://caraw.ir/api/payment-callback",
     "vars": {
-      "ADMIN_TOKEN": "JRvMW677JEmLkTMhwEQyZ5xzJm7Z30sT-ESsSJ2JwaRf6TNXPfbDzlzv6-d45B_9vJ8Vz50e2Vjxw3IE7XD_0GyW66zwKeu4vsYfA9LY5d-nO7O4SeGROM0txCVf2Tkvc8424fe7d376763768db5782edf5afa8f0ff77ba505c138250fd825dafc7b80dI7r4RfUGdh8XR9_pJtVY4v8nrwx25-2c-xr6wClVx_GjjGtSMcibkMhZSsRuTenB",
-      "BASE_FEE": "150000",
       "HEZAR_CHESHM_PRICE": "3000000",
       "WORK_PRICE": "1700000",
 
