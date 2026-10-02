@@ -392,3 +392,15 @@ h3 {
 .mini-gal b,.mini-gal span{padding:0 12px}
 .mini-gal b{font-size:16px}.mini-gal span{font-size:13px}
 @media(max-width:850px){.mini-gal{grid-template-columns:1fr 1fr}.mini-gal img{height:150px}}
+
+/* نماد اینماد توی فوتر */
+.foot .enamad{display:inline-flex;align-items:center}
+.foot .enamad img{height:72px;width:auto;display:block}
+@media(max-width:850px){.foot .enamad{align-self:flex-start}}
+
+/* لوگو توی هدر: نسخه‌ی روشن روی هیروی تیره، نسخه‌ی تیره بعد از اسکرول */
+.top .logo{display:flex;align-items:center}
+.top .logo img{height:44px;width:auto;display:block}
+.top .logo .l-dark{display:none}
+.top.solid .logo .l-light{display:none}
+.top.solid .logo .l-dark{display:block}

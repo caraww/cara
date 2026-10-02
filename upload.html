@@ -1,10 +1,16 @@
-<!doctype html><html lang="fa" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" href="img/beads.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap"><link rel="stylesheet" href="css/studio.css"><title>cara — عکس به الگو</title></head><body><header class="top solid"><a href="index.html" class="logo">cara<i>.</i></a><nav><a href="builder.html">طراحی دستی</a><a href="upload.html">عکس به الگو</a><a href="gallery.html">گالری</a><a class="btn dark sm" href="checkout.html">سفارش</a></nav></header>
-<main class="wrap narrow"><h1 class="page-title">عکس رو تبدیل کن به الگوی دستبند</h1><p class="sub">رنگ هر خونه با نزدیک‌ترین منجوق موجود عوض می‌شه. عکس ساده و پررنگ بهتر جواب می‌ده.</p>
-<label class="drop" id="drop"><b>عکس رو بنداز اینجا یا کلیک کن</b><span class="muted">JPG، PNG یا WebP</span><input id="file" type="file" accept="image/*"></label>
-<div class="controls"><label class="field">عرض<input id="w" type="number" min="1" max="40" value="15"></label><label class="field">طول<input id="h" type="number" min="1" max="200" value="80"></label>
-<label class="field">برش<select id="fit"><option value="cover">پر کردن (لبه‌ها بریده می‌شه)</option><option value="contain">کل عکس (با حاشیه‌ی سفید)</option></select></label>
-<label class="check"><input id="dither" type="checkbox"> سایه‌روشن (برای چهره و عکس واقعی)</label></div>
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><link rel="icon" type="image/png" href="img/cara-favicon.png"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap"><link rel="stylesheet" href="css/studio.css"><title>cara — سازنده الگو</title></head><body><header class="top solid"><a href="index.html" class="logo"><img src="img/cara-logo.png" alt="cara" style="height:44px;width:auto;display:block"></a><nav><a href="builder.html">طراحی دستی</a><a href="upload.html">عکس به الگو</a><a href="gallery.html">گالری</a><a class="btn dark sm" href="checkout.html">سفارش</a></nav></header>
+<main class="wrap"><div class="builder">
+<aside class="panel"><h2>رنگ‌ها</h2><div id="palette" class="palette" role="group" aria-label="پالت منجوق"></div>
+<div class="current"><i id="curDot"></i><div><b id="curName"></b><small id="curCode"></small></div></div></aside>
+<section class="panel"><div class="head"><div><h1 class="page-title">دستبندت رو خودت بساز</h1><p class="sub" style="margin:0">هر خونه یه منجوقه. برای پاک کردن راست‌کلیک کن یا از پاک‌کن استفاده کن.</p></div>
+<div class="dims"><label>عرض <input id="w" type="number" min="1" max="40" value="15"></label>×<label>طول <input id="h" type="number" min="1" max="200" value="80"></label></div></div>
 <p id="warn" class="warn" role="alert" hidden>دستبندت داره خیلی پهن میشه ها!</p>
-<div class="preview"><canvas id="out" hidden></canvas><div class="msg" id="msg">هنوز عکسی انتخاب نشده.</div></div>
-<div class="btns" style="margin-top:18px"><a class="btn dark" href="builder.html">ویرایشش کن</a><a class="btn" href="checkout.html">ادامه سفارش</a></div>
-</main><script src="js/palette.js"></script><script src="js/upload.js"></script></body></html>
+<div class="tools">
+<div class="grp"><button class="tool" data-tool="brush" aria-pressed="true">قلم (B)</button><button class="tool" data-tool="eraser" aria-pressed="false">پاک‌کن (E)</button>
+<button class="tool" data-tool="fill" aria-pressed="false">سطل (G)</button><button class="tool" data-tool="pan" aria-pressed="false">جابه‌جایی</button>
+</div><div class="grp"><button class="tool" id="mirror" aria-pressed="false">آینه</button><button class="tool" id="undo">↶ برگشت</button><button class="tool" id="clear">پاک کردن همه</button></div>
+<span class="grow"></span><span class="muted" id="saved"></span><div class="grp"><button class="tool" id="export">دانلود چارت</button><a class="btn accent sm" id="next" href="checkout.html">ادامه سفارش</a></div></div>
+<div class="grid-wrap" id="gridWrap"><canvas id="grid" aria-label="گرید طراحی"></canvas><i class="ghost" id="ghost" hidden></i></div>
+<div class="statusbar"><span id="pos">—</span><span>ابزار: <b id="toolName">قلم</b></span><span>Space + کشیدن = جابه‌جایی</span></div></section>
+<aside class="panel summary"><h2>پیش‌نمایش روی مچ</h2><div class="wristbox"><canvas id="wrist" aria-label="پیش‌نمایش دستبند"></canvas></div><h2 class="h2b">خلاصه</h2><div class="stat"><span>تعداد منجوق</span><strong id="total">۰</strong></div><div class="stat"><span>ابعاد</span><strong id="dimText"></strong></div><div class="colors" id="colors"></div></aside>
+</div></main><script src="js/palette.js"></script><script src="js/builder.js"></script></body></html>
