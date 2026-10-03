@@ -7,7 +7,7 @@
   /* عکس واقعی منجوق‌ها: برای هر رنگ سعی می‌کنه img/beads/<کد رنگ>.jpg رو لود کنه (مثلاً DB0680.jpg).
      اگه jpg نبود png/webp رو امتحان می‌کنه؛ اگه هیچ عکسی نبود همون منجوق کشیده‌شده می‌مونه.
      دیگه لازم نیست کدها رو دستی این‌جا بنویسی؛ فقط اسم فایل باید دقیقاً کد رنگ باشه (حروف بزرگ). */
-  const EXTS = ["jpg", "jpeg", "png", "webp"];
+  const EXTS = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG", "WEBP"];
   const shade = (hex, k) => { const t = k < 0 ? 0 : 255; return `rgb(${CARA.hexRgb(hex).map((v) => Math.round(v + (t - v) * Math.abs(k))).join(",")})`; };
   const beadSVG = (hex, i) => `<svg viewBox="0 0 100 78" aria-hidden="true"><defs>
     <linearGradient id="b${i}" x1="0" x2="1"><stop offset="0" stop-color="${shade(hex, -0.38)}"/><stop offset=".3" stop-color="${shade(hex, 0.22)}"/><stop offset=".6" stop-color="${hex}"/><stop offset="1" stop-color="${shade(hex, -0.45)}"/></linearGradient>
