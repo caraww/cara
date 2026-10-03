@@ -126,7 +126,7 @@
   color: var(--ink, #221a2c);
   background: #fff;
   border: 1px solid var(--line, #ddd6e6);
-  border-radius: 12px;
+  border-radius: 11px;
   cursor: pointer;
   white-space: nowrap;
   transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
@@ -158,23 +158,10 @@
 /* ===== پالت رنگ‌ها: خونه‌های بزرگ‌تر که خودشون جا عوض می‌کنن ===== */
 .palette {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
   gap: 8px;
 }
-.palette .swatch {
-  width: 100%;
-  min-height: 42px;
-  aspect-ratio: 1;
-  border-radius: 10px;
-  cursor: pointer;
-}
 
-/* ===== صفحه‌ی کوچیک‌تر: ستون‌ها زیر هم ===== */
-@media (max-width: 1100px) {
-  .builder {
-    grid-template-columns: 1fr !important;
-  }
-}
 @media (max-width: 560px) {
   .tools .grp {
     width: 100%;
@@ -190,25 +177,20 @@
   }
 }
 
-/* ===== دکمه‌ی «ببین بافته می‌شه»: هم‌قد و هم‌شکل بقیه‌ی دکمه‌ها ===== */
-.dl-weave {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  width: auto !important;
-  max-width: 100%;
-  min-height: 50px;
-  margin: 16px 0 !important;
-  padding: 0 26px;
-  font: inherit;
-  font-size: 17px;
-  line-height: 1.4;
-  white-space: normal;
-  text-align: center;
+/* ===== دکمه‌ی «ببین چجوری می‌بافمش» =====
+   فونت و گردی رو از کلاس خودش (.btn) می‌گیره، پس با دکمه‌های بغلش یکیه. فقط فاصله و عرض اینجا تنظیم می‌شه. */
+
+/* سازنده: زیر پیش‌نمایش مچ، هم‌اندازه‌ی دکمه‌های نوار ابزار (۴۶ پیکسل، فونت ۱۶) */
+.summary .dl-weave {
+  width: 100% !important;
+  min-height: 46px;
+  padding: 0 22px;
+  font-size: 16px;
+  margin: 12px 0 18px !important;
 }
-@media (max-width: 560px) {
-  .dl-weave {
-    width: 100% !important;
-  }
+
+/* آپلود: توی همون ردیف دکمه‌های «ویرایشش کن» و «ادامه سفارش»؛ بدون فاصله‌ی اضافه تا هم‌تراز بمونه */
+.btns .dl-weave {
+  width: auto !important;
+  margin: 0 !important;
 }
