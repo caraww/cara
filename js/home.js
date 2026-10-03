@@ -4,8 +4,10 @@
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
 
   const chips = document.getElementById("chips");
-  /* عکس واقعی منجوق‌ها: کد رنگ رو این‌جا بنویس و عکس رو بذار توی img/beads/DB0010.jpg */
-  const PHOTOS = new Set(["DB0010", "DB0157", "DB0200", "DB0310", "DB0321", "DB0351", "DB0628", "DB0654", "DB0721", "DB0724", "DB0725", "DB0726", "DB0727", "DB0732", "DB0756", "DB0757", "DB0766", "DB0774", "DB0785", "DB1133", "DB1134", "DB1498", "DB1582", "DB1832", "DB2103", "DB2109", "DB2264", "DB2359", "FGB0370"]);
+  /* عکس واقعی منجوق‌ها: برای هر رنگ سعی می‌کنه img/beads/<کد رنگ>.jpg رو لود کنه (مثلاً DB0680.jpg).
+     اگه jpg نبود png/webp رو امتحان می‌کنه؛ اگه هیچ عکسی نبود همون منجوق کشیده‌شده می‌مونه.
+     دیگه لازم نیست کدها رو دستی این‌جا بنویسی؛ فقط اسم فایل باید دقیقاً کد رنگ باشه (حروف بزرگ). */
+  const EXTS = ["jpg", "jpeg", "png", "webp"];
   const shade = (hex, k) => { const t = k < 0 ? 0 : 255; return `rgb(${CARA.hexRgb(hex).map((v) => Math.round(v + (t - v) * Math.abs(k))).join(",")})`; };
   const beadSVG = (hex, i) => `<svg viewBox="0 0 100 78" aria-hidden="true"><defs>
     <linearGradient id="b${i}" x1="0" x2="1"><stop offset="0" stop-color="${shade(hex, -0.38)}"/><stop offset=".3" stop-color="${shade(hex, 0.22)}"/><stop offset=".6" stop-color="${hex}"/><stop offset="1" stop-color="${shade(hex, -0.45)}"/></linearGradient>
@@ -13,7 +15,14 @@
     <path d="M12 30v26c0 10 17 16 38 16s38-6 38-16V30z" fill="url(#b${i})"/><ellipse cx="50" cy="30" rx="38" ry="17" fill="url(#t${i})"/>
     <ellipse cx="50" cy="30" rx="17" ry="8" fill="${shade(hex, -0.7)}"/><ellipse cx="50" cy="28.5" rx="17" ry="6.2" fill="${shade(hex, -0.88)}" opacity=".75"/>
     <path d="M22 45c1 5 5 8 10 10" stroke="rgba(255,255,255,.55)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
-  CARA.palette.forEach((p, i) => chips.insertAdjacentHTML("beforeend", `<li><div class="bead">${PHOTOS.has(p.code) ? `<img src="img/beads/${p.code}.jpg" alt="${p.name}" loading="lazy">` : beadSVG(p.hex, i)}</div><b>${p.code}</b><span>${p.name}</span></li>`));
+  CARA.palette.forEach((p, i) => chips.insertAdjacentHTML("beforeend", `<li data-i="${i}"><div class="bead"><img src="img/beads/${p.code}.${EXTS[0]}" data-e="0" alt="${p.name}" loading="lazy"></div><b>${p.code}</b><span>${p.name}</span></li>`));
+  /* خطای لود عکس بابل نمی‌شه، پس توی فاز capture می‌گیریمش: ساختار بعدی یا برگشت به منجوق کشیده‌شده */
+  chips.addEventListener("error", (e) => {
+    const im = e.target; if (im.tagName !== "IMG") return;
+    const n = Number(im.dataset.e) + 1, li = im.closest("li"), p = CARA.palette[Number(li.dataset.i)];
+    if (n < EXTS.length) { im.dataset.e = n; im.src = `img/beads/${p.code}.${EXTS[n]}`; }
+    else li.querySelector(".bead").innerHTML = beadSVG(p.hex, Number(li.dataset.i));
+  }, true);
 
   /* چند عکس تصادفی از کارهای خودم (js/works.js با tools/build-works.js ساخته می‌شه) */
   const mg = document.getElementById("miniGal"), works = CARA.works || [];
