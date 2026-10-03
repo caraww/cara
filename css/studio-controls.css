@@ -1,0 +1,191 @@
+/* تنظیمات استودیو (builder و upload): بزرگ‌تر، انعطاف‌پذیر، مرتب.
+   باید بعد از css/studio.css و css/delight.css لود بشه. */
+
+/* ===== upload: عرض / طول / برش / سایه‌روشن ===== */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px;
+  margin: 24px 0 8px;
+}
+.controls .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1 1 140px;
+  min-width: 120px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.6;
+}
+.controls .field:has(select) {
+  flex: 2 1 260px;
+}
+.controls .field input,
+.controls .field select,
+.dims input {
+  box-sizing: border-box;
+  width: 100%;
+  height: 50px;
+  padding: 0 16px;
+  font: inherit;
+  font-size: 17px;
+  font-weight: 400;
+  color: var(--ink, #221a2c);
+  background: #fff;
+  border: 1px solid var(--line, #ddd6e6);
+  border-radius: 12px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.controls .field input:focus,
+.controls .field select:focus,
+.dims input:focus {
+  outline: 0;
+  border-color: var(--accent-2, #7a34c4);
+  box-shadow: 0 0 0 4px rgba(122, 52, 196, 0.14);
+}
+.controls .check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1 1 260px;
+  min-height: 50px;
+  padding: 0 16px;
+  font-size: 16px;
+  line-height: 1.6;
+  background: #fff;
+  border: 1px solid var(--line, #ddd6e6);
+  border-radius: 12px;
+  cursor: pointer;
+}
+.controls .check input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  accent-color: var(--accent, #5b1f9a);
+}
+
+/* ===== builder: ابعاد بالای صفحه ===== */
+.panel .head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px 24px;
+}
+.panel .head > div:first-child {
+  flex: 1 1 280px;
+  min-width: 0;
+}
+.dims {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  font-size: 18px;
+}
+.dims label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.dims input {
+  width: 100px;
+  text-align: center;
+}
+
+/* ===== builder: نوار ابزار ===== */
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+  margin: 18px 0;
+}
+.tools .grp {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tools .grow {
+  flex: 1 1 0;
+  min-width: 0;
+}
+.tools .tool {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 20px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--ink, #221a2c);
+  background: #fff;
+  border: 1px solid var(--line, #ddd6e6);
+  border-radius: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+}
+.tools .tool:hover {
+  border-color: var(--ink, #221a2c);
+  transform: translateY(-2px);
+}
+.tools .tool[aria-pressed="true"] {
+  color: #fff;
+  background: var(--ink, #221a2c);
+  border-color: var(--ink, #221a2c);
+}
+.tools .btn.sm {
+  min-height: 46px;
+  padding: 0 22px;
+  font-size: 16px;
+}
+.tools .muted {
+  font-size: 15px;
+}
+.statusbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  font-size: 15px;
+}
+
+/* ===== پالت رنگ‌ها: خونه‌های بزرگ‌تر که خودشون جا عوض می‌کنن ===== */
+.palette {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(42px, 1fr));
+  gap: 8px;
+}
+.palette .swatch {
+  width: 100%;
+  min-height: 42px;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+/* ===== صفحه‌ی کوچیک‌تر: ستون‌ها زیر هم ===== */
+@media (max-width: 1100px) {
+  .builder {
+    grid-template-columns: 1fr !important;
+  }
+}
+@media (max-width: 560px) {
+  .tools .grp {
+    width: 100%;
+  }
+  .tools .tool {
+    flex: 1 1 auto;
+  }
+  .tools .grow {
+    display: none;
+  }
+  .dims input {
+    width: 84px;
+  }
+}
