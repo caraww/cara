@@ -1,0 +1,68 @@
+/* جزئیات خلاقانه‌ی cara: دستگاه بافندگی زنده + چند حرکت ریز. فایل جداست؛ کدهای قبلی دست نخورده‌اند. */
+:root{--dl-gold:#b8975a;--dl-gold2:#cfae6c}
+
+/* ===== دستگاه بافندگی (قاب تاریک؛ بوم رو جاوااسکریپت می‌کشه) ===== */
+.dl-loom{
+  position:relative;overflow:hidden;border-radius:22px;
+  background:radial-gradient(ellipse 80% 70% at 50% 0,#43295a 0,#1d1527 72%);
+  border:1px solid rgba(184,151,90,.5);
+  box-shadow:0 26px 60px rgba(29,21,39,.38),inset 0 0 0 6px rgba(255,255,255,.035)}
+.dl-loom canvas{display:block;width:100%}
+.dl-cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:0 22px 16px;color:#cfc3de;font-size:15px;line-height:1.8}
+.dl-cap b{color:#f3e2b4;font-weight:700}
+#loom .dl-loom{margin-top:44px}
+#loom .btns{margin-top:30px}
+
+/* ===== پنجره‌ی «ببین بافته می‌شه» ===== */
+.dl-dlg{
+  width:min(980px,94vw);max-width:none;padding:0;border:0;border-radius:28px;overflow:hidden;
+  background:#1d1527;color:#f1ecf6;box-shadow:0 50px 110px rgba(10,5,18,.6)}
+.dl-dlg::backdrop{background:rgba(18,11,26,.78);backdrop-filter:blur(7px)}
+.dl-dlg .dl-loom{border:0;border-radius:0;box-shadow:none;background:radial-gradient(ellipse 80% 70% at 50% 0,#43295a 0,#1d1527 75%)}
+.dl-hd{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 24px 6px}
+.dl-hd b{font-size:20px;font-weight:900;color:#f3e2b4}
+.dl-x{appearance:none;border:1px solid rgba(255,255,255,.2);background:transparent;color:#f1ecf6;width:38px;height:38px;border-radius:50%;font-size:22px;line-height:1;cursor:pointer;transition:background .2s}
+.dl-x:hover{background:rgba(255,255,255,.12)}
+.dl-prog{direction:ltr;height:8px;margin:0 24px;background:radial-gradient(circle,rgba(184,151,90,.28) 0 2.6px,transparent 3.2px) 0 50%/12px 8px repeat-x}
+.dl-prog i{display:block;height:100%;width:0;background:radial-gradient(circle,var(--dl-gold2) 0 3px,transparent 3.6px) 0 50%/12px 8px repeat-x}
+.dl-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:14px 24px 22px}
+.dl-bar .dl-cnt{flex:1 1 auto;color:#cfc3de;font-size:16px}
+.dl-b{
+  appearance:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;
+  min-height:44px;padding:0 20px;border-radius:12px;border:1px solid rgba(255,255,255,.25);
+  background:transparent;color:#f1ecf6;font:inherit;font-size:16px;text-decoration:none;transition:background .2s,transform .2s}
+.dl-b:hover{background:rgba(255,255,255,.1);transform:translateY(-2px)}
+.dl-b.gold{background:linear-gradient(135deg,#cfae6c,#a7853f);border-color:transparent;color:#fff;font-weight:700;box-shadow:0 8px 20px rgba(167,133,63,.4)}
+.dl-b.gold:hover{background:linear-gradient(135deg,#d9b974,#b08f48)}
+
+/* دکمه‌ی «ببین بافته می‌شه» توی بیلدر و آپلود */
+.dl-weave{width:100%;margin:14px 0 22px;gap:8px;cursor:pointer}
+.dl-pulse{position:relative}
+.dl-pulse::after{content:"";position:absolute;inset:-3px;border-radius:inherit;border:2px solid var(--dl-gold);opacity:0;animation:dl-pulse 2.4s 1s ease-out 2}
+@keyframes dl-pulse{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(1.08)}}
+
+/* ===== تیتر صفحه‌های استودیو: نخ مهره‌ای که کشیده می‌شه ===== */
+.page-title::after{
+  content:"";display:block;height:12px;margin-top:10px;width:0;
+  background:radial-gradient(circle,var(--dl-gold) 0 3.2px,transparent 3.8px) 0 50%/17px 12px repeat-x;
+  animation:dl-thread 1.4s .25s cubic-bezier(.2,.7,.2,1) forwards}
+@keyframes dl-thread{to{width:min(100%,170px)}}
+
+/* ===== صدا، توست، ضربه‌ی عدد ===== */
+.dl-sound{appearance:none;cursor:pointer;border:1px solid var(--line,#ddd6e6);background:#fff;color:inherit;font:inherit;font-size:14px;border-radius:999px;padding:0 14px;line-height:2;transition:transform .2s}
+.dl-sound:hover{transform:translateY(-2px)}
+.dl-sound[aria-pressed="false"]{opacity:.55}
+.dl-toast{
+  position:fixed;inset-inline:0;top:96px;margin:auto;width:max-content;max-width:90vw;z-index:70;
+  padding:10px 26px;border-radius:999px;color:#fff6e0;font-size:17px;line-height:1.9;
+  background:linear-gradient(135deg,#3b2650,#1d1527);border:1px solid rgba(184,151,90,.6);
+  box-shadow:0 14px 40px rgba(29,21,39,.35);opacity:0;transform:translateY(-14px) scale(.96);
+  transition:opacity .35s,transform .45s cubic-bezier(.2,.9,.3,1.3);pointer-events:none}
+.dl-toast.on{opacity:1;transform:none}
+@keyframes dl-bump{40%{transform:scale(1.25);color:var(--dl-gold)}}
+.dl-bump{display:inline-block;animation:dl-bump .35s}
+
+@media (prefers-reduced-motion:reduce){
+  .page-title::after{animation:none;width:min(100%,170px)}
+  .dl-pulse::after{animation:none}
+}
