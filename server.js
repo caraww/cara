@@ -25,8 +25,9 @@ const { CARA_PALETTE, CARA_LIMITS: L } = require(palettePath);
 
 const PORT = Number(process.env.PORT) || 3000;
 const API_KEY = process.env.SEPAL_API_KEY || "test";
+/* کلید test فقط روی سندباکس کار می‌کند؛ پس بدون کلید واقعی هیچ‌وقت سراغ درگاه واقعی نمی‌رویم */
 const SANDBOX =
-  API_KEY === "5028824063"; /* کلید test فقط روی سندباکس کار می‌کند */
+  process.env.SEPAL_SANDBOX === "1" || API_KEY === "test" || API_KEY === "5028824063";
 const PRICE_PER_BEAD = Number(process.env.PRICE_PER_BEAD) || 1500; /* تومان */
 const BASE_FEE = Number(process.env.BASE_FEE) || 150000; /* تومان */
 const WORK_PRICE =
@@ -61,16 +62,24 @@ const save = (o) => {
 const byPaymentNumber = (pn) =>
   [...orders.values()].find((o) => o.paymentNumber && o.paymentNumber === pn);
 
-/* کارهای گالری: tools/build-works.js فایل data/works.json رو می‌سازه */
-function findWork(id) {
+/* کارهای گالری: tools/build-works.js فایل data/works.json و js/works.js رو می‌سازه */
+function loadWorks() {
   try {
-    const list = JSON.parse(
-      fs.readFileSync(path.join(__dirname, "data", "works.json"), "utf8"),
-    );
-    return list.find((w) => w.id === String(id)) || null;
+    return JSON.parse(fs.readFileSync(path.join(__dirname, "data", "works.json"), "utf8"));
+  } catch {}
+  /* اگه works.json نبود، از js/works.js می‌خونیم */
+  try {
+    const src = fs.readFileSync(path.join(__dirname, "js", "works.js"), "utf8");
+    const win = {};
+    new Function("window", src)(win);
+    return (win.CARA && win.CARA.works) || [];
   } catch {
-    return null;
+    return [];
   }
+}
+function findWork(id) {
+  const k = String(id || "").trim();
+  return loadWorks().find((w) => String(w.id).trim() === k) || null;
 }
 
 const VALID = new Set(CARA_PALETTE.map((p) => p.code));
@@ -165,9 +174,13 @@ const MIME = {
 const PAGES = new Set(["index", "builder", "upload", "gallery", "checkout"]);
 
 function sendFile(res, file) {
+  const ext = path.extname(file).toLowerCase();
   res.writeHead(200, {
-    "Content-Type":
-      MIME[path.extname(file).toLowerCase()] || "application/octet-stream",
+    "Content-Type": MIME[ext] || "application/octet-stream",
+    /* صفحه و js/css همیشه تازه؛ عکس‌ها چون لینکشون نسخه (?v=) داره می‌تونن کش بشن */
+    "Cache-Control": [".html", ".js", ".css"].includes(ext)
+      ? "no-cache"
+      : "public, max-age=86400",
   });
   fs.createReadStream(file).pipe(res);
 }
@@ -355,6 +368,15 @@ http
           pricePerBead: PRICE_PER_BEAD,
           baseFee: BASE_FEE,
         });
+      if (p === "/api/works" && req.method === "GET")
+        return json(
+          res,
+          200,
+          loadWorks().map((w) => ({
+            id: String(w.id).trim(),
+            price: Math.round(w.price || WORK_PRICE) || 0,
+          })),
+        );
       if (p === "/api/work" && req.method === "GET") {
         const w = findWork(url.searchParams.get("id"));
         if (!w) return json(res, 404, { error: "not found" });

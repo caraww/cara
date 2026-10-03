@@ -16,11 +16,16 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const DIR = path.join(ROOT, "img", "works-cutouts");
 const OUT = path.join(ROOT, "js", "works.js");
+const OUT_JSON = path.join(ROOT, "data", "works.json"); /* server.js و Worker از این می‌خوانند */
+const STAMP = Date.now().toString(36); /* نسخه‌ی این بیلد؛ برای شکستن کش */
+const PAGES = ["index.html", "gallery.html"];
 const EXT = /\.(jpe?g|png|webp|gif|avif)$/i;
 
 const fixFa = (s) => s.normalize("NFC").replace(/ي/g, "ی").replace(/ك/g, "ک");
 const isNum = (s) => /^[\s0-9۰-۹٠-٩.\-_)]+$/.test(s);
 const enc = (rel) => rel.split("/").map(encodeURIComponent).join("/");
+/* هر عکس با نسخه‌ی تاریخ تغییرش لینک می‌شه، پس عکس عوض‌شده یا قدیمی از کش نمیاد */
+const ver = (file) => { try { return "?v=" + Math.round(fs.statSync(path.join(DIR, file)).mtimeMs).toString(36); } catch { return ""; } };
 
 /* ابعاد عکس (با در نظر گرفتن چرخش EXIF موبایل) */
 function exifOrient(b, s) {
@@ -117,7 +122,7 @@ all
    همه‌شون یک کار حساب می‌شن و توی نمایش بزرگ با عکس‌های ریز کنار هم می‌آن. */
 const groups = new Map();
 for (const file of files) {
-  const b0 = fixFa(file.replace(EXT, ""));
+  const b0 = fixFa(file.replace(EXT, "")).trim();
   const m = b0.match(/^(.*?)\s*__(\d+)$/);
   const key = m ? m[1] : b0;
   if (!groups.has(key)) groups.set(key, []);
@@ -134,6 +139,7 @@ const works = [...groups].map(([base, items]) => {
   while (used.has(id)) id = `${base}-${n++}`;
   used.add(id);
   const nice = base.replace(/_+/g, " ").replace(/\s+/g, " ").trim();
+  id = id.trim();
   const title = meta.title ? String(meta.title) : isNum(nice) ? "" : nice;
   items.forEach((it) => {
     if (it.file !== it.file.normalize("NFC"))
@@ -142,7 +148,7 @@ const works = [...groups].map(([base, items]) => {
         it.file,
       );
   });
-  const images = items.map((it) => enc("img/works-cutouts/" + it.file));
+  const images = items.map((it) => enc("img/works-cutouts/" + it.file) + ver(it.file));
   console.log("✓", file, `(${images.length} عکس)`, "→ عنوان:", title || "(بدون عنوان)");
   const w = { id, src: images[0], thumb: images[0] };
   if (images.length > 1) w.images = images;
@@ -159,10 +165,21 @@ const works = [...groups].map(([base, items]) => {
 });
 
 fs.mkdirSync(path.dirname(OUT), { recursive: true });
+fs.mkdirSync(path.dirname(OUT_JSON), { recursive: true });
+fs.writeFileSync(OUT_JSON, JSON.stringify(works, null, 1));
 fs.writeFileSync(
   OUT,
   "/* خودکار ساخته شده با tools/build-works.js؛ دستی ویرایشش نکن. */\n(window.CARA = window.CARA || {}).works = " +
     JSON.stringify(works, null, 1) +
     ";\n",
 );
-console.log(`${works.length} کار نوشته شد → js/works.js`);
+console.log(`${works.length} کار نوشته شد → js/works.js و data/works.json`);
+
+/* نسخه‌ی js/works.js رو توی صفحه‌ها عوض می‌کنیم تا مرورگر و کلودفلر نسخه‌ی قدیمی رو نشون ندن */
+for (const page of PAGES) {
+  const f = path.join(ROOT, page);
+  if (!fs.existsSync(f)) continue;
+  const html = fs.readFileSync(f, "utf8");
+  const next = html.replace(/js\/works\.js(\?v=[0-9a-z]+)?/g, "js/works.js?v=" + STAMP);
+  if (next !== html) { fs.writeFileSync(f, next); console.log("✓ نسخه‌ی works.js در", page, "به‌روز شد"); }
+}
