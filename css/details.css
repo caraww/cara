@@ -1,0 +1,171 @@
+/* جزئیات ریز cara. فقط CSS، روی رنگ‌های بنفش خودت. آخرین فایل CSS هر صفحه باشه (بعد از delight.css).
+   تم همه‌جا «بافتن منجوقیه»: سوراخ منجوق، نخ، دوخت، گره. */
+:root{--g1:#b8975a;--g2:#cfae6c;--g3:#a7853f;--bead-shine:inset 0 2px rgba(255,255,255,.5),inset 0 -3px 4px rgba(0,0,0,.22)}
+::selection{background:var(--g2);color:#1d1527}
+.grid-wrap,.colors,.preview,.wk-info,.dl-dlg{scrollbar-width:thin;scrollbar-color:rgba(184,151,90,.75) transparent}
+
+/* ===== جابه‌جایی نرم بین صفحه‌ها (مرورگرهای جدید) ===== */
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:dl2-out .2s ease both}
+::view-transition-new(root){animation:dl2-in .3s .03s ease both}
+.top{view-transition-name:dl2-top}
+@keyframes dl2-out{to{opacity:0}}
+@keyframes dl2-in{from{opacity:0}}
+
+/* ===== زمینه‌ی صفحه‌های استودیو: ردیف‌های مهره‌ی کم‌رنگ که به پایین محو می‌شن ===== */
+body:has(.wrap)::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(ellipse 5px 4px,rgba(91,31,154,.06) 0 65%,transparent 72%) 0 0/20px 16px,
+    radial-gradient(ellipse 5px 4px,rgba(184,151,90,.09) 0 65%,transparent 72%) 10px 8px/20px 16px;
+  -webkit-mask-image:linear-gradient(#000,transparent 65%);mask-image:linear-gradient(#000,transparent 65%)}
+
+/* ===== نخ پیشرفت اسکرول بالای صفحه (جاهایی که JS خودش نخ نداره) ===== */
+@supports (animation-timeline:scroll()){
+  body:not(:has(#threadBar))::after{
+    content:"";position:fixed;inset:0 0 auto 0;height:8px;z-index:60;pointer-events:none;
+    background:radial-gradient(circle at 5px 4px,var(--g1) 0 3px,transparent 3.6px) 0 0/12px 8px repeat-x;
+    filter:drop-shadow(0 1px 2px rgba(0,0,0,.25));
+    animation:dl2-prog linear both;animation-timeline:scroll(root)}
+}
+@keyframes dl2-prog{from{clip-path:inset(0 0 0 100%)}to{clip-path:inset(0)}}
+
+/* ===== هدر: لبه‌دوزی مهره‌ای، لوگوی زنده، نقطه‌ی طلایی زیر لینک ===== */
+.top.solid::after{
+  content:"";position:absolute;inset:auto 0 -6px;height:12px;pointer-events:none;opacity:.6;
+  background:radial-gradient(circle,var(--g1) 0 2.4px,transparent 3px) 0 50%/16px 12px repeat-x;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
+.logo img{transition:transform .45s cubic-bezier(.2,.9,.3,1.4)}
+.logo:hover img{transform:rotate(-3deg) scale(1.05)}
+.top nav a:not(.btn):not(.cta){position:relative}
+.top nav a:not(.btn):not(.cta)::after{
+  content:"";position:absolute;inset-inline:0;bottom:-2px;margin:auto;width:7px;height:7px;border-radius:50%;
+  background:var(--g1);transform:scale(0);transition:transform .25s}
+.top nav a:not(.btn):not(.cta):hover::after{transform:scale(1)}
+
+/* ===== پنل و کارت: دوخت خط‌چین طلایی دور تا دور ===== */
+.panel,.card{position:relative}
+.panel::before,.card::before{
+  content:"";position:absolute;inset:7px;pointer-events:none;
+  border:1px dashed rgba(184,151,90,.5);border-radius:calc(var(--r,20px) - 6px)}
+.panel h2::before,.card h2::before{
+  content:"";display:inline-block;width:12px;height:9px;margin-inline-end:9px;vertical-align:.08em;
+  border-radius:3px;background:linear-gradient(var(--g2),var(--g3));box-shadow:var(--bead-shine)}
+
+/* ===== منجوق‌ها: سوراخ وسط هر رنگ، سنجاق طلایی روی رنگ انتخاب‌شده ===== */
+.swatch{position:relative}
+.swatch::before{
+  content:"";position:absolute;inset:0;margin:auto;width:26%;height:32%;border-radius:50%;
+  background:rgba(0,0,0,.26);box-shadow:inset 0 1px 2px rgba(0,0,0,.45),0 1px 0 rgba(255,255,255,.28)}
+.swatch[aria-pressed="true"]::after{
+  content:"";position:absolute;top:-8px;inset-inline-end:-8px;width:15px;height:15px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,#f3e2b4,var(--g1));border:2px solid #fff;
+  box-shadow:0 2px 5px rgba(0,0,0,.35);animation:dl2-pin .35s cubic-bezier(.2,.9,.3,1.5)}
+@keyframes dl2-pin{from{transform:scale(0)}}
+.current i{animation:dl2-pop .35s cubic-bezier(.2,.9,.3,1.4)}
+@keyframes dl2-pop{from{transform:scale(.6)}}
+
+/* ===== بوم‌ها: قاب دستگاه بافندگی ===== */
+.grid-wrap,.preview{
+  background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.22) 0 2px,transparent 2px 7px);
+  box-shadow:inset 0 0 0 1px rgba(184,151,90,.5),inset 0 10px 24px rgba(27,18,38,.1)}
+.wristbox{box-shadow:inset 0 0 0 1px rgba(184,151,90,.4)}
+.ghost{animation:dl2-ghost 1.3s ease-in-out infinite}
+@keyframes dl2-ghost{50%{box-shadow:0 0 0 7px rgba(122,52,196,.12)}}
+
+/* ===== ابزارها ===== */
+.tools .tool,.chipbar .tool{gap:8px}
+.tools .tool[aria-pressed="true"]::before,.chipbar .tool[aria-pressed="true"]::before{
+  content:"";width:7px;height:7px;border-radius:50%;flex:none;
+  background:radial-gradient(circle at 35% 30%,#f3e2b4,var(--g1))}
+.statusbar{padding-top:10px;border-top:1px dashed rgba(184,151,90,.5)}
+#saved:not(:empty){display:inline-block;animation:dl2-pop .4s cubic-bezier(.2,.9,.3,1.4)}
+.stat strong{font-variant-numeric:tabular-nums}
+.color-row{padding:3px 6px;margin:0 -6px;border-radius:8px;transition:background .2s}
+.color-row:hover{background:#efeaf6}
+.color-row .dot{box-shadow:var(--bead-shine)}
+
+/* ===== دکمه‌ها: برق رد می‌شه، حالت صبر راه‌راه ===== */
+.btn.dark,.btn.accent{
+  background-image:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.24) 50%,transparent 65%);
+  background-size:260% 100%;background-position:130% 0;background-repeat:no-repeat;
+  transition:transform .2s,background-color .2s,background-position .8s ease}
+.btn.dark:hover,.btn.accent:hover{background-position:-30% 0}
+.btn.dark:disabled,.btn.accent:disabled{
+  background-image:repeating-linear-gradient(-45deg,rgba(255,255,255,.14) 0 8px,transparent 8px 16px);
+  background-size:23px 23px;background-position:0 0;animation:dl2-stripes .8s linear infinite}
+@keyframes dl2-stripes{to{background-position:23px 0}}
+
+/* ===== فرم: منجوق طلایی کنار فیلد درست پرشده، تیک‌باکس به شکل منجوق ===== */
+form .field :is(input,textarea):valid:not(:placeholder-shown){
+  border-color:rgba(184,151,90,.75);
+  background-image:radial-gradient(ellipse at 40% 35%,#f3e2b4 0,var(--g1) 62%,transparent 66%);
+  background-repeat:no-repeat;background-position:14px 50%;background-size:13px 10px}
+form .field textarea:valid{background-position:14px 14px}
+.check input[type="checkbox"]{
+  -webkit-appearance:none;appearance:none;flex:none;display:grid;place-items:center;
+  width:26px;height:20px;margin:0;border:1.5px solid #bfb4d0;border-radius:7px;background:#fff;cursor:pointer;
+  transition:background .2s,border-color .2s,box-shadow .2s}
+.check input[type="checkbox"]::after{
+  content:"";width:9px;height:6px;border-radius:50%;background:rgba(29,21,39,.6);
+  transform:scale(0);transition:transform .25s cubic-bezier(.2,.9,.3,1.5)}
+.check input[type="checkbox"]:checked{
+  background:linear-gradient(var(--g2),var(--g3));border-color:var(--g3);box-shadow:var(--bead-shine)}
+.check input[type="checkbox"]:checked::after{transform:scale(1)}
+.warn:not([hidden]){display:flex;align-items:center;animation:dl2-shake .5s}
+.warn::before{
+  content:"!";display:inline-grid;place-items:center;flex:none;width:24px;height:24px;margin-inline-end:10px;
+  border-radius:50%;background:var(--hot,#e24a2b);color:#fff;font-size:15px;line-height:1}
+@keyframes dl2-shake{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+
+/* ===== آپلود: نخ مهره‌ای که روی کادر عکس می‌لغزه ===== */
+.drop{position:relative;transition:border-color .2s,background .2s,transform .3s,box-shadow .3s}
+.drop:hover{transform:translateY(-3px);box-shadow:0 18px 36px rgba(59,38,80,.12)}
+.drop b::before{
+  content:"";width:132px;height:12px;margin:0 auto 6px;letter-spacing:0;font-size:0;
+  background:
+    radial-gradient(circle,var(--accent,#5b1f9a) 0 3.2px,transparent 3.8px) 0 50%/24px 12px repeat-x,
+    radial-gradient(circle,var(--g1) 0 3.2px,transparent 3.8px) 12px 50%/24px 12px repeat-x;
+  animation:dl2-slide 5s linear infinite}
+@keyframes dl2-slide{to{background-position:24px 50%,36px 50%}}
+
+/* ===== سفارش: الگوی کوچیک مثل کارت سنجاق‌شده ===== */
+.sum canvas{
+  transform:rotate(-1.6deg);transition:transform .4s cubic-bezier(.2,.9,.3,1.4);
+  box-shadow:0 14px 28px rgba(27,18,38,.18),inset 0 0 0 1px rgba(184,151,90,.55)}
+.sum canvas:hover{transform:rotate(0) scale(1.03)}
+
+/* ===== گالری و نمونه‌های خانه: سوراخ آویز، ورود پله‌پله، پنجره‌ی باز می‌شه ===== */
+.wk-grid>*,.mini-gal a{position:relative}
+.wk-grid>*::before,.mini-gal a::before{
+  content:"";position:absolute;top:11px;inset-inline:0;margin:auto;z-index:3;width:11px;height:11px;border-radius:50%;
+  background:#e6e0ef;box-shadow:inset 0 2px 3px rgba(27,18,38,.4),0 0 0 2px #fff,0 0 0 3px rgba(184,151,90,.7);pointer-events:none}
+.wk-card{animation:dl2-cardin .6s cubic-bezier(.2,.7,.2,1) backwards;animation-delay:calc(var(--i,0)*55ms)}
+@keyframes dl2-cardin{from{opacity:0;transform:translateY(18px) rotate(.8deg)}}
+.wk-lb[open],.dl-dlg[open]{animation:dl2-open .38s cubic-bezier(.2,.9,.3,1.2)}
+.wk-lb[open]::backdrop,.dl-dlg[open]::backdrop{animation:dl2-in .3s ease both}
+@keyframes dl2-open{from{opacity:0;transform:translateY(24px) scale(.96)}}
+.wk-price{position:relative}
+.wk-price::before{content:"";display:inline-block;width:7px;height:7px;margin-inline-end:7px;border-radius:50%;background:var(--g1)}
+
+/* ===== صفحه‌ی اصلی: برچسب «کپی» روی رنگ‌ها ===== */
+.chips li{position:relative}
+.chips li::after{
+  content:"کپی کد";position:absolute;top:-10px;inset-inline:0;margin:auto;width:max-content;padding:0 12px;z-index:2;
+  border-radius:999px;background:#1d1527;color:#f3e2b4;font-size:12px;line-height:2;
+  opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;pointer-events:none}
+.chips li:hover::after{opacity:1;transform:none}
+
+/* ===== امضای ته صفحه ===== */
+.wrap::after{
+  content:"منجوق‌به‌منجوق";display:block;margin-top:56px;padding-top:30px;text-align:center;
+  color:var(--muted,#6c6478);font-size:15px;letter-spacing:.04em;
+  background:radial-gradient(circle,var(--g1) 0 3px,transparent 3.6px) 50% 0/17px 12px repeat-x;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 25%,#000 75%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 25%,#000 75%,transparent)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  @view-transition{navigation:none}
+}
