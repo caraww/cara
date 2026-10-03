@@ -189,3 +189,26 @@
     width: 84px;
   }
 }
+
+/* ===== دکمه‌ی «ببین بافته می‌شه»: هم‌قد و هم‌شکل بقیه‌ی دکمه‌ها ===== */
+.dl-weave {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto !important;
+  max-width: 100%;
+  min-height: 50px;
+  margin: 16px 0 !important;
+  padding: 0 26px;
+  font: inherit;
+  font-size: 17px;
+  line-height: 1.4;
+  white-space: normal;
+  text-align: center;
+}
+@media (max-width: 560px) {
+  .dl-weave {
+    width: 100% !important;
+  }
+}
