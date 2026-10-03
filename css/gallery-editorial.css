@@ -181,3 +181,21 @@
 @media(prefers-reduced-motion:reduce){
   .wk-grid .wk-card button.wk-fav::before,.wk-info #lbFav::before{animation:none !important}
 }
+
+/* ===== نمایش بزرگ: اصلاح اصلی =====
+   علت بریده شدن عکس‌های عمودی: عکس توی یه ردیف خودکار (auto) گرید بود و ارتفاعش از روی عرض حساب می‌شد؛
+   پس عکس بلند از قاب بیرون می‌زد و بریده می‌شد. حالا عکس مطلق و دقیقاً هم‌اندازه‌ی قابه و object-fit اون رو کامل جا می‌ده. */
+.wk-stage{position:relative;overflow:hidden}
+.wk-stage #lbImg{
+  position:absolute !important;inset:0 !important;
+  width:100% !important;height:100% !important;
+  max-width:none !important;max-height:none !important;
+  object-fit:contain !important;object-position:center !important;
+  box-sizing:border-box !important;
+  padding:24px !important;
+}
+.wk-stage:has(.wk-thumbs:not([hidden])) #lbImg{padding-bottom:92px !important}
+@media(max-width:760px){
+  .wk-stage #lbImg{padding:14px !important}
+  .wk-stage:has(.wk-thumbs:not([hidden])) #lbImg{padding-bottom:82px !important}
+}

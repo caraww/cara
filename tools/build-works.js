@@ -102,6 +102,28 @@ if (!fs.existsSync(DIR)) {
   process.exit(1);
 }
 
+/* عکس‌های سبک: از هر عکس یه نسخه‌ی کوچیک برای کارت‌ها (۷۰۰ پیکسل) و یه نسخه‌ی نمایش بزرگ (۱۶۰۰ پیکسل) به شکل webp می‌سازه.
+   عکس‌های اصلی ۳۰۰۰×۴۰۰۰ پیکسلی چند مگابایتن و باعث می‌شن گالری کند و ناقص لود بشه. اگه sharp نصب نباشه، همون عکس اصلی استفاده می‌شه (npm install). */
+let sharp = null;
+try { sharp = require("sharp"); } catch { console.warn("⚠ sharp نصب نیست؛ بدون عکس سبک ادامه می‌دم (npm install)"); }
+const THUMB_DIR = path.join(ROOT, "img", "works-thumbs");
+const VIEW_DIR = path.join(ROOT, "img", "works-view");
+async function derive(files) {
+  const m = new Map();
+  if (!sharp) return m;
+  for (const d of [THUMB_DIR, VIEW_DIR]) { fs.rmSync(d, { recursive: true, force: true }); fs.mkdirSync(d, { recursive: true }); } /* هر بار از نو؛ پس عکس پاک‌شده‌ها هم از این پوشه‌ها می‌رن */
+  for (const f of files) {
+    const name = f.replace(EXT, "") + ".webp", src = path.join(DIR, f);
+    try {
+      await sharp(src).rotate().resize({ width: 700, height: 700, fit: "inside", withoutEnlargement: true }).webp({ quality: 82 }).toFile(path.join(THUMB_DIR, name));
+      await sharp(src).rotate().resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true }).webp({ quality: 88 }).toFile(path.join(VIEW_DIR, name));
+      m.set(f, { thumb: "img/works-thumbs/" + name, view: "img/works-view/" + name });
+    } catch (e) { console.warn("⚠ عکس سبک ساخته نشد:", f, e.message); }
+  }
+  return m;
+}
+
+(async () => {
 let info = {};
 try {
   const raw = JSON.parse(fs.readFileSync(path.join(DIR, "info.json"), "utf8"));
@@ -129,6 +151,7 @@ for (const file of files) {
   groups.get(key).push({ file, n: m ? Number(m[2]) : 1 });
 }
 
+const derived = await derive(files);
 const used = new Set();
 const works = [...groups].map(([base, items]) => {
   items.sort((a, b) => a.n - b.n);
@@ -148,9 +171,10 @@ const works = [...groups].map(([base, items]) => {
         it.file,
       );
   });
-  const images = items.map((it) => enc("img/works-cutouts/" + it.file) + ver(it.file));
+  const images = items.map((it) => { const d = derived.get(it.file); return d ? enc(d.view) + ver(it.file) : enc("img/works-cutouts/" + it.file) + ver(it.file); });
+  const d0 = derived.get(items[0].file), thumb = d0 ? enc(d0.thumb) + ver(items[0].file) : images[0];
   console.log("✓", file, `(${images.length} عکس)`, "→ عنوان:", title || "(بدون عنوان)");
-  const w = { id, src: images[0], thumb: images[0] };
+  const w = { id, src: images[0], thumb };
   if (images.length > 1) w.images = images;
   const d = dims(fs.readFileSync(path.join(DIR, file)));
   if (d) {
@@ -183,3 +207,5 @@ for (const page of PAGES) {
   const next = html.replace(/js\/works\.js(\?v=[0-9a-z]+)?/g, "js/works.js?v=" + STAMP);
   if (next !== html) { fs.writeFileSync(f, next); console.log("✓ نسخه‌ی works.js در", page, "به‌روز شد"); }
 }
+
+})().catch((e) => { console.error(e); process.exit(1); });

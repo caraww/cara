@@ -22,7 +22,7 @@
       const ar = w.w && w.h ? ` style="--ar:${(w.w / w.h).toFixed(4)};--i:${i % 8}"` : ` style="--i:${i % 8}"`;
       return `<figure class="wk-card" data-id="${esc(w.id)}" tabindex="0" role="button" aria-label="${esc(w.title)}"${ar}>
         <button class="wk-fav" aria-label="علاقه‌مندی" aria-pressed="${favs.has(w.id)}">♥</button>
-        <img src="${esc(w.thumb)}" alt="${esc(w.title)}"${w.w ? ` width="${w.w}" height="${w.h}"` : ""} loading="${i < 6 ? "eager" : "lazy"}" decoding="async">
+        <img src="${esc(w.thumb)}" data-fb="${esc(w.src)}" alt="${esc(w.title)}"${w.w ? ` width="${w.w}" height="${w.h}"` : ""} loading="${i < 6 ? "eager" : "lazy"}" decoding="async">
         <figcaption><b>${esc(w.title)}</b>${w.note ? `<span>${esc(w.note)}</span>` : ""}</figcaption></figure>`;
     }).join("");
     grid.querySelectorAll("img").forEach((im) => { if (im.complete) im.classList.add("in"); });
@@ -32,7 +32,10 @@
     empty.textContent = !W.length ? "به‌زودی عکس کارهام رو این‌جا می‌ذارم." : onlyFav ? "هنوز چیزی رو علاقه‌مندی نکردی." : "چیزی پیدا نشد. یه کلمه‌ی دیگه امتحان کن.";
   }
   grid.addEventListener("load", (e) => { if (e.target.tagName === "IMG") e.target.classList.add("in"); }, true);
-  grid.addEventListener("error", (e) => { if (e.target.tagName === "IMG") e.target.closest(".wk-card").hidden = true; }, true);
+  grid.addEventListener("error", (e) => { /* اگه عکس کوچیک نبود یه بار عکس اصلی رو امتحان می‌کنه؛ اگه اون هم نبود، کارت مخفی می‌شه */
+    const im = e.target; if (im.tagName !== "IMG") return;
+    if (im.dataset.fb && !im.dataset.tried) { im.dataset.tried = "1"; im.src = im.dataset.fb; } else im.closest(".wk-card").hidden = true;
+  }, true);
 
   /* لایت‌باکس */
   function show(i) {
@@ -41,6 +44,7 @@
     const w = list[cur];
     $("lbImg").classList.remove("in");
     $("lbImg").src = w.src; $("lbImg").alt = w.title;
+    if ($("lbImg").complete && $("lbImg").naturalWidth) $("lbImg").classList.add("in"); /* عکس کش‌شده: گاهی load دوباره نمیاد */
     $("lbTitle").textContent = w.title; $("lbNote").textContent = w.note; $("lbNote").hidden = !w.note;
     $("lbTags").innerHTML = (w.tags || []).map((t) => `<span>${esc(t)}</span>`).join("");
     const imgs = w.images && w.images.length > 1 ? w.images : [];
