@@ -7,7 +7,29 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap"><link rel="stylesheet" href="css/home.css" /><link rel="stylesheet" href="css/gallery-editorial.css">
     <meta name="description" content="دستبند منجوقی دست‌باف با منجوق‌های دلیکای میوکی. طرحت رو خودت بکش یا از روی عکس بساز." />
     <title>cara — دستبند منجوقی دست‌باف</title>
-  <link rel="stylesheet" href="css/delight.css"></head>
+  <link rel="stylesheet" href="css/delight.css"><style>
+/* ===== فوتر صفحه‌ی اصلی: تاریک، ستون‌بندی منظم، نخ مهره‌ای بالاش ===== */
+.foot{display:block;position:relative;margin-top:0;padding:0;border:0;
+  background:radial-gradient(ellipse 70% 120% at 50% 0,#2c1c3d 0,#1d1527 70%);color:#c9bfd6;font-size:16px;line-height:1.9}
+.foot::before{content:"";position:absolute;inset:0 0 auto;height:12px;transform:translateY(-50%);
+  background:radial-gradient(circle,#b8975a 0 3.2px,transparent 3.8px) 0 50%/17px 12px repeat-x}
+.foot-in{width:min(1240px,100%);margin:auto;padding:72px max(22px,5vw) 44px;
+  display:grid;grid-template-columns:1.7fr 1fr 1fr auto;gap:44px clamp(32px,5vw,72px);align-items:start}
+.foot-brand img{display:block;height:44px;width:auto;margin-bottom:16px}
+.foot-brand p{margin:0;max-width:24em;color:#b4a8c4}
+.foot h4{margin:0 0 14px;font-size:16px;font-weight:900;color:#cfae6c;line-height:1.6;letter-spacing:.01em}
+.foot-nav{display:flex;flex-direction:column;align-items:flex-start}
+.foot-nav a{color:#d8cfe4;padding:3px 0;transition:color .2s,transform .2s}
+.foot-nav a:hover{color:#f3e2b4;transform:translateX(-4px)}
+.foot-trust .enamad{display:inline-flex;align-items:center;justify-content:center;padding:10px;background:#fff;border-radius:16px;box-shadow:0 10px 26px rgba(0,0,0,.28)}
+.foot-trust .enamad img{height:72px;width:auto;display:block}
+.foot-bot{width:calc(min(1240px,100%) - 2*max(22px,5vw));margin:auto;padding:20px 0 26px;display:flex;justify-content:space-between;align-items:center;gap:12px;
+  border-top:1px solid rgba(255,255,255,.1);color:#9a8fac;font-size:14.5px}
+.foot-top{color:#d8cfe4;transition:color .2s}
+.foot-top:hover{color:#f3e2b4}
+@media (max-width:980px){.foot-in{grid-template-columns:1fr 1fr}.foot-brand{grid-column:1/-1}}
+@media (max-width:520px){.foot-in{grid-template-columns:1fr;padding-top:56px}.foot-bot{flex-direction:column;align-items:flex-start}}
+</style></head>
   <body>
     <div class="thread" aria-hidden="true"><i id="threadBar"></i></div>
     <header class="top">
@@ -105,8 +127,25 @@
       </section>
     </main>
     <footer class="foot">
-      <span>cara</span><span>دستبند منجوقی دست‌باف</span>
-      <span class="enamad"><a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=8005519&Code=l6ZvIdVKpflNBLRq62mOcOthCU4MYP5a'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=8005519&Code=l6ZvIdVKpflNBLRq62mOcOthCU4MYP5a' alt='' style='cursor:pointer' code='l6ZvIdVKpflNBLRq62mOcOthCU4MYP5a'></a></span>
+      <div class="foot-in">
+        <div class="foot-brand">
+          <img src="img/cara-logo-light.png" alt="cara" style="height:44px;width:auto;max-width:180px">
+          <p>دستبند منجوقی دست‌باف با منجوق‌های دلیکای میوکی. طرحش رو تو می‌کشی، منجوق‌به‌منجوق من می‌بافمش.</p>
+        </div>
+        <nav class="foot-nav" aria-label="صفحه‌ها">
+          <h4>بخش‌ها</h4>
+          <a href="#paths">از کجا شروع کنیم</a><a href="gallery.html">نمونه‌ها</a><a href="#steps">مراحل</a><a href="#beads">منجوق‌ها</a>
+        </nav>
+        <nav class="foot-nav" aria-label="ساخت و سفارش">
+          <h4>ساخت و سفارش</h4>
+          <a href="builder.html">طراحی دستبند</a><a href="upload.html">ساخت الگو از عکس</a><a href="gallery.html">گالری</a><a href="checkout.html">سفارش</a>
+        </nav>
+        <div class="foot-trust">
+          <h4>نماد اعتماد</h4>
+          <span class="enamad"><a referrerpolicy='origin' target='_blank' href='https://trustseal.enamad.ir/?id=8005519&Code=l6ZvIdVKpflNBLRq62mOcOthCU4MYP5a'><img referrerpolicy='origin' src='https://trustseal.enamad.ir/logo.aspx?id=8005519&Code=l6ZvIdVKpflNBLRq62mOcOthCU4MYP5a' alt='' style='cursor:pointer' code='l6ZvIdVKpflNBLRq62mOcOthCU4MYP5a'></a></span>
+        </div>
+      </div>
+      <div class="foot-bot"><span>cara · دستبند منجوقی دست‌باف</span><a href="#" class="foot-top">↑ برگرد بالا</a></div>
     </footer>
     <script src="js/palette.js?v=32"></script>
     <script src="js/works.js?v=muschqus"></script>
