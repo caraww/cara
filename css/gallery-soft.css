@@ -1,0 +1,23 @@
+/* فریم نرم و گرد برای عکس‌ها. توی gallery.html بعد از gallery-fix.css لود می‌شه. */
+
+/* کارت‌های گالری */
+.wk-grid>*{
+  border-radius:30px;
+  border-color:rgba(184,151,90,.28);
+  background:
+    radial-gradient(circle at 50% 30%,#fff 0,#fbf9fd 45%,var(--wk-tint) 100%);
+  box-shadow:0 10px 30px rgba(59,38,80,.08),inset 0 0 0 6px rgba(255,255,255,.7);
+}
+.wk-grid>*:hover{box-shadow:0 26px 54px rgba(59,38,80,.18),inset 0 0 0 6px rgba(255,255,255,.85)}
+.wk-grid img{padding:22px;border-radius:30px}
+@media(max-width:560px){.wk-grid>*{border-radius:24px}.wk-grid img{padding:14px}}
+
+/* نمایش بزرگ */
+.wk-lb{border-radius:34px}
+.wk-stage{
+  margin:14px;border-radius:26px;overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,#fff 0,#f7f3fb 50%,var(--wk-tint) 100%);
+  box-shadow:inset 0 0 0 1px rgba(184,151,90,.25),inset 0 0 40px rgba(255,255,255,.8);
+}
+.wk-stage #lbImg{padding:36px}
+@media(max-width:760px){.wk-stage{margin:10px;border-radius:22px}}

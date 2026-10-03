@@ -343,64 +343,349 @@ h3 {
 }
 
 /* ===== UI خلاق: نخ پیشرفت، ورود نرم، هاله‌ی مهره‌ها، بافت روی کارت‌ها ===== */
-@keyframes rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
-@keyframes shine{to{background-position:-200% 0}}
-.thread{position:fixed;inset:0 0 auto;height:8px;z-index:40;pointer-events:none}
-.thread i{display:block;height:100%;width:var(--p,0%);background:radial-gradient(circle at 5px 4px,var(--gold) 0 3px,transparent 3.6px) 0 0/12px 8px repeat-x;filter:drop-shadow(0 1px 2px rgba(0,0,0,.25))}
-.gilt{background:linear-gradient(100deg,#b8975a 20%,#f3e2b4 40%,#b8975a 60%) 0 0/200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite}
-.hero-copy>*{animation:rise .9s cubic-bezier(.2,.7,.2,1) both}
-.hero-copy p{animation-delay:.12s}.hero-copy .btns{animation-delay:.24s}
-.top nav a:not(.cta){position:relative}
-.top nav a:not(.cta)::after{content:"";position:absolute;inset-inline:0;bottom:-2px;margin:auto;width:7px;height:7px;border-radius:50%;background:var(--gold);transform:scale(0);transition:transform .25s}
-.top nav a:not(.cta):hover::after{transform:scale(1)}
-.rv{opacity:0;transform:translateY(26px) scale(.98);transition:opacity .7s,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
-.rv.in{opacity:1;transform:none}
-.sec h2::after{content:"";display:block;width:104px;height:12px;margin-top:12px;background:radial-gradient(circle,var(--gold) 0 3.2px,transparent 3.8px) 0 50%/17px 12px repeat-x}
-.path{position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s}
-.path>*{position:relative}
-.path::before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(from 45deg,rgba(184,151,90,.13) 0 25%,transparent 0 50%) 0 0/24px 24px;opacity:0;transition:opacity .4s}
-.path:hover{transform:translateY(-6px) rotate(-.4deg);box-shadow:0 24px 50px rgba(59,38,80,.16)}
-.path:hover::before{opacity:1}
-.steps li::before{display:inline-grid;place-items:center;width:46px;height:36px;border-radius:12px;color:#fff;font-size:20px;line-height:1;background:linear-gradient(#cfae6c,#a7853f);box-shadow:inset 0 3px rgba(255,255,255,.45),inset 0 -5px 7px rgba(0,0,0,.2);transition:transform .3s}
-.steps li:hover::before{transform:rotate(-8deg) scale(1.1)}
-.chips li{cursor:pointer;transition:transform .2s}
-.chips li:hover{transform:translateY(-4px) rotate(-2deg)}
-.chips li:hover i{box-shadow:inset 0 2px rgba(255,255,255,.5),inset 0 -4px 6px rgba(0,0,0,.2),0 10px 18px rgba(0,0,0,.18)}
-.toast{position:fixed;inset-inline:0;bottom:26px;margin:auto;width:max-content;max-width:90vw;padding:8px 22px;border-radius:999px;background:var(--night);color:#f6f1fa;font-size:16px;line-height:1.8;opacity:0;transform:translateY(16px);transition:.3s;z-index:50;pointer-events:none}
-.toast.on{opacity:1;transform:none}
-@media(prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.gilt,.hero-copy>*{animation:none}}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes shine {
+  to {
+    background-position: -200% 0;
+  }
+}
+.thread {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 8px;
+  z-index: 40;
+  pointer-events: none;
+}
+.thread i {
+  display: block;
+  height: 100%;
+  width: var(--p, 0%);
+  background: radial-gradient(
+      circle at 5px 4px,
+      var(--gold) 0 3px,
+      transparent 3.6px
+    )
+    0 0/12px 8px repeat-x;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.25));
+}
+.gilt {
+  background: linear-gradient(100deg, #b8975a 20%, #f3e2b4 40%, #b8975a 60%) 0
+    0/200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shine 5s linear infinite;
+}
+.hero-copy > * {
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.hero-copy p {
+  animation-delay: 0.12s;
+}
+.hero-copy .btns {
+  animation-delay: 0.24s;
+}
+.top nav a:not(.cta) {
+  position: relative;
+}
+.top nav a:not(.cta)::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -2px;
+  margin: auto;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--gold);
+  transform: scale(0);
+  transition: transform 0.25s;
+}
+.top nav a:not(.cta):hover::after {
+  transform: scale(1);
+}
+.rv {
+  opacity: 0;
+  transform: translateY(26px) scale(0.98);
+  transition:
+    opacity 0.7s,
+    transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: var(--d, 0s);
+}
+.rv.in {
+  opacity: 1;
+  transform: none;
+}
+.sec h2::after {
+  content: "";
+  display: block;
+  width: 104px;
+  height: 12px;
+  margin-top: 12px;
+  background: radial-gradient(circle, var(--gold) 0 3.2px, transparent 3.8px) 0
+    50%/17px 12px repeat-x;
+}
+.path {
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+}
+.path > * {
+  position: relative;
+}
+.path::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-conic-gradient(
+      from 45deg,
+      rgba(184, 151, 90, 0.13) 0 25%,
+      transparent 0 50%
+    )
+    0 0/24px 24px;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.path:hover {
+  transform: translateY(-6px) rotate(-0.4deg);
+  box-shadow: 0 24px 50px rgba(59, 38, 80, 0.16);
+}
+.path:hover::before {
+  opacity: 1;
+}
+.steps li::before {
+  display: inline-grid;
+  place-items: center;
+  width: 46px;
+  height: 36px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  background: linear-gradient(#cfae6c, #a7853f);
+  box-shadow:
+    inset 0 3px rgba(255, 255, 255, 0.45),
+    inset 0 -5px 7px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s;
+}
+.steps li:hover::before {
+  transform: rotate(-8deg) scale(1.1);
+}
+.chips li {
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+.chips li:hover {
+  transform: translateY(-4px) rotate(-2deg);
+}
+.chips li:hover i {
+  box-shadow:
+    inset 0 2px rgba(255, 255, 255, 0.5),
+    inset 0 -4px 6px rgba(0, 0, 0, 0.2),
+    0 10px 18px rgba(0, 0, 0, 0.18);
+}
+.toast {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 26px;
+  margin: auto;
+  width: max-content;
+  max-width: 90vw;
+  padding: 8px 22px;
+  border-radius: 999px;
+  background: var(--night);
+  color: #f6f1fa;
+  font-size: 16px;
+  line-height: 1.8;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: 0.3s;
+  z-index: 50;
+  pointer-events: none;
+}
+.toast.on {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .rv {
+    opacity: 1;
+    transform: none;
+  }
+  .gilt,
+  .hero-copy > * {
+    animation: none;
+  }
+}
 
 /* منجوق‌های واقع‌نما و نمونه‌های صفحه‌ی اصلی */
-.chips .bead{aspect-ratio:1.3;display:grid;place-items:center;margin-bottom:6px;filter:drop-shadow(0 6px 5px rgba(0,0,0,.2))}
-.chips .bead svg,.chips .bead img{width:100%;height:100%;object-fit:contain}
-.mini-gal{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:48px}
-.mini-gal a{display:grid;justify-items:center;gap:0;padding:16px 12px 14px;border-radius:16px;border:1px solid var(--line);background:radial-gradient(circle at 50% 30%,#fff,var(--tint));text-align:center;line-height:1.7;transition:transform .3s,box-shadow .3s}
-.mini-gal a:hover{transform:translateY(-6px) rotate(-1deg);box-shadow:0 20px 40px rgba(59,38,80,.15)}
-.mini-gal canvas{width:100%;height:auto;max-width:220px}
-.mini-gal b{font-size:18px}.mini-gal span{font-size:14px;color:var(--muted)}
-@media(max-width:850px){.mini-gal{grid-template-columns:1fr 1fr}}
+.chips .bead {
+  aspect-ratio: 1.3;
+  display: grid;
+  place-items: center;
+  margin-bottom: 6px;
+  filter: drop-shadow(0 6px 5px rgba(0, 0, 0, 0.2));
+}
+.chips .bead svg,
+.chips .bead img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.mini-gal {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 48px;
+}
+.mini-gal a {
+  display: grid;
+  justify-items: center;
+  gap: 0;
+  padding: 16px 12px 14px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: radial-gradient(circle at 50% 30%, #fff, var(--tint));
+  text-align: center;
+  line-height: 1.7;
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+}
+.mini-gal a:hover {
+  transform: translateY(-6px) rotate(-1deg);
+  box-shadow: 0 20px 40px rgba(59, 38, 80, 0.15);
+}
+.mini-gal canvas {
+  width: 100%;
+  height: auto;
+  max-width: 220px;
+}
+.mini-gal b {
+  font-size: 18px;
+}
+.mini-gal span {
+  font-size: 14px;
+  color: var(--muted);
+}
+@media (max-width: 850px) {
+  .mini-gal {
+    grid-template-columns: 1fr 1fr;
+  }
+}
 /* عکس واقعی منجوق‌ها */
-.chips .bead:has(img){filter:none;overflow:hidden;border-radius:12px;box-shadow:0 6px 14px rgba(34,26,44,.16),inset 0 0 0 1px rgba(255,255,255,.35)}
-.chips .bead img{object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
-.chips li:hover .bead img{transform:scale(1.35)}
+.chips .bead:has(img) {
+  filter: none;
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow:
+    0 6px 14px rgba(34, 26, 44, 0.16),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.35);
+}
+.chips .bead img {
+  object-fit: cover;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.chips li:hover .bead img {
+  transform: scale(1.35);
+}
 
 /* عکس دستبندهای خودم روی صفحه‌ی اصلی: کوچک، هم‌اندازه، کامل دیده می‌شن (بریده نمی‌شن) */
-.mini-gal{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;max-width:920px}
-.mini-gal a{padding:0 0 12px;overflow:hidden;background:radial-gradient(circle at 50% 35%,#fff,var(--tint))}
-.mini-gal img{width:100%;height:190px;object-fit:contain;padding:14px;display:block;margin:0 0 6px;filter:drop-shadow(0 8px 10px rgba(34,26,44,.18));transition:transform .5s cubic-bezier(.2,.7,.2,1)}
-.mini-gal a:hover img{transform:scale(1.05)}
-.mini-gal b,.mini-gal span{padding:0 12px}
-.mini-gal b{font-size:16px}.mini-gal span{font-size:13px}
-@media(max-width:850px){.mini-gal{grid-template-columns:1fr 1fr}.mini-gal img{height:150px}}
+.mini-gal {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  max-width: 920px;
+}
+.mini-gal a {
+  padding: 0 0 12px;
+  overflow: hidden;
+  background: radial-gradient(circle at 50% 35%, #fff, var(--tint));
+}
+.mini-gal img {
+  width: 100%;
+  height: 190px;
+  object-fit: contain;
+  padding: 14px;
+  display: block;
+  margin: 0 0 6px;
+  filter: drop-shadow(0 8px 10px rgba(34, 26, 44, 0.18));
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.mini-gal a:hover img {
+  transform: scale(1.05);
+}
+.mini-gal b,
+.mini-gal span {
+  padding: 0 12px;
+}
+.mini-gal b {
+  font-size: 16px;
+}
+.mini-gal span {
+  font-size: 13px;
+}
+@media (max-width: 850px) {
+  .mini-gal {
+    grid-template-columns: 1fr 1fr;
+  }
+  .mini-gal img {
+    height: 150px;
+  }
+}
 
 /* نماد اینماد توی فوتر */
-.foot .enamad{display:inline-flex;align-items:center}
-.foot .enamad img{height:72px;width:auto;display:block}
-@media(max-width:850px){.foot .enamad{align-self:flex-start}}
+.foot .enamad {
+  display: inline-flex;
+  align-items: center;
+}
+.foot .enamad img {
+  height: 72px;
+  width: auto;
+  display: block;
+}
+@media (max-width: 850px) {
+  .foot .enamad {
+    align-self: flex-start;
+  }
+}
 
 /* لوگو توی هدر: نسخه‌ی روشن روی هیروی تیره، نسخه‌ی تیره بعد از اسکرول */
-.top .logo{display:flex;align-items:center}
-.top .logo img{height:44px;width:auto;display:block}
-.top .logo .l-dark{display:none}
-.top.solid .logo .l-light{display:none}
-.top.solid .logo .l-dark{display:block}
+.top .logo {
+  display: flex;
+  align-items: center;
+}
+.top .logo img {
+  height: 44px;
+  width: auto;
+  display: block;
+}
+.top .logo .l-dark {
+  display: none;
+}
+.top.solid .logo .l-light {
+  display: none;
+}
+.top.solid .logo .l-dark {
+  display: block;
+}
+.mini-gal a {
+  border-radius: 28px;
+  border-color: rgba(184, 151, 90, 0.28);
+  box-shadow:
+    0 10px 28px rgba(59, 38, 80, 0.08),
+    inset 0 0 0 6px rgba(255, 255, 255, 0.7);
+}
+.mini-gal img {
+  padding: 20px;
+}
