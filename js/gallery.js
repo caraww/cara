@@ -43,6 +43,9 @@
     $("lbImg").src = w.src; $("lbImg").alt = w.title;
     $("lbTitle").textContent = w.title; $("lbNote").textContent = w.note; $("lbNote").hidden = !w.note;
     $("lbTags").innerHTML = (w.tags || []).map((t) => `<span>${esc(t)}</span>`).join("");
+    const imgs = w.images && w.images.length > 1 ? w.images : [];
+    $("lbThumbs").innerHTML = imgs.map((s, k) => `<button type="button" class="${k ? "" : "on"}" data-src="${esc(s)}" aria-label="عکس ${fa(k + 1)}"><img src="${esc(s)}" alt=""></button>`).join("");
+    $("lbThumbs").hidden = !imgs.length;
     $("lbNum").textContent = `${fa(cur + 1)} از ${fa(list.length)}`;
     $("lbFav").setAttribute("aria-pressed", favs.has(w.id));
     $("lbMake").href = "upload.html?src=" + encodeURIComponent(w.src);
@@ -55,6 +58,11 @@
     show(i);
     if (!lb.open) lb.showModal ? lb.showModal() : lb.setAttribute("open", "");
   }
+  $("lbThumbs").addEventListener("click", (e) => {
+    const b = e.target.closest("button[data-src]"); if (!b) return;
+    $("lbThumbs").querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
+    $("lbImg").classList.remove("in"); $("lbImg").src = b.dataset.src;
+  });
   $("lbImg").addEventListener("load", (e) => e.target.classList.add("in"));
   $("lbNext").onclick = () => show(cur + 1); $("lbPrev").onclick = () => show(cur - 1);
   $("lbClose").onclick = () => lb.close();

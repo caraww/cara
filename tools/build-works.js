@@ -113,9 +113,21 @@ all
   .filter((f) => !EXT.test(f))
   .forEach((f) => console.warn("⚠ نادیده گرفته شد (پسوند عکس نیست):", f));
 
+/* چند عکس برای یک کار: عکس اصلی «اسب.png» و عکس‌های بعدی «اسب__2.png»، «اسب__3.jpg» ...
+   همه‌شون یک کار حساب می‌شن و توی نمایش بزرگ با عکس‌های ریز کنار هم می‌آن. */
+const groups = new Map();
+for (const file of files) {
+  const b0 = fixFa(file.replace(EXT, ""));
+  const m = b0.match(/^(.*?)\s*__(\d+)$/);
+  const key = m ? m[1] : b0;
+  if (!groups.has(key)) groups.set(key, []);
+  groups.get(key).push({ file, n: m ? Number(m[2]) : 1 });
+}
+
 const used = new Set();
-const works = files.map((file) => {
-  const base = fixFa(file.replace(EXT, ""));
+const works = [...groups].map(([base, items]) => {
+  items.sort((a, b) => a.n - b.n);
+  const file = items[0].file;
   const meta = info[fixFa(file)] || info[base] || {};
   let id = base,
     n = 2;
@@ -123,14 +135,17 @@ const works = files.map((file) => {
   used.add(id);
   const nice = base.replace(/_+/g, " ").replace(/\s+/g, " ").trim();
   const title = meta.title ? String(meta.title) : isNum(nice) ? "" : nice;
-  if (file !== file.normalize("NFC"))
-    console.warn(
-      "⚠ اسم این فایل با یونیکد NFD ذخیره شده (معمولاً مک)، اگه تو سایت لود نشد دوباره اسمش رو عوض کن:",
-      file,
-    );
-  const src = enc("img/works-cutouts/" + file);
-  console.log("✓", file, "→ عنوان:", title || "(بدون عنوان)");
-  const w = { id, src, thumb: src };
+  items.forEach((it) => {
+    if (it.file !== it.file.normalize("NFC"))
+      console.warn(
+        "⚠ اسم این فایل با یونیکد NFD ذخیره شده (معمولاً مک)، اگه تو سایت لود نشد دوباره اسمش رو عوض کن:",
+        it.file,
+      );
+  });
+  const images = items.map((it) => enc("img/works-cutouts/" + it.file));
+  console.log("✓", file, `(${images.length} عکس)`, "→ عنوان:", title || "(بدون عنوان)");
+  const w = { id, src: images[0], thumb: images[0] };
+  if (images.length > 1) w.images = images;
   const d = dims(fs.readFileSync(path.join(DIR, file)));
   if (d) {
     w.w = d.w;

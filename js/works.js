@@ -4,6 +4,10 @@
   "id": "آبشار رنگی",
   "src": "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.png",
   "thumb": "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.png",
+  "images": [
+   "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.png",
+   "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C__2.jpg"
+  ],
   "w": 615,
   "h": 820,
   "title": "آبشار رنگی",
