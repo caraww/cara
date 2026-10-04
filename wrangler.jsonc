@@ -9,7 +9,8 @@
   "vars": {
     "BASE_URL": "https://caraw.ir",
     "PRICE_PER_BEAD": "1500",
-    "BASE_FEE": "150000"
+    "BASE_FEE": "150000",
+    "ZIBAL_BASE": "https://relay.caraw.ir/zibal-relay.php?x=",
   },
 
   // بدون id: Wrangler موقع دیپلوی خودش KV رو می‌سازه و وصل می‌کنه (سفارش‌ها این‌جا ذخیره می‌شن)
@@ -18,6 +19,6 @@
   // فقط /api/* به Worker می‌رسه؛ بقیه‌ی سایت مثل قبل از GitHub Pages می‌آد
   "routes": [
     { "pattern": "caraw.ir/api/*", "zone_name": "caraw.ir" },
-    { "pattern": "www.caraw.ir/api/*", "zone_name": "caraw.ir" }
-  ]
+    { "pattern": "www.caraw.ir/api/*", "zone_name": "caraw.ir" },
+  ],
 }
