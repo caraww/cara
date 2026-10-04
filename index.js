@@ -4,6 +4,7 @@
      Variables (توی wrangler.jsonc):  PRICE_PER_BEAD   BASE_FEE   BASE_URL
      Secrets:    ZIBAL_MERCHANT  (کد merchant درگاه زیبال؛ برای تست بنویس zibal)
                  ADMIN_TOKEN     (یه رمز دلخواه برای صفحه‌ی admin.html)
+                 TELEGRAM_BOT_TOKEN  و  TELEGRAM_CHAT_ID  (اعلان سفارش جدید توی تلگرام؛ اختیاری)
      اختیاری:    CALLBACK_URL    (پیش‌فرض: BASE_URL/api/payment-callback)
                  ZIBAL_BASE + ZIBAL_RELAY_KEY  (فقط اگه زیبال آی‌پی ثابت می‌خواد؛ zibal-relay.js رو ببین)
      KV binding: ORDERS */
@@ -266,7 +267,8 @@ async function createPayment(request, env) {
 
 /* تأیید پرداخت با زیبال. هم از بازگشت مشتری از درگاه صدا زده می‌شه، هم از دکمه‌ی «بررسی وضعیت» توی admin.html.
    markFailed=false یعنی اگه پرداخت پیدا نشد، وضعیت سفارش رو خراب نکن. */
-async function settle(C, env, order, markFailed) {
+async function settle(C, env, order, markFailed, ctx) {
+  const later = (p) => (ctx ? ctx.waitUntil(p) : p); /* اعلان نباید مشتری رو معطل کنه */
   const v = await zibal(C, "verify", { trackId: Number(order.trackId) });
   const fresh = await getOrder(env, order.id);
   if (fresh && fresh.status === "paid") return fresh; /* کال‌بک هم‌زمان قبلاً تأییدش کرده */
@@ -278,6 +280,7 @@ async function settle(C, env, order, markFailed) {
     order.error = `amount mismatch: ${v.amount} != ${rial}`;
     await saveOrder(env, order);
     console.error("zibal amount mismatch", order.id, v.amount, rial);
+    await later(telegram(env, `⚠️ پرداخت با مبلغ نامطابق، نیاز به بررسی دستی\n#${order.id.slice(0, 8)}\nمبلغ سفارش: ${rial} ریال، مبلغ دریافتی: ${v.amount} ریال\n${C.site}/admin.html`));
     return order;
   }
   if (paid) {
@@ -286,6 +289,7 @@ async function settle(C, env, order, markFailed) {
     order.refNumber = v.refNumber != null ? String(v.refNumber) : null;
     order.cardNumber = v.cardNumber || null;
     await saveOrder(env, order);
+    await later(notifyPaid(C, env, order));
     return order;
   }
   if (markFailed) order.status = "failed";
@@ -295,7 +299,7 @@ async function settle(C, env, order, markFailed) {
 }
 
 /* زیبال مشتری رو با GET برمی‌گردونه این‌جا: ?success=1&status=2&trackId=...&orderId=... */
-async function paymentCallback(request, env, url) {
+async function paymentCallback(request, env, url, ctx) {
   const C = cfg(env);
   const back = (result, order) =>
     Response.redirect(`${C.site}/checkout.html?result=${result}${order ? "&order=" + order.id : ""}`, 302);
@@ -320,7 +324,7 @@ async function paymentCallback(request, env, url) {
       await saveOrder(env, order);
       return back(status === "3" ? "canceled" : "failed", order);
     }
-    const o = await settle(C, env, order, true);
+    const o = await settle(C, env, order, true, ctx);
     return back(o.status === "paid" ? "success" : "failed", o);
   } catch (e) {
     console.error(e);
@@ -371,6 +375,46 @@ function row(o) {
   };
 }
 
+/* ===== اعلان تلگرام ===== */
+const tgEsc = (s) => String(s == null ? "" : s).replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]);
+async function telegram(env, text) {
+  const token = String(env.TELEGRAM_BOT_TOKEN || "").trim(), chat = String(env.TELEGRAM_CHAT_ID || "").trim();
+  if (!token || !chat) return { ok: false, description: "TELEGRAM_BOT_TOKEN یا TELEGRAM_CHAT_ID تنظیم نشده" };
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: chat, text, parse_mode: "HTML", disable_web_page_preview: true }),
+      signal: AbortSignal.timeout(10000),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!j.ok) console.error("telegram failed", r.status, JSON.stringify(j));
+    return { ok: !!j.ok, description: j.description || "" };
+  } catch (e) {
+    console.error("telegram error", String(e).slice(0, 150));
+    return { ok: false, description: String(e).slice(0, 150) };
+  }
+}
+function orderText(C, o) {
+  const c = o.customer || {}, pt = o.pattern;
+  const what = o.kind === "work" ? `دستبند گالری: ${tgEsc(o.work && (o.work.title || o.work.id))}` : pt ? `الگوی دلخواه ${pt.width}×${pt.height} · ${pt.total} منجوق` : "";
+  return [
+    `${o.sandbox ? "🧪 سفارش آزمایشی" : "🛍 سفارش جدید (پرداخت شد)"} #${o.id.slice(0, 8)}`,
+    `💰 ${Number(o.priceToman).toLocaleString("fa-IR")} تومان`,
+    what,
+    `👤 ${tgEsc(c.firstName)} ${tgEsc(c.lastName)}`,
+    `📞 ${tgEsc(c.phone)}`,
+    `📍 ${tgEsc(c.address)}`,
+    o.refNumber ? `🧾 مرجع بانکی: ${tgEsc(o.refNumber)}` : "",
+    `${C.site}/admin.html`,
+  ].filter(Boolean).join("\n");
+}
+async function notifyPaid(C, env, o) {
+  if (o.notified) return;
+  const r = await telegram(env, orderText(C, o));
+  if (r.ok) { const f = await getOrder(env, o.id); if (f) { f.notified = true; await saveOrder(env, f); } }
+}
+
 /* دیدن و مدیریت سفارش‌ها (توکن فقط توی هدر Authorization: Bearer ...). صفحه‌ی admin.html همین رو صدا می‌زنه.
    GET  /api/admin/orders              → سفارش‌های پرداخت‌شده (با ?status=all همه‌ی سفارش‌ها)
    GET  /api/admin/orders?id=<کد کامل> → جزئیات کامل یه سفارش (با الگو)
@@ -379,7 +423,7 @@ function row(o) {
    POST /api/admin/orders {id, action:"delete", confirm}           → حذف یه سفارش (برای پرداخت‌شده‌ی واقعی confirm = ۸ حرف اول کد سفارش)
    POST /api/admin/orders {action:"purge", scope:"sandbox|unpaid"} → حذف گروهی آزمایشی‌ها / ناموفق‌های قدیمی
    POST /api/admin/orders {id, tracking, note}                     → کد رهگیری پست و یادداشت */
-async function admin(request, env, url) {
+async function admin(request, env, url, ctx) {
   if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
   if (!env.ORDERS) return json({ error: "KV وصل نیست." }, 500);
   if (request.method === "POST") {
@@ -410,7 +454,7 @@ async function admin(request, env, url) {
     if (b.action === "recheck") {
       if (o.status === "paid") return json(row(o));
       if (!o.trackId) return json({ error: "این سفارش شماره‌ی پیگیری درگاه نداره (درخواست پرداختش ساخته نشده)." }, 400);
-      return json(row(await settle(cfg(env), env, o, false)));
+      return json(row(await settle(cfg(env), env, o, false, ctx)));
     }
     if (typeof b.tracking === "string" || typeof b.note === "string") {
       if (typeof b.tracking === "string") o.tracking = b.tracking.trim().slice(0, 60); /* کد رهگیری پست */
@@ -437,7 +481,7 @@ async function debug(request, env, url) {
   if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
   const C = cfg(env), raw = String(env.ZIBAL_MERCHANT || "");
   const out = { sandbox: C.sandbox, hasMerchant: !!C.merchant, merchant: { length: raw.length, cleanLength: C.merchant.length, masked: C.merchant.slice(0, 2) + "…" + C.merchant.slice(-2) },
-    api: C.api, viaRelay: !!C.relayKey, kv: !!env.ORDERS, site: C.site, pricePerBead: C.price, baseFee: C.base, callback: callbackOf(C) };
+    telegram: !!(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID), api: C.api, viaRelay: !!C.relayKey, kv: !!env.ORDERS, site: C.site, pricePerBead: C.price, baseFee: C.base, callback: callbackOf(C) };
   try {
     const r = await fetch(`${C.site}/js/works.js`);
     const txt = await r.text();
@@ -447,11 +491,12 @@ async function debug(request, env, url) {
   } catch (e) { out.works = { error: String(e) }; }
   if (url.searchParams.get("zibal"))
     out.zibal = await zibal(C, "request", { amount: 10000, callbackUrl: callbackOf(C), orderId: "debug-" + Date.now(), description: "debug" });
+  if (url.searchParams.get("telegram")) out.telegramTest = await telegram(env, "✅ اتصال تلگرام cara برقراره");
   return json(out);
 }
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const url = new URL(request.url);
     const p = url.pathname;
     try {
@@ -462,9 +507,9 @@ export default {
       if (p === "/api/works" && request.method === "GET") return await worksInfo(env);
       if (p === "/api/work" && request.method === "GET") return await workInfo(env, url);
       if (p === "/api/create-payment" && request.method === "POST") return await createPayment(request, env);
-      if (p === "/api/payment-callback") return await paymentCallback(request, env, url);
+      if (p === "/api/payment-callback") return await paymentCallback(request, env, url, ctx);
       if (p === "/api/admin/debug") return await debug(request, env, url);
-      if (p === "/api/admin/orders") return await admin(request, env, url);
+      if (p === "/api/admin/orders") return await admin(request, env, url, ctx);
       if (p.startsWith("/api/")) return json({ error: "not found" }, 404);
       /* مسیر غیر از /api: فقط روی دامنه‌ی خود سایت به GitHub Pages پاس داده می‌شه (روی api.caraw.ir مبدأیی نیست و ۵۲۲ می‌شد) */
       const siteHost = new URL(cfg(env).site).hostname;

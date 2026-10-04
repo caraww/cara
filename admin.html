@@ -75,13 +75,15 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
       <label><input id="all" type="checkbox"> پرداخت‌نشده‌ها هم نشون بده</label>
       <select id="ful" aria-label="فیلتر وضعیت ارسال"><option value="">همه‌ی وضعیت‌های ارسال</option><option value="new">جدید</option><option value="weaving">در حال بافت</option><option value="shipped">ارسال شد</option></select>
       <span class="grow"></span>
+      <button class="btn" id="lblAll">چاپ برچسب‌ها</button>
       <button class="btn" id="csv">خروجی CSV</button>
       <button class="btn" id="reload">به‌روزرسانی</button>
       <button class="btn" id="out">خروج</button>
     </div>
     <div id="list"></div>
     <details class="tools" style="margin-top:26px">
-      <summary class="muted" style="cursor:pointer">پاک‌سازی دسته‌جمعی</summary>
+      <summary class="muted" style="cursor:pointer">فرستنده‌ی برچسب و پاک‌سازی دسته‌جمعی</summary>
+      <label style="display:grid;gap:4px;margin-top:12px;color:var(--muted)">مشخصات فرستنده روی برچسب‌ها (فقط توی همین مرورگر ذخیره می‌شه)<textarea id="sender" rows="3" placeholder="cara · اسم، آدرس، کد پستی و شماره‌ی خودت"></textarea></label>
       <div class="act" style="margin-top:10px">
         <button class="btn danger" id="pTest">حذف همه‌ی سفارش‌های آزمایشی</button>
         <button class="btn danger" id="pOld">حذف ناموفق‌ها و پرداخت‌نشده‌های قدیمی (بیش از ۲ ساعت)</button>
@@ -154,6 +156,7 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
         ${r.status === "paid" ? `<select class="ful" aria-label="وضعیت ارسال">${Object.entries(FUL).map(([k, v]) => `<option value="${k}"${r.fulfillment === k ? " selected" : ""}>${v}</option>`).join("")}</select>` : ""}
         <button class="btn det">جزئیات و آدرس</button>
         ${canRecheck ? '<button class="btn chk">بررسی وضعیت پرداخت</button>' : ""}
+        ${r.status === "paid" ? '<button class="btn lbl">چاپ برچسب</button>' : ""}
         <button class="btn danger del">حذف</button>
       </div>
       <div class="detail" hidden></div>
@@ -218,6 +221,7 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
   $("#list").addEventListener("click", async (e) => {
     const art = e.target.closest(".o"); if (!art) return;
     if (e.target.closest(".det")) return openDetail(art);
+    if (e.target.closest(".lbl")) return printLabels([rows.find((x) => x.id === art.dataset.id)]);
     if (e.target.closest(".del")) return removeOne(art);
     const sv = e.target.closest(".sv");
     if (sv) {
@@ -244,6 +248,29 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
     try { await api("/api/admin/orders", { id: art.dataset.id, fulfillment: s.value }); const r = rows.find((x) => x.id === art.dataset.id); if (r) r.fulfillment = s.value; render(); toast("ذخیره شد"); }
     catch (er) { toast(er.message); }
   });
+  /* برچسب آدرس: ۶ تا توی هر صفحه‌ی A4 (۲×۳). از لیستِ فیلترشده‌ی فعلی می‌سازه */
+  const SENDER_KEY = "cara-sender";
+  try { $("#sender").value = localStorage.getItem(SENDER_KEY) || ""; } catch {}
+  $("#sender").addEventListener("input", () => { try { localStorage.setItem(SENDER_KEY, $("#sender").value); } catch {} });
+  function printLabels(list) {
+    list = list.filter(Boolean);
+    if (!list.length) return toast("سفارشی برای برچسب نیست");
+    let sender = ""; try { sender = localStorage.getItem(SENDER_KEY) || ""; } catch {}
+    sender = sender.trim() || "cara · caraw.ir";
+    const labels = list.map((r) => `<section class="l"><div class="to"><small>گیرنده</small><b>${esc(r.name)}</b><p>${esc(r.address)}</p><div class="ph">${esc(r.phone)}</div></div><div class="from"><small>فرستنده</small><span>${esc(sender)}</span><em>#${esc(r.code)}</em></div></section>`).join("");
+    const css = "@page{size:A4;margin:8mm}*{box-sizing:border-box}body{margin:0;font:14px/1.8 Vazirmatn,Tahoma,sans-serif;color:#000}.g{display:grid;grid-template-columns:1fr 1fr;gap:6mm}.l{border:1.5px dashed #555;border-radius:3mm;padding:5mm;height:88mm;break-inside:avoid;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}small{display:block;color:#555;font-size:11px}.to b{font-size:20px;font-weight:900}.to p{margin:4px 0;font-size:16px;white-space:pre-wrap;word-break:break-word}.ph{font-size:18px;font-weight:700;direction:ltr;text-align:right}.from{border-top:1px solid #999;padding-top:3mm;font-size:12px}.from span{display:block;white-space:pre-wrap}.from em{font-style:normal;direction:ltr;color:#555}";
+    const doc = '<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap"><style>' + css + '</style></head><body><div class="g">' + labels + "</div></body></html>";
+    const fr = document.createElement("iframe");
+    fr.style.cssText = "position:fixed;width:0;height:0;border:0;right:0;bottom:0";
+    document.body.appendChild(fr);
+    fr.onload = () => {
+      const w = fr.contentWindow, go = () => { w.focus(); w.print(); setTimeout(() => fr.remove(), 60000); };
+      (w.document.fonts && w.document.fonts.ready ? w.document.fonts.ready : Promise.resolve()).then(go, go);
+    };
+    fr.srcdoc = doc;
+  }
+  $("#lblAll").onclick = () => printLabels(view().filter((r) => r.status === "paid" && !r.sandbox));
+
   async function removeOne(art) {
     const r = rows.find((x) => x.id === art.dataset.id); if (!r) return;
     const body = { id: r.id, action: "delete" };

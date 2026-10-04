@@ -11,7 +11,7 @@
     "PRICE_PER_BEAD": "1500",
     "BASE_FEE": "150000",
     "ZIBAL_BASE": "https://relay.caraw.ir/zibal-relay.php?x=",
-    "TEST_MODE": "1",
+    "TEST_MODE": "0",
   },
 
   // بدون id: Wrangler موقع دیپلوی خودش KV رو می‌سازه و وصل می‌کنه (سفارش‌ها این‌جا ذخیره می‌شن)
