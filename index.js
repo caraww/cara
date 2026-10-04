@@ -70,6 +70,10 @@ async function zibal(C, endpoint, body) {
 }
 
 const saveOrder = (env, o) => env.ORDERS.put("order:" + o.id, JSON.stringify(o));
+const removeOrder = async (env, o) => {
+  await env.ORDERS.delete("order:" + o.id);
+  if (o.trackId) await env.ORDERS.delete("pn:" + o.trackId);
+};
 const getOrder = async (env, id) => {
   const t = await env.ORDERS.get("order:" + id);
   return t ? JSON.parse(t) : null;
@@ -231,7 +235,7 @@ async function createPayment(request, env) {
     status: "pending",
     fulfillment: "new",
     createdAt: new Date().toISOString(),
-    sandbox: C.sandbox,
+    sandbox: C.sandbox || !!(extra.work && extra.work.id === TEST_WORK.id),
     provider: "zibal",
     priceToman,
     customer,
@@ -362,6 +366,7 @@ function row(o) {
     name: `${o.customer.firstName} ${o.customer.lastName}`, phone: o.customer.phone, address: o.customer.address,
     kind: o.kind || "pattern", work: o.work || null,
     size: pt ? `${pt.width}x${pt.height}` : "", beads: pt ? pt.total : 0, colors: pt ? pt.counts : null,
+    tracking: o.tracking || "", note: o.note || "",
     trackId: o.trackId || null, refNumber: o.refNumber || null, cardNumber: o.cardNumber || null, error: o.error || null,
   };
 }
@@ -370,19 +375,47 @@ function row(o) {
    GET  /api/admin/orders              → سفارش‌های پرداخت‌شده (با ?status=all همه‌ی سفارش‌ها)
    GET  /api/admin/orders?id=<کد کامل> → جزئیات کامل یه سفارش (با الگو)
    POST /api/admin/orders {id, fulfillment:"new|weaving|shipped"}  → تغییر وضعیت ارسال
-   POST /api/admin/orders {id, action:"recheck"}                   → دوباره از زیبال بپرس پرداخت شده یا نه */
+   POST /api/admin/orders {id, action:"recheck"}                   → دوباره از زیبال بپرس پرداخت شده یا نه
+   POST /api/admin/orders {id, action:"delete", confirm}           → حذف یه سفارش (برای پرداخت‌شده‌ی واقعی confirm = ۸ حرف اول کد سفارش)
+   POST /api/admin/orders {action:"purge", scope:"sandbox|unpaid"} → حذف گروهی آزمایشی‌ها / ناموفق‌های قدیمی
+   POST /api/admin/orders {id, tracking, note}                     → کد رهگیری پست و یادداشت */
 async function admin(request, env, url) {
   if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
   if (!env.ORDERS) return json({ error: "KV وصل نیست." }, 500);
   if (request.method === "POST") {
     let b;
     try { b = await request.json(); } catch { return json({ error: "bad request" }, 400); }
+    /* پاک‌سازی گروهی: scope = "sandbox" (آزمایشی‌ها) یا "unpaid" (ناموفق/در انتظارِ قدیمی‌تر از ۲ ساعت) */
+    if (b.action === "purge") {
+      const scope = String(b.scope || "");
+      const cutoff = Date.now() - 2 * 3600 * 1000;
+      let n = 0;
+      for (const x of await allOrders(env)) {
+        const hit = scope === "sandbox" ? !!x.sandbox
+          : scope === "unpaid" ? (x.status === "pending" || x.status === "failed") && Date.parse(x.createdAt) < cutoff
+          : false;
+        if (hit) { await removeOrder(env, x); n++; }
+      }
+      return json({ deleted: n });
+    }
     const o = await getOrder(env, String(b.id || ""));
     if (!o) return json({ error: "not found" }, 404);
+    if (b.action === "delete") {
+      const real = (o.status === "paid" || o.status === "review") && !o.sandbox;
+      if (real && String(b.confirm || "") !== o.id.slice(0, 8))
+        return json({ error: "برای حذف سفارش پرداخت‌شده باید کد سفارش رو تایپ کنی." }, 400);
+      await removeOrder(env, o);
+      return json({ deleted: 1, id: o.id });
+    }
     if (b.action === "recheck") {
       if (o.status === "paid") return json(row(o));
       if (!o.trackId) return json({ error: "این سفارش شماره‌ی پیگیری درگاه نداره (درخواست پرداختش ساخته نشده)." }, 400);
       return json(row(await settle(cfg(env), env, o, false)));
+    }
+    if (typeof b.tracking === "string" || typeof b.note === "string") {
+      if (typeof b.tracking === "string") o.tracking = b.tracking.trim().slice(0, 60); /* کد رهگیری پست */
+      if (typeof b.note === "string") o.note = b.note.trim().slice(0, 500); /* یادداشت داخلی */
+      await saveOrder(env, o);
     }
     if (FULFIL.includes(b.fulfillment)) { o.fulfillment = b.fulfillment; await saveOrder(env, o); }
     return json(row(o));
