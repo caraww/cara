@@ -1,11 +1,12 @@
-/* API سایت cara روی Cloudflare Worker (جایگزین server.js).
-   مسیرها: /api/config  /api/works  /api/work  /api/create-payment  /api/payment-callback  /api/admin/orders
-   تنظیمات (توی داشبورد Cloudflare → Worker → Settings):
-     Variables:  PRICE_PER_BEAD=1500   BASE_FEE=150000   BASE_URL=https://caraw.ir
-     Secrets:    SEPAL_API_KEY (کلید وب‌سرویس درگاه تأییدشده‌ی سپال؛ اجباریه)
-                 ADMIN_TOKEN (یه رمز دلخواه؛ توی هدر Authorization: Bearer فرستاده می‌شه)
-     اختیاری:    SEPAL_BASE (پیش‌فرض https://payment.sepal.ir)   CALLBACK_URL
-     KV binding: ORDERS  (یه KV namespace بساز و با همین اسم وصلش کن) */
+/* API سایت cara روی Cloudflare Worker: پرداخت با زیبال (zibal.ir) + ثبت و مدیریت سفارش‌ها.
+   مسیرها: /api/config  /api/works  /api/work  /api/create-payment  /api/payment-callback  /api/admin/orders  /api/admin/debug
+   تنظیمات (داشبورد Cloudflare → Worker → Settings، یا  npx wrangler secret put <اسم>):
+     Variables (توی wrangler.jsonc):  PRICE_PER_BEAD   BASE_FEE   BASE_URL
+     Secrets:    ZIBAL_MERCHANT  (کد merchant درگاه زیبال؛ برای تست بنویس zibal)
+                 ADMIN_TOKEN     (یه رمز دلخواه برای صفحه‌ی admin.html)
+     اختیاری:    CALLBACK_URL    (پیش‌فرض: BASE_URL/api/payment-callback)
+                 ZIBAL_BASE + ZIBAL_RELAY_KEY  (فقط اگه زیبال آی‌پی ثابت می‌خواد؛ zibal-relay.js رو ببین)
+     KV binding: ORDERS */
 
 /* کدهای معتبر منجوق؛ باید با js/palette.js یکی باشه. بعد از هر تغییر توی palette.js این رو بزن:  node tools/sync-valid.js <مسیر این فایل> */
 /* SYNC:START (خودکار؛ دستی ویرایش نکن: node tools/sync-valid.js) */
@@ -17,8 +18,9 @@ const VALID = new Set([
 ]);
 /* SYNC:END */
 const LIM = { MAX_W: 40, MAX_H: 200 };
+const GATEWAY = "https://gateway.zibal.ir"; /* صفحه‌ی پرداخت: مرورگر مشتری می‌ره این‌جا */
+const FULFIL = ["new", "weaving", "shipped"]; /* جدید / در حال بافت / ارسال شد */
 
-const ok = (j) => !!j && (j.status === true || j.status === 1 || j.status === "1");
 const json = (obj, code = 200) =>
   new Response(JSON.stringify(obj), {
     status: code,
@@ -28,19 +30,45 @@ const digits = (s) =>
   String(s)
     .replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
     .replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+/* کد کپی‌شده از صفحه‌ی راست‌به‌چپ ممکنه رقم فارسی یا کاراکتر نامرئی داشته باشه؛ اینجا درستش می‌کنیم */
+const clean = (s) => digits(String(s || "")).replace(/[\s\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g, "");
 
 function cfg(env) {
-  /* اگه کلید از صفحه‌ی راست‌به‌چپ کپی شده باشه ممکنه رقم‌هاش فارسی (۵۸۰) یا کاراکتر نامرئی داشته باشه؛ اینجا درستش می‌کنیم */
-  const key = digits(String(env.SEPAL_API_KEY || "")).replace(/[\s\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g, "");
+  const merchant = clean(env.ZIBAL_MERCHANT);
   return {
-    key,
-    sepal: String(env.SEPAL_BASE || "https://payment.sepal.ir").trim().replace(/\/+$/, "").replace(/^(?!https?:\/\/)/, "https://"),
+    merchant,
+    sandbox: merchant === "zibal", /* کد آزمایشی زیبال */
+    api: String(env.ZIBAL_BASE || GATEWAY).trim().replace(/\/+$/, "").replace(/^(?!https?:\/\/)/, "https://"),
+    relayKey: String(env.ZIBAL_RELAY_KEY || "").trim(),
     price: Number(env.PRICE_PER_BEAD) || 0,
     base: Number(env.BASE_FEE) || 0,
-    callback: String(env.CALLBACK_URL || "").trim(), /* اختیاری: اگه سپال آدرس بازگشت رو فقط با http:// قبول می‌کنه، اینجا بذار */
+    callback: String(env.CALLBACK_URL || "").trim(),
     site: (env.BASE_URL || "https://caraw.ir").replace(/\/+$/, "").replace(/^(?!https?:\/\/)/, "https://"),
   };
 }
+const callbackOf = (C) => C.callback || `${C.site}/api/payment-callback`;
+
+/* درخواست به API زیبال (merchant خودکار اضافه می‌شه). همیشه یه آبجکت برمی‌گردونه؛ result === 100 یعنی موفق */
+async function zibal(C, endpoint, body) {
+  try {
+    const r = await fetch(`${C.api}/v1/${endpoint}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", ...(C.relayKey ? { "X-Relay-Key": C.relayKey } : {}) },
+      body: JSON.stringify({ merchant: C.merchant, ...body }),
+      signal: AbortSignal.timeout(15000),
+    });
+    const t = await r.text();
+    try { return JSON.parse(t); } catch { return { result: -1, message: `bad response (${r.status}): ` + t.slice(0, 200) }; }
+  } catch (e) {
+    return { result: -1, message: "network: " + String(e).slice(0, 150) };
+  }
+}
+
+const saveOrder = (env, o) => env.ORDERS.put("order:" + o.id, JSON.stringify(o));
+const getOrder = async (env, id) => {
+  const t = await env.ORDERS.get("order:" + id);
+  return t ? JSON.parse(t) : null;
+};
 
 function cleanPattern(p) {
   if (!p || !Array.isArray(p.data)) return null;
@@ -65,23 +93,6 @@ function cleanPattern(p) {
   }
   return total ? { width: w, height: h, data, counts, total } : null;
 }
-
-async function sepal(C, endpoint, body) {
-  const r = await fetch(`${C.sepal}/api/${endpoint}.json`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    signal: AbortSignal.timeout(15000),
-  });
-  const t = await r.text();
-  try { return JSON.parse(t); } catch { return { status: 0, message: "bad response: " + t.slice(0, 200) }; }
-}
-
-const saveOrder = (env, o) => env.ORDERS.put("order:" + o.id, JSON.stringify(o));
-const getOrder = async (env, id) => {
-  const t = await env.ORDERS.get("order:" + id);
-  return t ? JSON.parse(t) : null;
-};
 
 /* کارهای گالری: از js/works.js خود سایت خونده می‌شه (فایل خودکار ساخته می‌شه؛ قیمت رو این‌جا کنترل می‌کنیم).
    اگه توی works.js برای یه اثر فیلد price (تومان) باشه همون استفاده می‌شه، وگرنه قیمت خودکار (PRICE_OVERRIDES بالای همین بخش). */
@@ -204,40 +215,74 @@ async function createPayment(request, env) {
     extra = { kind: "pattern", pattern };
   }
 
-  if (!C.key) return json({ error: "کلید درگاه (SEPAL_API_KEY) روی Worker تنظیم نشده." }, 503);
-  if (!(priceToman * 10 >= 100000)) return json({ error: "مبلغ کمتر از حداقل مجاز درگاه (۱۰٬۰۰۰ تومان) است." }, 400);
+  if (!C.merchant) return json({ error: "کد درگاه (ZIBAL_MERCHANT) روی Worker تنظیم نشده." }, 503);
+  if (!(priceToman * 10 >= 10000)) return json({ error: "مبلغ کمتر از حداقل مجاز درگاه است." }, 400);
 
   const order = {
     id: crypto.randomUUID(),
     status: "pending",
+    fulfillment: "new",
     createdAt: new Date().toISOString(),
+    sandbox: C.sandbox,
+    provider: "zibal",
     priceToman,
     customer,
     ...extra,
   };
   await saveOrder(env, order);
 
-  const j = await sepal(C, "request", {
-    apiKey: C.key,
-    amount: priceToman * 10 /* سپال ریال می‌گیره */,
-    callbackUrl: C.callback || `${C.site}/api/payment-callback`,
-    invoiceNumber: order.id.slice(0, 8),
-    payerName: `${customer.firstName} ${customer.lastName}`,
-    payerMobile: customer.phone,
+  const j = await zibal(C, "request", {
+    amount: priceToman * 10 /* زیبال ریال می‌گیره */,
+    callbackUrl: callbackOf(C),
+    orderId: order.id,
+    mobile: customer.phone,
+    description: `سفارش cara ${order.id.slice(0, 8)}`,
   });
-  if (ok(j) && j.paymentNumber) {
-    order.paymentNumber = String(j.paymentNumber);
+  if (j && j.result === 100 && j.trackId) {
+    order.trackId = String(j.trackId);
     await saveOrder(env, order);
-    await env.ORDERS.put("pn:" + order.paymentNumber, order.id, { expirationTtl: 60 * 60 * 24 * 30 });
-    return json({ paymentUrl: `${C.sepal}/api/payment/${order.paymentNumber}/` });
+    await env.ORDERS.put("pn:" + order.trackId, order.id, { expirationTtl: 60 * 60 * 24 * 60 });
+    return json({ paymentUrl: `${GATEWAY}/start/${order.trackId}` });
   }
   order.status = "failed";
-  order.error = j && j.message;
+  order.error = j && (j.message || String(j.result));
   await saveOrder(env, order);
-  console.error("sepal request failed", JSON.stringify(j), "callback:", C.callback || `${C.site}/api/payment-callback`);
-  return json({ error: "درگاه درخواست رو قبول نکرد، یه کم بعد دوباره امتحان کن." + (j && typeof j.message === "string" && j.message ? " (" + j.message.slice(0, 120) + ")" : "") }, 502);
+  console.error("zibal request failed", JSON.stringify(j), "callback:", callbackOf(C));
+  const why = j && (j.message || j.result != null) ? " (" + String(j.message || "کد " + j.result).slice(0, 120) + ")" : "";
+  return json({ error: "درگاه درخواست رو قبول نکرد، یه کم بعد دوباره امتحان کن." + why }, 502);
 }
 
+/* تأیید پرداخت با زیبال. هم از بازگشت مشتری از درگاه صدا زده می‌شه، هم از دکمه‌ی «بررسی وضعیت» توی admin.html.
+   markFailed=false یعنی اگه پرداخت پیدا نشد، وضعیت سفارش رو خراب نکن. */
+async function settle(C, env, order, markFailed) {
+  const v = await zibal(C, "verify", { trackId: Number(order.trackId) });
+  const fresh = await getOrder(env, order.id);
+  if (fresh && fresh.status === "paid") return fresh; /* کال‌بک هم‌زمان قبلاً تأییدش کرده */
+  order.verify = v;
+  const paid = v && (v.result === 100 || v.result === 201); /* ۲۰۱ = قبلاً تأیید شده */
+  const rial = order.priceToman * 10;
+  if (paid && v.amount != null && Number(v.amount) !== rial) {
+    order.status = "review"; /* پول گرفته شده ولی مبلغ با سفارش نمی‌خونه؛ دستی بررسی کن */
+    order.error = `amount mismatch: ${v.amount} != ${rial}`;
+    await saveOrder(env, order);
+    console.error("zibal amount mismatch", order.id, v.amount, rial);
+    return order;
+  }
+  if (paid) {
+    order.status = "paid";
+    order.paidAt = new Date().toISOString();
+    order.refNumber = v.refNumber != null ? String(v.refNumber) : null;
+    order.cardNumber = v.cardNumber || null;
+    await saveOrder(env, order);
+    return order;
+  }
+  if (markFailed) order.status = "failed";
+  await saveOrder(env, order);
+  console.error("zibal verify not paid", JSON.stringify(v));
+  return order;
+}
+
+/* زیبال مشتری رو با GET برمی‌گردونه این‌جا: ?success=1&status=2&trackId=...&orderId=... */
 async function paymentCallback(request, env, url) {
   const C = cfg(env);
   const back = (result, order) =>
@@ -248,26 +293,23 @@ async function paymentCallback(request, env, url) {
       const raw = await request.text();
       try { body = raw.trim().startsWith("{") ? JSON.parse(raw) : Object.fromEntries(new URLSearchParams(raw)); } catch {}
     }
-    const pn = String(url.searchParams.get("paymentNumber") || body.paymentNumber || "");
-    const id = pn && (await env.ORDERS.get("pn:" + pn));
+    const g = (k) => String(url.searchParams.get(k) || body[k] || "");
+    const trackId = g("trackId"), orderId = g("orderId"), success = g("success"), status = g("status");
+    let id = trackId && (await env.ORDERS.get("pn:" + trackId));
+    if (!id && /^[0-9a-f-]{36}$/i.test(orderId)) id = orderId;
     const order = id && (await getOrder(env, id));
-    if (!order) { console.error("callback without known paymentNumber", url.search, JSON.stringify(body)); return back("failed"); }
+    if (!order) { console.error("callback for unknown order", url.search, JSON.stringify(body)); return back("failed"); }
+    if (trackId && order.trackId && trackId !== order.trackId) { console.error("callback trackId mismatch", url.search); return back("failed"); }
     if (order.status === "paid") return back("success", order);
 
-    const v = await sepal(C, "verify", { apiKey: C.key, paymentNumber: order.paymentNumber });
-    const fresh = await getOrder(env, id);
-    if (fresh && fresh.status === "paid") return back("success", fresh);
-    order.verify = v;
-    if (ok(v)) {
-      order.status = "paid";
-      order.paidAt = new Date().toISOString();
+    if (success !== "1") { /* لغو یا ناموفق توی درگاه؛ نیازی به verify نیست */
+      order.status = "failed";
+      order.cancelStatus = status;
       await saveOrder(env, order);
-      return back("success", order);
+      return back(status === "3" ? "canceled" : "failed", order);
     }
-    order.status = "failed";
-    await saveOrder(env, order);
-    console.error("sepal verify failed", JSON.stringify(v));
-    return back(String(body.status) === "0" && !v.status ? "canceled" : "failed", order);
+    const o = await settle(C, env, order, true);
+    return back(o.status === "paid" ? "success" : "failed", o);
   } catch (e) {
     console.error(e);
     return back("failed");
@@ -282,51 +324,88 @@ function same(a, b) {
   return d === 0;
 }
 
-/* دیدن سفارش‌ها (توکن فقط توی هدر، نه توی آدرس):
-   curl -H "Authorization: Bearer ADMIN_TOKEN" https://caraw.ir/api/admin/orders
-   و برای جزئیات کامل یه سفارش:  .../api/admin/orders?id=<کد کامل سفارش> */
-async function admin(request, env, url) {
+const authed = (request, env) => {
   const t = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
-  if (!env.ADMIN_TOKEN || !same(t, env.ADMIN_TOKEN)) return json({ error: "unauthorized" }, 401);
-  const id = url.searchParams.get("id");
-  if (id) { const o = await getOrder(env, id); return o ? json(o) : json({ error: "not found" }, 404); }
-  const list = await env.ORDERS.list({ prefix: "order:", limit: 200 });
-  const rows = [];
-  for (const k of list.keys) {
-    const o = JSON.parse((await env.ORDERS.get(k.name)) || "null");
-    if (!o || o.status !== "paid") continue;
-    const pt = o.pattern; /* سفارش‌های گالری الگو ندارن */
-    rows.push({
-      id: o.id, code: o.id.slice(0, 8), paidAt: o.paidAt, sandbox: o.sandbox, priceToman: o.priceToman,
-      name: `${o.customer.firstName} ${o.customer.lastName}`, phone: o.customer.phone, address: o.customer.address,
-      kind: o.kind || "pattern", work: o.work || null,
-      size: pt ? `${pt.width}x${pt.height}` : "", beads: pt ? pt.total : 0, colors: pt ? pt.counts : null,
-    });
+  return !!env.ADMIN_TOKEN && same(t, env.ADMIN_TOKEN);
+};
+
+async function allOrders(env) {
+  const keys = [];
+  let cursor;
+  do {
+    const l = await env.ORDERS.list({ prefix: "order:", cursor });
+    keys.push(...l.keys);
+    cursor = l.list_complete ? undefined : l.cursor;
+  } while (cursor && keys.length < 2000);
+  const out = [];
+  for (let i = 0; i < keys.length; i += 25) {
+    const part = await Promise.all(keys.slice(i, i + 25).map((k) => env.ORDERS.get(k.name)));
+    for (const t of part) { try { const o = JSON.parse(t); if (o && o.id) out.push(o); } catch {} }
   }
-  rows.sort((a, b) => String(b.paidAt).localeCompare(String(a.paidAt)));
+  return out;
+}
+
+/* خلاصه‌ی یه سفارش برای لیست (الگوی کامل فقط توی ?id= می‌آد) */
+function row(o) {
+  const pt = o.pattern;
+  return {
+    id: o.id, code: o.id.slice(0, 8), status: o.status, fulfillment: o.fulfillment || "new",
+    createdAt: o.createdAt, paidAt: o.paidAt || null, sandbox: !!o.sandbox, priceToman: o.priceToman,
+    name: `${o.customer.firstName} ${o.customer.lastName}`, phone: o.customer.phone, address: o.customer.address,
+    kind: o.kind || "pattern", work: o.work || null,
+    size: pt ? `${pt.width}x${pt.height}` : "", beads: pt ? pt.total : 0, colors: pt ? pt.counts : null,
+    trackId: o.trackId || null, refNumber: o.refNumber || null, cardNumber: o.cardNumber || null, error: o.error || null,
+  };
+}
+
+/* دیدن و مدیریت سفارش‌ها (توکن فقط توی هدر Authorization: Bearer ...). صفحه‌ی admin.html همین رو صدا می‌زنه.
+   GET  /api/admin/orders              → سفارش‌های پرداخت‌شده (با ?status=all همه‌ی سفارش‌ها)
+   GET  /api/admin/orders?id=<کد کامل> → جزئیات کامل یه سفارش (با الگو)
+   POST /api/admin/orders {id, fulfillment:"new|weaving|shipped"}  → تغییر وضعیت ارسال
+   POST /api/admin/orders {id, action:"recheck"}                   → دوباره از زیبال بپرس پرداخت شده یا نه */
+async function admin(request, env, url) {
+  if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
+  if (!env.ORDERS) return json({ error: "KV وصل نیست." }, 500);
+  if (request.method === "POST") {
+    let b;
+    try { b = await request.json(); } catch { return json({ error: "bad request" }, 400); }
+    const o = await getOrder(env, String(b.id || ""));
+    if (!o) return json({ error: "not found" }, 404);
+    if (b.action === "recheck") {
+      if (o.status === "paid") return json(row(o));
+      if (!o.trackId) return json({ error: "این سفارش شماره‌ی پیگیری درگاه نداره (درخواست پرداختش ساخته نشده)." }, 400);
+      return json(row(await settle(cfg(env), env, o, false)));
+    }
+    if (FULFIL.includes(b.fulfillment)) { o.fulfillment = b.fulfillment; await saveOrder(env, o); }
+    return json(row(o));
+  }
+  const id = url.searchParams.get("id");
+  if (id) { const o = await getOrder(env, id); return o ? json({ ...o, fulfillment: o.fulfillment || "new" }) : json({ error: "not found" }, 404); }
+  const all = url.searchParams.get("status") === "all";
+  const rows = (await allOrders(env))
+    .filter((o) => all || o.status === "paid" || o.status === "review")
+    .map(row);
+  rows.sort((a, b) => String(b.paidAt || b.createdAt).localeCompare(String(a.paidAt || a.createdAt)));
   return json(rows);
 }
 
 /* عیب‌یابی (فقط با ADMIN_TOKEN):
-   curl -H "Authorization: Bearer ADMIN_TOKEN" "https://caraw.ir/api/admin/debug"
-   با ?sepal=1 یه درخواست آزمایشی به سپال هم می‌فرسته و جواب خامش رو نشون می‌ده */
+   curl.exe -H "Authorization: Bearer ADMIN_TOKEN" "https://caraw.ir/api/admin/debug?zibal=1"
+   با ?zibal=1 یه درخواست آزمایشی ۱۰٬۰۰۰ ریالی به زیبال می‌فرسته و جواب خامش رو نشون می‌ده (فقط یه تراکنش در انتظار می‌سازه) */
 async function debug(request, env, url) {
-  const t = (request.headers.get("Authorization") || "").replace(/^Bearer\s+/i, "");
-  if (!env.ADMIN_TOKEN || !same(t, env.ADMIN_TOKEN)) return json({ error: "unauthorized" }, 401);
-  const C = cfg(env);
-  const rawKey = String(env.SEPAL_API_KEY || "");
-  const out = { sepalBase: C.sepal, hasSepalKey: !!rawKey, key: { length: rawKey.length, trimmedLength: rawKey.trim().length, masked: rawKey.trim().slice(0, 2) + "…" + rawKey.trim().slice(-2) }, kv: !!env.ORDERS, site: C.site,
-    pricePerBead: C.price, baseFee: C.base, callback: C.callback || `${C.site}/api/payment-callback` };
+  if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
+  const C = cfg(env), raw = String(env.ZIBAL_MERCHANT || "");
+  const out = { sandbox: C.sandbox, hasMerchant: !!C.merchant, merchant: { length: raw.length, cleanLength: C.merchant.length, masked: C.merchant.slice(0, 2) + "…" + C.merchant.slice(-2) },
+    api: C.api, viaRelay: !!C.relayKey, kv: !!env.ORDERS, site: C.site, pricePerBead: C.price, baseFee: C.base, callback: callbackOf(C) };
   try {
     const r = await fetch(`${C.site}/js/works.js`);
     const txt = await r.text();
-    out.works = { status: r.status, finalUrl: r.url, redirected: r.redirected, length: txt.length, head: txt.slice(0, 160), tail: txt.slice(-120) };
+    out.works = { status: r.status, length: txt.length, head: txt.slice(0, 120) };
     try { const a = extractArray(txt); out.works.arrayFound = !!a; out.works.count = a ? parseLoose(a).length : 0; }
     catch (e) { out.works.parseError = String(e).slice(0, 200); }
   } catch (e) { out.works = { error: String(e) }; }
-  if (url.searchParams.get("sepal"))
-    out.sepal = await sepal(C, "request", { apiKey: C.key, amount: 100000 /* حداقل مجاز سپال: ۱۰۰٬۰۰۰ ریال */, callbackUrl: out.callback,
-      invoiceNumber: "debug", payerName: "test", payerMobile: "09123456789" });
+  if (url.searchParams.get("zibal"))
+    out.zibal = await zibal(C, "request", { amount: 10000, callbackUrl: callbackOf(C), orderId: "debug-" + Date.now(), description: "debug" });
   return json(out);
 }
 
@@ -346,8 +425,7 @@ export default {
       if (p === "/api/admin/debug") return await debug(request, env, url);
       if (p === "/api/admin/orders") return await admin(request, env, url);
       if (p.startsWith("/api/")) return json({ error: "not found" }, 404);
-      /* مسیر غیر از /api: فقط روی دامنه‌ی خود سایت (routeهای caraw.ir/api/*) به GitHub Pages پاس داده می‌شه.
-         روی ساب‌دامین api.caraw.ir مبدأیی وجود نداره و پاس دادن همون خطای ۵۲۲ می‌شد. */
+      /* مسیر غیر از /api: فقط روی دامنه‌ی خود سایت به GitHub Pages پاس داده می‌شه (روی api.caraw.ir مبدأیی نیست و ۵۲۲ می‌شد) */
       const siteHost = new URL(cfg(env).site).hostname;
       if (url.hostname === siteHost || url.hostname === "www." + siteHost) return fetch(request);
       return json({ error: "not found" }, 404);

@@ -5,26 +5,19 @@
   "compatibility_date": "2026-10-01",
   "observability": { "enabled": true },
 
-  // مقدارهای پیش‌فرض (تومان). بعداً می‌تونی اینجا عوضشون کنی
+  // مقدارهای عادی (تومان). رمزها (ZIBAL_MERCHANT و ADMIN_TOKEN) این‌جا نیستن؛ با  npx wrangler secret put  ذخیره می‌شن
   "vars": {
     "BASE_URL": "https://caraw.ir",
     "PRICE_PER_BEAD": "1500",
-    "BASE_FEE": "150000",
-    "CALLBACK_URL": "http://caraw.ir/api/payment-callback",
-    "vars": {
-      "HEZAR_CHESHM_PRICE": "3000000",
-      "WORK_PRICE": "1700000",
-
-      // ...
-    },
+    "BASE_FEE": "150000"
   },
 
-  // بدون id: Wrangler موقع دیپلوی خودش KV رو می‌سازه و وصل می‌کنه
+  // بدون id: Wrangler موقع دیپلوی خودش KV رو می‌سازه و وصل می‌کنه (سفارش‌ها این‌جا ذخیره می‌شن)
   "kv_namespaces": [{ "binding": "ORDERS" }],
 
   // فقط /api/* به Worker می‌رسه؛ بقیه‌ی سایت مثل قبل از GitHub Pages می‌آد
   "routes": [
     { "pattern": "caraw.ir/api/*", "zone_name": "caraw.ir" },
-    { "pattern": "www.caraw.ir/api/*", "zone_name": "caraw.ir" },
-  ],
+    { "pattern": "www.caraw.ir/api/*", "zone_name": "caraw.ir" }
+  ]
 }

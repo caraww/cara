@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" href="img/cara-favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap">
+<title>cara — سفارش‌ها</title>
+<style>
+:root{--ink:#221a2c;--muted:#6b6377;--line:#ddd6e6;--bg:#f6f4f8;--tint:#ece6f2;--gold:#b8975a;--plum:#3b2650;--ok:#1f7a4d;--bad:#b3261e;--warn:#9a6a00}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.9 "Vazirmatn",Tahoma,system-ui,sans-serif}
+main{width:min(980px,100%);margin:auto;padding:28px 18px 80px}
+h1{font-size:28px;font-weight:900;margin:0 0 4px}
+.muted{color:var(--muted)}
+button,select,input{font:inherit}
+.btn{appearance:none;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:10px;padding:2px 16px;min-height:40px;transition:border-color .2s,transform .2s}
+.btn:hover{border-color:var(--ink);transform:translateY(-1px)}
+.btn.dark{background:var(--plum);border-color:var(--plum);color:#fff}
+.btn:disabled{opacity:.55;cursor:wait;transform:none}
+input[type=password],input[type=search],select{height:42px;padding:0 14px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+#login{max-width:420px;margin:12vh auto 0;background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px}
+#login form{display:grid;gap:12px;margin-top:14px}
+.err{color:var(--bad);margin:8px 0 0}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:18px 0 8px}
+.bar .grow{flex:1 1 180px}
+.bar input[type=search]{width:100%;max-width:300px}
+.sum{display:flex;flex-wrap:wrap;gap:8px 22px;margin:4px 0 14px;color:var(--muted)}
+.sum b{color:var(--ink)}
+.o{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin:0 0 12px}
+.o .top{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px}
+.o .top .price{margin-inline-start:auto;font-weight:900;font-size:18px}
+.code{font-weight:700;direction:ltr;unicode-bidi:embed}
+.badge{display:inline-block;padding:0 12px;border-radius:999px;font-size:14px;line-height:1.9;background:var(--tint)}
+.badge.ok{background:#e3f4ea;color:var(--ok)}.badge.bad{background:#fbe5e3;color:var(--bad)}.badge.warn{background:#fff1d2;color:var(--warn)}.badge.test{background:#e8e2f6;color:#5b1f9a}
+.who{margin:6px 0 2px}.who a{color:inherit;margin-inline-start:10px;direction:ltr;unicode-bidi:embed}
+.what{display:flex;align-items:center;gap:12px;margin:6px 0}
+.what img{width:64px;height:64px;object-fit:contain;border-radius:12px;background:var(--tint);padding:4px;flex:none}
+.act{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}
+.detail{margin-top:14px;padding-top:14px;border-top:1px dashed rgba(184,151,90,.6);display:grid;gap:14px}
+.detail[hidden]{display:none}
+.addr{background:var(--bg);border-radius:12px;padding:10px 14px;white-space:pre-wrap}
+.pat{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start}
+.pat .cv{max-width:100%;max-height:520px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:#fff;padding:8px}
+.cols{display:grid;gap:4px;min-width:220px;flex:1 1 220px}
+.cols div{display:flex;align-items:center;gap:8px}
+.cols i{width:20px;height:16px;border-radius:5px;flex:none;box-shadow:inset 0 2px rgba(255,255,255,.4),inset 0 -3px 4px rgba(0,0,0,.2)}
+.cols small{flex:1;color:var(--muted)}
+.big{width:min(340px,100%);border-radius:14px;background:var(--tint);padding:8px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:2px 14px;font-size:15px}.kv dt{color:var(--muted)}.kv dd{margin:0;direction:ltr;text-align:right;unicode-bidi:embed}
+#toast{position:fixed;inset-inline:0;bottom:22px;margin:auto;width:max-content;max-width:90vw;background:var(--ink);color:#fff;padding:6px 22px;border-radius:999px;opacity:0;transform:translateY(12px);transition:.3s;pointer-events:none;z-index:9}
+#toast.on{opacity:1;transform:none}
+</style>
+</head>
+<body>
+<main>
+  <section id="login" hidden>
+    <h1>سفارش‌های cara</h1>
+    <p class="muted" style="margin:0">رمز ADMIN_TOKEN رو بنویس.</p>
+    <form id="lf"><input id="tok" type="password" autocomplete="current-password" placeholder="رمز" aria-label="رمز"><button class="btn dark" type="submit">ورود</button></form>
+    <p class="err" id="lerr" hidden></p>
+  </section>
+
+  <section id="app" hidden>
+    <h1>سفارش‌ها</h1>
+    <div class="sum" id="sum"></div>
+    <div class="bar">
+      <input id="q" type="search" placeholder="جستجو: اسم، موبایل یا کد…" aria-label="جستجو">
+      <label><input id="all" type="checkbox"> پرداخت‌نشده‌ها هم نشون بده</label>
+      <span class="grow"></span>
+      <button class="btn" id="reload">به‌روزرسانی</button>
+      <button class="btn" id="out">خروج</button>
+    </div>
+    <div id="list"></div>
+    <p class="muted" id="empty" hidden>هنوز سفارشی نیست.</p>
+  </section>
+</main>
+<div id="toast" role="status"></div>
+<script src="js/palette.js?v=32"></script>
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const fa = (n) => Number(n).toLocaleString("fa-IR");
+  const esc = (t) => String(t == null ? "" : t).replace(/[&<>"]/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[m]);
+  const STATUS = { paid: ["پرداخت‌شده", "ok"], pending: ["در انتظار پرداخت", ""], failed: ["ناموفق", "bad"], review: ["نیاز به بررسی", "warn"] };
+  const FUL = { new: "جدید", weaving: "در حال بافت", shipped: "ارسال شد" };
+  const when = (iso) => { try { return new Date(iso).toLocaleString("fa-IR", { dateStyle: "medium", timeStyle: "short" }); } catch { return ""; } };
+  let token = sessionStorage.getItem("cara-admin") || "", rows = [];
+
+  const toast = (m) => { const t = $("#toast"); t.textContent = m; t.classList.add("on"); clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove("on"), 2200); };
+  async function api(path, body) {
+    const r = await fetch(path, { method: body ? "POST" : "GET", headers: { Authorization: "Bearer " + token, ...(body ? { "Content-Type": "application/json" } : {}) }, body: body ? JSON.stringify(body) : undefined });
+    const j = await r.json().catch(() => ({}));
+    if (r.status === 401) throw new Error("401");
+    if (!r.ok) throw new Error(j.error || "خطا " + r.status);
+    return j;
+  }
+  function showLogin(msg) {
+    $("#app").hidden = true; $("#login").hidden = false;
+    const e = $("#lerr"); e.hidden = !msg; e.textContent = msg || "";
+  }
+
+  async function load() {
+    try {
+      rows = await api("/api/admin/orders" + ($("#all").checked ? "?status=all" : ""));
+      $("#login").hidden = true; $("#app").hidden = false;
+      render();
+    } catch (e) {
+      if (e.message === "401") { sessionStorage.removeItem("cara-admin"); token = ""; showLogin(e.message === "401" && $("#tok").value ? "رمز اشتباهه." : ""); }
+      else { $("#app").hidden = false; $("#login").hidden = true; toast(e.message); }
+    }
+  }
+
+  function render() {
+    const q = $("#q").value.trim().toLowerCase();
+    const list = rows.filter((r) => !q || [r.name, r.phone, r.code, r.work && r.work.title].join(" ").toLowerCase().includes(q));
+    const real = rows.filter((r) => r.status === "paid" && !r.sandbox), test = rows.filter((r) => r.sandbox).length;
+    const open = real.filter((r) => r.fulfillment !== "shipped").length;
+    $("#sum").innerHTML = `<span>پرداخت‌شده: <b>${fa(real.length)}</b></span><span>جمع فروش: <b>${fa(real.reduce((s, r) => s + r.priceToman, 0))} تومان</b></span><span>هنوز ارسال نشده: <b>${fa(open)}</b></span>` + (test ? `<span>آزمایشی: <b>${fa(test)}</b></span>` : "");
+    $("#empty").hidden = list.length > 0;
+    $("#list").innerHTML = list.map(card).join("");
+  }
+
+  function card(r) {
+    const [sl, sc] = STATUS[r.status] || [r.status, ""];
+    const what = r.kind === "work"
+      ? `<div class="what">${r.work && r.work.src ? `<img src="/${esc(r.work.src)}" alt="">` : ""}<span>دستبند گالری: <b>${esc((r.work && r.work.title) || (r.work && r.work.id) || "")}</b></span></div>`
+      : `<div class="what"><span>الگوی دلخواه · ${esc(r.size.replace("x", " × "))} · <b>${fa(r.beads)}</b> منجوق</span></div>`;
+    const canRecheck = r.status !== "paid" && r.trackId;
+    return `<article class="o" data-id="${esc(r.id)}">
+      <div class="top"><span class="code">#${esc(r.code)}</span><span class="badge ${sc}">${esc(sl)}</span>${r.sandbox ? '<span class="badge test">آزمایشی</span>' : ""}<span class="muted">${esc(when(r.paidAt || r.createdAt))}</span><span class="price">${fa(r.priceToman)} تومان</span></div>
+      <div class="who"><b>${esc(r.name)}</b><a href="tel:${esc(r.phone)}">${esc(r.phone)}</a></div>
+      ${what}
+      <div class="act">
+        ${r.status === "paid" ? `<select class="ful" aria-label="وضعیت ارسال">${Object.entries(FUL).map(([k, v]) => `<option value="${k}"${r.fulfillment === k ? " selected" : ""}>${v}</option>`).join("")}</select>` : ""}
+        <button class="btn det">جزئیات و آدرس</button>
+        ${canRecheck ? '<button class="btn chk">بررسی وضعیت پرداخت</button>' : ""}
+      </div>
+      <div class="detail" hidden></div>
+    </article>`;
+  }
+
+  /* الگو روی بوم کوچیک */
+  function drawPat(cv, p, cw) {
+    const ch = Math.round(cw / CARA.L.BEAD_ASPECT);
+    cv.width = p.width * cw; cv.height = p.height * ch;
+    const g = cv.getContext("2d"); g.fillStyle = "#EFECF4"; g.fillRect(0, 0, cv.width, cv.height);
+    CARA.drawPattern(g, p.data, cw, ch);
+  }
+  /* چارت قابل دانلود: شماره‌ی ردیف و ستون + لیست رنگ‌ها و تعدادشون (مثل «دانلود چارت» توی سازنده) */
+  function chartPNG(p, code) {
+    const cw = 26, ch = Math.round(cw / CARA.L.BEAD_ASPECT), M = 30, T = 22, gw = M + p.width * cw + 4, LW = 330;
+    const cols = Object.entries(p.counts).sort((a, b) => b[1] - a[1]);
+    const W = gw + 24 + LW, H = Math.max(T + p.height * ch + 20, 60 + cols.length * 30);
+    const c = document.createElement("canvas"); c.width = W; c.height = H;
+    const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, W, H);
+    g.fillStyle = "#D3CCDD"; g.fillRect(M, T, p.width * cw + 1, p.height * ch + 1);
+    for (let r = 0; r < p.height; r++) for (let k = 0; k < p.width; k++) {
+      const x = M + k * cw, y = T + r * ch, id = p.data[r][k];
+      g.fillStyle = "#EFECF4"; g.fillRect(x + 1, y + 1, cw - 1, ch - 1);
+      if (id) CARA.drawBead(g, x + 1, y + 1, cw - 1, ch - 1, CARA.byCode(id).hex);
+    }
+    g.fillStyle = "#6C6478"; g.font = "11px Vazirmatn,Tahoma,sans-serif"; g.textBaseline = "middle";
+    g.textAlign = "right"; for (let r = 0; r < p.height; r++) if (r === 0 || (r + 1) % 5 === 0) g.fillText(r + 1, M - 6, T + r * ch + ch / 2);
+    g.textAlign = "center"; for (let k = 0; k < p.width; k++) if (k === 0 || (k + 1) % 5 === 0) g.fillText(k + 1, M + k * cw + cw / 2, T - 10);
+    g.font = "14px Vazirmatn,Tahoma,sans-serif"; g.textAlign = "left";
+    cols.forEach(([id, n], i) => {
+      const pc = CARA.byCode(id), y = 30 + i * 30;
+      CARA.drawBead(g, gw + 24, y - 10, 26, 20, pc.hex); g.fillStyle = "#1B1226"; g.fillText(`${pc.code}  ${pc.name}  ×${n}`, gw + 60, y);
+    });
+    const a = document.createElement("a"); a.download = `cara-order-${code}.png`; a.href = c.toDataURL("image/png"); a.click();
+  }
+
+  async function openDetail(art) {
+    const box = $(".detail", art);
+    if (!box.hidden) { box.hidden = true; return; }
+    box.hidden = false; box.innerHTML = '<span class="muted">در حال باز کردن…</span>';
+    try {
+      const o = await api("/api/admin/orders?id=" + encodeURIComponent(art.dataset.id));
+      const c = o.customer || {};
+      let h = `<div><b>آدرس تحویل</b> <button class="btn cp" style="min-height:32px;padding:0 12px">کپی آدرس</button><div class="addr">${esc(c.firstName)} ${esc(c.lastName)} · ${esc(c.phone)}\n${esc(c.address)}</div></div>`;
+      if (o.kind === "work" && o.work) h += `<div><b>سفارش:</b> ${esc(o.work.title || o.work.id)}<br>${o.work.src ? `<img class="big" src="/${esc(o.work.src)}" alt="">` : ""}</div>`;
+      if (o.pattern) {
+        const p = o.pattern, cols = Object.entries(p.counts || {}).sort((a, b) => b[1] - a[1]);
+        h += `<div class="pat"><div class="cv"><canvas class="pc"></canvas></div><div class="cols"><b>رنگ‌ها (${fa(cols.length)})</b>${cols.map(([id, n]) => { const pc = CARA.byCode(id) || { hex: "#ccc", name: id, code: id }; return `<div><i style="background:${pc.hex}"></i><small>${esc(pc.code)} · ${esc(pc.name)}</small><b>${fa(n)}</b></div>`; }).join("")}<button class="btn dl" style="margin-top:8px">دانلود چارت (PNG)</button></div></div>`;
+      }
+      h += `<dl class="kv"><dt>وضعیت پرداخت</dt><dd>${esc(o.status)}</dd><dt>شماره‌ی پیگیری زیبال</dt><dd>${esc(o.trackId || "—")}</dd><dt>شماره‌ی مرجع بانکی</dt><dd>${esc(o.refNumber || "—")}</dd><dt>کارت پرداخت‌کننده</dt><dd>${esc(o.cardNumber || "—")}</dd><dt>کد کامل سفارش</dt><dd>${esc(o.id)}</dd>${o.error ? `<dt>خطا</dt><dd>${esc(o.error)}</dd>` : ""}</dl>`;
+      box.innerHTML = h;
+      if (o.pattern) {
+        const p = o.pattern; drawPat($(".pc", box), p, Math.max(6, Math.min(14, Math.floor(320 / p.width))));
+        $(".dl", box).onclick = () => chartPNG(p, art.dataset.id.slice(0, 8));
+      }
+      $(".cp", box).onclick = () => { const t = `${c.firstName} ${c.lastName}\n${c.phone}\n${c.address}`; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast("آدرس کپی شد"), () => toast("کپی نشد؛ دستی انتخاب کن")); };
+    } catch (e) { box.innerHTML = `<span class="err">${esc(e.message)}</span>`; }
+  }
+
+  $("#list").addEventListener("click", async (e) => {
+    const art = e.target.closest(".o"); if (!art) return;
+    if (e.target.closest(".det")) return openDetail(art);
+    const chk = e.target.closest(".chk");
+    if (chk) {
+      chk.disabled = true;
+      try { const r = await api("/api/admin/orders", { id: art.dataset.id, action: "recheck" }); toast(r.status === "paid" ? "پرداخت تأیید شد ✓" : "هنوز پرداختی پیدا نشد"); await load(); }
+      catch (er) { toast(er.message); chk.disabled = false; }
+    }
+  });
+  $("#list").addEventListener("change", async (e) => {
+    const s = e.target.closest(".ful"); if (!s) return;
+    const art = s.closest(".o");
+    try { await api("/api/admin/orders", { id: art.dataset.id, fulfillment: s.value }); const r = rows.find((x) => x.id === art.dataset.id); if (r) r.fulfillment = s.value; render(); toast("ذخیره شد"); }
+    catch (er) { toast(er.message); }
+  });
+  $("#lf").addEventListener("submit", (e) => { e.preventDefault(); token = $("#tok").value.trim(); if (!token) return; sessionStorage.setItem("cara-admin", token); load(); });
+  $("#reload").onclick = load; $("#all").onchange = load; $("#q").addEventListener("input", render);
+  $("#out").onclick = () => { sessionStorage.removeItem("cara-admin"); token = ""; $("#tok").value = ""; showLogin(""); };
+
+  if (token) load(); else showLogin("");
+})();
+</script>
+</body>
+</html>
