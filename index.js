@@ -53,7 +53,12 @@ async function zibal(C, endpoint, body) {
   try {
     const r = await fetch(`${C.api}/v1/${endpoint}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", ...(C.relayKey ? { "X-Relay-Key": C.relayKey } : {}) },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "User-Agent": "Mozilla/5.0 (compatible; cara-shop/1.0; +https://caraw.ir)",
+        ...(C.relayKey ? { "X-Relay-Key": C.relayKey } : {}),
+      },
       body: JSON.stringify({ merchant: C.merchant, ...body }),
       signal: AbortSignal.timeout(15000),
     });
@@ -165,8 +170,11 @@ function priceMap(list) {
   }
   return out;
 }
+/* محصول آزمایشی ۵٬۰۰۰ تومانی: فقط وقتی TEST_MODE="1" باشه وجود داره و توی گالری نمایش داده نمی‌شه (فقط با لینک مستقیم قابل سفارشه) */
+const TEST_WORK = { id: "cara-test-5000", title: "تست پرداخت", src: "img/cara-favicon.png", price: 5000 };
 async function pricedWorks(env) {
   const list = await loadWorks(cfg(env));
+  if (String(env.TEST_MODE) === "1") list.push({ ...TEST_WORK });
   return { list, prices: priceMap(list) };
 }
 
