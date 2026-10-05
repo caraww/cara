@@ -1,0 +1,35 @@
+/* اصلاحات کلی صفحه‌های استودیو (builder، upload، gallery، checkout).
+   توی هر صفحه آخرین CSS باشه (بعد از details.css). */
+
+/* همه‌ی دکمه‌ها یه گردی: ۱۲ پیکسل، مثل صفحه‌ی اصلی و فیلدها */
+.btn {
+  border-radius: 12px;
+}
+
+/* موبایل: لینک‌های هدر قبلاً مخفی می‌شدن و فقط «سفارش» می‌موند؛ حالا کوچیک‌تر ولی هستن */
+@media (max-width: 850px) {
+  body:has(.wrap) .top {
+    padding-inline: 12px;
+  }
+  body:has(.wrap) .top nav {
+    gap: 12px;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  body:has(.wrap) .top nav a:not(.btn) {
+    display: inline-flex;
+  }
+  body:has(.wrap) .top nav .btn.sm {
+    min-height: 36px;
+    padding: 0 12px;
+  }
+}
+@media (max-width: 480px) {
+  body:has(.wrap) .top .logo img {
+    height: 32px !important;
+  }
+  body:has(.wrap) .top nav {
+    gap: 9px;
+    font-size: 14px;
+  }
+}

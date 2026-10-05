@@ -1,0 +1,395 @@
+/* ویرایش عکس توی صفحه‌ی «عکس به الگو»: دکمه‌ها، برش، تنظیم کیفیت.
+   دکمه‌ها هم‌قد و هم‌شکل دکمه‌های ابزار سازنده (.tool) هستن.
+   باید آخرین CSS صفحه باشه (بعد از details.css). */
+
+/* ===== انتخاب فایل: با کیبورد هم فوکوس می‌گیره (display:none نه) ===== */
+.drop input {
+  display: block;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  opacity: 0;
+}
+.drop:focus-within {
+  border-color: var(--accent);
+  background: #f7f1fd;
+  outline: 3px solid var(--accent-2);
+  outline-offset: 3px;
+}
+
+/* ===== پنل ویرایش ===== */
+.cropper {
+  position: relative;
+  margin: 22px 0 8px;
+  padding: 22px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--r, 20px);
+}
+.cropper::before {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  pointer-events: none;
+  border: 1px dashed rgba(184, 151, 90, 0.5);
+  border-radius: calc(var(--r, 20px) - 6px);
+}
+.crop-top b {
+  display: block;
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.7;
+}
+.crop-top .muted {
+  display: block;
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+/* ===== دکمه‌ها (همون ظاهر .tool سازنده) ===== */
+.crop-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 14px;
+}
+.cb {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 0 20px;
+  font: inherit;
+  font-size: 16px;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--ink, #1b1226);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.2s;
+}
+.cb:hover {
+  border-color: var(--ink, #1b1226);
+  transform: translateY(-2px);
+}
+.cb:active {
+  transform: none;
+}
+.cb[aria-pressed="true"],
+.cb.on {
+  color: #fff;
+  background: var(--ink, #1b1226);
+  border-color: var(--ink, #1b1226);
+}
+.cb[aria-pressed="true"]::before,
+.cb.on::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f3e2b4, var(--g1, #b8975a));
+}
+.cb:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* تیک‌باکس‌های پنل: هم‌شکل بقیه‌ی سایت (منجوقی) */
+.cb-check {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 46px;
+  padding: 0 16px;
+  margin-inline-start: auto;
+  font-size: 16px;
+  line-height: 1.6;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.cb-check:hover {
+  border-color: var(--ink, #1b1226);
+}
+.cb-check input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 20px;
+  margin: 0;
+  border: 1.5px solid #bfb4d0;
+  border-radius: 7px;
+  background: #fff;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.cb-check input[type="checkbox"]::after {
+  content: "";
+  width: 9px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(29, 21, 39, 0.6);
+  transform: scale(0);
+  transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.5);
+}
+.cb-check input[type="checkbox"]:checked {
+  background: linear-gradient(var(--g2, #cfae6c), var(--g3, #a7853f));
+  border-color: var(--g3, #a7853f);
+  box-shadow: var(--bead-shine);
+}
+.cb-check input[type="checkbox"]:checked::after {
+  transform: scale(1);
+}
+
+/* ===== بوم برش (قاب مثل بقیه‌ی بوم‌های سایت) ===== */
+.crop-stage {
+  display: grid;
+  place-items: center;
+  min-height: 240px;
+  padding: 14px;
+  direction: ltr;
+  overflow: auto;
+  border-radius: 16px;
+  background: #dcd6e6
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.22) 0 2px,
+      transparent 2px 7px
+    );
+  box-shadow:
+    inset 0 0 0 1px rgba(184, 151, 90, 0.5),
+    inset 0 10px 24px rgba(27, 18, 38, 0.1);
+}
+.crop-stage canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  border-radius: 6px;
+  box-shadow: 0 8px 22px rgba(27, 18, 38, 0.22);
+}
+
+/* ===== اسلایدرها: دسته‌ی منجوقی ===== */
+.crop-angle {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 16px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.crop-angle input[type="range"] {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.crop-angle output,
+.tr output {
+  flex: none;
+  min-width: 56px;
+  padding: 2px 12px;
+  text-align: center;
+  direction: ltr;
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.7;
+  color: #7a5a1e;
+  background: #f6efe0;
+  border: 1px solid #e5d6b3;
+  border-radius: 999px;
+}
+.crop-angle input[type="range"],
+.tr input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 28px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  direction: ltr;
+}
+.crop-angle input[type="range"]::-webkit-slider-runnable-track,
+.tr input[type="range"]::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 999px;
+  background: #e4dcee;
+}
+.crop-angle input[type="range"]::-moz-range-track,
+.tr input[type="range"]::-moz-range-track {
+  height: 6px;
+  border-radius: 999px;
+  background: #e4dcee;
+}
+.crop-angle input[type="range"]::-webkit-slider-thumb,
+.tr input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 24px;
+  height: 18px;
+  margin-top: -6px;
+  border: 0;
+  border-radius: 7px;
+  background: linear-gradient(var(--g2, #cfae6c), var(--g3, #a7853f));
+  box-shadow: var(--bead-shine), 0 2px 5px rgba(27, 18, 38, 0.3);
+}
+.crop-angle input[type="range"]::-moz-range-thumb,
+.tr input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 18px;
+  border: 0;
+  border-radius: 7px;
+  background: linear-gradient(var(--g2, #cfae6c), var(--g3, #a7853f));
+  box-shadow: var(--bead-shine), 0 2px 5px rgba(27, 18, 38, 0.3);
+}
+.crop-angle input[type="range"]:focus-visible,
+.tr input[type="range"]:focus-visible {
+  outline: 3px solid var(--accent-2);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* ===== تنظیم کیفیت تبدیل ===== */
+.tune {
+  margin: 16px 0 0;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--r, 20px);
+  overflow: hidden;
+}
+.tune summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  font-size: 17px;
+  font-weight: 800;
+  list-style: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s;
+}
+.tune summary::-webkit-details-marker {
+  display: none;
+}
+.tune summary:hover {
+  background: #faf7fd;
+}
+.tune summary::before {
+  content: "";
+  flex: none;
+  width: 12px;
+  height: 9px;
+  border-radius: 3px;
+  background: linear-gradient(var(--g2, #cfae6c), var(--g3, #a7853f));
+  box-shadow: var(--bead-shine);
+}
+.tune summary::after {
+  content: "";
+  flex: none;
+  width: 9px;
+  height: 9px;
+  margin-inline-start: auto;
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  opacity: 0.6;
+  transform: rotate(45deg);
+  transition: transform 0.25s;
+}
+.tune[open] summary {
+  border-bottom: 1px dashed rgba(184, 151, 90, 0.5);
+}
+.tune[open] summary::after {
+  transform: rotate(-135deg);
+}
+.tgrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px 28px;
+  padding: 18px 20px 6px;
+}
+.tr {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 4px 12px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.tr output {
+  grid-column: 2;
+  grid-row: 1;
+}
+.tr input[type="range"] {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  width: 100%;
+}
+.trow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+  margin-top: 10px;
+  padding: 14px 20px 18px;
+  border-top: 1px dashed rgba(184, 151, 90, 0.5);
+}
+.trow .cb-check {
+  margin-inline-start: 0;
+}
+.trow .cb {
+  margin-inline-start: auto;
+}
+
+@media (max-width: 560px) {
+  .cropper {
+    padding: 16px;
+  }
+  .crop-bar .cb {
+    flex: 1 1 calc(50% - 10px);
+  }
+  .cb-check {
+    flex: 1 1 100%;
+    margin-inline-start: 0;
+  }
+  .tgrid {
+    grid-template-columns: 1fr;
+  }
+  .trow .cb {
+    flex: 1 1 100%;
+    margin-inline-start: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cb,
+  .cb-check,
+  .tune summary::after {
+    transition: none !important;
+  }
+}
