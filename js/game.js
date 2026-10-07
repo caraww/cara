@@ -42,12 +42,12 @@
 
   /* راند محلی (فقط حالت تمرین) */
   function localRound() {
-    const size = Math.min(7, 2 + Math.floor((L.round + 1) / 2)), delta = Math.max(5, 24 - L.round * 1.7), jit = 0;
-    const hue = Math.floor(Math.random() * 360), l = 42 + Math.random() * 22, sign = l > 53 ? -1 : 1;
+    const size = Math.min(7, 2 + Math.floor((L.round + 1) / 2)), d = 0.045 + 0.085 * Math.exp(-L.round / 6), C = 0.13;
+    const hue = Math.random() * 360, l = 0.58 + Math.random() * 0.17, dir = l > 0.665 ? -1 : 1;
     L.odd = Math.floor(Math.random() * size * size);
-    const cells = Array.from({ length: size * size }, (_, i) => i === L.odd
-      ? `hsl(${((hue + sign * delta * 0.4) % 360 + 360) % 360},68%,${(l + sign * delta).toFixed(1)}%)`
-      : `hsl(${hue},68%,${(l + (Math.random() - 0.5) * 2 * jit).toFixed(1)}%)`);
+    const base = `oklch(${l.toFixed(3)} ${C} ${hue.toFixed(1)})`;
+    const odd = `oklch(${(l + dir * d).toFixed(3)} ${(C + dir * d * 0.4).toFixed(3)} ${((hue + d * 60) % 360).toFixed(1)})`;
+    const cells = Array.from({ length: size * size }, (_, i) => (i === L.odd ? odd : base));
     return { size, cells, round: L.round, score: L.score };
   }
 

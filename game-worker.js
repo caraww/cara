@@ -25,19 +25,20 @@ async function open(env, tok) {
 
 /* سختی: شبکه بزرگ‌تر می‌شه، اختلاف رنگ کم می‌شه و از راند ۵ به بعد بقیه‌ی منجوق‌ها هم کمی نوسان رنگ دارن */
 const sizeOf = (r) => Math.min(7, 2 + Math.floor((r + 1) / 2));
-const deltaOf = (r) => Math.max(5, 24 - r * 1.7);
+/* اختلاف روشنایی توی OKLCH (برای چشم یکنواخته، پس روی همه‌ی رنگ‌ها یه‌اندازه دیده می‌شه). حداقلش ۰٫۰۴۵ که هنوز تشخیص‌دادنیه */
+const deltaOf = (r) => 0.045 + 0.085 * Math.exp(-r / 6);
 /* جای منجوق متفاوت از روی راز سرور حساب می‌شه، پس توی توکن نیست */
 async function oddIndex(env, st) {
   const n = sizeOf(st.r);
   return new DataView(await hmac(env, `odd:${st.i}:${st.r}`)).getUint32(0) % (n * n);
 }
 async function makeRound(env, st) {
-  const size = sizeOf(st.r), delta = deltaOf(st.r), jit = 0;
-  const hue = Math.floor(Math.random() * 360), l = 42 + Math.random() * 22, dir = l > 53 ? -1 : 1;
+  const size = sizeOf(st.r), d = deltaOf(st.r), C = 0.13;
+  const hue = Math.random() * 360, L = 0.58 + Math.random() * 0.17, dir = L > 0.665 ? -1 : 1;
   const oddIdx = await oddIndex(env, st);
-  const cells = Array.from({ length: size * size }, (_, i) => i === oddIdx
-    ? `hsl(${((hue + dir * delta * 0.4) % 360 + 360) % 360},68%,${(l + dir * delta).toFixed(1)}%)`
-    : `hsl(${hue},68%,${(l + (Math.random() - 0.5) * 2 * jit).toFixed(1)}%)`);
+  const base = `oklch(${L.toFixed(3)} ${C} ${hue.toFixed(1)})`;
+  const odd = `oklch(${(L + dir * d).toFixed(3)} ${(C + dir * d * 0.4).toFixed(3)} ${((hue + d * 60) % 360).toFixed(1)})`;
+  const cells = Array.from({ length: size * size }, (_, i) => (i === oddIdx ? odd : base));
   return { size, cells, round: st.r, score: st.c, token: await sign(env, st) };
 }
 
