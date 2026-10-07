@@ -33,3 +33,20 @@
     font-size: 14px;
   }
 }
+
+/* گوشی‌های خیلی کوچیک: چون یه لینک (بازی) اضافه شده، هدر فشرده‌تر می‌شه تا جا بشه */
+@media (max-width: 400px) {
+  body:has(.wrap) .top {
+    padding-inline: 8px;
+  }
+  body:has(.wrap) .top nav {
+    gap: 7px;
+    font-size: 13px;
+  }
+  body:has(.wrap) .top .logo img {
+    height: 28px !important;
+  }
+  body:has(.wrap) .top nav .btn.sm {
+    padding: 0 9px;
+  }
+}
