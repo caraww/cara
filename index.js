@@ -1,3 +1,5 @@
+import { handleGame, checkCode, reserveCode, releaseCode, useCode, DISCOUNT } from "./game-worker.js";
+
 /* API سایت cara روی Cloudflare Worker: پرداخت با زیبال (zibal.ir) + ثبت و مدیریت سفارش‌ها.
    مسیرها: /api/config  /api/works  /api/work  /api/create-payment  /api/payment-callback  /api/admin/orders  /api/admin/debug
    تنظیمات (داشبورد Cloudflare → Worker → Settings، یا  npx wrangler secret put <اسم>):
@@ -228,6 +230,14 @@ async function createPayment(request, env) {
     extra = { kind: "pattern", pattern };
   }
 
+  /* کد تخفیف بازی (۱۰٪)؛ قیمت نهایی همیشه سمت سرور حساب می‌شه */
+  let dc = null;
+  if (body.discountCode) {
+    dc = await checkCode(env, body.discountCode);
+    if (!dc) return json({ error: "کد تخفیف نامعتبر یا قبلاً استفاده شده." }, 400);
+    priceToman = Math.round(priceToman * (1 - DISCOUNT));
+  }
+
   if (!C.merchant) return json({ error: "کد درگاه (ZIBAL_MERCHANT) روی Worker تنظیم نشده." }, 503);
   if (!(priceToman * 10 >= 10000)) return json({ error: "مبلغ کمتر از حداقل مجاز درگاه است." }, 400);
 
@@ -240,9 +250,11 @@ async function createPayment(request, env) {
     provider: "zibal",
     priceToman,
     customer,
+    ...(dc ? { discountCode: dc } : {}),
     ...extra,
   };
   await saveOrder(env, order);
+  if (dc) await reserveCode(env, dc, order.id);
 
   const j = await zibal(C, "request", {
     amount: priceToman * 10 /* زیبال ریال می‌گیره */,
@@ -260,6 +272,7 @@ async function createPayment(request, env) {
   order.status = "failed";
   order.error = j && (j.message || String(j.result));
   await saveOrder(env, order);
+  if (dc) await releaseCode(env, dc, order.id);
   console.error("zibal request failed", JSON.stringify(j), "callback:", callbackOf(C));
   const why = j && (j.message || j.result != null) ? " (" + String(j.message || "کد " + j.result).slice(0, 120) + ")" : "";
   return json({ error: "درگاه درخواست رو قبول نکرد، یه کم بعد دوباره امتحان کن." + why }, 502);
@@ -289,11 +302,13 @@ async function settle(C, env, order, markFailed, ctx) {
     order.refNumber = v.refNumber != null ? String(v.refNumber) : null;
     order.cardNumber = v.cardNumber || null;
     await saveOrder(env, order);
+    if (order.discountCode) await useCode(env, order.discountCode, order.id);
     await later(notifyPaid(C, env, order));
     return order;
   }
   if (markFailed) order.status = "failed";
   await saveOrder(env, order);
+  if (markFailed && order.discountCode) await releaseCode(env, order.discountCode, order.id);
   console.error("zibal verify not paid", JSON.stringify(v));
   return order;
 }
@@ -322,6 +337,7 @@ async function paymentCallback(request, env, url, ctx) {
       order.status = "failed";
       order.cancelStatus = status;
       await saveOrder(env, order);
+      if (order.discountCode) await releaseCode(env, order.discountCode, order.id);
       return back(status === "3" ? "canceled" : "failed", order);
     }
     const o = await settle(C, env, order, true, ctx);
@@ -510,6 +526,8 @@ export default {
       if (p === "/api/payment-callback") return await paymentCallback(request, env, url, ctx);
       if (p === "/api/admin/debug") return await debug(request, env, url);
       if (p === "/api/admin/orders") return await admin(request, env, url, ctx);
+      const gameRes = await handleGame(request, env, url);
+      if (gameRes) return gameRes;
       if (p.startsWith("/api/")) return json({ error: "not found" }, 404);
       /* مسیر غیر از /api: فقط روی دامنه‌ی خود سایت به GitHub Pages پاس داده می‌شه (روی api.caraw.ir مبدأیی نیست و ۵۲۲ می‌شد) */
       const siteHost = new URL(cfg(env).site).hostname;

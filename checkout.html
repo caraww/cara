@@ -79,6 +79,15 @@
                 autocomplete="street-address"
               ></textarea>
             </label>
+            <label class="field full"
+              >کد تخفیف (اختیاری)<input
+                name="discountCode"
+                autocomplete="off"
+                placeholder=" "
+                dir="ltr"
+                style="text-align: right"
+            /></label>
+            <p class="muted" id="dcNote" style="margin: -4px 0 12px; font-size: 15px"></p>
             <button class="btn dark" id="pay" type="submit" style="width: 100%">
               ادامه و پرداخت
             </button>
@@ -87,6 +96,7 @@
       </div>
     </main>
     <script src="js/palette.js?v=32"></script>
+    <script src="js/checkout-discount.js"></script>
     <script src="js/checkout-work.js"></script>
     <script src="js/checkout.js"></script>
     <script src="js/delight.js?v=1" defer></script>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="img/cara-favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" />
+    <link rel="stylesheet" href="css/studio.css" />
+    <link rel="stylesheet" href="css/delight.css" />
+    <link rel="stylesheet" href="css/polish.css" />
+    <link rel="stylesheet" href="css/details.css" />
+    <title>بازی منجوق متفاوت | کارا (cara)</title>
+    <meta name="description" content="منجوقی که رنگش فرق داره رو پیدا کن و کد تخفیف ۱۰٪ سفارش بعدیت رو بگیر." />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#1d1527" />
+    <link rel="canonical" href="https://caraw.ir/game.html" />
+    <style>
+      .gm{max-width:460px;margin:0 auto;text-align:center}
+      .gm .page-title{font-size:clamp(26px,7vw,40px);text-wrap:balance;margin-bottom:14px}
+      .gm .card{padding:20px}
+      .gm .stats{display:flex;justify-content:space-between;font-weight:700;margin-bottom:10px}
+      .gm .bar{height:8px;background:rgba(128,128,128,.25);border-radius:8px;overflow:hidden;margin-bottom:14px}
+      .gm .bar i{display:block;height:100%;width:100%;background:#b8975a;transition:width .1s linear}
+      #grid{display:grid;gap:8px;direction:ltr;margin:0 auto}
+      .bead{aspect-ratio:1;border:0;border-radius:50%;cursor:pointer;position:relative;padding:0;
+        box-shadow:inset -3px -4px 8px rgba(0,0,0,.2),0 2px 4px rgba(0,0,0,.18)}
+      .bead::before{content:"";position:absolute;inset:14% 40% 55% 14%;border-radius:50%;background:rgba(255,255,255,.55)}
+      .bead::after{content:"";position:absolute;inset:38%;border-radius:50%;background:#1d1527;box-shadow:inset 1px 2px 3px rgba(0,0,0,.5)}
+      .bead:active{transform:scale(.92)}
+      .code{display:inline-block;direction:ltr;font-size:1.6rem;font-weight:900;letter-spacing:2px;border:2px dashed #b8975a;color:#b8975a;border-radius:14px;padding:8px 20px;margin:10px 0}
+      .shake{animation:sh .25s}
+      @keyframes sh{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+      [hidden]{display:none!important}
+      .gacts{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:8px 0 4px}
+      .gbtn{appearance:none;display:inline-flex;align-items:center;justify-content:center;min-height:56px;padding:0 40px;border:0;border-radius:14px;cursor:pointer;
+        font:inherit;font-size:19px;font-weight:900;line-height:1;color:#fff;text-decoration:none;
+        background:linear-gradient(135deg,#cfae6c,#a7853f);
+        box-shadow:inset 0 2px rgba(255,255,255,.45),inset 0 -4px 6px rgba(0,0,0,.2),0 10px 24px rgba(167,133,63,.36);
+        transition:transform .2s,box-shadow .2s}
+      .gbtn:hover{transform:translateY(-2px);box-shadow:inset 0 2px rgba(255,255,255,.45),inset 0 -4px 6px rgba(0,0,0,.2),0 14px 30px rgba(167,133,63,.5)}
+      .gbtn:active{transform:none}
+      .gbtn:disabled{opacity:.65;cursor:wait;transform:none}
+      .gbtn.line{background:#fff;color:var(--ink);box-shadow:none;border:1px solid var(--line)}
+      .gbtn.line:hover{border-color:var(--ink);box-shadow:none}
+      .gnote{margin:10px 0 0;font-size:15px;color:var(--muted)}
+    </style>
+  </head>
+  <body>
+    <header class="top solid">
+      <a href="/" class="logo"><img src="img/cara-logo.png" alt="cara" style="height:44px;width:auto;display:block" /></a>
+      <nav>
+        <a href="builder.html">طراحی دستی</a><a href="upload.html">عکس به الگو</a><a href="gallery.html">گالری</a><a href="game.html">بازی</a><a class="btn dark sm" href="checkout.html">سفارش</a>
+      </nav>
+    </header>
+    <main class="wrap">
+      <div class="gm">
+        <h1 class="page-title">منجوق متفاوت رو پیدا کن</h1>
+
+        <section class="card" id="start">
+          <p class="sub">توی هر راند یه منجوق رنگش یه کم با بقیه فرق داره؛ روش بزن. هر راند سخت‌تر می‌شه. کلیک اشتباه ۴ ثانیه از زمانت کم می‌کنه.</p>
+          <p class="sub">با <b id="goal"></b> امتیاز یا بیشتر، کد تخفیف <b>۱۰٪</b> سفارش بعدیت رو می‌گیری 🎁</p>
+          <div class="gacts"><button type="button" class="gbtn" id="play">شروع بازی</button></div>
+          <p class="gnote" id="gnote" hidden></p>
+        </section>
+
+        <section class="card" id="game" hidden>
+          <div class="stats"><span>امتیاز: <span id="score">۰</span></span><span>راند: <span id="round">۱</span></span><span>⏱ <span id="time">۵۰</span></span></div>
+          <div class="bar"><i id="fill"></i></div>
+          <div id="grid"></div>
+        </section>
+
+        <section class="card" id="end" hidden>
+          <h2>پایان بازی!</h2>
+          <p>امتیاز تو: <b id="final"></b></p>
+          <div id="win" hidden>
+            <p>تبریک! 🎉 کد تخفیف ۱۰٪ تو (یک‌بار مصرف):</p>
+            <div class="code" id="code"></div><br />
+            <div class="gacts"><button type="button" class="gbtn line" id="copy">کپی کد</button>
+            <a class="gbtn" href="builder.html">برو طراحی دستبند</a></div>
+            <p class="sub" style="margin-top:12px">کد رو توی صفحه‌ی سفارش وارد کن.</p>
+          </div>
+          <p id="limited" class="sub" hidden>امروز قبلاً کد گرفتی؛ هر نفر روزی یک کد می‌تونه بگیره.</p>
+          <p id="lose" class="sub" hidden>برای کد باید حداقل <b id="goal2"></b> امتیاز بگیری. دوباره تلاش کن!</p>
+          <div class="gacts"><button type="button" class="gbtn" id="again">بازی دوباره</button></div>
+        </section>
+      </div>
+    </main>
+    <script src="js/game.js"></script>
+    <script src="js/delight.js?v=1" defer></script>
+  </body>
+</html>

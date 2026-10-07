@@ -47,7 +47,7 @@
     try {
       const r = await fetch("/api/create-payment", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ workId: id, customer }),
+        body: JSON.stringify({ workId: id, customer, discountCode: String(f.discountCode || "").trim() }),
       });
       const j = await r.json().catch(() => ({}));
       if (j.paymentUrl) return (location.href = j.paymentUrl);

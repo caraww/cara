@@ -49,7 +49,7 @@
     const btn = $("pay"); btn.disabled = true; btn.textContent = "دارم می‌برمت به درگاه…";
     try {
       const r = await fetch("/api/create-payment", { method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ customer: fd, pattern: { width: p.width, height: p.height, data: p.data } }) });
+        body: JSON.stringify({ customer: fd, discountCode: String(fd.discountCode || "").trim(), pattern: { width: p.width, height: p.height, data: p.data } }) });
       const j = await r.json().catch(() => ({}));
       if (r.ok && j.paymentUrl) return (location.href = j.paymentUrl);
       showErr(j.error || "وصل شدن به درگاه نشد، یه کم بعد دوباره امتحان کن.");
