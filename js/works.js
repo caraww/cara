@@ -51,10 +51,10 @@
  },
  {
   "id": "خطر",
-  "src": "img/works-view/%D8%AE%D8%B7%D8%B1.webp?v=muxxy1mj",
-  "thumb": "img/works-thumbs/%D8%AE%D8%B7%D8%B1.webp?v=muxxy1mj",
+  "src": "img/works-view/%D8%AE%D8%B7%D8%B1.webp?v=muxy18fg",
+  "thumb": "img/works-thumbs/%D8%AE%D8%B7%D8%B1.webp?v=muxy18fg",
   "w": 1376,
-  "h": 1779,
+  "h": 1639,
   "title": "خطر",
   "note": "یه دستبند خاص برای خاص‌پسندها. اگه خاص‌پسند نیستی، نزدیک نشو!",
   "tags": [
@@ -112,10 +112,10 @@
  },
  {
   "id": "شطرنج",
-  "src": "img/works-view/%D8%B4%D8%B7%D8%B1%D9%86%D8%AC.webp?v=mus90iku",
-  "thumb": "img/works-thumbs/%D8%B4%D8%B7%D8%B1%D9%86%D8%AC.webp?v=mus90iku",
+  "src": "img/works-view/%D8%B4%D8%B7%D8%B1%D9%86%D8%AC.webp?v=muxy0bc4",
+  "thumb": "img/works-thumbs/%D8%B4%D8%B7%D8%B1%D9%86%D8%AC.webp?v=muxy0bc4",
   "w": 1400,
-  "h": 1076,
+  "h": 736,
   "title": "شطرنج",
   "note": "یه دستبند مینیمال که با هر استایلی ست می‌شه. سفید و مشکی. کیش و مات!",
   "tags": [
