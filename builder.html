@@ -3,7 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/png" href="img/cara-favicon.png" />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="192x192"
+      href="/img/cara-favicon.png"
+    />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/img/cara-favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -11,29 +18,137 @@
       href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap"
     />
     <link rel="stylesheet" href="css/studio.css" />
-    <title>طراحی دستبند منجوقی آنلاین | سازنده الگوی cara</title>
-    <meta name="description" content="طراحی دستبند منجوقی آنلاین و رایگان: خونه‌به‌خونه با ۳۲ رنگ منجوق میوکی الگو بکش، پیش‌نمایش روی مچ ببین و سفارش بده." />
+    <title>طراحی دستبند منجوقی آنلاین | سازنده الگوی کارا (cara)</title>
+    <meta
+      name="description"
+      content="طراحی دستبند منجوقی آنلاین و رایگان: خونه‌به‌خونه با ۳۲ رنگ منجوق میوکی الگو بکش، پیش‌نمایش روی مچ ببین و سفارش بده."
+    />
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#1d1527" />
     <link rel="canonical" href="https://caraw.ir/builder.html" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="fa_IR" />
-    <meta property="og:site_name" content="cara" />
+    <meta property="og:site_name" content="کارا (cara)" />
     <meta property="og:title" content="طراحی دستبند منجوقی آنلاین با cara" />
-    <meta property="og:description" content="طراحی دستبند منجوقی آنلاین و رایگان: خونه‌به‌خونه با ۳۲ رنگ منجوق میوکی الگو بکش، پیش‌نمایش روی مچ ببین و سفارش بده." />
+    <meta
+      property="og:description"
+      content="طراحی دستبند منجوقی آنلاین و رایگان: خونه‌به‌خونه با ۳۲ رنگ منجوق میوکی الگو بکش، پیش‌نمایش روی مچ ببین و سفارش بده."
+    />
     <meta property="og:url" content="https://caraw.ir/builder.html" />
     <meta property="og:image" content="https://caraw.ir/img/og-image.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="طراحی دستبند منجوقی آنلاین با cara" />
+    <meta
+      name="twitter:description"
+      content="طراحی دستبند منجوقی آنلاین و رایگان: خونه‌به‌خونه با ۳۲ رنگ منجوق میوکی الگو بکش، پیش‌نمایش روی مچ ببین و سفارش بده."
+    />
+    <meta name="twitter:image" content="https://caraw.ir/img/og-image.png" />
     <link rel="stylesheet" href="css/delight.css" />
     <link rel="stylesheet" href="css/studio-controls.css" />
     <link rel="stylesheet" href="css/details.css" />
     <link rel="stylesheet" href="css/polish.css" />
+    <style>
+      .seo-text {
+        max-width: 780px;
+        margin: 56px auto 32px;
+        line-height: 1.9;
+        font-size: 15px;
+      }
+      .seo-text h2 {
+        font-size: 22px;
+        font-weight: 900;
+        margin: 0 0 10px;
+      }
+      .seo-text .intro {
+        margin: 0 0 22px;
+        opacity: 0.85;
+      }
+      .faq {
+        display: grid;
+        gap: 10px;
+      }
+      .faq details {
+        border: 1px solid rgba(128, 128, 128, 0.28);
+        background: rgba(128, 128, 128, 0.07);
+        border-radius: 16px;
+        transition:
+          border-color 0.2s,
+          background 0.2s;
+      }
+      .faq details[open] {
+        border-color: #b8975a;
+        background: rgba(184, 151, 90, 0.1);
+      }
+      @supports (background: color-mix(in srgb, red 10%, transparent)) {
+        .faq details {
+          border-color: color-mix(in srgb, currentColor 14%, transparent);
+          background: color-mix(in srgb, currentColor 4%, transparent);
+        }
+        .faq details[open] {
+          border-color: #b8975a;
+          background: color-mix(in srgb, #b8975a 9%, transparent);
+        }
+      }
+      .faq summary {
+        list-style: none;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 14px 18px;
+        font-size: 16px;
+        font-weight: 700;
+      }
+      .faq summary::-webkit-details-marker {
+        display: none;
+      }
+      .faq summary::after {
+        content: "+";
+        flex: none;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        background: #b8975a;
+        color: #fff;
+        font-size: 19px;
+        line-height: 1;
+        transition: transform 0.25s;
+      }
+      .faq details[open] summary::after {
+        transform: rotate(45deg);
+      }
+      .faq summary:focus-visible {
+        outline: 2px solid #b8975a;
+        outline-offset: 2px;
+      }
+      .faq .ans {
+        padding: 0 18px 16px;
+      }
+      .faq .ans p {
+        margin: 0;
+      }
+      .faq a {
+        font-weight: 700;
+        text-decoration: underline;
+        text-decoration-color: #b8975a;
+        text-underline-offset: 4px;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .faq summary::after,
+        .faq details {
+          transition: none;
+        }
+      }
+    </style>
   </head>
   <body>
     <header class="top solid">
-      <a href="index.html" class="logo"
+      <a href="/" class="logo"
         ><img
           src="img/cara-logo.png"
           alt="cara"
@@ -136,6 +251,45 @@
           <div class="colors" id="colors"></div>
         </aside>
       </div>
+
+      <section class="seo-text" aria-labelledby="seo-h">
+        <h2 id="seo-h">طراحی دستبند منجوقی آنلاین</h2>
+        <p class="intro">
+          توی این سازنده خونه‌به‌خونه الگوی دستبندت رو با ۳۲ رنگ منجوق میوکی
+          دلیکا می‌کشی. هر خونه یه منجوقه. همزمان پیش‌نمایش روی مچ و تعداد و رنگ
+          منجوق‌ها رو می‌بینی و چارت الگو رو دانلود می‌کنی.
+        </p>
+        <div class="faq">
+          <details open>
+            <summary>ابعاد دستبند چقدر می‌تونه باشه؟</summary>
+            <div class="ans">
+              <p>
+                عرض تا ۴۰ و طول تا ۲۰۰ خونه. اگه دستبند خیلی پهن بشه، سایت بهت
+                هشدار می‌ده.
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>دستبند چند روزه آماده می‌شه؟</summary>
+            <div class="ans">
+              <p>
+                دستبند حداکثر تا یک هفته بعد از سفارش آماده می‌شه. بعدش
+                بسته‌بندی و برات پست می‌شه.
+              </p>
+            </div>
+          </details>
+          <details>
+            <summary>می‌شه از روی عکس شروع کرد؟</summary>
+            <div class="ans">
+              <p>
+                آره؛ توی صفحه‌ی <a href="upload.html">تبدیل عکس به الگو</a> عکست
+                رو آپلود کن و بعد همین‌جا ویرایشش کن. برای ایده گرفتن هم
+                <a href="gallery.html">گالری دستبندها</a> رو ببین.
+              </p>
+            </div>
+          </details>
+        </div>
+      </section>
     </main>
     <script src="js/palette.js?v=32"></script>
     <script src="js/builder.js"></script>

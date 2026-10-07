@@ -22,7 +22,7 @@
       const ar = w.w && w.h ? ` style="--ar:${(w.w / w.h).toFixed(4)};--i:${i % 8}"` : ` style="--i:${i % 8}"`;
       return `<figure class="wk-card" data-id="${esc(w.id)}" tabindex="0" role="button" aria-label="${esc(w.title)}"${ar}>
         <button class="wk-fav" aria-label="علاقه‌مندی" aria-pressed="${favs.has(w.id)}">♥</button>
-        <img src="${esc(w.thumb)}" data-fb="${esc(w.src)}" alt="${esc(w.title)}"${w.w ? ` width="${w.w}" height="${w.h}"` : ""} loading="${i < 6 ? "eager" : "lazy"}" decoding="async">
+        <img src="${esc(w.thumb)}" data-fb="${esc(w.src)}" alt="دستبند منجوقی ${esc(w.title)}"${w.w ? ` width="${w.w}" height="${w.h}"` : ""} loading="${i < 6 ? "eager" : "lazy"}" decoding="async">
         <figcaption><b>${esc(w.title)}</b>${w.note ? `<span>${esc(w.note)}</span>` : ""}</figcaption></figure>`;
     }).join("");
     grid.querySelectorAll("img").forEach((im) => { if (im.complete) im.classList.add("in"); });
@@ -43,7 +43,7 @@
     cur = (i + list.length) % list.length;
     const w = list[cur];
     $("lbImg").classList.remove("in");
-    $("lbImg").src = w.src; $("lbImg").alt = w.title;
+    $("lbImg").src = w.src; $("lbImg").alt = "دستبند منجوقی " + w.title;
     if ($("lbImg").complete && $("lbImg").naturalWidth) $("lbImg").classList.add("in"); /* عکس کش‌شده: گاهی load دوباره نمیاد */
     $("lbTitle").textContent = w.title; $("lbNote").textContent = w.note; $("lbNote").hidden = !w.note;
     $("lbTags").innerHTML = (w.tags || []).map((t) => `<span>${esc(t)}</span>`).join("");
