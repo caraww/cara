@@ -1,13 +1,13 @@
 /* بازی «منجوق متفاوت» + کد تخفیف یک‌بار مصرف، برای Worker (کنار index.js).
    وضعیت بازی توی توکن امضاشده‌ست (بدون KV در هر کلیک)؛ فقط کدها توی KV (ORDERS) با پیشوند code: ذخیره می‌شن.
    Secret لازم:  npx wrangler secret put GAME_SECRET   (اگه نباشه از ADMIN_TOKEN استفاده می‌شه)
-   Variable اختیاری:  GAME_GOAL (حداقل امتیاز برای کد، پیش‌فرض ۱۶) */
+   Variable اختیاری:  GAME_GOAL (حداقل امتیاز برای کد، پیش‌فرض ۱۲) */
 
-const TOTAL_MS = 50000, PENALTY_MS = 4000, MIN_GAP_MS = 300, RESERVE_MS = 20 * 60 * 1000;
+const TOTAL_MS = 60000, PENALTY_MS = 3000, BONUS_MS = 1000, MIN_GAP_MS = 300, RESERVE_MS = 20 * 60 * 1000;
 export const DISCOUNT = 0.1;
 const enc = new TextEncoder();
 const json = (o, c = 200) => new Response(JSON.stringify(o), { status: c, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
-const goalOf = (env) => Number(env.GAME_GOAL) || 16;
+const goalOf = (env) => Number(env.GAME_GOAL) || 12;
 const secretOf = (env) => String(env.GAME_SECRET || env.ADMIN_TOKEN || "");
 const b64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 const unb64 = (s) => JSON.parse(atob(s.replace(/-/g, "+").replace(/_/g, "/")));
@@ -24,19 +24,19 @@ async function open(env, tok) {
 }
 
 /* سختی: شبکه بزرگ‌تر می‌شه، اختلاف رنگ کم می‌شه و از راند ۵ به بعد بقیه‌ی منجوق‌ها هم کمی نوسان رنگ دارن */
-const sizeOf = (r) => Math.min(9, 2 + Math.floor((r + 1) / 2));
-const deltaOf = (r) => Math.max(2.5, 22 - r * 1.8);
+const sizeOf = (r) => Math.min(7, 2 + Math.floor((r + 1) / 2));
+const deltaOf = (r) => Math.max(5, 24 - r * 1.7);
 /* جای منجوق متفاوت از روی راز سرور حساب می‌شه، پس توی توکن نیست */
 async function oddIndex(env, st) {
   const n = sizeOf(st.r);
   return new DataView(await hmac(env, `odd:${st.i}:${st.r}`)).getUint32(0) % (n * n);
 }
 async function makeRound(env, st) {
-  const size = sizeOf(st.r), delta = deltaOf(st.r), jit = st.r >= 5 ? delta * 0.15 : 0;
-  const hue = Math.floor(Math.random() * 360), l = 42 + Math.random() * 22, sign = l > 53 ? -1 : 1;
+  const size = sizeOf(st.r), delta = deltaOf(st.r), jit = 0;
+  const hue = Math.floor(Math.random() * 360), l = 42 + Math.random() * 22, dir = l > 53 ? -1 : 1;
   const oddIdx = await oddIndex(env, st);
   const cells = Array.from({ length: size * size }, (_, i) => i === oddIdx
-    ? `hsl(${((hue + sign * delta * 0.4) % 360 + 360) % 360},68%,${(l + sign * delta).toFixed(1)}%)`
+    ? `hsl(${((hue + dir * delta * 0.4) % 360 + 360) % 360},68%,${(l + dir * delta).toFixed(1)}%)`
     : `hsl(${hue},68%,${(l + (Math.random() - 0.5) * 2 * jit).toFixed(1)}%)`);
   return { size, cells, round: st.r, score: st.c, token: await sign(env, st) };
 }
@@ -96,8 +96,8 @@ export async function handleGame(request, env, url) {
     if (now >= st.d) return finish(env, request, st);
     if (!(idx >= 0) || now - st.t < MIN_GAP_MS) return json({ tooFast: true, token: b.token, remainingMs: st.d - now });
     if (idx === (await oddIndex(env, st))) {
-      const next = { ...st, r: st.r + 1, c: st.c + 1, t: now };
-      return json({ correct: true, remainingMs: st.d - now, ...(await makeRound(env, next)) });
+      const next = { ...st, r: st.r + 1, c: st.c + 1, d: st.d + BONUS_MS, t: now };
+      return json({ correct: true, remainingMs: next.d - now, ...(await makeRound(env, next)) });
     }
     const wrong = { ...st, d: st.d - PENALTY_MS, t: now };
     if (now >= wrong.d) return finish(env, request, wrong);

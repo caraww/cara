@@ -1,7 +1,7 @@
 (function () {
   const $ = (id) => document.getElementById(id);
   const fa = (n) => Number(n).toLocaleString("fa-IR");
-  const TOTAL = 50000, PENALTY = 4000;
+  const TOTAL = 60000, PENALTY = 3000, BONUS = 1000;
   let token, endAt, timer, busy = false, code = "";
   let local = false, L = null; /* حالت تمرین (وقتی سرور بازی در دسترس نیست) */
 
@@ -13,7 +13,7 @@
   const note = (t) => { $("gnote").textContent = t || ""; $("gnote").hidden = !t; };
 
   fetch("/api/game/config").then((r) => r.json()).then((c) => { $("goal").textContent = $("goal2").textContent = fa(c.goal); })
-    .catch(() => { $("goal").textContent = $("goal2").textContent = fa(16); });
+    .catch(() => { $("goal").textContent = $("goal2").textContent = fa(12); });
 
   function hud(s) {
     if (s) { $("score").textContent = fa(s.score); $("round").textContent = fa(s.round); }
@@ -42,7 +42,7 @@
 
   /* راند محلی (فقط حالت تمرین) */
   function localRound() {
-    const size = Math.min(9, 2 + Math.floor((L.round + 1) / 2)), delta = Math.max(2.5, 22 - L.round * 1.8), jit = L.round >= 5 ? delta * 0.15 : 0;
+    const size = Math.min(7, 2 + Math.floor((L.round + 1) / 2)), delta = Math.max(5, 24 - L.round * 1.7), jit = 0;
     const hue = Math.floor(Math.random() * 360), l = 42 + Math.random() * 22, sign = l > 53 ? -1 : 1;
     L.odd = Math.floor(Math.random() * size * size);
     const cells = Array.from({ length: size * size }, (_, i) => i === L.odd
@@ -55,7 +55,7 @@
     if (busy) return;
     if (local) {
       if (performance.now() >= endAt) return end({ score: L.score });
-      if (idx === L.odd) { L.score++; L.round++; render(localRound()); }
+      if (idx === L.odd) { L.score++; L.round++; endAt += BONUS; render(localRound()); }
       else { endAt -= PENALTY; const g = $("grid"); g.classList.remove("shake"); void g.offsetWidth; g.classList.add("shake"); hud(); if (hud() <= 0) end({ score: L.score }); }
       return;
     }
