@@ -12,6 +12,7 @@
   const fa = (n) => Number(n).toLocaleString("fa-IR");
   const esc = (s) => String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const digits = (s) => s.replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+  const phoneFix = (s) => { s = digits(String(s)).replace(/[\s\-()]/g, ""); s = s.replace(/^(\+98|0098|98)(?=9\d{9}$)/, "0"); return /^9\d{9}$/.test(s) ? "0" + s : s; }; /* +98912…، 0098912…، 912… همه به 0912… */
   const NUM = /^[\s0-9۰-۹.\-_)]+$/; /* عنوان‌های فقط‌عددی نشون داده نمی‌شن */
   const showErr = (m) => { err.textContent = m; err.hidden = false; err.scrollIntoView({ block: "center", behavior: "smooth" }); };
   let work = null;
@@ -40,7 +41,7 @@
     const f = Object.fromEntries(new FormData(form));
     const customer = {};
     for (const k of ["firstName", "lastName", "phone", "address"]) customer[k] = String(f[k] || "").trim();
-    customer.phone = digits(customer.phone);
+    customer.phone = phoneFix(customer.phone);
     if (!customer.firstName || !customer.lastName || !customer.address) return showErr("اسم، فامیلی و آدرس رو کامل بنویس.");
     if (!/^09\d{9}$/.test(customer.phone)) return showErr("شماره موبایل باید شبیه 09123456789 باشه.");
     if (pay) pay.disabled = true;

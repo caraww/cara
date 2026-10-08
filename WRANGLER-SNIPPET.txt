@@ -1,0 +1,9 @@
+# 1) توی wrangler.jsonc اضافه کن (کنار بقیه‌ی تنظیم‌ها):
+"durable_objects": { "bindings": [{ "name": "GAME", "class_name": "GameDO" }] },
+"migrations": [{ "tag": "v1", "new_sqlite_classes": ["GameDO"] }]
+
+# 2) توی index.js (Worker) کنار import فعلی game-worker:
+export { GameDO } from "./game-worker.js";
+
+# 3) deploy کن:  npx wrangler deploy
+# تا وقتی binding اسم GAME نداشته باشه، بازی مثل قبل کار می‌کنه (فقط بدون محافظت).

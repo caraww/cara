@@ -1,6 +1,7 @@
 (() => {
   const C = CARA, $ = (id) => document.getElementById(id), p = C.loadPattern(), q = new URLSearchParams(location.search);
   const digits = (s) => s.replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+  const phoneFix = (s) => { s = digits(String(s)).replace(/[\s\-()]/g, ""); s = s.replace(/^(\+98|0098|98)(?=9\d{9}$)/, "0"); return /^9\d{9}$/.test(s) ? "0" + s : s; }; /* +98912…، 0098912…، 912… همه به 0912… */
   const showErr = (t) => { const e = $("err"); e.textContent = t; e.hidden = !t; if (t) e.scrollIntoView({ behavior: "smooth", block: "center" }); };
 
   /* بارش مهره برای پرداخت موفق */
@@ -42,7 +43,7 @@
     e.preventDefault(); showErr("");
     if (workMode) return;
     const f = e.currentTarget, fd = Object.fromEntries(new FormData(f));
-    fd.phone = digits(fd.phone.trim());
+    fd.phone = phoneFix(fd.phone);
     if (!p || !total) return showErr("اول یه الگو بساز و چندتا منجوق بچین.");
     if (!fd.firstName.trim() || !fd.lastName.trim() || !fd.address.trim()) return showErr("اسم، فامیلی و آدرس رو کامل بنویس.");
     if (!/^09\d{9}$/.test(fd.phone)) return showErr("شماره موبایل باید شبیه 09123456789 باشه.");

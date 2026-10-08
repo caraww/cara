@@ -63,7 +63,13 @@ const byPaymentNumber = (pn) =>
   [...orders.values()].find((o) => o.paymentNumber && o.paymentNumber === pn);
 
 /* کارهای گالری: tools/build-works.js فایل data/works.json و js/works.js رو می‌سازه */
-function loadWorks() {
+let worksCache = { t: 0, v: [] };
+function loadWorks() { /* هر ۵ ثانیه یک بار از دیسک، نه در هر درخواست */
+  if (Date.now() - worksCache.t < 5000) return worksCache.v;
+  worksCache = { t: Date.now(), v: readWorks() };
+  return worksCache.v;
+}
+function readWorks() {
   try {
     return JSON.parse(fs.readFileSync(path.join(__dirname, "data", "works.json"), "utf8"));
   } catch {}
@@ -83,6 +89,10 @@ function findWork(id) {
 }
 
 const VALID = new Set(CARA_PALETTE.map((p) => p.code));
+const phoneFix = (s) => {
+  s = digits(s).replace(/[\s\-()]/g, "").replace(/^(\+98|0098|98)(?=9\d{9}$)/, "0");
+  return /^9\d{9}$/.test(s) ? "0" + s : s;
+};
 const digits = (s) =>
   String(s)
     .replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
@@ -171,7 +181,9 @@ const MIME = {
   ".svg": "image/svg+xml",
   ".ico": "image/x-icon",
 };
-const PAGES = new Set(["index", "builder", "upload", "gallery", "checkout"]);
+const PAGES = new Set(["index", "builder", "upload", "gallery", "checkout", "game"]);
+/* فایل‌های سمت سرور که نباید از طریق مسیر جایگزین ریشه سرو بشن */
+const PRIVATE = new Set(["server.js", "index.js", "game-worker.js", "zibal-relay.js", "sync-valid.js"]);
 
 function sendFile(res, file) {
   const ext = path.extname(file).toLowerCase();
@@ -197,7 +209,7 @@ function serveStatic(p, res) {
     path.join(__dirname, m[1], rel),
     path.join(__dirname, path.basename(rel)),
   ]) {
-    if (path.basename(f) === "server.js") continue;
+    if (PRIVATE.has(path.basename(f))) continue;
     if (fs.existsSync(f) && fs.statSync(f).isFile()) {
       sendFile(res, f);
       return true;
@@ -217,7 +229,7 @@ async function createPayment(req, res) {
       lastName: String(c.lastName || "")
         .trim()
         .slice(0, 60),
-      phone: digits(c.phone || "").trim(),
+      phone: phoneFix(c.phone || ""),
       address: String(c.address || "")
         .trim()
         .slice(0, 500),

@@ -5,7 +5,7 @@
   const empty = (w, h) => Array.from({ length: h }, () => Array(w).fill(null));
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   let w = L.DEF_W, h = L.DEF_H, data = empty(w, h), sel = C.palette[0].code, tool = "brush";
-  let panning = null, space = false, mirror = false, erasing = false, painting = false, last = null, history = [], cw = 24, ch = 20, saveT, sumQ = false;
+  let panning = null, space = false, mirror = false, erasing = false, painting = false, last = null, history = [], redo = [], cw = 24, ch = 20, saveT, sumQ = false;
 
   const saved = C.loadPattern();
   if (saved) { data = saved.data; w = saved.width; h = saved.height; }
@@ -17,7 +17,7 @@
     const b = document.createElement("button");
     b.className = "swatch"; b.style.setProperty("--c", p.hex); b.title = `${p.code} — ${p.name}`;
     b.setAttribute("aria-label", b.title); b.setAttribute("aria-pressed", p.code === sel); b.dataset.code = p.code;
-    b.onclick = () => { sel = p.code; if (tool === "eraser" || tool === "pan") setTool("brush"); showSel(); };
+    b.onclick = () => { sel = p.code; if (tool === "eraser" || tool === "pan" || tool === "pick") setTool("brush"); showSel(); };
     pal.appendChild(b);
   });
   function showSel() {
@@ -28,7 +28,7 @@
 
   /* ابزارها */
   function setTool(t) {
-    tool = t; $("toolName").textContent = { brush: "قلم", eraser: "پاک‌کن", fill: "سطل", pan: "جابه‌جایی" }[t];
+    tool = t; $("toolName").textContent = { brush: "قلم", eraser: "پاک‌کن", fill: "سطل", pan: "جابه‌جایی", pick: "قطره‌چکان" }[t];
     document.querySelectorAll("[data-tool]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.tool === t));
     canvas.style.touchAction = "none";
     canvas.style.cursor = t === "pan" ? "grab" : "crosshair";
@@ -89,13 +89,18 @@
       setCell(r, c, v); st.push([r + 1, c], [r - 1, c], [r, c + 1], [r, c - 1]);
     }
   }
-  const pushHistory = () => { history.push(JSON.stringify({ w, h, data })); if (history.length > 50) history.shift(); };
+  const pushHistory = () => { redo.length = 0; history.push(JSON.stringify({ w, h, data })); if (history.length > 50) history.shift(); };
   canvas.addEventListener("pointerdown", (e) => {
     if (tool === "pan" || e.button === 1 || space) { /* جابه‌جایی: کشیدن با موس/لمس، دکمه‌ی وسط یا نگه داشتن Space */
       e.preventDefault(); panning = { x: e.clientX, y: e.clientY, l: wrap.scrollLeft, t: wrap.scrollTop };
       canvas.setPointerCapture(e.pointerId); canvas.style.cursor = "grabbing"; return;
     }
     const cell = cellFrom(e); if (!cell) return;
+    if (tool === "pick" || e.altKey) { /* قطره‌چکان: رنگ خونه‌ی زیر نشانگر رو برمی‌داره (Alt+کلیک یا کلید I) */
+      const code = data[cell[0]][cell[1]];
+      if (code) { sel = code; showSel(); if (tool === "pick" || tool === "eraser") setTool("brush"); }
+      return;
+    }
     erasing = e.button === 2; pushHistory(); canvas.setPointerCapture(e.pointerId);
     if (tool === "fill") { fill(cell); changed(); return; }
     painting = true; last = cell; setCell(cell[0], cell[1], val()); queueSummary();
@@ -112,7 +117,8 @@
   function applyState(s) {
     w = s.w; h = s.h; data = s.data; wIn.value = w; hIn.value = h; layout(); changed();
   }
-  $("undo").onclick = () => { const p = history.pop(); if (p) applyState(JSON.parse(p)); };
+  $("undo").onclick = () => { const p = history.pop(); if (p) { redo.push(JSON.stringify({ w, h, data })); applyState(JSON.parse(p)); } };
+  const doRedo = () => { const p = redo.pop(); if (p) { history.push(JSON.stringify({ w, h, data })); applyState(JSON.parse(p)); } };
   $("clear").onclick = () => { pushHistory(); data = empty(w, h); layout(); changed(); };
   function resize() {
     pushHistory();
@@ -166,7 +172,9 @@
     if (/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return;
     if (e.code === "Space" && !/BUTTON|A/.test(document.activeElement.tagName)) { e.preventDefault(); if (!space) { space = true; canvas.style.cursor = "grab"; } return; }
     const k = e.key.toLowerCase();
-    if ((e.ctrlKey || e.metaKey) && k === "z") { e.preventDefault(); $("undo").click(); }
+    if ((e.ctrlKey || e.metaKey) && k === "z" && !e.shiftKey) { e.preventDefault(); $("undo").click(); }
+    else if ((e.ctrlKey || e.metaKey) && (k === "y" || (k === "z" && e.shiftKey))) { e.preventDefault(); doRedo(); }
+    else if (k === "i" && !e.ctrlKey && !e.metaKey) setTool("pick");
     else if (k === "b") setTool("brush"); else if (k === "e") setTool("eraser"); else if (k === "g") setTool("fill");
   });
   addEventListener("keyup", (e) => { if (e.code === "Space" && space) { space = false; setTool(tool); } });

@@ -15,7 +15,7 @@
     <path d="M12 30v26c0 10 17 16 38 16s38-6 38-16V30z" fill="url(#b${i})"/><ellipse cx="50" cy="30" rx="38" ry="17" fill="url(#t${i})"/>
     <ellipse cx="50" cy="30" rx="17" ry="8" fill="${shade(hex, -0.7)}"/><ellipse cx="50" cy="28.5" rx="17" ry="6.2" fill="${shade(hex, -0.88)}" opacity=".75"/>
     <path d="M22 45c1 5 5 8 10 10" stroke="rgba(255,255,255,.55)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
-  CARA.palette.forEach((p, i) => chips.insertAdjacentHTML("beforeend", `<li data-i="${i}"><div class="bead"><img src="img/beads/${p.code}.${EXTS[0]}" data-e="0" alt="${p.name}" loading="lazy"></div><b>${p.code}</b><span>${p.name}</span></li>`));
+  CARA.palette.forEach((p, i) => chips.insertAdjacentHTML("beforeend", `<li data-i="${i}" tabindex="0" role="button" aria-label="کپی کد ${p.code}"><div class="bead"><img src="img/beads/${p.code}.${EXTS[0]}" data-e="0" alt="${p.name}" loading="lazy"></div><b>${p.code}</b><span>${p.name}</span></li>`));
   /* خطای لود عکس بابل نمی‌شه، پس توی فاز capture می‌گیریمش: ساختار بعدی یا برگشت به منجوق کشیده‌شده */
   chips.addEventListener("error", (e) => {
     const im = e.target; if (im.tagName !== "IMG") return;
@@ -109,4 +109,6 @@
       toast.textContent = `کد ${code} کپی شد`; toast.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove("on"), 1600);
     });
   });
+  /* با کیبورد هم می‌شه کد رنگ رو کپی کرد */
+  chips.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.tagName === "LI") { e.preventDefault(); e.target.click(); } });
 })();
