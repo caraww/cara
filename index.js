@@ -1,4 +1,5 @@
 import { handleGame, checkCode, reserveCode, releaseCode, useCode, DISCOUNT } from "./game-worker.js";
+export { GameDO } from "./game-worker.js";
 
 /* API سایت cara روی Cloudflare Worker: پرداخت با زیبال (zibal.ir) + ثبت و مدیریت سفارش‌ها.
    مسیرها: /api/config  /api/works  /api/work  /api/create-payment  /api/payment-callback  /api/admin/orders  /api/admin/debug

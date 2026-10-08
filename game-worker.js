@@ -17,9 +17,10 @@ async function hmac(env, msg) {
   return crypto.subtle.sign("HMAC", k, enc.encode(msg));
 }
 const sign = async (env, st) => { const p = b64(enc.encode(JSON.stringify(st))); return p + "." + b64(await hmac(env, p)); };
+const safeEq = (a, b) => { a = String(a); b = String(b); if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i); return d === 0; };
 async function open(env, tok) {
   const [p, s] = String(tok || "").split(".");
-  if (!p || !s || b64(await hmac(env, p)) !== s) return null;
+  if (!p || !s || !safeEq(b64(await hmac(env, p)), s)) return null;
   try { return unb64(p); } catch { return null; }
 }
 
@@ -39,7 +40,31 @@ async function makeRound(env, st) {
   const base = `oklch(${L.toFixed(3)} ${C} ${hue.toFixed(1)})`;
   const odd = `oklch(${(L + dir * d).toFixed(3)} ${(C + dir * d * 0.4).toFixed(3)} ${((hue + d * 60) % 360).toFixed(1)})`;
   const cells = Array.from({ length: size * size }, (_, i) => (i === oddIdx ? odd : base));
-  return { size, cells, round: st.r, score: st.c, token: await sign(env, st) };
+  return { size, cells, round: st.r, score: st.c, goal: goalOf(env), token: await sign(env, st) };
+}
+
+/* ===== ضدتقلب: هر توکن فقط یک بار قابل‌مصرفه =====
+   بدون این، می‌شد با یه توکن قدیمی همه‌ی خونه‌ها رو یکی‌یکی امتحان کرد و جریمه‌ی ۳ ثانیه‌ای رو دور زد.
+   اگه binding با اسم GAME نباشه، مثل قبل بدون این محافظت کار می‌کنه (WRANGLER-SNIPPET.txt). */
+async function consume(env, st) {
+  if (!env.GAME) return true;
+  try {
+    const stub = env.GAME.get(env.GAME.idFromName(String(st.i)));
+    const r = await stub.fetch("https://game/consume?n=" + ((st.n | 0)));
+    return r.ok;
+  } catch { return true; } /* خرابی DO نباید بازی رو بخوابونه */
+}
+export class GameDO {
+  constructor(state) { this.state = state; }
+  async fetch(req) {
+    const n = Number(new URL(req.url).searchParams.get("n")) | 0;
+    const cur = (await this.state.storage.get("n")) || 0;
+    if (n !== cur) return new Response("stale", { status: 409 });
+    await this.state.storage.put("n", cur + 1);
+    await this.state.storage.setAlarm(Date.now() + 40 * 60 * 1000); /* بعد از ۴۰ دقیقه پاک می‌شه */
+    return new Response("ok");
+  }
+  async alarm() { await this.state.storage.deleteAll(); }
 }
 
 /* ===== کد تخفیف ===== */
@@ -61,14 +86,16 @@ export async function releaseCode(env, code, orderId) { const r = await getRec(e
 export async function useCode(env, code, orderId) { const r = await getRec(env, code); if (r) { r.usedBy = orderId; r.usedAt = Date.now(); await putRec(env, code, r); } }
 
 async function finish(env, request, st) {
-  const out = { over: true, score: st.c, goal: goalOf(env) };
+  const out = { over: true, score: st.c, goal: goalOf(env), percent: DISCOUNT * 100 };
   if (st.c >= out.goal) {
+    const prev = await env.ORDERS.get("gdone:" + st.i); /* همین بازی قبلاً تموم شده؟ همون کد قبلی (اگه جواب اولی گم شده بود) */
+    if (prev && prev !== "1") { out.code = prev; return json(out); }
     const ip = request.headers.get("CF-Connecting-IP") || "unknown";
     if ((await env.ORDERS.get("gdone:" + st.i)) || (await env.ORDERS.get("gip:" + ip))) out.limited = true; /* هر بازی یک کد، هر IP روزی یک کد */
     else {
       const code = "CARA-" + [...crypto.getRandomValues(new Uint8Array(4))].map((b) => b.toString(16).padStart(2, "0")).join("").toUpperCase();
       await putRec(env, code, { createdAt: Date.now(), reservedBy: null, reservedAt: 0, usedBy: null });
-      await env.ORDERS.put("gdone:" + st.i, "1", { expirationTtl: 3600 });
+      await env.ORDERS.put("gdone:" + st.i, code, { expirationTtl: 3600 });
       await env.ORDERS.put("gip:" + ip, "1", { expirationTtl: 86400 });
       out.code = code;
     }
@@ -86,7 +113,7 @@ export async function handleGame(request, env, url) {
   if (request.method !== "POST") return json({ error: "not found" }, 404);
 
   if (p === "/api/game/start") {
-    const st = { i: crypto.randomUUID(), r: 1, c: 0, d: Date.now() + TOTAL_MS, t: 0 };
+    const st = { i: crypto.randomUUID(), r: 1, c: 0, d: Date.now() + TOTAL_MS, t: 0, n: 0 };
     return json({ remainingMs: TOTAL_MS, ...(await makeRound(env, st)) });
   }
   if (p === "/api/game/answer") {
@@ -94,13 +121,17 @@ export async function handleGame(request, env, url) {
     const st = await open(env, b.token);
     if (!st) return json({ error: "بازی معتبر نیست؛ دوباره شروع کن." }, 400);
     const now = Date.now(), idx = Number(b.idx);
-    if (now >= st.d) return finish(env, request, st);
+    if (now >= st.d) { /* وقت تموم شده؛ توکن مصرف‌شده هم کد همون بازی رو دوباره می‌گیره، کد جدید نه */
+      if (!(await consume(env, st))) { const prev = await env.ORDERS.get("gdone:" + st.i); return json({ over: true, score: st.c, goal: goalOf(env), ...(prev && prev !== "1" ? { code: prev } : {}) }); }
+      return finish(env, request, st);
+    }
     if (!(idx >= 0) || now - st.t < MIN_GAP_MS) return json({ tooFast: true, token: b.token, remainingMs: st.d - now });
+    if (!(await consume(env, st))) return json({ stale: true, error: "این کلیک قبلاً ثبت شده بود." }, 409);
     if (idx === (await oddIndex(env, st))) {
-      const next = { ...st, r: st.r + 1, c: st.c + 1, d: st.d + BONUS_MS, t: now };
+      const next = { ...st, r: st.r + 1, c: st.c + 1, d: st.d + BONUS_MS, t: now, n: (st.n | 0) + 1 };
       return json({ correct: true, remainingMs: next.d - now, ...(await makeRound(env, next)) });
     }
-    const wrong = { ...st, d: st.d - PENALTY_MS, t: now };
+    const wrong = { ...st, d: st.d - PENALTY_MS, t: now, n: (st.n | 0) + 1 };
     if (now >= wrong.d) return finish(env, request, wrong);
     return json({ correct: false, token: await sign(env, wrong), remainingMs: wrong.d - now });
   }

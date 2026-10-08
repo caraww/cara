@@ -18,6 +18,10 @@
   // بدون id: Wrangler موقع دیپلوی خودش KV رو می‌سازه و وصل می‌کنه (سفارش‌ها این‌جا ذخیره می‌شن)
   "kv_namespaces": [{ "binding": "ORDERS" }],
 
+  // ضدتقلب بازی (هر توکن فقط یک بار مصرف می‌شه)
+  "durable_objects": { "bindings": [{ "name": "GAME", "class_name": "GameDO" }] },
+  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["GameDO"] }],
+
   // فقط /api/* به Worker می‌رسه؛ بقیه‌ی سایت مثل قبل از GitHub Pages می‌آد
   "routes": [
     { "pattern": "caraw.ir/api/*", "zone_name": "caraw.ir" },
