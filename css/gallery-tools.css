@@ -1,0 +1,109 @@
+/* نوار ابزار مینیمال گالری + دکمه‌ی اشتراک‌گذاری.
+   توی gallery.html آخر از همه (بعد از gallery-editorial.css) لود می‌شه. */
+
+/* ===== نوار: فقط جستجو + یک دکمه‌ی فیلتر ===== */
+.gal-tools{position:relative;align-items:center;gap:10px}
+.gal-tools .wk-count{
+  background:none;border:0;padding:0;margin-inline-start:auto;
+  font-size:14px;color:var(--muted);
+}
+.flt{position:relative}
+.flt-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  height:44px;padding:0 18px;border-radius:999px;
+  border:1px solid var(--line);background:#fff;color:var(--ink);
+  font:inherit;font-size:16px;line-height:1;cursor:pointer;
+  box-shadow:0 2px 6px rgba(34,26,44,.05);
+  transition:border-color .2s,color .2s,box-shadow .2s,transform .2s;
+}
+.flt-btn svg{
+  width:18px;height:18px;fill:none;stroke:currentColor;
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
+.flt-btn:hover,.flt-btn[aria-expanded="true"],.flt-btn.has{border-color:var(--accent-2);color:var(--accent)}
+.flt-btn:hover{transform:translateY(-1px)}
+.flt-n{
+  display:grid;place-items:center;min-width:20px;height:20px;padding:0 6px;
+  border-radius:999px;font-style:normal;font-size:12px;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+}
+.flt-n[hidden]{display:none}
+
+/* ===== پنل بازشونده ===== */
+.flt-panel{
+  position:absolute;top:calc(100% + 10px);inset-inline-start:0;z-index:20;
+  width:min(340px,92vw);box-sizing:border-box;padding:16px;
+  background:#fff;border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 24px 50px rgba(34,26,44,.18);
+}
+.flt-panel:not([hidden]){display:flex;flex-direction:column;gap:14px;animation:flt-in .18s ease}
+@keyframes flt-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.flt-sec[hidden]{display:none}
+.flt-h{display:block;margin-bottom:8px;font-size:13px;color:var(--muted)}
+.flt-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.flt-panel .chipbar{gap:6px}
+.flt-panel .chipbar > *{height:34px;padding:0 14px;font-size:14px}
+.flt-panel .flt-row .tool{height:40px;padding:0 10px;font-size:14px;box-shadow:none}
+.flt-panel #surprise{
+  background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none;
+}
+.flt-panel #surprise:hover{border-color:var(--gold);color:#7a5a1e;box-shadow:none}
+.flt-panel #favOnly:not([aria-pressed="true"]){background:#fff;color:var(--ink);border:1px solid var(--line)}
+.flt-clear{
+  align-self:flex-start;padding:0;border:0;background:none;
+  font:inherit;font-size:13.5px;color:var(--accent);cursor:pointer;
+  text-decoration:underline;text-underline-offset:4px;
+}
+.flt-clear[hidden]{display:none}
+
+@media(max-width:560px){
+  .flt{position:static}
+  .flt-panel{inset-inline:0;width:auto}
+  .gal-tools #q{max-width:none}
+}
+
+/* ===== دکمه‌ی اشتراک‌گذاری روی کارت (گوشه‌ی مقابلِ قلب) ===== */
+.wk-grid .wk-card button.wk-share{
+  position:absolute !important;top:10px;
+  inset-inline-start:10px !important;inset-inline-end:auto !important;z-index:3;
+  display:grid !important;place-items:center;
+  width:38px !important;height:38px !important;min-height:0 !important;
+  margin:0 !important;padding:0 !important;
+  border:1px solid rgba(184,151,90,.35) !important;border-radius:50% !important;
+  background:rgba(255,255,255,.86) !important;backdrop-filter:blur(10px);
+  color:#8c809c !important;font-size:0 !important;line-height:0 !important;cursor:pointer;
+  box-shadow:0 4px 14px rgba(34,26,44,.12) !important;
+  transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s,color .2s,border-color .2s;
+}
+.wk-grid .wk-card button.wk-share:hover{
+  transform:scale(1.12);background:#fff !important;
+  color:var(--accent) !important;border-color:var(--accent-2) !important;
+}
+.wk-grid .wk-card button.wk-share:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.wk-share svg,#lbShare svg{
+  width:18px;height:18px;fill:none;stroke:currentColor;
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
+
+/* ===== نمایش بزرگ: علاقه‌مندی و اشتراک‌گذاری کنار هم ===== */
+.wk-info .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wk-info #lbShare{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:#fff;border:1px solid rgba(184,151,90,.4);color:var(--ink);
+  box-shadow:none;cursor:pointer;font:inherit;
+}
+.wk-info #lbShare:hover{border-color:var(--accent-2);color:var(--accent)}
+
+/* ===== پیام کوتاه («لینک کپی شد») ===== */
+.wk-toast{
+  position:fixed;left:50%;bottom:26px;z-index:9999;translate:-50% 12px;
+  padding:10px 20px;border-radius:999px;background:#1d1527;color:#fff;
+  font-size:14.5px;opacity:0;pointer-events:none;
+  transition:opacity .25s,translate .25s;
+}
+.wk-toast.on{opacity:1;translate:-50% 0}
+@media(prefers-reduced-motion:reduce){
+  .flt-panel:not([hidden]){animation:none}
+  .flt-btn,.wk-grid .wk-card button.wk-share,.wk-toast{transition:none !important}
+}

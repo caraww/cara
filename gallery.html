@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="css/gallery-fix.css" />
     <link rel="stylesheet" href="css/gallery-soft.css" />
     <link rel="stylesheet" href="css/gallery-editorial.css" />
+    <link rel="stylesheet" href="css/gallery-tools.css" />
     <title>گالری دستبند منجوقی دست‌باف | کارا (cara)</title>
     <meta name="description" content="گالری دستبندهای منجوقی دست‌باف cara با منجوق دلیکای میوکی. دستبند دلخواهت رو انتخاب و آنلاین سفارش بده یا ازش الگو بساز." />
     <meta name="robots" content="index, follow" />
@@ -368,11 +369,32 @@
       </p>
       <div class="gal-tools" id="wkTools">
         <input id="q" type="search" placeholder="جستجو…" aria-label="جستجو" />
-        <div class="chipbar" id="tagbar"></div>
-        <button class="tool" id="favOnly" aria-pressed="false">
-          ♥ علاقه‌مندی‌ها</button
-        ><button class="tool" id="surprise">یکی بیار برام</button
-        ><span class="wk-count" id="wkCount"></span>
+        <div class="flt">
+          <button
+            type="button"
+            class="flt-btn"
+            id="fltBtn"
+            aria-expanded="false"
+            aria-controls="fltPanel"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4" />
+            </svg>
+            <span>فیلتر</span><i class="flt-n" id="fltN" hidden></i>
+          </button>
+          <div class="flt-panel" id="fltPanel" role="group" aria-label="فیلتر کارها" hidden>
+            <div class="flt-sec" id="tagSec">
+              <span class="flt-h">دسته‌بندی</span>
+              <div class="chipbar" id="tagbar"></div>
+            </div>
+            <div class="flt-sec flt-row">
+              <button class="tool" id="favOnly" aria-pressed="false">♥ علاقه‌مندی‌ها</button>
+              <button class="tool" id="surprise">یکی بیار برام</button>
+            </div>
+            <button type="button" class="flt-clear" id="fltClear" hidden>پاک کردن فیلترها</button>
+          </div>
+        </div>
+        <span class="wk-count" id="wkCount"></span>
       </div>
       <div class="wk-grid" id="wkGrid"></div>
       <p class="muted" id="empty" hidden></p>
@@ -392,10 +414,14 @@
         <span id="lbPrice"></span><small class="muted" id="lbNum"></small>
         <div class="btns">
           <a class="btn" id="lbOrder" href="checkout.html">سفارش این دستبند</a
-          ><a class="btn" id="lbMake" href="upload.html">ازش الگو بساز</a
-          ><button class="btn" id="lbFav" aria-pressed="false">
-            علاقه‌مندی
-          </button>
+          ><a class="btn" id="lbMake" href="upload.html">ازش الگو بساز</a>
+          <div class="btn-row">
+            <button class="btn" id="lbFav" aria-pressed="false">علاقه‌مندی</button>
+            <button class="btn" id="lbShare" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+              اشتراک‌گذاری
+            </button>
+          </div>
         </div>
       </div>
     </dialog>
