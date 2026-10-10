@@ -465,3 +465,38 @@
     bottom: calc(84px + env(safe-area-inset-bottom, 0px));
   }
 }
+
+/* ===== اصلاح موبایل: پالت از صفحه بیرون نزنه ===== */
+@media (max-width: 760px) {
+  .builder {
+    align-items: stretch;
+  }
+  .builder > * {
+    width: auto;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .builder > aside:first-child {
+    bottom: calc(66px + env(safe-area-inset-bottom, 0px));
+    padding: 8px 10px;
+  }
+  .palette {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+    gap: 6px;
+    max-height: 22svh;
+    padding: 2px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-snap-type: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .palette .swatch {
+    width: auto;
+    height: auto;
+    min-height: 30px;
+    aspect-ratio: 1.15;
+    scroll-snap-align: none;
+  }
+}
