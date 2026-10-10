@@ -641,3 +641,26 @@
 @media (max-width: 760px) {
   .tools .grp.bare .tool.ib[aria-pressed="true"] { background: var(--ink, #221a2c); color: #fff; }
 }
+
+/* ===== سرتیتر پنل رنگ‌ها: بستن و «باز بمونه» ===== */
+.mb-hd { display: contents; }
+.mb-pin, .mb-close { display: none; }
+@media (max-width: 760px) {
+  .mb-hd { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; }
+  .mb-hd h2 { margin: 0 !important; margin-inline-end: auto !important; }
+  .mb-pin {
+    display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px;
+    font: inherit; font-size: 14px; color: var(--ink, #221a2c); background: #fff;
+    border: 1px solid var(--line, #ddd6e6); border-radius: 999px; cursor: pointer;
+  }
+  .mb-pin[aria-pressed="true"] { color: #fff; background: var(--ink, #221a2c); border-color: var(--ink, #221a2c); }
+  .mb-close {
+    display: grid; place-items: center; width: 36px; height: 36px; padding: 0;
+    color: inherit; background: #efeaf6; border: 0; border-radius: 50%; cursor: pointer;
+  }
+  .mb-close .ic { width: 18px; height: 18px; }
+  /* حالت «باز بمونه»: پنل کوتاه‌تر، بوم زیرش قابل لمسه */
+  .builder > aside:first-child.mb-pinned { max-height: 36svh; box-shadow: 0 -6px 24px rgba(27, 18, 38, 0.22); }
+  .builder > aside:first-child.mb-pinned .current,
+  .builder > aside:first-child.mb-pinned .sp-recent { display: none; }
+}
