@@ -199,3 +199,12 @@
   .wk-stage #lbImg{padding:14px !important}
   .wk-stage:has(.wk-thumbs:not([hidden])) #lbImg{padding-bottom:82px !important}
 }
+
+/* ===== کارت قابل‌فوکوس: دکمه‌ی نامرئی روی کل کارت (به‌جای role=button روی figure که دکمه‌ی قلب رو داخلش داشت) ===== */
+.wk-grid .wk-card button.wk-open{
+  position:absolute !important;inset:0 !important;width:auto !important;height:auto !important;
+  display:block !important;margin:0 !important;padding:0 !important;border:0 !important;border-radius:inherit !important;
+  background:transparent !important;box-shadow:none !important;backdrop-filter:none !important;
+  transform:none !important;animation:none !important;font-size:0 !important;cursor:pointer;z-index:2;
+}
+.wk-grid .wk-card:has(.wk-open:focus-visible){outline:2px solid var(--accent-2);outline-offset:3px}

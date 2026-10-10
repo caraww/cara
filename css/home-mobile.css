@@ -1,0 +1,64 @@
+/* صفحه‌ی اصلی، موبایل و سفارش: باید آخرین CSS صفحه باشه (بعد از details.css).
+   فقط چیزهای جدید رو استایل می‌کنه و دکمه‌ها رو برای انگشت بزرگ می‌کنه؛ بقیه‌ی CSS دست نخورده. */
+
+.m-cta {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  body {
+    overflow-x: clip;
+  }
+  .btn {
+    min-height: 48px;
+  }
+  .hero .btns {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .hero .btns .btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+  .chips li {
+    min-height: 44px;
+  }
+  .foot-bot {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* نوار ثابت پایین: بعد از رد شدن از بالای صفحه ظاهر می‌شه */
+  .m-cta {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 55;
+    display: flex;
+    gap: 10px;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
+    background: rgba(255, 255, 255, 0.96);
+    border-top: 1px solid #ddd6e6;
+    box-shadow: 0 -6px 20px rgba(27, 18, 38, 0.12);
+    transform: translateY(110%);
+    transition: transform 0.3s;
+  }
+  .m-cta.on {
+    transform: none;
+  }
+  .m-cta .btn {
+    min-height: 48px;
+    justify-content: center;
+    text-align: center;
+    font-size: 17px;
+  }
+  .m-cta .btn {
+    flex: 1 1 auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .m-cta {
+    transition: none;
+  }
+}

@@ -15,7 +15,10 @@
     <path d="M12 30v26c0 10 17 16 38 16s38-6 38-16V30z" fill="url(#b${i})"/><ellipse cx="50" cy="30" rx="38" ry="17" fill="url(#t${i})"/>
     <ellipse cx="50" cy="30" rx="17" ry="8" fill="${shade(hex, -0.7)}"/><ellipse cx="50" cy="28.5" rx="17" ry="6.2" fill="${shade(hex, -0.88)}" opacity=".75"/>
     <path d="M22 45c1 5 5 8 10 10" stroke="rgba(255,255,255,.55)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
-  CARA.palette.forEach((p, i) => chips.insertAdjacentHTML("beforeend", `<li data-i="${i}" tabindex="0" role="button" aria-label="کپی کد ${p.code}"><div class="bead"><img src="img/beads/${p.code}.${EXTS[0]}" data-e="0" alt="${p.name}" loading="lazy"></div><b>${p.code}</b><span>${p.name}</span></li>`));
+  /* js/beads.js (با tools/build-beads.js ساخته می‌شه) می‌گه کدوم عکس‌ها واقعاً هستن؛ بدون اون همون امتحان پسوندها انجام می‌شه */
+  const BF = CARA.beadFiles;
+  const bead = (p, i) => !BF ? `<img src="img/beads/${p.code}.${EXTS[0]}" data-e="0" alt="${p.name}" loading="lazy">` : BF[p.code] ? `<img src="img/beads/${BF[p.code]}" data-e="${EXTS.length}" alt="${p.name}" loading="lazy">` : beadSVG(p.hex, i);
+  CARA.palette.forEach((p, i) => chips.insertAdjacentHTML("beforeend", `<li data-i="${i}" tabindex="0" role="button" aria-label="کپی کد ${p.code}"><div class="bead">${bead(p, i)}</div><b>${p.code}</b><span>${p.name}</span></li>`));
   /* خطای لود عکس بابل نمی‌شه، پس توی فاز capture می‌گیریمش: ساختار بعدی یا برگشت به منجوق کشیده‌شده */
   chips.addEventListener("error", (e) => {
     const im = e.target; if (im.tagName !== "IMG") return;

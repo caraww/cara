@@ -56,7 +56,7 @@
     }
     </script>
     <title>کارا (cara) — دستبند منجوقی دست‌باف | طراحی و سفارش آنلاین</title>
-  <link rel="stylesheet" href="css/delight.css"><link rel="stylesheet" href="css/details.css"><style>
+  <link rel="stylesheet" href="css/delight.css"><link rel="stylesheet" href="css/details.css"><link rel="stylesheet" href="css/home-mobile.css?v=1"><style>
 /* ===== فوتر صفحه‌ی اصلی: تاریک، ستون‌بندی منظم، نخ مهره‌ای بالاش ===== */
 .foot{display:block;position:relative;margin-top:0;padding:0;border:0;
   background:radial-gradient(ellipse 70% 120% at 50% 0,#2c1c3d 0,#1d1527 70%);color:#c9bfd6;font-size:16px;line-height:1.9}
@@ -100,11 +100,11 @@
       <section class="hero">
         <canvas id="heroCanvas" aria-hidden="true"></canvas>
         <div class="hero-copy">
-          <h1>طرحش رو تو می‌کشی، <span class="gilt">منجوق‌به‌منجوق</span> من می‌بافمش.</h1>
+          <h1>طرحش رو بکش، <span class="gilt">منجوق‌به‌منجوق</span> برات می‌بافمش.</h1>
           <p>
-            دو راه داری: یا از صفر طرح می‌کشی، یا یه عکس می‌دی و سایت تبدیلش
-            می‌کنه به الگو. آخرش یه الگوی خونه‌به‌خونه دستته؛ هر خونه یه منجوقه
-            و از رنگ‌ها گرفته تا تعدادشون، همه‌چی از قبل معلومه.
+            از صفر طرحت رو بکش، یا یه عکس بده تا سایت
+            برات تبدیلش کنه به الگو. هر خونه‌ی الگو یه منجوقه، پس از همون اول
+            می‌دونی دستبندت چه شکلی می‌شه و چند تا منجوق می‌خواد.
           </p>
           <div class="btns">
             <a class="btn light" href="builder.html">طراحی دستبند</a
@@ -214,8 +214,24 @@
       </div>
       <div class="foot-bot"><span>cara · دستبند منجوقی دست‌باف</span><a href="#" class="foot-top">↑ برگرد بالا</a></div>
     </footer>
+    <div class="m-cta" id="mCta" aria-hidden="true">
+      <a class="btn accent" href="builder.html" tabindex="-1">طراحی دستبند</a>
+    </div>
+    <script>
+      (function () {
+        var bar = document.getElementById("mCta"), hero = document.querySelector(".hero");
+        if (!bar || !hero || !("IntersectionObserver" in window)) return;
+        new IntersectionObserver(function (e) {
+          var on = !e[0].isIntersecting;
+          bar.classList.toggle("on", on);
+          bar.setAttribute("aria-hidden", on ? "false" : "true");
+          bar.querySelectorAll("a").forEach(function (a) { a.tabIndex = on ? 0 : -1; });
+        }, { threshold: 0.15 }).observe(hero);
+      })();
+    </script>
     <script src="js/palette.js?v=34"></script>
     <script src="js/works.js?v=muxy1dr2"></script>
-    <script src="js/home.js?v=2"></script>
+    <script src="js/beads.js"></script>
+    <script src="js/home.js?v=3"></script>
   <script src="js/delight.js?v=1" defer></script></body>
 </html>
