@@ -603,3 +603,41 @@
   .tools { justify-content: space-between; }
   .tools .tool.ib { width: 35px; min-width: 35px; flex: 1 1 35px; max-width: 42px; }
 }
+
+/* ===== تمام‌صفحه (موبایل): بوم کل صفحه رو می‌گیره ===== */
+.fs-btn { display: none !important; }
+@media (max-width: 760px) {
+  .fs-btn { display: inline-flex !important; }
+  body.fs-mode { overflow: hidden; touch-action: manipulation; }
+  body.fs-mode .top,
+  body.fs-mode .foot,
+  body.fs-mode .seo-text,
+  body.fs-mode .sp-wrap,
+  body.fs-mode .builder > .summary { display: none !important; }
+  body.fs-mode .builder > section.panel:not(.sp-card) {
+    position: fixed;
+    inset: 0;
+    z-index: 65;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: calc(8px + env(safe-area-inset-top, 0px)) 8px calc(70px + env(safe-area-inset-bottom, 0px));
+    border: 0;
+    border-radius: 0;
+    overflow: hidden;
+    animation: none;
+  }
+  body.fs-mode .panel .head,
+  body.fs-mode #warn { display: none; }
+  body.fs-mode .tools { flex: none; margin: 0 0 8px; }
+  body.fs-mode .grid-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+  }
+  body.fs-mode .mb-bar { z-index: 66; }
+  body.fs-mode .mb-scrim { z-index: 67; }
+}
+@media (max-width: 760px) {
+  .tools .grp.bare .tool.ib[aria-pressed="true"] { background: var(--ink, #221a2c); color: #fff; }
+}
