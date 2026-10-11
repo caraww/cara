@@ -55,3 +55,11 @@
   .hint{display:none}
   .hero2 .b1{width:70vw;height:70vw;left:-15%;bottom:0}.hero2 .b2{width:60vw;height:60vw;left:30%;top:20%}
 }
+
+/* موبایل: دکمه‌های هیرو کوچیک‌تر و کنار هم */
+@media (max-width:820px){
+  .hero2 .hero-copy .btns{display:flex;flex-wrap:nowrap;gap:8px}
+  .hero2 .hero-copy .btns .btn{flex:1 1 0;min-width:0;min-height:42px;height:42px;padding:0 10px;font-size:14px;line-height:1;white-space:nowrap;border-radius:10px}
+  .hero2 .hero-copy p{font-size:14.5px;line-height:1.8;margin-bottom:14px}
+}
+@media (max-width:360px){.hero2 .hero-copy .btns .btn{font-size:13px;padding:0 6px}}
