@@ -1,0 +1,882 @@
+/* gallery.css — فقط صفحه‌ی گالری (gallery.html)
+   ترتیب لود: studio.css ← decor.css ← gallery.css
+   داخلش (به همین ترتیب، هر بخش روی قبلی می‌شینه):
+     ۱) پایه‌ی کارت‌ها و نمایش بزرگ
+     ۲) شبکه‌ی هم‌اندازه، دکمه‌ها، قلب، لیبل‌ها
+     ۳) فریم نرم و گرد
+     ۴) حالت ژورنالی (کاغذ، قلب جدید، اصلاح عکس عمودی)
+     ۵) نوار فیلتر مینیمال + دکمه‌ی اشتراک */
+
+/* ======================================================================
+   ۱) پایه (قبلاً works.css)
+   ====================================================================== */
+.wk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin-top:26px}
+.wk-card{position:relative;margin:0;cursor:pointer;border:1px solid var(--line);border-radius:18px;background:#fff;overflow:hidden}
+.wk-card:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
+.wk-card img{display:block;width:100%;height:auto;opacity:0;transition:opacity .4s}
+.wk-card img.in{opacity:1}
+.wk-card figcaption{padding:10px 14px 14px;text-align:center}
+.wk-card figcaption b{display:block}
+.wk-card figcaption span{display:block;color:var(--muted);font-size:14px}
+.wk-fav{position:absolute;top:10px;inset-inline-end:10px;border:0;background:rgba(255,255,255,.9);width:36px;height:36px;border-radius:50%;cursor:pointer;color:#a99db8;font-size:18px}
+.wk-fav[aria-pressed="true"]{color:var(--hot)}
+.wk-count{color:var(--muted)}
+.wk-lb{border:0;padding:0;border-radius:24px;background:#fff;color:var(--ink)}
+.wk-lb::backdrop{background:rgba(29,21,39,.7)}
+.wk-stage{position:relative}
+.wk-stage #lbImg{display:block;opacity:0;transition:opacity .3s}
+.wk-stage #lbImg.in{opacity:1}
+.wk-info .tags{display:flex;flex-wrap:wrap;gap:6px}
+
+/* ======================================================================
+   ۲) شبکه و دکمه‌ها (قبلاً gallery-fix.css)
+   ====================================================================== */
+:root {
+  --gold: #b8975a;
+  --wk-tint: #ece6f2;
+}
+
+/* ===== شبکه‌ی هم‌اندازه ===== */
+.wk-grid {
+  display: grid !important;
+  column-count: auto !important;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(min(100%, 220px), 1fr)
+  ) !important;
+  grid-auto-rows: auto !important;
+  gap: 18px !important;
+  margin-top: 26px;
+}
+.wk-grid > * {
+  margin: 0 !important;
+  width: auto !important;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: radial-gradient(circle at 50% 35%, #fff, var(--wk-tint));
+  transition:
+    transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.3s,
+    border-color 0.3s;
+}
+.wk-grid > *:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 22px 44px rgba(59, 38, 80, 0.16);
+  border-color: var(--gold);
+}
+/* همه‌ی عکس‌ها یه قاب مربعی ثابت دارن؛ contain یعنی کامل دیده می‌شن و کش نمیان */
+.wk-grid img {
+  display: block;
+  width: 100% !important;
+  height: auto !important;
+  aspect-ratio: 1/1 !important;
+  object-fit: contain !important;
+  padding: 14px;
+  margin: 0 !important;
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  filter: drop-shadow(0 8px 10px rgba(34, 26, 44, 0.16));
+}
+.wk-grid > *:hover img {
+  transform: scale(1.05);
+}
+.wk-grid [style*="aspect-ratio"] {
+  aspect-ratio: 1/1 !important;
+}
+@media (max-width: 560px) {
+  .wk-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 12px !important;
+  }
+  .wk-grid img {
+    padding: 8px;
+  }
+}
+
+/* ===== نوار ابزار و دکمه‌ها ===== */
+.gal-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 12px;
+  margin: 22px 0 4px;
+}
+.gal-tools #q {
+  flex: 1 1 200px;
+  min-width: 0;
+  max-width: 280px;
+  height: 44px;
+  padding: 0 20px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  font: inherit;
+  font-size: 16px;
+  box-shadow: 0 2px 6px rgba(34, 26, 44, 0.05);
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+.gal-tools #q:focus {
+  outline: 0;
+  border-color: var(--accent-2);
+  box-shadow: 0 0 0 4px rgba(122, 52, 196, 0.14);
+}
+.chipbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  flex: 1 1 auto;
+}
+.chipbar > * {
+  appearance: none;
+  cursor: pointer;
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 15px;
+  line-height: 1;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.chipbar > *:hover {
+  border-color: var(--accent-2);
+  color: var(--accent);
+  transform: translateY(-2px);
+}
+.chipbar > [aria-pressed="true"],
+.chipbar > .on,
+.chipbar > .active,
+.chipbar > .sel,
+.chipbar > [aria-selected="true"] {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  border-color: transparent;
+  box-shadow: 0 6px 16px rgba(91, 31, 154, 0.28);
+}
+.gal-tools .tool {
+  height: 44px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 16px;
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.gal-tools .tool:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(34, 26, 44, 0.12);
+}
+#favOnly[aria-pressed="true"] {
+  background: var(--hot);
+  border-color: var(--hot);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(226, 74, 43, 0.3);
+}
+#surprise {
+  border-color: transparent;
+  color: #fff;
+  background: linear-gradient(135deg, #cfae6c, #a7853f);
+  box-shadow: 0 6px 16px rgba(167, 133, 63, 0.32);
+}
+#surprise:hover {
+  box-shadow: 0 10px 22px rgba(167, 133, 63, 0.42);
+}
+.wk-count {
+  font-size: 15px;
+  color: var(--muted);
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 2px 16px;
+  align-self: center;
+  white-space: nowrap;
+}
+
+/* ===== نمایش بزرگ ===== */
+.wk-lb {
+  width: min(1040px, 94vw);
+  max-width: none;
+  max-height: 92vh;
+  padding: 0;
+  border: 0;
+  border-radius: 24px;
+  overflow: hidden;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 40px 90px rgba(20, 10, 30, 0.45);
+}
+.wk-lb::backdrop {
+  background: rgba(29, 21, 39, 0.72);
+  backdrop-filter: blur(6px);
+}
+.wk-lb[open] {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+}
+.wk-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: min(78vh, 680px);
+  background: radial-gradient(circle at 50% 40%, #fff, var(--wk-tint));
+}
+.wk-stage #lbImg {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  padding: 28px;
+  filter: drop-shadow(0 14px 18px rgba(34, 26, 44, 0.2));
+}
+.wk-x,
+.wk-nav {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--ink);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(34, 26, 44, 0.14);
+  transition:
+    transform 0.2s,
+    background 0.2s,
+    color 0.2s;
+}
+.wk-x {
+  top: 14px;
+  inset-inline-start: 14px;
+}
+.wk-nav {
+  top: 50%;
+  translate: 0 -50%;
+}
+.wk-nav.prev {
+  inset-inline-end: 14px;
+}
+.wk-nav.next {
+  inset-inline-start: 14px;
+}
+.wk-x:hover,
+.wk-nav:hover {
+  background: var(--ink);
+  color: #fff;
+  transform: scale(1.08);
+}
+.wk-info {
+  padding: 34px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: auto;
+  max-height: min(78vh, 680px);
+}
+.wk-info h2 {
+  font-size: 26px;
+  line-height: 1.5;
+  margin: 0;
+}
+.wk-info .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.wk-info .tags > * {
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--wk-tint);
+  color: var(--accent);
+  font-size: 14px;
+  line-height: 1.9;
+}
+.wk-info .btns {
+  display: grid;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+.wk-info .btn {
+  width: 100%;
+  border-radius: 14px;
+  min-height: 50px;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s,
+    background 0.2s,
+    color 0.2s;
+}
+.wk-info .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(34, 26, 44, 0.14);
+}
+#lbMake {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  border-color: transparent;
+  color: #fff;
+}
+#lbFav[aria-pressed="true"] {
+  background: var(--hot);
+  border-color: var(--hot);
+  color: #fff;
+}
+@media (max-width: 760px) {
+  .wk-lb[open] {
+    display: block;
+    overflow: auto;
+  }
+  .wk-stage {
+    height: min(52vh, 420px);
+  }
+  .wk-info {
+    max-height: none;
+    padding: 22px 20px 26px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wk-grid > *,
+  .wk-grid img,
+  .chipbar > *,
+  .gal-tools .tool,
+  .wk-info .btn {
+    transition: none !important;
+  }
+}
+
+/* ===== دکمه‌ی قلب روی عکس‌ها ===== */
+@keyframes wk-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+.wk-grid > * {
+  position: relative;
+}
+.wk-grid > * button:not(:has(img)),
+.wk-grid > * [class*="fav"],
+.wk-grid > * [class*="heart"] {
+  position: absolute !important;
+  top: 10px;
+  inset-inline-end: 10px;
+  inset-inline-start: auto !important;
+  z-index: 3;
+  display: grid !important;
+  place-items: center;
+  width: 40px !important;
+  height: 40px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.88) !important;
+  backdrop-filter: blur(8px);
+  color: #a99db8 !important;
+  font-size: 20px !important;
+  line-height: 1 !important;
+  cursor: pointer;
+  box-shadow:
+    0 4px 14px rgba(34, 26, 44, 0.16),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+  transition:
+    transform 0.2s,
+    background 0.2s,
+    color 0.2s,
+    box-shadow 0.2s;
+}
+.wk-grid > * button:not(:has(img)):hover,
+.wk-grid > * [class*="fav"]:hover,
+.wk-grid > * [class*="heart"]:hover {
+  transform: scale(1.14);
+  color: var(--hot) !important;
+  background: #fff !important;
+}
+.wk-grid > * [aria-pressed="true"]:not(:has(img)),
+.wk-grid > * [class*="fav"].on,
+.wk-grid > * [class*="fav"].active,
+.wk-grid > * [class*="fav"].is-fav,
+.wk-grid > * [class*="fav"].liked,
+.wk-grid > * [class*="heart"].on,
+.wk-grid > * [class*="heart"].active,
+.wk-grid > * [class*="heart"].liked {
+  color: #fff !important;
+  background: linear-gradient(135deg, #f0664a, var(--hot)) !important;
+  box-shadow: 0 6px 16px rgba(226, 74, 43, 0.42);
+  animation: wk-pop 0.35s ease;
+}
+/* قلب توی نمایش بزرگ */
+#lbFav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+#lbFav[aria-pressed="true"] {
+  background: linear-gradient(135deg, #f0664a, var(--hot));
+  box-shadow: 0 8px 20px rgba(226, 74, 43, 0.35);
+  animation: wk-pop 0.35s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .wk-grid > * [aria-pressed="true"],
+  #lbFav {
+    animation: none !important;
+  }
+}
+
+/* ===== لیبل زیر عکس‌ها: وسط‌چین و مرتب ===== */
+.wk-grid > * {
+  aspect-ratio: auto !important;
+  display: flex;
+  flex-direction: column;
+}
+.wk-grid figcaption {
+  position: static !important;
+  inset: auto !important;
+  transform: none !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+  margin: 0 !important;
+  padding: 2px 14px 18px !important;
+  background: none !important;
+  text-align: center !important;
+  color: var(--ink);
+}
+.wk-grid figcaption b {
+  display: block;
+  width: 100%;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.7;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.wk-grid figcaption span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+  text-align: center;
+}
+.wk-grid figcaption .wk-price {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 16px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #7a5a1e;
+  background: #f6efe0;
+  border: 1px solid #e5d6b3;
+}
+@media (max-width: 560px) {
+  .wk-grid figcaption {
+    padding: 0 8px 14px !important;
+  }
+  .wk-grid figcaption b {
+    font-size: 14.5px;
+  }
+  .wk-grid figcaption .wk-price {
+    font-size: 13.5px;
+    padding: 2px 12px;
+  }
+}
+
+/* ===== قیمت و دکمه‌ی سفارش توی نمایش بزرگ ===== */
+#lbPrice {
+  display: block;
+  font-size: 24px;
+  font-weight: 900;
+  color: #7a5a1e;
+  line-height: 1.4;
+}
+#lbPrice:empty {
+  display: none;
+}
+#lbNum {
+  text-align: center;
+}
+#lbOrder {
+  background: linear-gradient(135deg, #cfae6c, #a7853f);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(167, 133, 63, 0.34);
+  font-weight: 700;
+}
+#lbOrder:hover {
+  box-shadow: 0 12px 26px rgba(167, 133, 63, 0.46);
+}
+
+/* ======================================================================
+   ۳) فریم نرم (قبلاً gallery-soft.css)
+   ====================================================================== */
+/* کارت‌های گالری */
+.wk-grid>*{
+  border-radius:30px;
+  border-color:rgba(184,151,90,.28);
+  background:
+    radial-gradient(circle at 50% 30%,#fff 0,#fbf9fd 45%,var(--wk-tint) 100%);
+  box-shadow:0 10px 30px rgba(59,38,80,.08),inset 0 0 0 6px rgba(255,255,255,.7);
+}
+.wk-grid>*:hover{box-shadow:0 26px 54px rgba(59,38,80,.18),inset 0 0 0 6px rgba(255,255,255,.85)}
+.wk-grid img{padding:22px;border-radius:30px}
+@media(max-width:560px){.wk-grid>*{border-radius:24px}.wk-grid img{padding:14px}}
+
+/* نمایش بزرگ */
+.wk-lb{border-radius:34px}
+.wk-stage{
+  margin:14px;border-radius:26px;overflow:hidden;
+  background:radial-gradient(circle at 50% 35%,#fff 0,#f7f3fb 50%,var(--wk-tint) 100%);
+  box-shadow:inset 0 0 0 1px rgba(184,151,90,.25),inset 0 0 40px rgba(255,255,255,.8);
+}
+.wk-stage #lbImg{padding:36px}
+@media(max-width:760px){.wk-stage{margin:10px;border-radius:22px}}
+
+/* عکس‌های ریز چند‌عکسی توی نمایش بزرگ */
+.wk-thumbs{position:absolute;z-index:2;bottom:14px;inset-inline:0;display:flex;justify-content:center;gap:10px}
+.wk-thumbs[hidden]{display:none}
+.wk-thumbs button{width:58px;height:58px;padding:4px;border:2px solid transparent;border-radius:16px;background:rgba(255,255,255,.92);cursor:pointer;box-shadow:0 4px 12px rgba(34,26,44,.16);transition:transform .2s,border-color .2s}
+.wk-thumbs button:hover{transform:translateY(-2px)}
+.wk-thumbs button.on{border-color:var(--gold)}
+.wk-thumbs img{display:block;width:100%;height:100%;object-fit:contain;border-radius:11px}
+.wk-stage #lbImg{padding-bottom:84px}
+
+/* ======================================================================
+   ۴) حالت ژورنالی (قبلاً gallery-editorial.css)
+   ====================================================================== */
+:root{--paper:#fbf9fd;--paper-2:#ece6f2;--hair:rgba(184,151,90,.38)}
+
+/* ===== کارت: کاغذ گرم، قاب نازک، شماره‌ی مجله‌ای ===== */
+.wk-grid{gap:26px !important}
+.wk-grid>*{
+  border-radius:26px;
+  border:1px solid var(--hair);
+  background:
+    radial-gradient(ellipse 70% 55% at 50% 40%,#fff 0,rgba(255,255,255,0) 70%),
+    linear-gradient(180deg,var(--paper),var(--paper-2));
+  box-shadow:0 1px 2px rgba(59,38,80,.06),0 14px 34px rgba(59,38,80,.09),inset 0 0 0 7px rgba(255,255,255,.55);
+}
+.wk-grid>*:hover{
+  border-color:var(--gold);
+  box-shadow:0 2px 4px rgba(59,38,80,.06),0 30px 60px rgba(59,38,80,.16),inset 0 0 0 7px rgba(255,255,255,.7);
+}
+
+/* ===== خود عکس: بدون سایه‌ی تیز، با سایه‌ی نرم لایه‌لایه ===== */
+.wk-grid img{
+  padding:34px 24px 18px;
+  filter:
+    drop-shadow(0 2px 3px rgba(34,26,44,.10))
+    drop-shadow(0 18px 20px rgba(34,26,44,.14));
+  image-rendering:auto;
+}
+.wk-grid>*:hover img{transform:scale(1.04) rotate(-.6deg)}
+@media(max-width:560px){.wk-grid img{padding:30px 12px 10px}}
+
+/* ===== زیرنویس: خط نازک، تیتر درشت، توضیح ریز ===== */
+.wk-grid figcaption{
+  margin:0 22px !important;padding:14px 0 20px !important;
+  border-top:1px solid var(--hair);
+}
+.wk-grid figcaption b{font-size:17px;font-weight:900;letter-spacing:-.2px}
+.wk-grid figcaption span:not(.wk-price){font-size:13.5px;color:var(--muted);line-height:1.9}
+.wk-grid figcaption .wk-price{
+  background:none;border:0;padding:0;margin-top:6px;
+  font-size:15px;color:var(--gold);letter-spacing:.02em;
+}
+@media(max-width:560px){.wk-grid figcaption{margin:0 12px !important}}
+
+/* ===== نمایش بزرگ ===== */
+.wk-stage{
+  background:
+    radial-gradient(ellipse 65% 55% at 50% 42%,#fff 0,rgba(255,255,255,0) 72%),
+    linear-gradient(180deg,var(--paper),var(--paper-2));
+  box-shadow:inset 0 0 0 1px var(--hair),inset 0 0 50px rgba(255,255,255,.7);
+}
+.wk-stage #lbImg{
+  filter:
+    drop-shadow(0 3px 4px rgba(34,26,44,.10))
+    drop-shadow(0 26px 30px rgba(34,26,44,.18));
+}
+.wk-info h2{font-size:30px;font-weight:900;letter-spacing:-.3px}
+.wk-info h2::after{content:"";display:block;width:56px;height:1px;margin-top:12px;background:var(--gold)}
+.wk-info .tags>*{background:none;border:1px solid var(--hair);color:var(--gold);font-size:13px}
+
+
+@media(prefers-reduced-motion:reduce){.wk-grid>*:hover img{transform:none}}
+
+/* ===== نمایش بزرگ: عکس همیشه کامل و وسط قاب (بریده نشه) ===== */
+.wk-stage{box-sizing:border-box;height:min(74vh,660px);min-height:0}
+.wk-stage #lbImg{
+  box-sizing:border-box !important;
+  width:100% !important;height:100% !important;
+  max-width:100% !important;max-height:100% !important;
+  object-fit:contain !important;object-position:center !important;
+  padding:32px !important;
+}
+/* جا برای عکس‌های ریز فقط وقتی هستن */
+.wk-stage:has(.wk-thumbs:not([hidden])) #lbImg{padding-bottom:96px !important}
+@media(max-width:760px){
+  .wk-stage{height:min(52vh,420px)}
+  .wk-stage #lbImg{padding:20px !important}
+  .wk-stage:has(.wk-thumbs:not([hidden])) #lbImg{padding-bottom:84px !important}
+}
+
+/* ===== عکس‌های عمودی: قاب ۴ به ۵ به جای مربع، تا بلندها ریز نشن ===== */
+.wk-grid img{
+  aspect-ratio:4/5 !important;
+  padding:20px 16px 10px !important;
+  object-fit:contain !important;
+}
+@media(max-width:560px){.wk-grid img{padding:14px 8px 6px !important}}
+
+/* نمایش بزرگ: قاب بلندتر و پهن‌تر برای عکس عمودی */
+.wk-lb{width:min(1080px,95vw)}
+.wk-lb[open]{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+.wk-stage{height:min(82vh,760px)}
+.wk-info{max-height:min(82vh,760px)}
+.wk-stage #lbImg{padding:20px !important}
+.wk-stage:has(.wk-thumbs:not([hidden])) #lbImg{padding-bottom:88px !important}
+@media(max-width:760px){
+  .wk-stage{height:min(62vh,520px)}
+  .wk-stage #lbImg{padding:14px !important}
+  .wk-stage:has(.wk-thumbs:not([hidden])) #lbImg{padding-bottom:78px !important}
+}
+
+/* ===== قلب علاقه‌مندی (کارت‌ها و نمایش بزرگ) ===== */
+:root{
+  --heart-o:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z'/%3E%3C/svg%3E");
+  --heart-f:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+  --heart-grad:linear-gradient(145deg,#ff7a5c,#e24a2b 55%,#c93a52);
+}
+@keyframes wk-heart{0%{transform:scale(.6)}55%{transform:scale(1.35)}100%{transform:scale(1)}}
+
+/* دکمه‌ی روی کارت: دایره‌ی سفید، قلب دقیقاً وسطش (با position مطلق، مستقل از هر متن داخل دکمه) */
+.wk-grid .wk-card button.wk-fav{
+  position:absolute !important;
+  width:38px !important;height:38px !important;padding:0 !important;
+  font-size:0 !important;line-height:0 !important;
+  background:rgba(255,255,255,.86) !important;
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(184,151,90,.35) !important;
+  box-shadow:0 4px 14px rgba(34,26,44,.12) !important;
+  color:#8c809c !important;
+  transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s,border-color .2s,box-shadow .25s;
+}
+.wk-grid .wk-card button.wk-fav::before{
+  content:"";position:absolute;inset:0;margin:auto;width:20px;height:20px;
+  background:currentColor;
+  -webkit-mask:var(--heart-o) center/contain no-repeat;mask:var(--heart-o) center/contain no-repeat;
+}
+.wk-grid .wk-card button.wk-fav:hover{
+  transform:scale(1.12);background:#fff !important;
+  border-color:rgba(226,74,43,.5) !important;color:#e5584a !important;
+  box-shadow:0 8px 20px rgba(226,74,43,.2) !important;
+}
+.wk-grid .wk-card button.wk-fav[aria-pressed="true"]{
+  background:#fff !important;border-color:rgba(226,74,43,.45) !important;
+  box-shadow:0 8px 22px rgba(226,74,43,.28),0 0 0 4px rgba(226,74,43,.1) !important;
+  animation:none !important;
+}
+.wk-grid .wk-card button.wk-fav[aria-pressed="true"]::before{
+  background:var(--heart-grad);
+  -webkit-mask-image:var(--heart-f);mask-image:var(--heart-f);
+  animation:wk-heart .45s cubic-bezier(.2,.9,.3,1.4);
+}
+
+/* دکمه‌ی توی نمایش بزرگ: همون قلب، کنار نوشته */
+.wk-info #lbFav{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  background:#fff;border:1px solid rgba(184,151,90,.4);color:var(--ink);
+  box-shadow:none;animation:none;
+}
+.wk-info #lbFav::before{
+  content:"";flex:none;width:20px;height:20px;
+  background:#8c809c;
+  -webkit-mask:var(--heart-o) center/contain no-repeat;mask:var(--heart-o) center/contain no-repeat;
+  transition:background .2s;
+}
+.wk-info #lbFav:hover{border-color:rgba(226,74,43,.5);color:#c93a2b}
+.wk-info #lbFav:hover::before{background:#e5584a}
+.wk-info #lbFav[aria-pressed="true"]{
+  background:#fff4f1;border-color:rgba(226,74,43,.45);color:#c93a2b;
+  box-shadow:0 8px 20px rgba(226,74,43,.16);animation:none;
+}
+.wk-info #lbFav[aria-pressed="true"]::before{
+  background:var(--heart-grad);
+  -webkit-mask-image:var(--heart-f);mask-image:var(--heart-f);
+  animation:wk-heart .45s cubic-bezier(.2,.9,.3,1.4);
+}
+@media(prefers-reduced-motion:reduce){
+  .wk-grid .wk-card button.wk-fav::before,.wk-info #lbFav::before{animation:none !important}
+}
+
+/* ===== نمایش بزرگ: اصلاح اصلی =====
+   علت بریده شدن عکس‌های عمودی: عکس توی یه ردیف خودکار (auto) گرید بود و ارتفاعش از روی عرض حساب می‌شد؛
+   پس عکس بلند از قاب بیرون می‌زد و بریده می‌شد. حالا عکس مطلق و دقیقاً هم‌اندازه‌ی قابه و object-fit اون رو کامل جا می‌ده. */
+.wk-stage{position:relative;overflow:hidden}
+.wk-stage #lbImg{
+  position:absolute !important;inset:0 !important;
+  width:100% !important;height:100% !important;
+  max-width:none !important;max-height:none !important;
+  object-fit:contain !important;object-position:center !important;
+  box-sizing:border-box !important;
+  padding:24px !important;
+}
+.wk-stage:has(.wk-thumbs:not([hidden])) #lbImg{padding-bottom:92px !important}
+@media(max-width:760px){
+  .wk-stage #lbImg{padding:14px !important}
+  .wk-stage:has(.wk-thumbs:not([hidden])) #lbImg{padding-bottom:82px !important}
+}
+
+/* ===== کارت قابل‌فوکوس: دکمه‌ی نامرئی روی کل کارت (به‌جای role=button روی figure که دکمه‌ی قلب رو داخلش داشت) ===== */
+.wk-grid .wk-card button.wk-open{
+  position:absolute !important;inset:0 !important;width:auto !important;height:auto !important;
+  display:block !important;margin:0 !important;padding:0 !important;border:0 !important;border-radius:inherit !important;
+  background:transparent !important;box-shadow:none !important;backdrop-filter:none !important;
+  transform:none !important;animation:none !important;font-size:0 !important;cursor:pointer;z-index:2;
+}
+.wk-grid .wk-card:has(.wk-open:focus-visible){outline:2px solid var(--accent-2);outline-offset:3px}
+
+/* ======================================================================
+   ۵) فیلتر و اشتراک‌گذاری (قبلاً gallery-tools.css)
+   ====================================================================== */
+/* ===== نوار: فقط جستجو + یک دکمه‌ی فیلتر ===== */
+.gal-tools{position:relative;align-items:center;gap:10px}
+.gal-tools .wk-count{
+  background:none;border:0;padding:0;margin-inline-start:auto;
+  font-size:14px;color:var(--muted);
+}
+.flt{position:relative}
+.flt-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  height:44px;padding:0 18px;border-radius:999px;
+  border:1px solid var(--line);background:#fff;color:var(--ink);
+  font:inherit;font-size:16px;line-height:1;cursor:pointer;
+  box-shadow:0 2px 6px rgba(34,26,44,.05);
+  transition:border-color .2s,color .2s,box-shadow .2s,transform .2s;
+}
+.flt-btn svg{
+  width:18px;height:18px;fill:none;stroke:currentColor;
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
+.flt-btn:hover,.flt-btn[aria-expanded="true"],.flt-btn.has{border-color:var(--accent-2);color:var(--accent)}
+.flt-btn:hover{transform:translateY(-1px)}
+.flt-n{
+  display:grid;place-items:center;min-width:20px;height:20px;padding:0 6px;
+  border-radius:999px;font-style:normal;font-size:12px;font-weight:700;color:#fff;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+}
+.flt-n[hidden]{display:none}
+
+/* ===== پنل بازشونده ===== */
+.flt-panel{
+  position:absolute;top:calc(100% + 10px);inset-inline-start:0;z-index:20;
+  width:min(340px,92vw);box-sizing:border-box;padding:16px;
+  background:#fff;border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 24px 50px rgba(34,26,44,.18);
+}
+.flt-panel:not([hidden]){display:flex;flex-direction:column;gap:14px;animation:flt-in .18s ease}
+@keyframes flt-in{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.flt-sec[hidden]{display:none}
+.flt-h{display:block;margin-bottom:8px;font-size:13px;color:var(--muted)}
+.flt-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+.flt-panel .chipbar{gap:6px}
+.flt-panel .chipbar > *{height:34px;padding:0 14px;font-size:14px}
+.flt-panel .flt-row .tool{height:40px;padding:0 10px;font-size:14px;box-shadow:none}
+.flt-panel #surprise{
+  background:#fff;color:var(--ink);border:1px solid var(--line);box-shadow:none;
+}
+.flt-panel #surprise:hover{border-color:var(--gold);color:#7a5a1e;box-shadow:none}
+.flt-panel #favOnly:not([aria-pressed="true"]){background:#fff;color:var(--ink);border:1px solid var(--line)}
+.flt-clear{
+  align-self:flex-start;padding:0;border:0;background:none;
+  font:inherit;font-size:13.5px;color:var(--accent);cursor:pointer;
+  text-decoration:underline;text-underline-offset:4px;
+}
+.flt-clear[hidden]{display:none}
+
+@media(max-width:560px){
+  .flt{position:static}
+  .flt-panel{inset-inline:0;width:auto}
+  .gal-tools #q{max-width:none}
+}
+
+/* ===== دکمه‌ی اشتراک‌گذاری روی کارت (گوشه‌ی مقابلِ قلب) ===== */
+.wk-grid .wk-card button.wk-share{
+  position:absolute !important;top:10px;
+  inset-inline-start:10px !important;inset-inline-end:auto !important;z-index:3;
+  display:grid !important;place-items:center;
+  width:38px !important;height:38px !important;min-height:0 !important;
+  margin:0 !important;padding:0 !important;
+  border:1px solid rgba(184,151,90,.35) !important;border-radius:50% !important;
+  background:rgba(255,255,255,.86) !important;backdrop-filter:blur(10px);
+  color:#8c809c !important;font-size:0 !important;line-height:0 !important;cursor:pointer;
+  box-shadow:0 4px 14px rgba(34,26,44,.12) !important;
+  transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s,color .2s,border-color .2s;
+}
+.wk-grid .wk-card button.wk-share:hover{
+  transform:scale(1.12);background:#fff !important;
+  color:var(--accent) !important;border-color:var(--accent-2) !important;
+}
+.wk-grid .wk-card button.wk-share:focus-visible{outline:2px solid var(--accent-2);outline-offset:2px}
+.wk-share svg,#lbShare svg{
+  width:18px;height:18px;fill:none;stroke:currentColor;
+  stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;
+}
+
+/* ===== نمایش بزرگ: علاقه‌مندی و اشتراک‌گذاری کنار هم ===== */
+.wk-info .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wk-info #lbShare{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:#fff;border:1px solid rgba(184,151,90,.4);color:var(--ink);
+  box-shadow:none;cursor:pointer;font:inherit;
+}
+.wk-info #lbShare:hover{border-color:var(--accent-2);color:var(--accent)}
+
+/* ===== پیام کوتاه («لینک کپی شد») ===== */
+.wk-toast{
+  position:fixed;left:50%;bottom:26px;z-index:9999;translate:-50% 12px;
+  padding:10px 20px;border-radius:999px;background:#1d1527;color:#fff;
+  font-size:14.5px;opacity:0;pointer-events:none;
+  transition:opacity .25s,translate .25s;
+}
+.wk-toast.on{opacity:1;translate:-50% 0}
+@media(prefers-reduced-motion:reduce){
+  .flt-panel:not([hidden]){animation:none}
+  .flt-btn,.wk-grid .wk-card button.wk-share,.wk-toast{transition:none !important}
+}

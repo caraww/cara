@@ -6,7 +6,7 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/img/cara-favicon.png">
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/img/cara-favicon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap"><link rel="stylesheet" href="css/home.css" /><link rel="stylesheet" href="css/gallery-editorial.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap"><link rel="stylesheet" href="css/home.css" />
     <meta name="description" content="خرید دستبند منجوقی دست‌باف با منجوق‌های دلیکای میوکی. طرح دلخواهت رو خودت بکش یا از روی عکس الگو بساز؛ دستبند رو با دست می‌بافم و برات پست می‌کنم." />
     <meta name="keywords" content="دستبند منجوقی, دستبند دست‌باف, دستبند دلیکا, منجوق میوکی, دستبند سفارشی, طراحی دستبند, الگوی منجوق‌کاری, cara" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
@@ -56,7 +56,8 @@
     }
     </script>
     <title>کارا (cara) — دستبند منجوقی دست‌باف | طراحی و سفارش آنلاین</title>
-  <link rel="stylesheet" href="css/delight.css"><link rel="stylesheet" href="css/details.css"><link rel="stylesheet" href="css/home-mobile.css?v=1"><style>
+<link rel="stylesheet" href="css/decor.css" />
+<style>
 /* ===== فوتر صفحه‌ی اصلی: تاریک، ستون‌بندی منظم، نخ مهره‌ای بالاش ===== */
 .foot{display:block;position:relative;margin-top:0;padding:0;border:0;
   background:radial-gradient(ellipse 70% 120% at 50% 0,#2c1c3d 0,#1d1527 70%);color:#c9bfd6;font-size:16px;line-height:1.9}
@@ -217,21 +218,10 @@
     <div class="m-cta" id="mCta" aria-hidden="true">
       <a class="btn accent" href="builder.html" tabindex="-1">طراحی دستبند</a>
     </div>
-    <script>
-      (function () {
-        var bar = document.getElementById("mCta"), hero = document.querySelector(".hero");
-        if (!bar || !hero || !("IntersectionObserver" in window)) return;
-        new IntersectionObserver(function (e) {
-          var on = !e[0].isIntersecting;
-          bar.classList.toggle("on", on);
-          bar.setAttribute("aria-hidden", on ? "false" : "true");
-          bar.querySelectorAll("a").forEach(function (a) { a.tabIndex = on ? 0 : -1; });
-        }, { threshold: 0.15 }).observe(hero);
-      })();
-    </script>
-    <script src="js/palette.js?v=34"></script>
+<script src="js/palette.js?v=34"></script>
     <script src="js/works.js?v=mv2w6xqt"></script>
     <script src="js/beads.js"></script>
-    <script src="js/home.js?v=3"></script>
-  <script src="js/delight.js?v=1" defer></script></body>
+<script src="js/home.js?v=4"></script>
+<script src="js/decor.js?v=4" defer></script>
+</body>
 </html>

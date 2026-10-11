@@ -1,3 +1,10 @@
+/* upload.js — فقط صفحه‌ی «عکس به الگو» (upload.html)
+   ترتیب لود: palette.js ← upload.js ← decor.js
+   کارش: انتخاب عکس، چرخش/برش، تبدیل به رنگ‌های منجوق، تنظیم کیفیت. جفت CSS: upload.css */
+
+/* ==================================================================
+   کد صفحه
+   ================================================================== */
 (() => {
   const C = CARA, L = C.L, $ = (id) => document.getElementById(id);
   const out = $("out"), msg = $("msg"), drop = $("drop"), cv = $("crop"), cropper = $("cropper"), stage = cv.parentElement;

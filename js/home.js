@@ -1,3 +1,28 @@
+/* home.js — فقط صفحه‌ی اصلی (index.html)
+   ترتیب لود: palette.js ← works.js ← beads.js ← home.js ← decor.js
+   داخلش:  ۱) نوار ثابت پایین موبایل (قبلاً inline توی index.html بود)
+           ۲) هدر، رنگ‌ها/منجوق‌ها، نمونه‌ها، هیروی مهره‌ای، نخ اسکرول، کپی کد */
+
+/* ==================================================================
+   ۱) نوار ثابت پایین موبایل (قبلاً inline توی index.html)
+   ================================================================== */
+try {
+(function () {
+  var bar = document.getElementById("mCta"), hero = document.querySelector(".hero");
+  if (!bar || !hero || !("IntersectionObserver" in window)) return;
+  new IntersectionObserver(function (e) {
+    var on = !e[0].isIntersecting;
+    bar.classList.toggle("on", on);
+    bar.setAttribute("aria-hidden", on ? "false" : "true");
+    bar.querySelectorAll("a").forEach(function (a) { a.tabIndex = on ? 0 : -1; });
+  }, { threshold: 0.15 }).observe(hero);
+})();
+} catch (e) { console.error('home:mcta', e); }
+
+/* ==================================================================
+   ۲) صفحه‌ی اصلی (قبلاً home.js)
+   ================================================================== */
+try {
 (() => {
   const top = document.querySelector(".top");
   const onScroll = () => top.classList.toggle("solid", scrollY > 20);
@@ -115,3 +140,4 @@
   /* با کیبورد هم می‌شه کد رنگ رو کپی کرد */
   chips.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.tagName === "LI") { e.preventDefault(); e.target.click(); } });
 })();
+} catch (e) { console.error('home:main', e); }
