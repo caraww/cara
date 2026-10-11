@@ -154,11 +154,13 @@ try {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   if (reduce) { img.style.transform = "none"; return; }
   let tick = false;
+  const mob = matchMedia("(max-width: 820px)");
   function update() {
     tick = false;
-    const m = pin.offsetHeight - innerHeight;
-    const p = m > 0 ? Math.min(1, Math.max(0, -pin.getBoundingClientRect().top / m)) : 0;
-    const e = p * p * (3 - 2 * p); /* حرکت نرم‌تر */
+    let p;
+    if (mob.matches) { p = Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / (hero.offsetHeight * 0.8) + 0.15)); } /* موبایل: هیرو نمی‌چسبه، فقط با رد شدنش دستبند می‌چرخه */
+    else { const m = pin.offsetHeight - innerHeight; p = m > 0 ? Math.min(1, Math.max(0, -pin.getBoundingClientRect().top / m / 0.8)) : 0; } /* دسکتاپ: انیمیشن تا ۸۰٪ مسیر تموم می‌شه */
+    const e = p * p * (3 - 2 * p);
     img.style.transform = `rotateY(${24 - e * 48}deg) rotateZ(${-14 + e * 30}deg) scale(${1 + e * 0.1})`;
     hero.style.setProperty("--p", p.toFixed(3));
     cards.forEach((c) => c.classList.toggle("on", p >= Number(c.dataset.at)));
