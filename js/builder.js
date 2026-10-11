@@ -303,7 +303,9 @@
   addEventListener("keyup", (e) => { if (e.code === "Space" && space) { space = false; setTool(tool); } });
   let rt; addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(layout, 120); });
 
-  /* پیش‌نمایش دستبند: الگو ۹۰ درجه چرخیده و مثل استوانه سایه‌زده روی مچ */
+  /* پیش‌نمایش دستبند: الگو ۹۰ درجه (در جهت ساعت) چرخیده و مثل استوانه سایه‌زده روی مچ */
+  /* جهت پیش‌نمایش مچ: FLIP_ROWS = ردیف اول سمت راست (به‌جای چپ)، FLIP_COLS = ستون اول پایین (به‌جای بالا). هر کدوم true/false = یه آینه‌ی ساده. */
+  const FLIP_ROWS = false, FLIP_COLS = true;
   function drawWrist() {
     const cv = $("wrist"), Wd = Math.max(140, cv.parentElement.clientWidth - 20), d = devicePixelRatio || 1;
     const s = Math.max(1, Math.min(8, (Wd - 60) / h, 110 / w)), len = h * s, wid = w * s, Ht = Math.round(wid + 40), x0 = (Wd - len) / 2, y0 = 20;
@@ -314,7 +316,7 @@
     g.fillStyle = "#EFECF4"; g.fillRect(x0, y0, len, wid);
     for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) {
       const code = data[r][c]; if (!code) continue;
-      const x = x0 + r * s, y = y0 + c * s, hex = C.byCode(code).hex;
+      const x = x0 + (FLIP_ROWS ? h - 1 - r : r) * s, y = y0 + (FLIP_COLS ? w - 1 - c : c) * s, hex = C.byCode(code).hex;
       if (s >= 5) C.drawBead(g, x, y, s, s, hex); else { g.fillStyle = hex; g.fillRect(x, y, s + 0.6, s + 0.6); }
     }
     const sh = g.createLinearGradient(0, y0, 0, y0 + wid);

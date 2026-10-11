@@ -45,7 +45,8 @@
       const x = cx - s / 2, y = cy - s / 2;
       if (s >= 5) C.drawBead(ctx, x + 0.5, y + 0.5, s - 1, s - 1, hex); else { ctx.fillStyle = hex; ctx.fillRect(x, y, s + 0.4, s + 0.4); }
     };
-    const cx = (r) => x0 + r * s + s / 2, cy = (c) => y0 + c * s + s / 2;
+    const FLIP_ROWS = false, FLIP_COLS = true; /* هم‌جهت با پیش‌نمایش مچ توی builder.js */
+    const cx = (r) => x0 + (FLIP_ROWS ? h - 1 - r : r) * s + s / 2, cy = (c) => y0 + (FLIP_COLS ? w - 1 - c : c) * s + s / 2;
     const commit = (f) => putC(lg, cx(f.r), cy(f.c), hexOf(f.r, f.c));
 
     function fit() {
@@ -131,7 +132,7 @@
       g.lineCap = "round";
       for (const p of sparks) {
         const u = clamp((t - p.delay) / 700, 0, 1); if (u <= 0 || u >= 1) continue;
-        const a = Math.sin(u * Math.PI), z = (5 + 6 * a) * Math.max(0.6, Math.min(1.6, s / 10)), X = x0 + p.r * s, Y = y0 + p.c * s;
+        const a = Math.sin(u * Math.PI), z = (5 + 6 * a) * Math.max(0.6, Math.min(1.6, s / 10)), X = x0 + (FLIP_ROWS ? h - 1 - p.r : p.r) * s, Y = y0 + (FLIP_COLS ? w - 1 - p.c : p.c) * s;
         g.strokeStyle = `rgba(255,247,220,${a})`; g.lineWidth = 1.5; g.beginPath();
         g.moveTo(X - z, Y); g.lineTo(X + z, Y); g.moveTo(X, Y - z); g.lineTo(X, Y + z); g.stroke();
         g.lineWidth = 1; g.beginPath(); g.moveTo(X - z * .5, Y - z * .5); g.lineTo(X + z * .5, Y + z * .5); g.moveTo(X + z * .5, Y - z * .5); g.lineTo(X - z * .5, Y + z * .5); g.stroke();

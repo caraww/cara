@@ -157,12 +157,12 @@
       if (el.posL.value === "custom") nh = Math.min(L.MAX_H, Math.max(nh, r0 + needL));
       r0 = Math.max(0, r0);
       if (r0 + needL > L.MAX_H) notes.push("آخر متن بیرون از طول مجاز موند و بریده شد");
-      const c0 = needW >= nw ? 0 : el.posC.value === "top" ? 0 : el.posC.value === "bottom" ? nw - needW : Math.floor((nw - needW) / 2);
+      const pcv = el.posC.value, c0 = needW >= nw ? 0 : pcv === (along ? "bottom" : "top") ? 0 : pcv === (along ? "top" : "bottom") ? nw - needW : Math.floor((nw - needW) / 2); /* توی پیش‌نمایش مچ ستون اول پایینه */
       const nd = emptyData(nw, nh);
       if (!el.clear.checked) for (let r = 0; r < Math.min(st.h, nh); r++) for (let c = 0; c < Math.min(st.w, nw); c++) nd[r][c] = st.data[r][c];
       for (let y = 0; y < IH; y++) for (let x = 0; x < IW; x++) {
         const code = img[y][x]; if (!code) continue;
-        const r = r0 + (along ? x : y), c = c0 + (along ? y : x);
+        const r = r0 + (along ? x : y), c = c0 + (along ? IH - 1 - y : x); /* «در طول مچ»: چرخش واقعی (نه ترانهاده)، تا نوشته آینه نشه */
         if (r >= 0 && r < nh && c >= 0 && c < nw) nd[r][c] = code;
       }
       return { w: nw, h: nh, data: nd };
