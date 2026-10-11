@@ -1,0 +1,37 @@
+/* hero.css — هیروی محصول‌محور صفحه‌ی اصلی (بعد از home.css و decor.css لود بشه) */
+.pin{position:relative;height:300vh}
+.hero.hero2{position:sticky;top:0;height:100vh;height:100svh;min-height:620px;overflow:hidden;
+  display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:2vw;
+  padding:96px max(24px,5vw) 40px;color:#fff;
+  background:radial-gradient(ellipse 75% 70% at 30% 45%,#33214a 0,#1b1226 55%,#120b1a 100%)}
+.hero2 #heroCanvas{position:absolute;inset:0;width:100%;height:100%;opacity:.4;pointer-events:none}
+.hero2 .blob{position:absolute;pointer-events:none;border-radius:42% 58% 55% 45%/50% 42% 58% 50%;
+  filter:blur(1px);opacity:.75;transform:translateY(calc(var(--p,0)*-60px))}
+.hero2 .b1{width:34vw;height:34vw;left:6%;bottom:-12%;background:linear-gradient(150deg,#b8975a,#5b1f9a 70%,transparent)}
+.hero2 .b2{width:30vw;height:30vw;left:22%;top:4%;background:linear-gradient(200deg,#7a34c4,#3a1f5c 70%,transparent);opacity:.55}
+.hero2 .hero-copy{position:relative;z-index:2;max-width:580px;justify-self:start;color:#fff}
+.hero2 .hero-copy h1{font-size:clamp(34px,5vw,70px);line-height:1.25;font-weight:900;margin:0 0 18px;letter-spacing:-1px}
+.hero2 .hero-copy p{color:#cbbfdc;font-size:clamp(16px,1.5vw,20px);line-height:2;margin:0 0 28px}
+.hero2 .gilt{color:#cfae6c}
+.prod{position:relative;z-index:2;height:min(78vh,740px);display:grid;place-items:center;perspective:1300px}
+.prod img{height:100%;width:auto;max-width:100%;object-fit:contain;will-change:transform;
+  transform:rotateY(24deg) rotateZ(-14deg);filter:drop-shadow(0 40px 46px rgba(0,0,0,.6))}
+.fc{position:absolute;z-index:3;max-width:220px;padding:10px 16px 11px;border-radius:16px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(207,174,108,.4);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  opacity:0;transform:translateY(16px);transition:opacity .5s,transform .5s cubic-bezier(.2,.8,.2,1)}
+.fc.on{opacity:1;transform:none}
+.fc b{display:flex;align-items:center;gap:8px;font-size:17px;font-weight:900;color:#f3e2b4}
+.fc b::before{content:"";flex:none;width:9px;height:9px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#f3e2b4,#b8975a)}
+.fc span{display:block;font-size:14px;line-height:1.7;color:#d8cfe4}
+.fc1{top:6%;right:-4%}.fc2{top:33%;left:-6%}.fc3{top:60%;right:-8%}.fc4{bottom:4%;left:-2%}
+.hint{position:absolute;z-index:3;bottom:18px;left:50%;translate:-50% 0;font-size:14px;color:#b4a8c4;transition:opacity .3s}
+@media (max-width:820px){
+  .hero.hero2{grid-template-columns:1fr;grid-template-rows:auto 1fr;align-content:start;padding-top:84px;gap:0}
+  .hero2 .hero-copy h1{font-size:clamp(28px,8vw,40px);margin-bottom:10px}
+  .hero2 .hero-copy p{font-size:15px;line-height:1.8;margin-bottom:16px}
+  .hero2 .hero-copy .btns{gap:8px}
+  .prod{height:100%;min-height:0}
+  .fc{max-width:150px;padding:7px 11px}.fc b{font-size:14px}.fc span{font-size:12px;line-height:1.5}
+  .fc1{top:2%;right:0}.fc2{top:30%;left:0}.fc3{top:58%;right:0}.fc4{bottom:2%;left:0}
+}
+@media (prefers-reduced-motion:reduce){.pin{height:auto}.hero.hero2{position:relative}.fc{opacity:1;transform:none;transition:none}.hint{display:none}}

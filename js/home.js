@@ -1,7 +1,8 @@
 /* home.js — فقط صفحه‌ی اصلی (index.html)
    ترتیب لود: palette.js ← works.js ← beads.js ← home.js ← decor.js
    داخلش:  ۱) نوار ثابت پایین موبایل (قبلاً inline توی index.html بود)
-           ۲) هدر، رنگ‌ها/منجوق‌ها، نمونه‌ها، هیروی مهره‌ای، نخ اسکرول، کپی کد */
+           ۲) هدر، رنگ‌ها/منجوق‌ها، نمونه‌ها، هیروی مهره‌ای، نخ اسکرول، کپی کد
+           ۳) چرخش دستبند و کارت‌های ویژگی هیرو با اسکرول */
 
 /* ==================================================================
    ۱) نوار ثابت پایین موبایل (قبلاً inline توی index.html)
@@ -141,3 +142,29 @@ try {
   chips.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.tagName === "LI") { e.preventDefault(); e.target.click(); } });
 })();
 } catch (e) { console.error('home:main', e); }
+
+/* ==================================================================
+   ۳) هیروی محصول: دستبند با اسکرول می‌چرخه و کارت‌ها پیدا می‌شن (قبلاً hero.js)
+   ================================================================== */
+try {
+(() => {
+  const pin = document.getElementById("pin"), hero = pin && pin.querySelector(".hero2");
+  if (!pin || !hero) return;
+  const img = hero.querySelector(".prod img"), cards = [...hero.querySelectorAll(".fc")], hint = hero.querySelector(".hint");
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduce) { img.style.transform = "none"; return; }
+  let tick = false;
+  function update() {
+    tick = false;
+    const m = pin.offsetHeight - innerHeight;
+    const p = m > 0 ? Math.min(1, Math.max(0, -pin.getBoundingClientRect().top / m)) : 0;
+    const e = p * p * (3 - 2 * p); /* حرکت نرم‌تر */
+    img.style.transform = `rotateY(${24 - e * 48}deg) rotateZ(${-14 + e * 30}deg) scale(${1 + e * 0.1})`;
+    hero.style.setProperty("--p", p.toFixed(3));
+    cards.forEach((c) => c.classList.toggle("on", p >= Number(c.dataset.at)));
+    if (hint) hint.style.opacity = p > 0.05 ? 0 : 1;
+  }
+  const req = () => { if (!tick) { tick = true; requestAnimationFrame(update); } };
+  addEventListener("scroll", req, { passive: true }); addEventListener("resize", req); update();
+})();
+} catch (e) { console.error('home:hero', e); }
