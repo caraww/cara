@@ -45,8 +45,4 @@ cara-site/
 
 بعد از هر تغییر توی palette.js: `node tools/sync-valid.js index.js` و بعد `npx wrangler deploy`.
 
-## چیزهایی که باید خودت تصمیم بگیری
-- **server.js** با درگاه سپال کار می‌کنه، ولی Worker (`index.js`) با زیبال؛ طبق wrangler.jsonc سایت فعلی روی Worker می‌چرخه. اگه server.js دیگه استفاده نمی‌شه پاکش کن (همراه `orders/` و `package.json > scripts.start`).
-- **tools/zibal-relay.js**: `ZIBAL_BASE` توی wrangler به یه رله‌ی `.php` اشاره می‌کنه، پس این نسخه‌ی Node احتمالاً استفاده نمی‌شه.
-- **package.json**: `@imgly/background-removal-node` توی هیچ فایلی استفاده نشده؛ `sharp` فقط برای tools لازمه.
-- `WRANGLER-SNIPPET.txt` حذف شد: تنظیمش (Durable Object بازی) از قبل توی wrangler.jsonc و index.js هست.
+
