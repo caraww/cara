@@ -44,6 +44,8 @@ function cfg(env) {
     sandbox: merchant === "zibal", /* کد آزمایشی زیبال */
     api: String(env.ZIBAL_BASE || GATEWAY).trim().replace(/\/+$/, "").replace(/^(?!https?:\/\/)/, "https://"),
     relayKey: String(env.ZIBAL_RELAY_KEY || "").trim(),
+    relaySecret: String(env.RELAY_SECRET || "").trim(), /* رمز مشترک امضا بین Worker و هاست ایرانی */
+    payUrl: String(env.RELAY_PAY_URL || "https://relay.caraw.ir/pay.php").trim(),
     price: Number(env.PRICE_PER_BEAD) || 0,
     base: Number(env.BASE_FEE) || 0,
     callback: String(env.CALLBACK_URL || "").trim(),
@@ -51,6 +53,15 @@ function cfg(env) {
   };
 }
 const callbackOf = (C) => C.callback || `${C.site}/api/payment-callback`;
+
+/* امضای HMAC بین Worker و فایل‌های PHP روی هاست ایرانی (pay.php / callback.php) */
+const b64u = (s) => { const b = new TextEncoder().encode(s); let t = ""; for (const x of b) t += String.fromCharCode(x); return btoa(t).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, ""); };
+const unb64u = (s) => { s = s.replace(/-/g, "+").replace(/_/g, "/"); while (s.length % 4) s += "="; return new TextDecoder().decode(Uint8Array.from(atob(s), (c) => c.charCodeAt(0))); };
+async function hmac(secret, msg) {
+  const k = await crypto.subtle.importKey("raw", new TextEncoder().encode(secret), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
+  const sg = await crypto.subtle.sign("HMAC", k, new TextEncoder().encode(msg));
+  return [...new Uint8Array(sg)].map((x) => x.toString(16).padStart(2, "0")).join("");
+}
 
 /* درخواست به API زیبال (merchant خودکار اضافه می‌شه). همیشه یه آبجکت برمی‌گردونه؛ result === 100 یعنی موفق */
 async function zibal(C, endpoint, body) {
@@ -240,6 +251,7 @@ async function createPayment(request, env) {
   }
 
   if (!C.merchant) return json({ error: "کد درگاه (ZIBAL_MERCHANT) روی Worker تنظیم نشده." }, 503);
+  if (!C.relaySecret) return json({ error: "RELAY_SECRET روی Worker تنظیم نشده." }, 503);
   if (!(priceToman * 10 >= 10000)) return json({ error: "مبلغ کمتر از حداقل مجاز درگاه است." }, 400);
 
   const order = {
@@ -257,33 +269,23 @@ async function createPayment(request, env) {
   await saveOrder(env, order);
   if (dc) await reserveCode(env, dc, order.id);
 
-  const j = await zibal(C, "request", {
-    amount: priceToman * 10 /* زیبال ریال می‌گیره */,
-    callbackUrl: callbackOf(C),
-    orderId: order.id,
-    mobile: customer.phone,
-    description: `سفارش cara ${order.id.slice(0, 8)}`,
-  });
-  if (j && j.result === 100 && j.trackId) {
-    order.trackId = String(j.trackId);
-    await saveOrder(env, order);
-    await env.ORDERS.put("pn:" + order.trackId, order.id, { expirationTtl: 60 * 60 * 24 * 60 });
-    return json({ paymentUrl: `${GATEWAY}/start/${order.trackId}` });
-  }
-  order.status = "failed";
-  order.error = j && (j.message || String(j.result));
-  await saveOrder(env, order);
-  if (dc) await releaseCode(env, dc, order.id);
-  console.error("zibal request failed", JSON.stringify(j), "callback:", callbackOf(C));
-  const why = j && (j.message || j.result != null) ? " (" + String(j.message || "کد " + j.result).slice(0, 120) + ")" : "";
-  return json({ error: "درگاه درخواست رو قبول نکرد، یه کم بعد دوباره امتحان کن." + why }, 502);
+  /* Worker دیگه خودش با زیبال حرف نمی‌زنه (فایروال هاست آی‌پی Cloudflare رو می‌بنده).
+     یه بلیت امضاشده می‌سازیم؛ مرورگر مشتری (آی‌پی ایرانی) با اون می‌ره pay.php روی هاست و اون درخواست رو به زیبال می‌ده. */
+  const d = b64u(JSON.stringify({
+    o: order.id,
+    a: priceToman * 10 /* زیبال ریال می‌گیره */,
+    m: customer.phone,
+    x: `cara order ${order.id.slice(0, 8)}`,
+    e: Math.floor(Date.now() / 1000) + 900,
+  }));
+  return json({ paymentUrl: `${C.payUrl}?d=${d}&sig=${await hmac(C.relaySecret, d)}` });
 }
 
 /* تأیید پرداخت با زیبال. هم از بازگشت مشتری از درگاه صدا زده می‌شه، هم از دکمه‌ی «بررسی وضعیت» توی admin.html.
    markFailed=false یعنی اگه پرداخت پیدا نشد، وضعیت سفارش رو خراب نکن. */
-async function settle(C, env, order, markFailed, ctx) {
+async function settle(C, env, order, markFailed, ctx, pre) {
   const later = (p) => (ctx ? ctx.waitUntil(p) : p); /* اعلان نباید مشتری رو معطل کنه */
-  const v = await zibal(C, "verify", { trackId: Number(order.trackId) });
+  const v = pre || (await zibal(C, "verify", { trackId: Number(order.trackId) })); /* pre = نتیجه‌ی تأییدی که callback.php روی هاست ایرانی گرفته و امضا کرده */
   const fresh = await getOrder(env, order.id);
   if (fresh && fresh.status === "paid") return fresh; /* کال‌بک هم‌زمان قبلاً تأییدش کرده */
   order.verify = v;
@@ -327,6 +329,21 @@ async function paymentCallback(request, env, url, ctx) {
     }
     const g = (k) => String(url.searchParams.get(k) || body[k] || "");
     const trackId = g("trackId"), orderId = g("orderId"), success = g("success"), status = g("status");
+
+    /* نتیجه‌ی امضاشده از callback.php (هاست ایرانی پرداخت رو با زیبال verify کرده) */
+    const dd = g("d"), sig = g("sig");
+    if (dd && sig) {
+      if (!C.relaySecret || !same(sig, await hmac(C.relaySecret, dd))) { console.error("bad relay signature"); return back("failed"); }
+      let t;
+      try { t = JSON.parse(unb64u(dd)); } catch { return back("failed"); }
+      if (!t || !t.o || !(t.e > Math.floor(Date.now() / 1000))) return back("failed");
+      const o2 = await getOrder(env, String(t.o));
+      if (!o2) { console.error("signed callback for unknown order", t.o); return back("failed"); }
+      if (o2.status === "paid") return back("success", o2);
+      if (!o2.trackId && t.t) o2.trackId = String(t.t);
+      const o3 = await settle(C, env, o2, true, ctx, { result: 100, amount: t.a, refNumber: t.r, cardNumber: t.c });
+      return back(o3.status === "paid" ? "success" : "failed", o3);
+    }
     let id = trackId && (await env.ORDERS.get("pn:" + trackId));
     if (!id && /^[0-9a-f-]{36}$/i.test(orderId)) id = orderId;
     const order = id && (await getOrder(env, id));
