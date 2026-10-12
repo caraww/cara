@@ -11,7 +11,7 @@
     "PRICE_PER_BEAD": "1500",
     "BASE_FEE": "150000",
     "ZIBAL_BASE": "https://relay.caraw.ir/relay.php",
-    "TEST_MODE": "0",
+    "TEST_MODE": "1",
     "GAME_GOAL": "12",
   },
 

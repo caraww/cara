@@ -479,3 +479,62 @@
     transition: none !important;
   }
 }
+
+/* ======================================================================
+   ۳) چیدمان کارگاه: پیش‌نمایش همیشه در دید، تنظیمات کنارش/زیرش
+   ====================================================================== */
+.ws-page { --hdr: 72px; } /* ارتفاع هدر؛ اگه هدر sticky نیست 0px بذار */
+.wrap.narrow.ws-page { max-width: 1120px; }
+
+.ws {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 400px);
+  gap: 24px;
+  align-items: start;
+  margin-top: 8px;
+}
+.ws-tools { min-width: 0; }
+.ws-view { align-self: stretch; min-width: 0; }
+
+.ws-sticky {
+  position: sticky;
+  top: calc(var(--hdr) + 12px);
+  margin-top: 24px;
+  max-height: calc(100svh - var(--hdr) - 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+.ws-sticky .preview {
+  min-height: 0;
+  flex: 1 1 auto;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+}
+.ws-sticky .preview canvas {
+  max-width: 100%;
+  max-height: calc(100svh - var(--hdr) - 160px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* گوشی و تبلت: پیش‌نمایش بالا می‌چسبه، تنظیمات زیرش اسکرول می‌شن */
+@media (max-width: 860px) {
+  .ws { display: flex; flex-direction: column; gap: 0; }
+  .ws-view { display: contents; }
+  .ws-sticky {
+    order: -1;
+    top: var(--hdr);
+    z-index: 20;
+    margin: 12px -4px 0;
+    padding: 8px 4px 10px;
+    max-height: 40svh;
+    background: var(--bg, #fff);
+    border-bottom: 1px solid var(--line);
+    box-shadow: 0 8px 18px rgba(27, 18, 38, 0.12);
+  }
+  .ws-sticky .preview canvas { max-height: calc(40svh - 60px); }
+}
