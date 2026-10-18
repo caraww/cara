@@ -379,7 +379,8 @@
         return best ? best.code : null;
       };
       return Array.from({length: 42}, (_, x) => Array.from({length: 9}, (_, y) => {
-        const k = (y * 42 + x) * 4;
+        /* Loom عمداً جهت ستون‌ها را برای الگوی بیلدر برمی‌گرداند؛ این عکس‌ها را جبران می‌کنیم تا وارونه دیده نشوند. */
+        const sourceY = 8 - y, k = (sourceY * 42 + x) * 4;
         return pixels[k + 3] < 20 ? null : nearest(pixels[k], pixels[k + 1], pixels[k + 2]);
       }));
     }
