@@ -65,6 +65,22 @@
       const shine = ctx.createLinearGradient(0, y, 0, y + bh);
       shine.addColorStop(0, "rgba(255,255,255,.34)"); shine.addColorStop(.38, "rgba(255,255,255,.07)"); shine.addColorStop(1, "rgba(0,0,0,.22)");
       ctx.fillStyle = shine; ctx.beginPath(); ctx.roundRect(x + .5, y + .5, bw - 1, bh - 1, Math.max(.8, s * .14)); ctx.fill();
+      /* ترکیب منجوق‌های براق و نیمه‌مات: برق شیشه‌ای واضح، بدون سوراخ وسط. */
+      const glossy = (Math.round(cx / Math.max(1, s)) + Math.round(cy / Math.max(1, s))) % 4 !== 0;
+      if (glossy) {
+        const glint = ctx.createLinearGradient(x, y, x + bw * .72, y + bh * .65);
+        glint.addColorStop(0, "rgba(255,255,255,.78)");
+        glint.addColorStop(.24, "rgba(255,255,255,.34)");
+        glint.addColorStop(.58, "rgba(255,255,255,.05)");
+        glint.addColorStop(1, "rgba(255,255,255,0)");
+        ctx.fillStyle = glint;
+        ctx.beginPath(); ctx.roundRect(x + .7, y + .7, bw * .78, bh * .72, Math.max(1, s * .16)); ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,.72)";
+        ctx.beginPath(); ctx.ellipse(x + bw * .29, y + bh * .2, Math.max(.7, bw * .16), Math.max(.45, bh * .075), -.22, 0, Math.PI * 2); ctx.fill();
+      } else {
+        ctx.strokeStyle = "rgba(255,255,255,.32)"; ctx.lineWidth = Math.max(.7, s * .055);
+        ctx.beginPath(); ctx.moveTo(x + s * .2, y + 1); ctx.lineTo(x + bw - s * .2, y + 1); ctx.stroke();
+      }
       /* سطح یک‌دستِ منجوق؛ حجم با سایه‌ی کناره‌ها و برق شیشه‌ای ساخته می‌شود، نه سوراخ وسط */
       ctx.strokeStyle = "rgba(0,0,0,.24)"; ctx.lineWidth = Math.max(.5, s * .045);
       ctx.beginPath(); ctx.roundRect(x + .35, y + .35, bw - .7, bh - .7, Math.max(1, s * .17)); ctx.stroke();
@@ -323,11 +339,12 @@
       }
       const code = best ? best.code : null; codeCache.set(hex, code); return code;
     }
+    /* رنگ‌ها مستقیماً از طیف واقعی پالت cara انتخاب شده‌اند تا طرح‌ها زنده‌تر باشند. */
     const ink = {
-      night: "#21172f", black: "#211b28", white: "#fff2d6",
-      blue: "#168bd2", aqua: "#65e6df", gold: "#e8b84f",
-      pink: "#ff5f9e", coral: "#ff795e", purple: "#9b62d8",
-      green: "#54b77a", mint: "#a8e6b2"
+      night: "#171717", black: "#272726", white: "#F0EDF2",
+      blue: "#251A82", aqua: "#50A7CD", gold: "#FABC03",
+      pink: "#F2A9B8", coral: "#DF2A1B", purple: "#5E4697",
+      green: "#A4B12B", mint: "#F1E00A"
     };
     const designs = [
       { title: "چشم‌نظر نئونی", paint(x, y) {
