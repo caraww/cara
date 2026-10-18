@@ -300,89 +300,75 @@
   /* ---------- صفحه‌ی اصلی: بافت زنده از طرح‌های گالری ---------- */
   const steps = $("steps");
   if (steps && $("heroCanvas")) {
-    const works = (C.works || []).filter((work) => work && work.thumb && work.title);
-    const sec = document.createElement("section"); sec.className = "sec"; sec.id = "loom";
-    sec.innerHTML = `<h2>ببین چطور می‌بافم</h2>
-      <div class="dl-loom"><canvas aria-label="نمایش بافته شدن دستبند روی دار"></canvas><div class="dl-cap"><span class="n"></span><span class="nm"></span></div></div>
-      <div class="btns"><a class="btn plum" href="gallery.html">دیدن همه‌ی دستبندها</a><a class="btn line" href="builder.html">طرح خودت رو بساز</a></div>`;
-    steps.insertAdjacentElement("beforebegin", sec);
-    const nEl = sec.querySelector(".n"), nmEl = sec.querySelector(".nm");
-    const loom = Loom(sec.querySelector("canvas"), { maxH: () => Math.min(440, innerHeight * 0.6), tick: null });
-    let i = 0, vis = false, timer = 0, runId = 0;
+    /* الگوهای مستقل Alpha-inspired؛ برای انیمیشن از عکس‌های گالری نمونه‌برداری نمی‌کنیم.
+       الهام کلی از الگوهای پیکسلی هندسی/گل‌دار است؛ طرح‌ها در خود سایت ساخته می‌شوند. */
     const beadColors = (C.palette || []).filter((p) => p && p.hex && p.code);
-    function imageFor(work) {
-      return new Promise((resolve, reject) => {
-        const im = new Image();
-        im.onload = () => resolve(im);
-        im.onerror = reject;
-        im.src = work.thumb;
-      });
-    }
-    function contrast(v) { return clamp((v - 128) * 1.38 + 128, 0, 255); }
-    function cropScore(ctx, w, h) {
-      const pixels = ctx.getImageData(0, 0, w, h).data;
-      let score = 0, colored = 0, total = 0;
-      for (let k = 0; k < pixels.length; k += 4) {
-        const r = pixels[k], g = pixels[k + 1], b = pixels[k + 2];
-        const hi = Math.max(r, g, b), lo = Math.min(r, g, b), lum = (r + g + b) / 3;
-        if (hi > 244 && lo > 228) continue;
-        total++;
-        const sat = hi - lo;
-        if (sat > 22) { score += 1.7 + sat / 120; colored++; }
-        else if (lum < 205) score += (205 - lum) / 90;
+    const codeCache = new Map();
+    function codeFor(hex) {
+      if (codeCache.has(hex)) return codeCache.get(hex);
+      const rgb = C.hexRgb(hex);
+      let best = beadColors[0], score = Infinity;
+      for (const p of beadColors) {
+        const qrgb = C.hexRgb(p.hex);
+        const d = (rgb[0] - qrgb[0]) ** 2 + (rgb[1] - qrgb[1]) ** 2 + (rgb[2] - qrgb[2]) ** 2;
+        if (d < score) { score = d; best = p; }
       }
-      return total ? score / total + colored / (w * h) * 0.8 : 0;
+      const code = best ? best.code : null; codeCache.set(hex, code); return code;
     }
-    async function patternFromWork(work) {
-      const im = await imageFor(work);
-      /* عکس‌های عمودی را قبل از نمونه‌برداری افقی می‌کنیم؛ عکس را وارونه یا آینه‌ای نمی‌کنیم. */
-      const oriented = document.createElement("canvas"), og = oriented.getContext("2d", { willReadFrequently: true });
-      const portrait = im.naturalHeight > im.naturalWidth * 1.12;
-      oriented.width = portrait ? im.naturalHeight : im.naturalWidth;
-      oriented.height = portrait ? im.naturalWidth : im.naturalHeight;
-      if (portrait) {
-        og.translate(oriented.width, 0); og.rotate(Math.PI / 2);
-        og.drawImage(im, 0, 0);
-      } else og.drawImage(im, 0, 0);
-      const ow = oriented.width, oh = oriented.height, ratio = 4.2;
-      let cropW = Math.min(ow * .96, oh * ratio * .96);
-      let cropH = cropW / ratio;
-      if (cropH > oh * .96) { cropH = oh * .96; cropW = cropH * ratio; }
-      const source = document.createElement("canvas"), sg = source.getContext("2d", { willReadFrequently: true });
-      source.width = 42; source.height = 9;
-      /* چند نوار افقی را می‌سنجیم و نواری را برمی‌داریم که جزئیات و رنگ خود دستبند در آن بیشتر است. */
-      let bestY = (oh - cropH) / 2, bestScore = -1;
-      const probe = document.createElement("canvas"), pg = probe.getContext("2d", { willReadFrequently: true });
-      probe.width = 42; probe.height = 9;
-      for (let n = 0; n <= 10; n++) {
-        const sy = (oh - cropH) * n / 10;
-        pg.clearRect(0, 0, 42, 9);
-        pg.drawImage(oriented, (ow - cropW) / 2, sy, cropW, cropH, 0, 0, 42, 9);
-        const score = cropScore(pg, 42, 9);
-        if (score > bestScore) { bestScore = score; bestY = sy; }
-      }
-      sg.drawImage(oriented, (ow - cropW) / 2, bestY, cropW, cropH, 0, 0, 42, 9);
-      const pixels = sg.getImageData(0, 0, 42, 9).data;
-      const nearest = (r, g, b) => {
-        /* کنتراست و اشباع کمی بیشتر تا مرز رنگ‌های طرح در بافت منجوقی واضح‌تر شود. */
-        const avg = (r + g + b) / 3;
-        r = clamp(avg + (contrast(r) - avg) * 1.16, 0, 255);
-        g = clamp(avg + (contrast(g) - avg) * 1.16, 0, 255);
-        b = clamp(avg + (contrast(b) - avg) * 1.16, 0, 255);
-        let best = beadColors[0], score = Infinity;
-        for (const p of beadColors) {
-          const rgb = C.hexRgb(p.hex);
-          const dr = (r - rgb[0]) * 0.92, dg = (g - rgb[1]) * 1.04, db = (b - rgb[2]) * 0.96;
-          const q = dr * dr + dg * dg + db * db;
-          if (q < score) { score = q; best = p; }
+    const ink = {
+      night: "#21172f", black: "#211b28", white: "#fff2d6",
+      blue: "#168bd2", aqua: "#65e6df", gold: "#e8b84f",
+      pink: "#ff5f9e", coral: "#ff795e", purple: "#9b62d8",
+      green: "#54b77a", mint: "#a8e6b2"
+    };
+    const designs = [
+      { title: "چشم‌نظر نئونی", paint(x, y) {
+        let col = ink.night;
+        for (const cx of [5, 15, 25, 35]) {
+          const r = Math.sqrt(((x - cx) / 3.0) ** 2 + ((y - 4) / 1.85) ** 2);
+          if (r < .42) col = ink.black;
+          else if (r < .78) col = ink.white;
+          else if (r < 1.17) col = ink.blue;
+          else if (r < 1.55) col = ink.aqua;
+          else if (r < 1.92) col = ink.gold;
         }
-        return best ? best.code : null;
-      };
-      return Array.from({length: 42}, (_, x) => Array.from({length: 9}, (_, y) => {
-        /* Loom عمداً جهت ستون‌ها را برای الگوی بیلدر برمی‌گرداند؛ این عکس‌ها را جبران می‌کنیم تا وارونه دیده نشوند. */
-        const sourceY = 8 - y, k = (sourceY * 42 + x) * 4;
-        return pixels[k + 3] < 20 ? null : nearest(pixels[k], pixels[k + 1], pixels[k + 2]);
-      }));
+        return col;
+      }},
+      { title: "باغ گل‌های پیکسلی", paint(x, y) {
+        let col = ink.night;
+        for (const cx of [4, 14, 24, 34]) {
+          const dx = Math.abs(x - cx), dy = Math.abs(y - 3);
+          if ((dx === 0 && dy <= 1) || (dx === 1 && dy === 0) || (dx === 2 && dy === 1)) col = ink.pink;
+          if (dx === 0 && dy === 0) col = ink.gold;
+          if (x === cx && y >= 4) col = ink.green;
+          if ((x === cx - 1 && y === 5) || (x === cx + 1 && y === 6)) col = ink.mint;
+          if ((x === cx + 1 && y === 5) || (x === cx - 1 && y === 6)) col = ink.green;
+        }
+        return col;
+      }},
+      { title: "الماس هندسی", paint(x, y) {
+        const phase = x % 12, dist = Math.abs(phase - 6) + Math.abs(y - 4) * 2;
+        if (dist <= 2) return ink.white;
+        if (dist <= 5) return ink.aqua;
+        if (dist <= 8) return ink.purple;
+        if ((x + y) % 6 === 0) return ink.gold;
+        return ink.night;
+      }},
+      { title: "ماه و ستاره", paint(x, y) {
+        let col = ink.night;
+        const dx = x - 7, dy = y - 4, r = Math.sqrt(dx * dx + dy * dy * 1.5);
+        if (r < 3.05 && Math.sqrt((x - 8.6) ** 2 + (y - 3.4) ** 2 * 1.5) > 2.65) col = ink.gold;
+        const stars = [[17,1],[19,6],[27,3],[31,7],[38,2],[39,5]];
+        for (const [sx, sy] of stars) if ((x === sx && Math.abs(y - sy) <= 1) || (Math.abs(x - sx) === 1 && y === sy)) col = ink.white;
+        if ((x + y * 2) % 17 === 0 && col === ink.night) col = ink.blue;
+        return col;
+      }}
+    ];
+    const works = designs;
+    function patternFromWork(work) {
+      /* Loom ستون‌ها را عمودی برمی‌گرداند؛ ترتیب ردیف‌ها را از همین‌جا جبران می‌کنیم. */
+      return Array.from({length: 42}, (_, x) =>
+        Array.from({length: 9}, (_, y) => codeFor(work.paint(x, 8 - y))));
     }
     loom.onProgress = (p, n) => { nEl.textContent = `${C.faNum(p)} از ${C.faNum(n)} منجوق`; };
     loom.onDone = () => {
