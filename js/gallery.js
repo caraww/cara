@@ -54,7 +54,7 @@ try {
     if (im.tagName !== "IMG") return;
     /* Recover legacy URLs containing whitespace before the image extension. */
     const raw = im.getAttribute("src") || "";
-    const normalized = raw.replace(/%20(?=\\.(?:webp|png|jpe?g|avif)(?:[?#]|$))/i, "");
+    const normalized = raw.replace(/%20(?=[.(?:webp|png|jpe?g|avif)(?:[?#]|$))/i, "");
     if (!im.dataset.normalizedTried && normalized !== raw) {
       im.dataset.normalizedTried = "1";
       im.src = normalized;
@@ -133,7 +133,7 @@ try {
   $("lbImg").addEventListener("error", (e) => {
     const im = e.target;
     const raw = im.getAttribute("src") || "";
-    const normalized = raw.replace(/%20(?=\\.(?:webp|png|jpe?g|avif)(?:[?#]|$))/i, "");
+    const normalized = raw.replace(/%20(?=[.(?:webp|png|jpe?g|avif)(?:[?#]|$))/i, "");
     if (!im.dataset.normalizedTried && normalized !== raw) {
       im.dataset.normalizedTried = "1";
       im.src = normalized;
