@@ -104,8 +104,11 @@ try {
     if (!list.length) return;
     cur = (i + list.length) % list.length;
     const w = list[cur];
-    $("lbImg").classList.remove("in");
-    $("lbImg").src = w.src; $("lbImg").alt = "دستبند منجوقی " + w.title;
+    const lbImg = $("lbImg");
+    lbImg.classList.remove("in");
+    delete lbImg.dataset.normalizedTried;
+    delete lbImg.dataset.thumbTried;
+    lbImg.src = w.src; lbImg.alt = "دستبند منجوقی " + w.title;
     if ($("lbImg").complete && $("lbImg").naturalWidth) $("lbImg").classList.add("in"); /* عکس کش‌شده: گاهی load دوباره نمیاد */
     $("lbTitle").textContent = w.title; $("lbNote").textContent = w.note; $("lbNote").hidden = !w.note;
     $("lbTags").innerHTML = (w.tags || []).map((t) => `<span>${esc(t)}</span>`).join("");
@@ -137,6 +140,13 @@ try {
     if (!im.dataset.normalizedTried && normalized !== raw) {
       im.dataset.normalizedTried = "1";
       im.src = normalized;
+      return;
+    }
+    /* If a full-size derivative is missing, try this work's thumbnail before giving up. */
+    const work = list[cur];
+    if (work && work.thumb && raw !== work.thumb && !im.dataset.thumbTried) {
+      im.dataset.thumbTried = "1";
+      im.src = work.thumb;
       return;
     }
     im.classList.remove("in");
