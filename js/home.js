@@ -67,10 +67,12 @@ try {
 
   /* هیرو: زمین مهره؛ با اسکرول، مهره‌ها از وسط به دو طرف کنار می‌روند */
   const cv = document.getElementById("heroCanvas"), g = cv.getContext("2d"), hero = cv.parentElement;
+  /* افزایش وضوح بافت منجوق‌ها؛ تغییر قبلی زیر لایه‌های هیرو خیلی کم‌رنگ دیده می‌شد. */
+  cv.style.opacity = "0.82";
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   /* پالت آرام و تک‌رنگ: طیف بنفش‌های خاکستری و فقط یک مهره‌ی طلایی در مرکز هر لوزی */
-  const SET = ["#C5B6D9", "#9C86BB", "#7A5F9E", "#5F4780", "#4B3663", "#3A2B4D"], GOLD = "#B8975A";
-  const R2 = 150 * 150, CW = 25, CH = 18, BASE = 0.68, BW = CW - 1.5, BH = CH - 1.5;
+  const SET = ["#E7D9F7", "#C8B2E8", "#A88BD0", "#8869B3", "#6E5196", "#563C78"], GOLD = "#E4BE70";
+  const R2 = 175 * 175, CW = 24, CH = 18, BASE = 0.94, BW = CW - 1.1, BH = CH - 1.1;
   let mx = -1, my = -1, W, H, cols, rows, ticking = false, cleared = false, sprites = [], jx, jy, ci;
   const rnd = (x, y) => { const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return s - Math.floor(s); };
   /* هر مهره‌ی دلیکای استوانه‌ای یک بار رندر می‌شود: لبه‌ی تیره، بدنه‌ی شیشه‌ای،
