@@ -92,25 +92,11 @@ try {
   let panning = null, space = false, mirror = false, erasing = false, painting = false, last = null, history = [], redo = [], cw = 24, ch = 20, saveT, sumQ = false;
   let zoom = 1, fillShapes = false, drag = null, snap = null, track = null, selRect = null, selDrag = null, clip = null, hover = null, recent = [];
 
-  /* لینک اشتراک‌گذاری فقط در مرورگر باز می‌شود؛ هیچ داده‌ای به سرور فرستاده نمی‌شود. */
-  function readSharedPattern() {
-    try {
-      const match = location.hash.match(/^#pattern=(\d+)x(\d+):([A-Za-z0-9_-]+)$/);
-      if (!match) return null;
-      const sw = Number(match[1]), sh = Number(match[2]), packed = match[3];
-      if (!Number.isInteger(sw) || !Number.isInteger(sh) || sw < 1 || sh < 1 ||
-          sw > L.MAX_W || sh > L.MAX_H || packed.length !== sw * sh) return null;
-      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
-      const shared = Array.from({ length: sh }, (_, r) =>
-        Array.from({ length: sw }, (_, c) => {
-          const n = alphabet.indexOf(packed[r * sw + c]);
-          return n >= 0 && n < C.palette.length ? C.palette[n].code : null;
-        }));
-      history.replaceState(null, "", location.pathname + location.search);
-      return { width: sw, height: sh, data: shared };
-    } catch { return null; }
-  }
-  const shared = readSharedPattern();
+  /* الگوی اشتراکی در fragment لینک قرار دارد؛ داده‌ای به سرور فرستاده نمی‌شود. */
+  const shared = window.CARA_PATTERN_SHARE
+    ? window.CARA_PATTERN_SHARE.parseHash(location.hash, C.palette, L)
+    : null;
+  if (shared) history.replaceState(null, "", location.pathname + location.search);
   const saved = C.loadPattern();
   if (shared) { data = shared.data; w = shared.width; h = shared.height; }
   else if (saved) { data = saved.data; w = saved.width; h = saved.height; }
@@ -373,13 +359,11 @@ try {
   /* ساخت لینک قابل‌اشتراک از خود الگو؛ طرح در hash است و به سرور ارسال نمی‌شود. */
   const shareButton = $("shareLink");
   if (shareButton) shareButton.onclick = async () => {
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
-    const packed = data.flat().map((code) => {
-      if (!code) return "-";
-      const i = C.palette.findIndex((p) => p.code === code);
-      return i >= 0 && i < alphabet.length ? alphabet[i] : "-";
-    }).join("");
-    const url = location.origin + location.pathname + location.search + "#pattern=" + w + "x" + h + ":" + packed;
+    const hash = window.CARA_PATTERN_SHARE
+      ? window.CARA_PATTERN_SHARE.makeHash(data, C.palette)
+      : "";
+    if (!hash) return;
+    const url = location.origin + location.pathname + location.search + hash;
     try {
       if (navigator.share) await navigator.share({ title: "الگوی دستبند کارا", url });
       else if (navigator.clipboard && window.isSecureContext) {
