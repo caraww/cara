@@ -1,0 +1,95 @@
+name: Process transparent gallery images
+
+on:
+  push:
+    branches:
+      - tool/transparent-gallery-images-bot
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gallery-background-processing
+  cancel-in-progress: false
+
+jobs:
+  remove-backgrounds:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Check out project
+        uses: actions/checkout@v4
+        with:
+          ref: tool/transparent-gallery-images-bot
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: tools/requirements-background-bot.txt
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install background-removal dependencies
+        run: python -m pip install -r tools/requirements-background-bot.txt
+
+      - name: Create transparent copies
+        run: |
+          python tools/remove_gallery_backgrounds.py \
+            --input img/works-cutouts \
+            --output img/works-cutouts-transparent \
+            --preview output/gallery-transparency-preview.png
+          cp img/works-cutouts/info.json img/works-cutouts-transparent/info.json
+
+      - name: Rebuild optimized gallery assets and data
+        run: |
+          npm ci
+          node tools/build-works.js
+
+      - name: Verify generated files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          source = [p for p in Path("img/works-cutouts").iterdir()
+                    if p.is_file() and p.suffix.lower() in {".png", ".jpg", ".jpeg", ".webp", ".bmp"}]
+          outputs = list(Path("img/works-cutouts-transparent").glob("*.png"))
+          if len(outputs) != len(source):
+              raise SystemExit(f"Expected {len(source)} transparent images, found {len(outputs)}")
+          transparent = 0
+          for path in outputs:
+              with Image.open(path) as image:
+                  if image.mode != "RGBA":
+                      raise SystemExit(f"Missing alpha channel: {path}")
+                  alpha = image.getchannel("A")
+                  if alpha.getextrema()[0] < 255:
+                      transparent += 1
+          print(f"Generated {len(outputs)} PNGs; {transparent} contain transparent pixels.")
+          if not Path("output/gallery-transparency-preview.png").is_file():
+              raise SystemExit("Contact sheet preview was not created")
+          PY
+
+      - name: Upload visual review preview
+        uses: actions/upload-artifact@v4
+        with:
+          name: gallery-transparency-preview
+          path: output/gallery-transparency-preview.png
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Commit processed assets to this pull request branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add img/works-cutouts-transparent img/works-thumbs img/works-view js/works.js data/works.json index.html gallery.html output/gallery-transparency-preview.png
+          if git diff --cached --quiet; then
+            echo "No generated changes to commit."
+            exit 0
+          fi
+          git commit -m "[skip ci] Add AI-processed transparent gallery assets"
+          git push origin HEAD:tool/transparent-gallery-images-bot
