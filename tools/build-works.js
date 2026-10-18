@@ -116,7 +116,7 @@ async function derive(files) {
   if (!sharp) return m;
   for (const d of [THUMB_DIR, VIEW_DIR]) { fs.rmSync(d, { recursive: true, force: true }); fs.mkdirSync(d, { recursive: true }); } /* هر بار از نو؛ پس عکس پاک‌شده‌ها هم از این پوشه‌ها می‌رن */
   for (const f of files) {
-    const name = f.replace(EXT, "") + ".webp", src = path.join(DIR, f);
+    const name = f.replace(EXT, "").trim() + ".webp", src = path.join(DIR, f);
     try {
       await sharp(src).rotate().resize({ width: 700, height: 700, fit: "inside", withoutEnlargement: true }).webp({ quality: 82 }).toFile(path.join(THUMB_DIR, name));
       await sharp(src).rotate().resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true }).webp({ quality: 88 }).toFile(path.join(VIEW_DIR, name));
