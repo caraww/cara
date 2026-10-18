@@ -16,8 +16,8 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const ORIGINAL_DIR = path.join(ROOT, "img", "works-cutouts");
 const TRANSPARENT_DIR = path.join(ROOT, "img", "works-cutouts-transparent");
-/* Prefer AI-processed transparent copies when present; keep originals as backups. */
-const DIR = fs.existsSync(TRANSPARENT_DIR) ? TRANSPARENT_DIR : ORIGINAL_DIR;
+/* Use untouched source photos by default. Background removal can erase bead edges and bracelet straps. */
+const DIR = process.env.CARA_USE_TRANSPARENT === "1" && fs.existsSync(TRANSPARENT_DIR) ? TRANSPARENT_DIR : ORIGINAL_DIR;
 const OUT = path.join(ROOT, "js", "works.js");
 const OUT_JSON = path.join(ROOT, "data", "works.json"); /* server.js و Worker از این می‌خوانند */
 const STAMP = Date.now().toString(36); /* نسخه‌ی این بیلد؛ برای شکستن کش */
@@ -116,7 +116,7 @@ async function derive(files) {
   if (!sharp) return m;
   for (const d of [THUMB_DIR, VIEW_DIR]) { fs.rmSync(d, { recursive: true, force: true }); fs.mkdirSync(d, { recursive: true }); } /* هر بار از نو؛ پس عکس پاک‌شده‌ها هم از این پوشه‌ها می‌رن */
   for (const f of files) {
-    const name = f.replace(EXT, "") + ".webp", src = path.join(DIR, f);
+    const name = f.replace(EXT, "").trim() + ".webp", src = path.join(DIR, f);
     try {
       await sharp(src).rotate().resize({ width: 700, height: 700, fit: "inside", withoutEnlargement: true }).webp({ quality: 82 }).toFile(path.join(THUMB_DIR, name));
       await sharp(src).rotate().resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true }).webp({ quality: 88 }).toFile(path.join(VIEW_DIR, name));

@@ -49,9 +49,24 @@ try {
     empty.textContent = !W.length ? "به‌زودی عکس کارهام رو این‌جا می‌ذارم." : onlyFav ? "هنوز چیزی رو علاقه‌مندی نکردی." : "چیزی پیدا نشد. یه کلمه‌ی دیگه امتحان کن.";
   }
   grid.addEventListener("load", (e) => { if (e.target.tagName === "IMG") e.target.classList.add("in"); }, true);
-  grid.addEventListener("error", (e) => { /* اگه عکس کوچیک نبود یه بار عکس اصلی رو امتحان می‌کنه؛ اگه اون هم نبود، کارت مخفی می‌شه */
-    const im = e.target; if (im.tagName !== "IMG") return;
-    if (im.dataset.fb && !im.dataset.tried) { im.dataset.tried = "1"; im.src = im.dataset.fb; } else im.closest(".wk-card").hidden = true;
+  grid.addEventListener("error", (e) => {
+    const im = e.target;
+    if (im.tagName !== "IMG") return;
+    /* Recover legacy URLs containing whitespace before the image extension. */
+    const raw = im.getAttribute("src") || "";
+    const normalized = raw.replace(/%20(?=[.](?:webp|png|jpe?g|avif)(?:[?#]|$))/i, "");
+    if (!im.dataset.normalizedTried && normalized !== raw) {
+      im.dataset.normalizedTried = "1";
+      im.src = normalized;
+      return;
+    }
+    if (im.dataset.fb && !im.dataset.tried) {
+      im.dataset.tried = "1";
+      im.src = im.dataset.fb;
+      return;
+    }
+    const card = im.closest(".wk-card");
+    if (card) card.classList.add("image-unavailable");
   }, true);
 
   /* منوی فیلتر: با کلیک باز و بسته می‌شه */
@@ -89,8 +104,11 @@ try {
     if (!list.length) return;
     cur = (i + list.length) % list.length;
     const w = list[cur];
-    $("lbImg").classList.remove("in");
-    $("lbImg").src = w.src; $("lbImg").alt = "دستبند منجوقی " + w.title;
+    const lbImg = $("lbImg");
+    lbImg.classList.remove("in");
+    delete lbImg.dataset.normalizedTried;
+    delete lbImg.dataset.thumbTried;
+    lbImg.src = w.src; lbImg.alt = "دستبند منجوقی " + w.title;
     if ($("lbImg").complete && $("lbImg").naturalWidth) $("lbImg").classList.add("in"); /* عکس کش‌شده: گاهی load دوباره نمیاد */
     $("lbTitle").textContent = w.title; $("lbNote").textContent = w.note; $("lbNote").hidden = !w.note;
     $("lbTags").innerHTML = (w.tags || []).map((t) => `<span>${esc(t)}</span>`).join("");
@@ -112,9 +130,31 @@ try {
   $("lbThumbs").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-src]"); if (!b) return;
     $("lbThumbs").querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
-    $("lbImg").classList.remove("in"); $("lbImg").src = b.dataset.src;
+    const im = $("lbImg");
+    im.classList.remove("in");
+    delete im.dataset.normalizedTried;
+    delete im.dataset.thumbTried;
+    im.src = b.dataset.src;
   });
   $("lbImg").addEventListener("load", (e) => e.target.classList.add("in"));
+  $("lbImg").addEventListener("error", (e) => {
+    const im = e.target;
+    const raw = im.getAttribute("src") || "";
+    const normalized = raw.replace(/%20(?=[.](?:webp|png|jpe?g|avif)(?:[?#]|$))/i, "");
+    if (!im.dataset.normalizedTried && normalized !== raw) {
+      im.dataset.normalizedTried = "1";
+      im.src = normalized;
+      return;
+    }
+    /* If a full-size derivative is missing, try this work's thumbnail before giving up. */
+    const work = list[cur];
+    if (work && work.thumb && raw !== work.thumb && !im.dataset.thumbTried) {
+      im.dataset.thumbTried = "1";
+      im.src = work.thumb;
+      return;
+    }
+    im.classList.remove("in");
+  });
   $("lbNext").onclick = () => show(cur + 1); $("lbPrev").onclick = () => show(cur - 1);
   $("lbClose").onclick = () => lb.close();
   lb.addEventListener("close", () => { try { history.replaceState(null, "", location.pathname + location.search); } catch {} });

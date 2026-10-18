@@ -1004,13 +1004,14 @@
 }
 
 
-/* Transparent PNG/WebP assets show the card surface through the removed background. */
+/* Consistent warm backdrop works with transparent cutouts and untouched source photos. */
 .wk-grid > .wk-card > img {
-  background: transparent !important;
+  background: radial-gradient(ellipse at 50% 38%, #fff 0%, #faf7fb 66%, #f1ebf5 100%) !important;
+  border-radius: 18px;
   padding: clamp(18px, 2.2vw, 28px) !important;
 }
 .wk-grid > .wk-card:hover > img {
-  background: transparent !important;
+  background: radial-gradient(ellipse at 50% 38%, #fff 0%, #faf7fb 66%, #f1ebf5 100%) !important;
 }
 @media (max-width: 560px) {
   .wk-grid > .wk-card > img { padding: 15px 9px !important; }
