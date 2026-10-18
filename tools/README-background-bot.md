@@ -1,6 +1,6 @@
 # Cara gallery background-removal bot
 
-This local tool creates transparent PNG copies of the photos in \`img/works-view\`.
+This local tool creates transparent PNG copies of the photos in \`img/works-cutouts\`.
 It does not overwrite originals or publish anything to the live website.
 
 ## Run it
@@ -18,7 +18,7 @@ python -m pip install -r tools/requirements-background-bot.txt
 python tools/remove_gallery_backgrounds.py
 \`\`\`
 
-By default, outputs go to \`img/works-view-transparent/\` and a contact sheet is written to
+By default, outputs go to \`img/works-cutouts-transparent/\` and a contact sheet is written to
 \`output/gallery-transparency-preview.png\`. The first run downloads the segmentation model.
 
 To try another model:
