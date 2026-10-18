@@ -130,7 +130,11 @@ try {
   $("lbThumbs").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-src]"); if (!b) return;
     $("lbThumbs").querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
-    $("lbImg").classList.remove("in"); $("lbImg").src = b.dataset.src;
+    const im = $("lbImg");
+    im.classList.remove("in");
+    delete im.dataset.normalizedTried;
+    delete im.dataset.thumbTried;
+    im.src = b.dataset.src;
   });
   $("lbImg").addEventListener("load", (e) => e.target.classList.add("in"));
   $("lbImg").addEventListener("error", (e) => {
