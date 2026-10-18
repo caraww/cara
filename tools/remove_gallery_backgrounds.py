@@ -74,9 +74,9 @@ def make_contact_sheet(paths: list[Path], output: Path, thumb_size=(240, 200)) -
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--input", type=Path, default=Path("img/works-view"),
+    parser.add_argument("--input", type=Path, default=Path("img/works-cutouts"),
                         help="folder with original gallery photos")
-    parser.add_argument("--output", type=Path, default=Path("img/works-view-transparent"),
+    parser.add_argument("--output", type=Path, default=Path("img/works-cutouts-transparent"),
                         help="folder for transparent PNG copies")
     parser.add_argument("--model", default="u2net",
                         help="rembg model name, e.g. u2net or birefnet-general")
