@@ -1004,11 +1004,9 @@
 }
 
 
-/* Let product photos blend into the card instead of showing a white image tile.
-   Multiply makes near-white pixels transparent-looking on the gallery's light surface. */
+/* Transparent PNG/WebP assets show the card surface through the removed background. */
 .wk-grid > .wk-card > img {
   background: transparent !important;
-  mix-blend-mode: multiply;
   padding: clamp(18px, 2.2vw, 28px) !important;
 }
 .wk-grid > .wk-card:hover > img {

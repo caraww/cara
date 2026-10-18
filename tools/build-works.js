@@ -14,7 +14,10 @@ const fs = require("fs");
 const path = require("path");
 
 const ROOT = path.resolve(__dirname, "..");
-const DIR = path.join(ROOT, "img", "works-cutouts");
+const ORIGINAL_DIR = path.join(ROOT, "img", "works-cutouts");
+const TRANSPARENT_DIR = path.join(ROOT, "img", "works-cutouts-transparent");
+/* Prefer AI-processed transparent copies when present; keep originals as backups. */
+const DIR = fs.existsSync(TRANSPARENT_DIR) ? TRANSPARENT_DIR : ORIGINAL_DIR;
 const OUT = path.join(ROOT, "js", "works.js");
 const OUT_JSON = path.join(ROOT, "data", "works.json"); /* server.js و Worker از این می‌خوانند */
 const STAMP = Date.now().toString(36); /* نسخه‌ی این بیلد؛ برای شکستن کش */
