@@ -297,14 +297,13 @@
     upBtns.appendChild(b);
   }
 
-  /* ---------- صفحه‌ی اصلی: بافت زنده از طرح‌های واقعی گالری ---------- */
+  /* ---------- صفحه‌ی اصلی: بافت زنده از طرح‌های گالری ---------- */
   const steps = $("steps");
   if (steps && $("heroCanvas")) {
     const works = (C.works || []).filter((work) => work && work.thumb && work.title);
     const sec = document.createElement("section"); sec.className = "sec"; sec.id = "loom";
     sec.innerHTML = `<h2>ببین چطور می‌بافم</h2>
-      <p class="lead">این بار طرح‌های واقعی گالری خودم رو منجوق‌به‌منجوق می‌بینی؛ دانه‌ها برجسته‌ان، اما سطحشون صافه و سوراخی روشون نیست.</p>
-      <div class="dl-loom"><canvas aria-label="نمایش سه‌بعدی بافت یکی از دستبندهای گالری"></canvas><div class="dl-cap"><span class="n"></span><span class="nm"></span></div></div>
+      <div class="dl-loom"><canvas aria-label="نمایش بافته شدن دستبند روی دار"></canvas><div class="dl-cap"><span class="n"></span><span class="nm"></span></div></div>
       <div class="btns"><a class="btn plum" href="gallery.html">دیدن همه‌ی دستبندها</a><a class="btn line" href="builder.html">طرح خودت رو بساز</a></div>`;
     steps.insertAdjacentElement("beforebegin", sec);
     const nEl = sec.querySelector(".n"), nmEl = sec.querySelector(".nm");
@@ -319,39 +318,70 @@
         im.src = work.thumb;
       });
     }
+    function contrast(v) { return clamp((v - 128) * 1.38 + 128, 0, 255); }
+    function cropScore(ctx, w, h) {
+      const pixels = ctx.getImageData(0, 0, w, h).data;
+      let score = 0, colored = 0, total = 0;
+      for (let k = 0; k < pixels.length; k += 4) {
+        const r = pixels[k], g = pixels[k + 1], b = pixels[k + 2];
+        const hi = Math.max(r, g, b), lo = Math.min(r, g, b), lum = (r + g + b) / 3;
+        if (hi > 244 && lo > 228) continue;
+        total++;
+        const sat = hi - lo;
+        if (sat > 22) { score += 1.7 + sat / 120; colored++; }
+        else if (lum < 205) score += (205 - lum) / 90;
+      }
+      return total ? score / total + colored / (w * h) * 0.8 : 0;
+    }
     async function patternFromWork(work) {
       const im = await imageFor(work);
-      const longN = 42, shortN = 9;
+      /* عکس‌های عمودی را قبل از نمونه‌برداری افقی می‌کنیم؛ عکس را وارونه یا آینه‌ای نمی‌کنیم. */
+      const oriented = document.createElement("canvas"), og = oriented.getContext("2d", { willReadFrequently: true });
+      const portrait = im.naturalHeight > im.naturalWidth * 1.12;
+      oriented.width = portrait ? im.naturalHeight : im.naturalWidth;
+      oriented.height = portrait ? im.naturalWidth : im.naturalHeight;
+      if (portrait) {
+        og.translate(oriented.width, 0); og.rotate(Math.PI / 2);
+        og.drawImage(im, 0, 0);
+      } else og.drawImage(im, 0, 0);
+      const ow = oriented.width, oh = oriented.height, ratio = 4.2;
+      let cropW = Math.min(ow * .96, oh * ratio * .96);
+      let cropH = cropW / ratio;
+      if (cropH > oh * .96) { cropH = oh * .96; cropW = cropH * ratio; }
       const source = document.createElement("canvas"), sg = source.getContext("2d", { willReadFrequently: true });
-      source.width = longN; source.height = shortN;
-      /* از نوار میانی عکس نمونه می‌گیریم تا بافتِ خود دستبند، نه قاب عکس، به الگو تبدیل شود. */
-      const cropW = Math.min(im.naturalWidth * .94, im.naturalHeight * 4.2);
-      const cropH = cropW / 4.2;
-      const sx = (im.naturalWidth - cropW) / 2;
-      const sy = (im.naturalHeight - cropH) / 2;
-      sg.drawImage(im, sx, sy, cropW, cropH, 0, 0, longN, shortN);
-      const pixels = sg.getImageData(0, 0, longN, shortN).data;
+      source.width = 42; source.height = 9;
+      /* چند نوار افقی را می‌سنجیم و نواری را برمی‌داریم که جزئیات و رنگ خود دستبند در آن بیشتر است. */
+      let bestY = (oh - cropH) / 2, bestScore = -1;
+      const probe = document.createElement("canvas"), pg = probe.getContext("2d", { willReadFrequently: true });
+      probe.width = 42; probe.height = 9;
+      for (let n = 0; n <= 10; n++) {
+        const sy = (oh - cropH) * n / 10;
+        pg.clearRect(0, 0, 42, 9);
+        pg.drawImage(oriented, (ow - cropW) / 2, sy, cropW, cropH, 0, 0, 42, 9);
+        const score = cropScore(pg, 42, 9);
+        if (score > bestScore) { bestScore = score; bestY = sy; }
+      }
+      sg.drawImage(oriented, (ow - cropW) / 2, bestY, cropW, cropH, 0, 0, 42, 9);
+      const pixels = sg.getImageData(0, 0, 42, 9).data;
       const nearest = (r, g, b) => {
+        /* کنتراست و اشباع کمی بیشتر تا مرز رنگ‌های طرح در بافت منجوقی واضح‌تر شود. */
+        const avg = (r + g + b) / 3;
+        r = clamp(avg + (contrast(r) - avg) * 1.16, 0, 255);
+        g = clamp(avg + (contrast(g) - avg) * 1.16, 0, 255);
+        b = clamp(avg + (contrast(b) - avg) * 1.16, 0, 255);
         let best = beadColors[0], score = Infinity;
         for (const p of beadColors) {
-          const rgb = C.hexRgb(p.hex), q = (r-rgb[0])**2 + (g-rgb[1])**2 + (b-rgb[2])**2;
+          const rgb = C.hexRgb(p.hex);
+          const dr = (r - rgb[0]) * 0.92, dg = (g - rgb[1]) * 1.04, db = (b - rgb[2]) * 0.96;
+          const q = dr * dr + dg * dg + db * db;
           if (q < score) { score = q; best = p; }
         }
         return best ? best.code : null;
       };
-      const data = Array.from({length: longN}, (_, x) => Array.from({length: shortN}, (_, y) => {
-        const k = (y * longN + x) * 4, r = pixels[k], g = pixels[k+1], b = pixels[k+2], a = pixels[k+3];
-        if (a < 38 || (r > 247 && g > 247 && b > 247)) return null;
-        return nearest(r, g, b);
+      return Array.from({length: 42}, (_, x) => Array.from({length: 9}, (_, y) => {
+        const k = (y * 42 + x) * 4;
+        return pixels[k + 3] < 20 ? null : nearest(pixels[k], pixels[k + 1], pixels[k + 2]);
       }));
-      /* ردیف‌های خالیِ حاشیه حذف می‌شوند؛ اگر عکس پس‌زمینه‌ی روشن داشته باشد، طرح همچنان قابل‌نمایش می‌ماند. */
-      if (!data.some((row) => row.some(Boolean))) {
-        for (let x = 0; x < longN; x++) for (let y = 0; y < shortN; y++) {
-          const k = (y * longN + x) * 4;
-          data[x][y] = nearest(pixels[k], pixels[k+1], pixels[k+2]);
-        }
-      }
-      return data;
     }
     loom.onProgress = (p, n) => { nEl.textContent = `${C.faNum(p)} از ${C.faNum(n)} منجوق`; };
     loom.onDone = () => {
@@ -361,29 +391,26 @@
     async function run(k) {
       if (!works.length || !beadColors.length) return;
       i = k; const id = ++runId, work = works[k];
-      nmEl.textContent = `طرح گالری: ${work.title}`;
+      nmEl.textContent = work.title;
       try {
         const pattern = await patternFromWork(work);
         if (!vis || id !== runId) return;
         loom.load(pattern); loom.play();
       } catch (err) {
         console.warn("loom: gallery image could not be converted", work.title, err);
-        if (id === runId) { nmEl.textContent = `طرح گالری: ${work.title} · عکس در دسترس نیست`; }
+        if (id === runId) nmEl.textContent = work.title;
       }
     }
     if (works.length) {
-      nmEl.textContent = `طرح گالری: ${works[0].title}`;
-      run(0);
+      nmEl.textContent = works[0].title;
       if ("IntersectionObserver" in window) new IntersectionObserver((es) => es.forEach((e) => {
         if (e.isIntersecting && !vis) { vis = true; run(i); }
         else if (!e.isIntersecting && vis) { vis = false; runId++; loom.stop(); clearTimeout(timer); }
       }), { threshold: 0.4 }).observe(sec.querySelector(".dl-loom"));
-    } else {
-      nmEl.textContent = "طرح‌های گالری به‌زودی اینجا بافته می‌شن";
-    }
+    } else nmEl.textContent = "";
   }
 
-  /* ---------- بعد از پرداخت موفق: دستبندت همون‌جا شروع می‌کنه به بافته شدن ---------- */
+/* ---------- بعد از پرداخت موفق: دستبندت همون‌جا شروع می‌کنه به بافته شدن ---------- */
   document.addEventListener("submit", (e) => {
     if (e.target && e.target.id === "form") { try { sessionStorage.setItem("cara-kind", new URLSearchParams(location.search).get("work") ? "work" : "pattern"); } catch {} }
   }, true);
