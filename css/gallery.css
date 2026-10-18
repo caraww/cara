@@ -880,3 +880,125 @@
   .flt-panel:not([hidden]){animation:none}
   .flt-btn,.wk-grid .wk-card button.wk-share,.wk-toast{transition:none !important}
 }
+
+
+/* Cara — premium product-card finish */
+.wk-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 248px), 1fr)) !important;
+  gap: clamp(14px, 2vw, 24px) !important;
+  margin-top: 34px;
+}
+.wk-grid > .wk-card {
+  border: 1px solid rgba(63, 44, 76, .085);
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 5px 20px rgba(38, 24, 51, .035);
+  isolation: isolate;
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+.wk-grid > .wk-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(184, 151, 90, .45);
+  box-shadow: 0 18px 38px rgba(38, 24, 51, .095);
+}
+.wk-grid > .wk-card > img {
+  aspect-ratio: 4 / 4.35 !important;
+  padding: clamp(18px, 2.2vw, 28px) !important;
+  background:
+    radial-gradient(ellipse at 50% 35%, rgba(255,255,255,.98), rgba(250,247,251,.72) 62%, rgba(241,235,245,.72));
+  filter: drop-shadow(0 12px 14px rgba(34,26,44,.105));
+  transition: transform .4s cubic-bezier(.2,.7,.2,1), filter .3s ease;
+}
+.wk-grid > .wk-card:hover > img {
+  transform: scale(1.035);
+  filter: drop-shadow(0 16px 18px rgba(34,26,44,.14));
+}
+.wk-grid > .wk-card figcaption {
+  flex: 1;
+  align-items: stretch;
+  margin: 0 18px !important;
+  padding: 14px 0 18px !important;
+  border-top: 1px solid rgba(63,44,76,.09);
+  gap: 6px;
+  text-align: right !important;
+}
+.wk-grid > .wk-card figcaption b {
+  color: #2b2035;
+  font-size: 16px;
+  text-align: right;
+  letter-spacing: -.25px;
+}
+.wk-grid > .wk-card figcaption span:not(.wk-price) {
+  min-height: 0;
+  -webkit-line-clamp: 2;
+  color: #807688;
+  font-size: 12.5px;
+  line-height: 1.85;
+  text-align: right;
+}
+.wk-grid > .wk-card figcaption .wk-price {
+  align-self: flex-start;
+  margin-top: 7px;
+  padding: 0;
+  color: #8b6a30;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+.wk-grid > .wk-card .wk-fav,
+.wk-grid > .wk-card .wk-share {
+  top: 12px;
+  width: 36px !important;
+  height: 36px !important;
+  border: 1px solid rgba(63,44,76,.07) !important;
+  background: rgba(255,255,255,.88) !important;
+  color: #786b82 !important;
+  box-shadow: 0 3px 12px rgba(29,21,39,.08);
+  backdrop-filter: blur(12px);
+}
+.wk-grid > .wk-card .wk-share {
+  position: absolute;
+  inset-inline-start: 12px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.wk-grid > .wk-card .wk-share svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.wk-grid > .wk-card .wk-fav:hover,
+.wk-grid > .wk-card .wk-share:hover {
+  transform: translateY(-1px);
+  background: #fff !important;
+  color: #a85a62 !important;
+}
+.wk-grid > .wk-card .wk-fav[aria-pressed="true"] {
+  color: #fff !important;
+  background: linear-gradient(135deg, #e67b83, #c64f66) !important;
+}
+@media (max-width: 560px) {
+  .wk-grid { gap: 11px !important; margin-top: 22px; }
+  .wk-grid > .wk-card { border-radius: 17px; }
+  .wk-grid > .wk-card > img { padding: 15px 9px !important; }
+  .wk-grid > .wk-card figcaption { margin: 0 11px !important; padding: 11px 0 14px !important; }
+  .wk-grid > .wk-card figcaption b { font-size: 14px; }
+  .wk-grid > .wk-card figcaption span:not(.wk-price) { font-size: 11.5px; line-height: 1.7; }
+  .wk-grid > .wk-card figcaption .wk-price { font-size: 13px; }
+  .wk-grid > .wk-card .wk-fav,
+  .wk-grid > .wk-card .wk-share { top: 8px; width: 32px !important; height: 32px !important; }
+  .wk-grid > .wk-card .wk-fav { inset-inline-end: 8px; }
+  .wk-grid > .wk-card .wk-share { inset-inline-start: 8px; padding: 7px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wk-grid > .wk-card,
+  .wk-grid > .wk-card > img { transition: none !important; }
+}

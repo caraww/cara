@@ -967,3 +967,35 @@ button, .btn, a.btn {
     transition-duration: .01ms !important;
   }
 }
+
+
+/* Cara — quieter, more editorial featured-work cards */
+.mini-gal { gap: clamp(12px, 1.8vw, 20px); }
+.mini-gal > a {
+  border: 1px solid rgba(63,44,76,.09);
+  border-radius: 22px;
+  background: linear-gradient(180deg, #fff 0%, #faf8fc 100%);
+  box-shadow: 0 6px 22px rgba(38,24,51,.045);
+  inset: auto;
+  transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+}
+.mini-gal > a:hover {
+  transform: translateY(-4px);
+  border-color: rgba(184,151,90,.42);
+  box-shadow: 0 16px 34px rgba(38,24,51,.09);
+}
+.mini-gal > a img {
+  padding: 18px 14px 8px !important;
+  filter: drop-shadow(0 10px 13px rgba(34,26,44,.12));
+}
+.mini-gal > a b { color: #2b2035; font-size: 15.5px; }
+.mini-gal > a span { color: #807688; font-size: 12.5px; }
+@media (max-width: 560px) {
+  .mini-gal > a { border-radius: 17px; }
+  .mini-gal > a img { padding: 12px 8px 5px !important; }
+  .mini-gal > a b { font-size: 13.5px; }
+  .mini-gal > a span { font-size: 11.5px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mini-gal > a, .mini-gal > a img { transition: none !important; }
+}
