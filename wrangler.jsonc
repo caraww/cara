@@ -24,6 +24,8 @@
       "ZIBAL_BASE": "https://preview.invalid/relay.php",
       "TEST_MODE": "1",
       "GAME_GOAL": "12",
+      "CALLBACK_URL": "https://preview.invalid/api/payment-callback",
+      "RELAY_PAY_URL": "https://preview.invalid/pay.php",
     },
   },
 
