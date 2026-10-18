@@ -49,9 +49,24 @@ try {
     empty.textContent = !W.length ? "به‌زودی عکس کارهام رو این‌جا می‌ذارم." : onlyFav ? "هنوز چیزی رو علاقه‌مندی نکردی." : "چیزی پیدا نشد. یه کلمه‌ی دیگه امتحان کن.";
   }
   grid.addEventListener("load", (e) => { if (e.target.tagName === "IMG") e.target.classList.add("in"); }, true);
-  grid.addEventListener("error", (e) => { /* اگه عکس کوچیک نبود یه بار عکس اصلی رو امتحان می‌کنه؛ اگه اون هم نبود، کارت مخفی می‌شه */
-    const im = e.target; if (im.tagName !== "IMG") return;
-    if (im.dataset.fb && !im.dataset.tried) { im.dataset.tried = "1"; im.src = im.dataset.fb; } else im.closest(".wk-card").hidden = true;
+  grid.addEventListener("error", (e) => {
+    const im = e.target;
+    if (im.tagName !== "IMG") return;
+    /* Recover legacy URLs containing whitespace before the image extension. */
+    const raw = im.getAttribute("src") || "";
+    const normalized = raw.replace(/%20(?=\\.(?:webp|png|jpe?g|avif)(?:[?#]|$))/i, "");
+    if (!im.dataset.normalizedTried && normalized !== raw) {
+      im.dataset.normalizedTried = "1";
+      im.src = normalized;
+      return;
+    }
+    if (im.dataset.fb && !im.dataset.tried) {
+      im.dataset.tried = "1";
+      im.src = im.dataset.fb;
+      return;
+    }
+    const card = im.closest(".wk-card");
+    if (card) card.classList.add("image-unavailable");
   }, true);
 
   /* منوی فیلتر: با کلیک باز و بسته می‌شه */
@@ -115,6 +130,17 @@ try {
     $("lbImg").classList.remove("in"); $("lbImg").src = b.dataset.src;
   });
   $("lbImg").addEventListener("load", (e) => e.target.classList.add("in"));
+  $("lbImg").addEventListener("error", (e) => {
+    const im = e.target;
+    const raw = im.getAttribute("src") || "";
+    const normalized = raw.replace(/%20(?=\\.(?:webp|png|jpe?g|avif)(?:[?#]|$))/i, "");
+    if (!im.dataset.normalizedTried && normalized !== raw) {
+      im.dataset.normalizedTried = "1";
+      im.src = normalized;
+      return;
+    }
+    im.classList.remove("in");
+  });
   $("lbNext").onclick = () => show(cur + 1); $("lbPrev").onclick = () => show(cur - 1);
   $("lbClose").onclick = () => lb.close();
   lb.addEventListener("close", () => { try { history.replaceState(null, "", location.pathname + location.search); } catch {} });
