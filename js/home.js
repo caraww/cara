@@ -70,11 +70,44 @@ try {
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   /* پالت آرام و تک‌رنگ: طیف بنفش‌های خاکستری و فقط یک مهره‌ی طلایی در مرکز هر لوزی */
   const SET = ["#C5B6D9", "#9C86BB", "#7A5F9E", "#5F4780", "#4B3663", "#3A2B4D"], GOLD = "#B8975A";
-  const R2 = 150 * 150, CW = 34, CH = 27, BASE = 0.6, BW = CW - 2, BH = CH - 2;
+  const R2 = 150 * 150, CW = 25, CH = 18, BASE = 0.68, BW = CW - 1.5, BH = CH - 1.5;
   let mx = -1, my = -1, W, H, cols, rows, ticking = false, cleared = false, sprites = [], jx, jy, ci;
   const rnd = (x, y) => { const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return s - Math.floor(s); };
-  /* هر رنگ یک بار روی بوم کوچک کشیده می‌شود و در هر فریم فقط drawImage می‌شود (چند برابر سریع‌تر از roundRect) */
-  const sprite = (hex, d) => { const c = document.createElement("canvas"); c.width = Math.ceil(BW * d); c.height = Math.ceil(BH * d); const s = c.getContext("2d"); s.scale(d, d); CARA.drawBead(s, 0, 0, BW, BH, hex); return c; };
+  /* هر مهره‌ی دلیکای استوانه‌ای یک بار رندر می‌شود: لبه‌ی تیره، بدنه‌ی شیشه‌ای،
+     برق باریک روی سطح و سایه‌ی اتصال؛ در هر فریم فقط sprite آماده کشیده می‌شود. */
+  const mix = (hex, target, amount) => {
+    const a = CARA.hexRgb(hex), b = CARA.hexRgb(target);
+    return "rgb(" + a.map((v, i) => Math.round(v + (b[i] - v) * amount)).join(",") + ")";
+  };
+  const sprite = (hex, d) => {
+    const c = document.createElement("canvas");
+    c.width = Math.ceil(BW * d); c.height = Math.ceil(BH * d);
+    const s = c.getContext("2d"); s.scale(d, d);
+    const x = 0.55, y = 0.45, w = BW - 1.1, h = BH - 1.0, r = Math.min(3.2, h * 0.23);
+    /* شکاف بسیار باریک بین مهره‌ها باعث می‌شود بافت، شبیه یک سطح پلاستیکی صاف نشود. */
+    s.fillStyle = "rgba(5,3,10,.58)";
+    s.beginPath(); s.roundRect(0.05, 0.05, BW - 0.1, BH - 0.1, r + 0.5); s.fill();
+    const body = s.createLinearGradient(x, y, x + w, y + h * 0.2);
+    body.addColorStop(0, mix(hex, "#000000", .42));
+    body.addColorStop(.18, mix(hex, "#ffffff", .13));
+    body.addColorStop(.48, mix(hex, "#ffffff", .24));
+    body.addColorStop(.72, hex);
+    body.addColorStop(1, mix(hex, "#000000", .38));
+    s.fillStyle = body;
+    s.beginPath(); s.roundRect(x, y, w, h, r); s.fill();
+    /* برق نرم شیشه‌ای، نه نقطه‌ی سفید کارتونی */
+    const shine = s.createLinearGradient(0, y, 0, y + h * .62);
+    shine.addColorStop(0, "rgba(255,255,255,.34)");
+    shine.addColorStop(.42, "rgba(255,255,255,.08)");
+    shine.addColorStop(1, "rgba(255,255,255,0)");
+    s.fillStyle = shine;
+    s.beginPath(); s.roundRect(x + 1, y + .45, w - 2, h * .55, Math.max(1, r - .8)); s.fill();
+    s.strokeStyle = "rgba(255,255,255,.18)"; s.lineWidth = .45;
+    s.beginPath(); s.moveTo(x + r, y + .55); s.lineTo(x + w - r, y + .55); s.stroke();
+    s.fillStyle = "rgba(0,0,0,.2)";
+    s.beginPath(); s.roundRect(x + .7, y + h * .78, w - 1.4, h * .14, 1); s.fill();
+    return c;
+  };
   function size() {
     W = hero.clientWidth; H = hero.clientHeight;
     const d = Math.min(2, devicePixelRatio || 1);
@@ -96,6 +129,10 @@ try {
       const q = Math.min(1, Math.max(0, p * 1.6 - (y / rows) * 0.6)), e = q * q * (3 - 2 * q), a = (1 - e) * BASE;
       if (a < 0.02) continue;
       g.globalAlpha = a;
+      /* نخ‌های افقیِ زیر بافت، فقط در فاصله‌ی باریک ردیف‌ها دیده می‌شوند. */
+      g.strokeStyle = "rgba(228,211,187,.17)";
+      g.lineWidth = .55;
+      g.beginPath(); g.moveTo(0, y * CH + CH - .25); g.lineTo(W, y * CH + CH - .25); g.stroke();
       for (let x = 0; x < cols; x++) {
         const i = y * cols + x, dir = (x + 0.5) * CW < W / 2 ? -1 : 1, px = x * CW + dir * e * W * jx[i] + 1;
         if (px > W || px + BW < 0) continue;
