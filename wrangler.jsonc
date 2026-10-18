@@ -15,6 +15,18 @@
     "GAME_GOAL": "12",
   },
 
+  // مقادیر فقط برای Preview؛ از درگاه و callback واقعی استفاده نمی‌شود.
+  "previews": {
+    "vars": {
+      "BASE_URL": "https://preview.invalid",
+      "PRICE_PER_BEAD": "1500",
+      "BASE_FEE": "150000",
+      "ZIBAL_BASE": "https://preview.invalid/relay.php",
+      "TEST_MODE": "1",
+      "GAME_GOAL": "12",
+    },
+  },
+
   // بدون id: Wrangler موقع دیپلوی خودش KV رو می‌سازه و وصل می‌کنه (سفارش‌ها این‌جا ذخیره می‌شن)
   "kv_namespaces": [{ "binding": "ORDERS" }],
 
