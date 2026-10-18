@@ -347,46 +347,39 @@
       green: "#A4B12B", mint: "#F1E00A"
     };
     const designs = [
-      { title: "چشم‌نظر نئونی", paint(x, y) {
-        let col = ink.night;
-        for (const cx of [5, 15, 25, 35]) {
-          const r = Math.sqrt(((x - cx) / 3.0) ** 2 + ((y - 4) / 1.85) ** 2);
-          if (r < .42) col = ink.black;
-          else if (r < .78) col = ink.white;
-          else if (r < 1.17) col = ink.blue;
-          else if (r < 1.55) col = ink.aqua;
-          else if (r < 1.92) col = ink.gold;
+      { title: "I LOVE YOU", paint(x, y) {
+        /* متن پیکسلی با کنتراست بالا، برگرفته از الگوی ارسالی */
+        const glyphs = {
+          I:["111","010","010","010","010","010","111"],
+          L:["100","100","100","100","100","100","111"],
+          O:["111","101","101","101","101","101","111"],
+          V:["101","101","101","101","101","101","010"],
+          E:["111","100","100","110","100","100","111"],
+          Y:["101","101","010","010","010","010","010"],
+          U:["101","101","101","101","101","101","111"]
+        };
+        const text = "ILOVEYOU";
+        let pos = 1;
+        for (const ch of text) {
+          const glyph = glyphs[ch];
+          if (x >= pos && x < pos + 3 && y >= 1 && y < 8) {
+            if (glyph[y - 1][x - pos] === "1") return "#111111";
+          }
+          pos += 5;
         }
-        return col;
+        return "#F7F4E8";
       }},
-      { title: "باغ گل‌های پیکسلی", paint(x, y) {
-        let col = ink.night;
-        for (const cx of [4, 14, 24, 34]) {
-          const dx = Math.abs(x - cx), dy = Math.abs(y - 3);
-          if ((dx === 0 && dy <= 1) || (dx === 1 && dy === 0) || (dx === 2 && dy === 1)) col = ink.pink;
-          if (dx === 0 && dy === 0) col = ink.gold;
-          if (x === cx && y >= 4) col = ink.green;
-          if ((x === cx - 1 && y === 5) || (x === cx + 1 && y === 6)) col = ink.mint;
-          if ((x === cx + 1 && y === 5) || (x === cx - 1 && y === 6)) col = ink.green;
-        }
-        return col;
-      }},
-      { title: "الماس هندسی", paint(x, y) {
-        const phase = x % 12, dist = Math.abs(phase - 6) + Math.abs(y - 4) * 2;
-        if (dist <= 2) return ink.white;
-        if (dist <= 5) return ink.aqua;
-        if (dist <= 8) return ink.purple;
-        if ((x + y) % 6 === 0) return ink.gold;
-        return ink.night;
-      }},
-      { title: "ماه و ستاره", paint(x, y) {
-        let col = ink.night;
-        const dx = x - 7, dy = y - 4, r = Math.sqrt(dx * dx + dy * dy * 1.5);
-        if (r < 3.05 && Math.sqrt((x - 8.6) ** 2 + (y - 3.4) ** 2 * 1.5) > 2.65) col = ink.gold;
-        const stars = [[17,1],[19,6],[27,3],[31,7],[38,2],[39,5]];
-        for (const [sx, sy] of stars) if ((x === sx && Math.abs(y - sy) <= 1) || (Math.abs(x - sx) === 1 && y === sy)) col = ink.white;
-        if ((x + y * 2) % 17 === 0 && col === ink.night) col = ink.blue;
-        return col;
+      { title: "سبز نئونی هندسی", paint(x, y) {
+        /* موتیف هندسی سبز و مشکی از طرح منجوقی ارسالی */
+        const xx = x % 14, yy = y % 9;
+        const border = xx === 0 || xx === 13;
+        const frame = (xx >= 3 && xx <= 10 && yy >= 2 && yy <= 6) &&
+          (xx === 3 || xx === 10 || yy === 2 || yy === 6);
+        const diagonal = (xx === yy + 1 || xx === 12 - yy) && yy >= 1 && yy <= 7;
+        const center = (xx === 6 || xx === 7) && (yy === 4 || yy === 5);
+        const dash = (yy === 1 && xx >= 4 && xx <= 9) || (yy === 7 && xx >= 4 && xx <= 9);
+        if (frame || diagonal || center || dash || (border && yy % 2 === 0)) return "#65F51A";
+        return "#123C2A";
       }}
     ];
     const works = designs;
