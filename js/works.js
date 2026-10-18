@@ -2,11 +2,11 @@
 (window.CARA = window.CARA || {}).works = [
  {
   "id": "آبشار رنگی",
-  "src": "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.png?v=mus90hrw",
-  "thumb": "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.png?v=mus90hrw",
+  "src": "img/works-view/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.webp?v=mvdywbr7",
+  "thumb": "img/works-thumbs/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.webp?v=mvdywbr7",
   "images": [
-   "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.png?v=mus90hrw",
-   "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C__2.jpg?v=muo177fj"
+   "img/works-view/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.webp?v=mvdywbr7",
+   "img/works-view/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C__2.webp?v=mvdywd9x"
   ],
   "w": 615,
   "h": 820,
@@ -21,23 +21,18 @@
  },
  {
   "id": "آلبوم",
-  "src": "img/works-cutouts/%D8%A2%D9%84%D8%A8%D9%88%D9%85.JPG?v=muxx3xb1",
-  "thumb": "img/works-cutouts/%D8%A2%D9%84%D8%A8%D9%88%D9%85.JPG?v=muxx3xb1",
+  "src": "img/works-view/%D8%A2%D9%84%D8%A8%D9%88%D9%85.webp?v=mvdywwbd",
+  "thumb": "img/works-thumbs/%D8%A2%D9%84%D8%A8%D9%88%D9%85.webp?v=mvdywwbd",
   "w": 2945,
   "h": 2945,
   "title": "آلبوم",
-  "note": "عکسِ عزیزترین‌هات رو به دستبند تبدیل کن و همیشه همراهت داشته باش. این فقط یه نمونه‌ست از چیزی که تحویل می‌گیری.",
-  "tags": [
-   "عاشقانه",
-   "یادگاری",
-   "هدیه",
-   "سفارشی"
-  ]
+  "note": "",
+  "tags": []
  },
  {
   "id": "اسب",
-  "src": "img/works-cutouts/%D8%A7%D8%B3%D8%A8.png?v=mus90hup",
-  "thumb": "img/works-cutouts/%D8%A7%D8%B3%D8%A8.png?v=mus90hup",
+  "src": "img/works-view/%D8%A7%D8%B3%D8%A8.webp?v=mvdywydg",
+  "thumb": "img/works-thumbs/%D8%A7%D8%B3%D8%A8.webp?v=mvdywydg",
   "w": 892,
   "h": 1191,
   "title": "اسب",
@@ -51,25 +46,18 @@
  },
  {
   "id": "خطر",
-  "src": "img/works-cutouts/%D8%AE%D8%B7%D8%B1.jpg?v=muxy18fg",
-  "thumb": "img/works-cutouts/%D8%AE%D8%B7%D8%B1.jpg?v=muxy18fg",
+  "src": "img/works-view/%D8%AE%D8%B7%D8%B1.webp?v=mvdyx16f",
+  "thumb": "img/works-thumbs/%D8%AE%D8%B7%D8%B1.webp?v=mvdyx16f",
   "w": 1376,
   "h": 1639,
   "title": "خطر",
-  "note": "هشدار روی مچت؛ مرزهایت را خودت تعیین کن",
-  "tags": [
-   "روزمره",
-   "خاص",
-   "مشکی",
-   "جسور",
-   "شاد"
-  ],
-  "price": 900000
+  "note": "",
+  "tags": []
  },
  {
   "id": "درفش کاویانی",
-  "src": "img/works-cutouts/%D8%AF%D8%B1%D9%81%D8%B4%20%DA%A9%D8%A7%D9%88%DB%8C%D8%A7%D9%86%DB%8C.png?v=mus90i1u",
-  "thumb": "img/works-cutouts/%D8%AF%D8%B1%D9%81%D8%B4%20%DA%A9%D8%A7%D9%88%DB%8C%D8%A7%D9%86%DB%8C.png?v=mus90i1u",
+  "src": "img/works-view/%D8%AF%D8%B1%D9%81%D8%B4%20%DA%A9%D8%A7%D9%88%DB%8C%D8%A7%D9%86%DB%8C.webp?v=mvdyx544",
+  "thumb": "img/works-thumbs/%D8%AF%D8%B1%D9%81%D8%B4%20%DA%A9%D8%A7%D9%88%DB%8C%D8%A7%D9%86%DB%8C.webp?v=mvdyx544",
   "w": 1400,
   "h": 1400,
   "title": "درفش کاویانی",
@@ -83,8 +71,8 @@
  },
  {
   "id": "ریک اند مورتی",
-  "src": "img/works-cutouts/%D8%B1%DB%8C%DA%A9%20%D8%A7%D9%86%D8%AF%20%D9%85%D9%88%D8%B1%D8%AA%DB%8C.png?v=mus90id4",
-  "thumb": "img/works-cutouts/%D8%B1%DB%8C%DA%A9%20%D8%A7%D9%86%D8%AF%20%D9%85%D9%88%D8%B1%D8%AA%DB%8C.png?v=mus90id4",
+  "src": "img/works-view/%D8%B1%DB%8C%DA%A9%20%D8%A7%D9%86%D8%AF%20%D9%85%D9%88%D8%B1%D8%AA%DB%8C.webp?v=mvdyx9ev",
+  "thumb": "img/works-thumbs/%D8%B1%DB%8C%DA%A9%20%D8%A7%D9%86%D8%AF%20%D9%85%D9%88%D8%B1%D8%AA%DB%8C.webp?v=mvdyx9ev",
   "w": 1050,
   "h": 1400,
   "title": "ریک اند مورتی",
@@ -98,8 +86,8 @@
  },
  {
   "id": "زنجیر",
-  "src": "img/works-cutouts/%D8%B2%D9%86%D8%AC%DB%8C%D8%B1.png?v=mus90igr",
-  "thumb": "img/works-cutouts/%D8%B2%D9%86%D8%AC%DB%8C%D8%B1.png?v=mus90igr",
+  "src": "img/works-view/%D8%B2%D9%86%D8%AC%DB%8C%D8%B1.webp?v=mvdyxam0",
+  "thumb": "img/works-thumbs/%D8%B2%D9%86%D8%AC%DB%8C%D8%B1.webp?v=mvdyxam0",
   "w": 750,
   "h": 750,
   "title": "زنجیر",
@@ -113,8 +101,8 @@
  },
  {
   "id": "شطرنج",
-  "src": "img/works-cutouts/%D8%B4%D8%B7%D8%B1%D9%86%D8%AC.png?v=muxy0bc4",
-  "thumb": "img/works-cutouts/%D8%B4%D8%B7%D8%B1%D9%86%D8%AC.png?v=muxy0bc4",
+  "src": "img/works-view/%D8%B4%D8%B7%D8%B1%D9%86%D8%AC.webp?v=mvdyxcue",
+  "thumb": "img/works-thumbs/%D8%B4%D8%B7%D8%B1%D9%86%D8%AC.webp?v=mvdyxcue",
   "w": 1400,
   "h": 736,
   "title": "شطرنج",
@@ -129,24 +117,18 @@
  },
  {
   "id": "طاووس",
-  "src": "img/works-cutouts/%D8%B7%D8%A7%D9%88%D9%88%D8%B3.PNG?v=mv2vm4sk",
-  "thumb": "img/works-cutouts/%D8%B7%D8%A7%D9%88%D9%88%D8%B3.PNG?v=mv2vm4sk",
+  "src": "img/works-view/%D8%B7%D8%A7%D9%88%D9%88%D8%B3.webp?v=mvdyxi3f",
+  "thumb": "img/works-thumbs/%D8%B7%D8%A7%D9%88%D9%88%D8%B3.webp?v=mvdyxi3f",
   "w": 1536,
   "h": 2048,
   "title": "طاووس",
-  "note": "یه طاووس برقی بورقی که از باغ وحش فرار کرده وآروم و قرار نداره . ",
-  "tags": [
-   "روزمره",
-   "خاص",
-   "هدیه",
-   "حیوانات"
-  ],
-  "price": 2100000
+  "note": "",
+  "tags": []
  },
  {
   "id": "قالی",
-  "src": "img/works-cutouts/%D9%82%D8%A7%D9%84%DB%8C.png?v=mus90inl",
-  "thumb": "img/works-cutouts/%D9%82%D8%A7%D9%84%DB%8C.png?v=mus90inl",
+  "src": "img/works-view/%D9%82%D8%A7%D9%84%DB%8C.webp?v=mvdyxkcf",
+  "thumb": "img/works-thumbs/%D9%82%D8%A7%D9%84%DB%8C.webp?v=mvdyxkcf",
   "w": 750,
   "h": 750,
   "title": "قالی",
@@ -160,8 +142,8 @@
  },
  {
   "id": "قلب طلا",
-  "src": "img/works-cutouts/%D9%82%D9%84%D8%A8%20%D8%B7%D9%84%D8%A7.png?v=mus90ipv",
-  "thumb": "img/works-cutouts/%D9%82%D9%84%D8%A8%20%D8%B7%D9%84%D8%A7.png?v=mus90ipv",
+  "src": "img/works-view/%D9%82%D9%84%D8%A8%20%D8%B7%D9%84%D8%A7.webp?v=mvdyxmpu",
+  "thumb": "img/works-thumbs/%D9%82%D9%84%D8%A8%20%D8%B7%D9%84%D8%A7.webp?v=mvdyxmpu",
   "w": 1194,
   "h": 896,
   "title": "قلب طلا",
@@ -174,8 +156,8 @@
  },
  {
   "id": "کوکا",
-  "src": "img/works-cutouts/%DA%A9%D9%88%DA%A9%D8%A7.png?v=mus90je2",
-  "thumb": "img/works-cutouts/%DA%A9%D9%88%DA%A9%D8%A7.png?v=mus90je2",
+  "src": "img/works-view/%DA%A9%D9%88%DA%A9%D8%A7.webp?v=mvdyy193",
+  "thumb": "img/works-thumbs/%DA%A9%D9%88%DA%A9%D8%A7.webp?v=mvdyy193",
   "w": 1400,
   "h": 733,
   "title": "کوکا",
@@ -189,8 +171,8 @@
  },
  {
   "id": "لابستر",
-  "src": "img/works-cutouts/%D9%84%D8%A7%D8%A8%D8%B3%D8%AA%D8%B1.png?v=mus90iro",
-  "thumb": "img/works-cutouts/%D9%84%D8%A7%D8%A8%D8%B3%D8%AA%D8%B1.png?v=mus90iro",
+  "src": "img/works-view/%D9%84%D8%A7%D8%A8%D8%B3%D8%AA%D8%B1.webp?v=mvdyxopy",
+  "thumb": "img/works-thumbs/%D9%84%D8%A7%D8%A8%D8%B3%D8%AA%D8%B1.webp?v=mvdyxopy",
   "w": 615,
   "h": 820,
   "title": "لابستر",
@@ -204,8 +186,8 @@
  },
  {
   "id": "ماریو",
-  "src": "img/works-cutouts/%D9%85%D8%A7%D8%B1%DB%8C%D9%88.png?v=mus90ixd",
-  "thumb": "img/works-cutouts/%D9%85%D8%A7%D8%B1%DB%8C%D9%88.png?v=mus90ixd",
+  "src": "img/works-view/%D9%85%D8%A7%D8%B1%DB%8C%D9%88.webp?v=mvdyxr7e",
+  "thumb": "img/works-thumbs/%D9%85%D8%A7%D8%B1%DB%8C%D9%88.webp?v=mvdyxr7e",
   "w": 1050,
   "h": 1400,
   "title": "ماریو",
@@ -219,8 +201,8 @@
  },
  {
   "id": "و من یتق ..",
-  "src": "img/works-cutouts/%D9%88%20%D9%85%D9%86%20%DB%8C%D8%AA%D9%82%20...png?v=mus90j9u",
-  "thumb": "img/works-cutouts/%D9%88%20%D9%85%D9%86%20%DB%8C%D8%AA%D9%82%20...png?v=mus90j9u",
+  "src": "img/works-view/%D9%88%20%D9%85%D9%86%20%DB%8C%D8%AA%D9%82%20...webp?v=mvdyxypq",
+  "thumb": "img/works-thumbs/%D9%88%20%D9%85%D9%86%20%DB%8C%D8%AA%D9%82%20...webp?v=mvdyxypq",
   "w": 1050,
   "h": 1400,
   "title": "و من یتق ..",
@@ -233,8 +215,8 @@
  },
  {
   "id": "هزار چشم",
-  "src": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20.png?v=mus90j0u",
-  "thumb": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20.png?v=mus90j0u",
+  "src": "img/works-view/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20.webp?v=mvdyxvvn",
+  "thumb": "img/works-thumbs/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20.webp?v=mvdyxvvn",
   "w": 1310,
   "h": 1200,
   "title": "هزار چشم",
