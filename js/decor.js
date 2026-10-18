@@ -65,22 +65,6 @@
       const shine = ctx.createLinearGradient(0, y, 0, y + bh);
       shine.addColorStop(0, "rgba(255,255,255,.34)"); shine.addColorStop(.38, "rgba(255,255,255,.07)"); shine.addColorStop(1, "rgba(0,0,0,.22)");
       ctx.fillStyle = shine; ctx.beginPath(); ctx.roundRect(x + .5, y + .5, bw - 1, bh - 1, Math.max(.8, s * .14)); ctx.fill();
-      /* ترکیب منجوق‌های براق و نیمه‌مات: برق شیشه‌ای واضح، بدون سوراخ وسط. */
-      const glossy = (Math.round(cx / Math.max(1, s)) + Math.round(cy / Math.max(1, s))) % 4 !== 0;
-      if (glossy) {
-        const glint = ctx.createLinearGradient(x, y, x + bw * .72, y + bh * .65);
-        glint.addColorStop(0, "rgba(255,255,255,.78)");
-        glint.addColorStop(.24, "rgba(255,255,255,.34)");
-        glint.addColorStop(.58, "rgba(255,255,255,.05)");
-        glint.addColorStop(1, "rgba(255,255,255,0)");
-        ctx.fillStyle = glint;
-        ctx.beginPath(); ctx.roundRect(x + .7, y + .7, bw * .78, bh * .72, Math.max(1, s * .16)); ctx.fill();
-        ctx.fillStyle = "rgba(255,255,255,.72)";
-        ctx.beginPath(); ctx.ellipse(x + bw * .29, y + bh * .2, Math.max(.7, bw * .16), Math.max(.45, bh * .075), -.22, 0, Math.PI * 2); ctx.fill();
-      } else {
-        ctx.strokeStyle = "rgba(255,255,255,.32)"; ctx.lineWidth = Math.max(.7, s * .055);
-        ctx.beginPath(); ctx.moveTo(x + s * .2, y + 1); ctx.lineTo(x + bw - s * .2, y + 1); ctx.stroke();
-      }
       /* سطح یک‌دستِ منجوق؛ حجم با سایه‌ی کناره‌ها و برق شیشه‌ای ساخته می‌شود، نه سوراخ وسط */
       ctx.strokeStyle = "rgba(0,0,0,.24)"; ctx.lineWidth = Math.max(.5, s * .045);
       ctx.beginPath(); ctx.roundRect(x + .35, y + .35, bw - .7, bh - .7, Math.max(1, s * .17)); ctx.stroke();
@@ -316,6 +300,7 @@
   /* ---------- صفحه‌ی اصلی: بافت زنده از طرح‌های گالری ---------- */
   const steps = $("steps");
   if (steps && $("heroCanvas")) {
+    const works = (C.works || []).filter((work) => work && work.thumb && work.title);
     const sec = document.createElement("section"); sec.className = "sec"; sec.id = "loom";
     sec.innerHTML = `<h2>ببین چطور می‌بافم</h2>
       <div class="dl-loom"><canvas aria-label="نمایش بافته شدن دستبند روی دار"></canvas><div class="dl-cap"><span class="n"></span><span class="nm"></span></div></div>
@@ -324,69 +309,79 @@
     const nEl = sec.querySelector(".n"), nmEl = sec.querySelector(".nm");
     const loom = Loom(sec.querySelector("canvas"), { maxH: () => Math.min(440, innerHeight * 0.6), tick: null });
     let i = 0, vis = false, timer = 0, runId = 0;
-    /* الگوهای مستقل Alpha-inspired؛ برای انیمیشن از عکس‌های گالری نمونه‌برداری نمی‌کنیم.
-       الهام کلی از الگوهای پیکسلی هندسی/گل‌دار است؛ طرح‌ها در خود سایت ساخته می‌شوند. */
     const beadColors = (C.palette || []).filter((p) => p && p.hex && p.code);
-    const codeCache = new Map();
-    function codeFor(hex) {
-      if (codeCache.has(hex)) return codeCache.get(hex);
-      const rgb = C.hexRgb(hex);
-      let best = beadColors[0], score = Infinity;
-      for (const p of beadColors) {
-        const qrgb = C.hexRgb(p.hex);
-        const d = (rgb[0] - qrgb[0]) ** 2 + (rgb[1] - qrgb[1]) ** 2 + (rgb[2] - qrgb[2]) ** 2;
-        if (d < score) { score = d; best = p; }
-      }
-      const code = best ? best.code : null; codeCache.set(hex, code); return code;
+    function imageFor(work) {
+      return new Promise((resolve, reject) => {
+        const im = new Image();
+        im.onload = () => resolve(im);
+        im.onerror = reject;
+        im.src = work.thumb;
+      });
     }
-    /* رنگ‌ها مستقیماً از طیف واقعی پالت cara انتخاب شده‌اند تا طرح‌ها زنده‌تر باشند. */
-    const ink = {
-      night: "#171717", black: "#272726", white: "#F0EDF2",
-      blue: "#251A82", aqua: "#50A7CD", gold: "#FABC03",
-      pink: "#F2A9B8", coral: "#DF2A1B", purple: "#5E4697",
-      green: "#A4B12B", mint: "#F1E00A"
-    };
-    const designs = [
-      { title: "I LOVE YOU", paint(x, y) {
-        /* متن پیکسلی با کنتراست بالا، برگرفته از الگوی ارسالی */
-        const glyphs = {
-          I:["111","010","010","010","010","010","111"],
-          L:["100","100","100","100","100","100","111"],
-          O:["111","101","101","101","101","101","111"],
-          V:["101","101","101","101","101","101","010"],
-          E:["111","100","100","110","100","100","111"],
-          Y:["101","101","010","010","010","010","010"],
-          U:["101","101","101","101","101","101","111"]
-        };
-        const text = "ILOVEYOU";
-        let pos = 1;
-        for (const ch of text) {
-          const glyph = glyphs[ch];
-          if (x >= pos && x < pos + 3 && y >= 1 && y < 8) {
-            if (glyph[y - 1][x - pos] === "1") return "#111111";
-          }
-          pos += 5;
+    function contrast(v) { return clamp((v - 128) * 1.38 + 128, 0, 255); }
+    function cropScore(ctx, w, h) {
+      const pixels = ctx.getImageData(0, 0, w, h).data;
+      let score = 0, colored = 0, total = 0;
+      for (let k = 0; k < pixels.length; k += 4) {
+        const r = pixels[k], g = pixels[k + 1], b = pixels[k + 2];
+        const hi = Math.max(r, g, b), lo = Math.min(r, g, b), lum = (r + g + b) / 3;
+        if (hi > 244 && lo > 228) continue;
+        total++;
+        const sat = hi - lo;
+        if (sat > 22) { score += 1.7 + sat / 120; colored++; }
+        else if (lum < 205) score += (205 - lum) / 90;
+      }
+      return total ? score / total + colored / (w * h) * 0.8 : 0;
+    }
+    async function patternFromWork(work) {
+      const im = await imageFor(work);
+      /* عکس‌های عمودی را قبل از نمونه‌برداری افقی می‌کنیم؛ عکس را وارونه یا آینه‌ای نمی‌کنیم. */
+      const oriented = document.createElement("canvas"), og = oriented.getContext("2d", { willReadFrequently: true });
+      const portrait = im.naturalHeight > im.naturalWidth * 1.12;
+      oriented.width = portrait ? im.naturalHeight : im.naturalWidth;
+      oriented.height = portrait ? im.naturalWidth : im.naturalHeight;
+      if (portrait) {
+        og.translate(oriented.width, 0); og.rotate(Math.PI / 2);
+        og.drawImage(im, 0, 0);
+      } else og.drawImage(im, 0, 0);
+      const ow = oriented.width, oh = oriented.height, ratio = 4.2;
+      let cropW = Math.min(ow * .96, oh * ratio * .96);
+      let cropH = cropW / ratio;
+      if (cropH > oh * .96) { cropH = oh * .96; cropW = cropH * ratio; }
+      const source = document.createElement("canvas"), sg = source.getContext("2d", { willReadFrequently: true });
+      source.width = 42; source.height = 9;
+      /* چند نوار افقی را می‌سنجیم و نواری را برمی‌داریم که جزئیات و رنگ خود دستبند در آن بیشتر است. */
+      let bestY = (oh - cropH) / 2, bestScore = -1;
+      const probe = document.createElement("canvas"), pg = probe.getContext("2d", { willReadFrequently: true });
+      probe.width = 42; probe.height = 9;
+      for (let n = 0; n <= 10; n++) {
+        const sy = (oh - cropH) * n / 10;
+        pg.clearRect(0, 0, 42, 9);
+        pg.drawImage(oriented, (ow - cropW) / 2, sy, cropW, cropH, 0, 0, 42, 9);
+        const score = cropScore(pg, 42, 9);
+        if (score > bestScore) { bestScore = score; bestY = sy; }
+      }
+      sg.drawImage(oriented, (ow - cropW) / 2, bestY, cropW, cropH, 0, 0, 42, 9);
+      const pixels = sg.getImageData(0, 0, 42, 9).data;
+      const nearest = (r, g, b) => {
+        /* کنتراست و اشباع کمی بیشتر تا مرز رنگ‌های طرح در بافت منجوقی واضح‌تر شود. */
+        const avg = (r + g + b) / 3;
+        r = clamp(avg + (contrast(r) - avg) * 1.16, 0, 255);
+        g = clamp(avg + (contrast(g) - avg) * 1.16, 0, 255);
+        b = clamp(avg + (contrast(b) - avg) * 1.16, 0, 255);
+        let best = beadColors[0], score = Infinity;
+        for (const p of beadColors) {
+          const rgb = C.hexRgb(p.hex);
+          const dr = (r - rgb[0]) * 0.92, dg = (g - rgb[1]) * 1.04, db = (b - rgb[2]) * 0.96;
+          const q = dr * dr + dg * dg + db * db;
+          if (q < score) { score = q; best = p; }
         }
-        return "#F7F4E8";
-      }},
-      { title: "سبز نئونی هندسی", paint(x, y) {
-        /* موتیف هندسی سبز و مشکی از طرح منجوقی ارسالی */
-        const xx = x % 14, yy = y % 9;
-        const border = xx === 0 || xx === 13;
-        const frame = (xx >= 3 && xx <= 10 && yy >= 2 && yy <= 6) &&
-          (xx === 3 || xx === 10 || yy === 2 || yy === 6);
-        const diagonal = (xx === yy + 1 || xx === 12 - yy) && yy >= 1 && yy <= 7;
-        const center = (xx === 6 || xx === 7) && (yy === 4 || yy === 5);
-        const dash = (yy === 1 && xx >= 4 && xx <= 9) || (yy === 7 && xx >= 4 && xx <= 9);
-        if (frame || diagonal || center || dash || (border && yy % 2 === 0)) return "#65F51A";
-        return "#123C2A";
-      }}
-    ];
-    const works = designs;
-    function patternFromWork(work) {
-      /* Loom ستون‌ها را عمودی برمی‌گرداند؛ ترتیب ردیف‌ها را از همین‌جا جبران می‌کنیم. */
-      return Array.from({length: 42}, (_, x) =>
-        Array.from({length: 9}, (_, y) => codeFor(work.paint(x, 8 - y))));
+        return best ? best.code : null;
+      };
+      return Array.from({length: 42}, (_, x) => Array.from({length: 9}, (_, y) => {
+        const k = (y * 42 + x) * 4;
+        return pixels[k + 3] < 20 ? null : nearest(pixels[k], pixels[k + 1], pixels[k + 2]);
+      }));
     }
     loom.onProgress = (p, n) => { nEl.textContent = `${C.faNum(p)} از ${C.faNum(n)} منجوق`; };
     loom.onDone = () => {
