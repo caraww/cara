@@ -52,14 +52,6 @@ try {
   grid.addEventListener("error", (e) => {
     const im = e.target;
     if (im.tagName !== "IMG") return;
-    /* Recover legacy URLs containing whitespace before the image extension. */
-    const raw = im.getAttribute("src") || "";
-    const normalized = raw.replace(/%20(?=[.](?:webp|png|jpe?g|avif)(?:[?#]|$))/i, "");
-    if (!im.dataset.normalizedTried && normalized !== raw) {
-      im.dataset.normalizedTried = "1";
-      im.src = normalized;
-      return;
-    }
     if (im.dataset.fb && !im.dataset.tried) {
       im.dataset.tried = "1";
       im.src = im.dataset.fb;
@@ -106,7 +98,6 @@ try {
     const w = list[cur];
     const lbImg = $("lbImg");
     lbImg.classList.remove("in");
-    delete lbImg.dataset.normalizedTried;
     delete lbImg.dataset.thumbTried;
     lbImg.src = w.src; lbImg.alt = "دستبند منجوقی " + w.title;
     if ($("lbImg").complete && $("lbImg").naturalWidth) $("lbImg").classList.add("in"); /* عکس کش‌شده: گاهی load دوباره نمیاد */
@@ -132,20 +123,12 @@ try {
     $("lbThumbs").querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
     const im = $("lbImg");
     im.classList.remove("in");
-    delete im.dataset.normalizedTried;
     delete im.dataset.thumbTried;
     im.src = b.dataset.src;
   });
   $("lbImg").addEventListener("load", (e) => e.target.classList.add("in"));
   $("lbImg").addEventListener("error", (e) => {
     const im = e.target;
-    const raw = im.getAttribute("src") || "";
-    const normalized = raw.replace(/%20(?=[.](?:webp|png|jpe?g|avif)(?:[?#]|$))/i, "");
-    if (!im.dataset.normalizedTried && normalized !== raw) {
-      im.dataset.normalizedTried = "1";
-      im.src = normalized;
-      return;
-    }
     /* If a full-size derivative is missing, try this work's thumbnail before giving up. */
     const work = list[cur];
     if (work && work.thumb && raw !== work.thumb && !im.dataset.thumbTried) {
