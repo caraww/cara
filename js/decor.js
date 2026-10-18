@@ -300,6 +300,14 @@
   /* ---------- صفحه‌ی اصلی: بافت زنده از طرح‌های گالری ---------- */
   const steps = $("steps");
   if (steps && $("heroCanvas")) {
+    const sec = document.createElement("section"); sec.className = "sec"; sec.id = "loom";
+    sec.innerHTML = `<h2>ببین چطور می‌بافم</h2>
+      <div class="dl-loom"><canvas aria-label="نمایش بافته شدن دستبند روی دار"></canvas><div class="dl-cap"><span class="n"></span><span class="nm"></span></div></div>
+      <div class="btns"><a class="btn plum" href="gallery.html">دیدن همه‌ی دستبندها</a><a class="btn line" href="builder.html">طرح خودت رو بساز</a></div>`;
+    steps.insertAdjacentElement("beforebegin", sec);
+    const nEl = sec.querySelector(".n"), nmEl = sec.querySelector(".nm");
+    const loom = Loom(sec.querySelector("canvas"), { maxH: () => Math.min(440, innerHeight * 0.6), tick: null });
+    let i = 0, vis = false, timer = 0, runId = 0;
     /* الگوهای مستقل Alpha-inspired؛ برای انیمیشن از عکس‌های گالری نمونه‌برداری نمی‌کنیم.
        الهام کلی از الگوهای پیکسلی هندسی/گل‌دار است؛ طرح‌ها در خود سایت ساخته می‌شوند. */
     const beadColors = (C.palette || []).filter((p) => p && p.hex && p.code);
