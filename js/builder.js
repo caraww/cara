@@ -92,8 +92,28 @@ try {
   let panning = null, space = false, mirror = false, erasing = false, painting = false, last = null, history = [], redo = [], cw = 24, ch = 20, saveT, sumQ = false;
   let zoom = 1, fillShapes = false, drag = null, snap = null, track = null, selRect = null, selDrag = null, clip = null, hover = null, recent = [];
 
+  /* لینک اشتراک‌گذاری فقط در مرورگر باز می‌شود؛ هیچ داده‌ای به سرور فرستاده نمی‌شود. */
+  function readSharedPattern() {
+    try {
+      const match = location.hash.match(/^#pattern=(\d+)x(\d+):([A-Za-z0-9_-]+)$/);
+      if (!match) return null;
+      const sw = Number(match[1]), sh = Number(match[2]), packed = match[3];
+      if (!Number.isInteger(sw) || !Number.isInteger(sh) || sw < 1 || sh < 1 ||
+          sw > L.MAX_W || sh > L.MAX_H || packed.length !== sw * sh) return null;
+      const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
+      const shared = Array.from({ length: sh }, (_, r) =>
+        Array.from({ length: sw }, (_, c) => {
+          const n = alphabet.indexOf(packed[r * sw + c]);
+          return n >= 0 && n < C.palette.length ? C.palette[n].code : null;
+        }));
+      history.replaceState(null, "", location.pathname + location.search);
+      return { width: sw, height: sh, data: shared };
+    } catch { return null; }
+  }
+  const shared = readSharedPattern();
   const saved = C.loadPattern();
-  if (saved) { data = saved.data; w = saved.width; h = saved.height; }
+  if (shared) { data = shared.data; w = shared.width; h = shared.height; }
+  else if (saved) { data = saved.data; w = saved.width; h = saved.height; }
   wIn.value = w; hIn.value = h;
   try { recent = (JSON.parse(localStorage.getItem("cara-recent")) || []).filter((c) => C.byCode(c)).slice(0, 8); } catch {}
 
@@ -349,6 +369,36 @@ try {
     if (!summary().total) { e.preventDefault(); $("saved").textContent = "اول چندتا منجوق بچین."; return; }
     C.savePattern(w, h, data);
   });
+
+  /* ساخت لینک قابل‌اشتراک از خود الگو؛ طرح در hash است و به سرور ارسال نمی‌شود. */
+  const shareButton = $("shareLink");
+  if (shareButton) shareButton.onclick = async () => {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_";
+    const packed = data.flat().map((code) => {
+      if (!code) return "-";
+      const i = C.palette.findIndex((p) => p.code === code);
+      return i >= 0 && i < alphabet.length ? alphabet[i] : "-";
+    }).join("");
+    const url = location.origin + location.pathname + location.search + "#pattern=" + w + "x" + h + ":" + packed;
+    try {
+      if (navigator.share) await navigator.share({ title: "الگوی دستبند کارا", url });
+      else if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(url);
+        const label = shareButton.getAttribute("aria-label");
+        shareButton.setAttribute("aria-label", "لینک کپی شد");
+        shareButton.dataset.tip = "لینک کپی شد";
+        setTimeout(() => { shareButton.setAttribute("aria-label", label || "اشتراک‌گذاری الگو"); shareButton.dataset.tip = "اشتراک‌گذاری الگو"; }, 1800);
+      } else {
+        const field = document.createElement("textarea");
+        field.value = url; field.setAttribute("readonly", ""); field.style.position = "fixed"; field.style.opacity = "0";
+        document.body.appendChild(field); field.select();
+        const copied = document.execCommand("copy"); field.remove();
+        if (!copied) window.prompt("این لینک را کپی کن:", url);
+      }
+    } catch (e) {
+      if (e && e.name !== "AbortError") window.prompt("لینک الگو:", url);
+    }
+  };
 
   /* خروجی چارت */
   $("export").onclick = () => {
