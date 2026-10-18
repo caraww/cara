@@ -1,5 +1,5 @@
 /* خودکار ساخته شده با tools/build-works.js؛ دستی ویرایشش نکن. */
-(window.CARA = window.CARA || {}; window.CARA.works = [
+(window.CARA = window.CARA || {}).works = [
  {
   "id": "آبشار رنگی",
   "src": "img/works-view/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.webp?v=mvdywbr7",
