@@ -48,9 +48,31 @@
     const api = { onProgress: null, onDone: null };
     const maxH = () => (typeof opt.maxH === "function" ? opt.maxH() : opt.maxH || 520);
     const hexOf = (r, c) => { const p = C.byCode(data[r][c]); return p ? p.hex : "#999"; };
+    /* منجوق دلیکای استوانه‌ای: لبه‌ی تیره، شیشه‌ی براق و سوراخ نخ */
     const putC = (ctx, cx, cy, hex) => {
-      const x = cx - s / 2, y = cy - s / 2;
-      if (s >= 5) C.drawBead(ctx, x + 0.5, y + 0.5, s - 1, s - 1, hex); else { ctx.fillStyle = hex; ctx.fillRect(x, y, s + 0.4, s + 0.4); }
+      const x = cx - s / 2, y = cy - s / 2, bw = Math.max(1, s - 0.8), bh = Math.max(1, s - 0.8);
+      if (s < 5) { ctx.fillStyle = hex; ctx.fillRect(x, y, s + 0.4, s + 0.4); return; }
+      const rgb = C.hexRgb(hex), tone = (k) => "rgb(" + rgb.map(v => Math.round(k < 0 ? v * (1 + k) : v + (255 - v) * k)).join(",") + ")";
+      ctx.save();
+      ctx.fillStyle = "rgba(0,0,0,.22)";
+      ctx.beginPath(); ctx.roundRect(x + .35, y + .65, bw, bh, Math.max(1, s * .18)); ctx.fill();
+      const body = ctx.createLinearGradient(x, y, x + bw, y + bh * .25);
+      body.addColorStop(0, tone(-.42)); body.addColorStop(.18, tone(.06)); body.addColorStop(.48, tone(.24)); body.addColorStop(.78, hex); body.addColorStop(1, tone(-.38));
+      ctx.fillStyle = body;
+      ctx.beginPath(); ctx.roundRect(x, y, bw, bh, Math.max(1, s * .18)); ctx.fill();
+      ctx.strokeStyle = "rgba(255,255,255,.28)"; ctx.lineWidth = Math.max(.45, s * .035);
+      ctx.beginPath(); ctx.moveTo(x + s * .22, y + .55); ctx.lineTo(x + bw - s * .22, y + .55); ctx.stroke();
+      const shine = ctx.createLinearGradient(0, y, 0, y + bh);
+      shine.addColorStop(0, "rgba(255,255,255,.34)"); shine.addColorStop(.38, "rgba(255,255,255,.07)"); shine.addColorStop(1, "rgba(0,0,0,.22)");
+      ctx.fillStyle = shine; ctx.beginPath(); ctx.roundRect(x + .5, y + .5, bw - 1, bh - 1, Math.max(.8, s * .14)); ctx.fill();
+      /* سوراخ استوانه‌ایِ نخ، با لبه‌ی داخلی روشن */
+      if (s >= 7) {
+        ctx.fillStyle = "rgba(20,12,27,.72)";
+        ctx.beginPath(); ctx.ellipse(cx, cy + .1, s * .16, s * .105, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,.26)"; ctx.lineWidth = .45;
+        ctx.beginPath(); ctx.ellipse(cx, cy - .1, s * .16, s * .105, 0, Math.PI, Math.PI * 2); ctx.stroke();
+      }
+      ctx.restore();
     };
     const FLIP_ROWS = false, FLIP_COLS = true; /* هم‌جهت با پیش‌نمایش مچ توی builder.js */
     const cx = (r) => x0 + (FLIP_ROWS ? h - 1 - r : r) * s + s / 2, cy = (c) => y0 + (FLIP_COLS ? w - 1 - c : c) * s + s / 2;
@@ -81,14 +103,29 @@
     }
 
     function drawLoom(now) {
-      const L = x0 - 14, R = x0 + h * s + 14, top = y0 - 12, hh = w * s + 24;
-      for (const px of [L - 10, R + 2]) {
-        const gr = g.createLinearGradient(px, 0, px + 8, 0); gr.addColorStop(0, "#e0c383"); gr.addColorStop(1, "#8e6f33");
-        g.fillStyle = gr; g.beginPath(); g.roundRect(px, top, 8, hh, 4); g.fill();
+      const L = x0 - 14, R = x0 + h * s + 14, top = y0 - 12, bottom = y0 + w * s + 12, hh = bottom - top;
+      /* قاب واقعی‌تر دستگاه: تیرک‌های کشش در دو سرِ تار */
+      const wood = g.createLinearGradient(0, top, 0, bottom);
+      wood.addColorStop(0, "#f0d69a"); wood.addColorStop(.45, "#b18a48"); wood.addColorStop(1, "#73552e");
+      g.fillStyle = wood;
+      g.beginPath(); g.roundRect(L - 12, top - 9, 12, hh + 18, 4); g.fill();
+      g.beginPath(); g.roundRect(R + 2, top - 9, 12, hh + 18, 4); g.fill();
+      g.fillStyle = "rgba(255,244,211,.7)";
+      for (let c = 0; c < w; c++) {
+        const y = cy(c);
+        /* تارهای موازی با سایه و برق ظریف؛ زیر منجوق‌ها دیده می‌مانند */
+        g.strokeStyle = "rgba(9,5,15,.42)"; g.lineWidth = Math.max(1.3, s * .22);
+        g.beginPath(); g.moveTo(L - 5, y + 1); g.lineTo(R + 5, y + 1); g.stroke();
+        g.strokeStyle = "rgba(238,207,143,.88)"; g.lineWidth = Math.max(.65, s * .075);
+        g.beginPath(); g.moveTo(L - 5, y); g.lineTo(R + 5, y); g.stroke();
+        g.strokeStyle = "rgba(255,249,225,.52)"; g.lineWidth = .55;
+        g.beginPath(); g.moveTo(L - 4, y - .7); g.lineTo(R + 4, y - .7); g.stroke();
       }
-      g.strokeStyle = "rgba(220,186,116,.55)"; g.lineWidth = 1.2; g.beginPath();
-      for (let c = 0; c < w; c++) { const y = cy(c); g.moveTo(L - 2, y); g.lineTo(R + 4, y); }
-      g.stroke();
+      /* پیچ‌های کوچک فلزی روی دو تیرک */
+      for (const px of [L - 6, R + 8]) for (let c = 0; c < w; c += Math.max(2, Math.floor(w / 7))) {
+        g.fillStyle = "#5d4528"; g.beginPath(); g.arc(px, cy(c), Math.max(1.5, s * .12), 0, Math.PI * 2); g.fill();
+        g.fillStyle = "rgba(255,244,211,.8)"; g.beginPath(); g.arc(px - .35, cy(c) - .35, Math.max(.5, s * .045), 0, Math.PI * 2); g.fill();
+      }
     }
 
     function render(now) {
@@ -110,24 +147,34 @@
       const ax = cx(steps[a][0]), ay = cy(steps[a][1]), bx = cx(steps[b][0]), by = cy(steps[b][1]);
       const nx = ax + (bx - ax) * nf, ny = ay + (by - ay) * nf;
       const fx = cx(steps[a][0]), fy = cy(steps[first[a]][1]);
-      /* نخی که از منجوق‌های همین ردیف رد شده */
-      g.strokeStyle = "rgba(255,238,196,.92)"; g.lineWidth = Math.max(1, s * 0.09); g.lineCap = "round";
+      /* نخِ پود از مسیر ردیف عبور می‌کند و کمی شل می‌شود */
+      g.lineCap = "round";
+      g.strokeStyle = "rgba(10,6,16,.5)"; g.lineWidth = Math.max(1.5, s * .15);
+      g.beginPath(); g.moveTo(fx, fy + 1); g.lineTo(nx, ny + 1); g.stroke();
+      g.strokeStyle = "rgba(255,235,183,.95)"; g.lineWidth = Math.max(.7, s * .075);
       g.beginPath(); g.moveTo(fx, fy); g.lineTo(nx, ny); g.stroke();
-      /* قرقره بالا سمت راست + نخ شل که به سوزن می‌رسه */
-      const sx = W - 46, sy = 40, ex = nx + 14, ey = ny - 32;
-      g.strokeStyle = "rgba(255,238,196,.8)"; g.lineWidth = 1.3;
-      g.beginPath(); g.moveTo(ex, ey); g.quadraticCurveTo((ex + sx) / 2, Math.max(ey, sy) + 26 + Math.sin(now / 320) * 3, sx - 14, sy + 6); g.stroke();
-      g.save(); g.translate(sx, sy); g.scale(1.9, 1.9);
-      g.fillStyle = "#cfae6c"; g.beginPath(); g.roundRect(-10, -13, 20, 26, 5); g.fill();
-      g.fillStyle = "#efe0b8"; g.beginPath(); g.roundRect(-8, -9, 16, 18, 3); g.fill();
-      g.strokeStyle = "rgba(0,0,0,.14)"; g.lineWidth = 0.7; g.beginPath(); for (let k = -5; k <= 5; k += 5) { g.moveTo(-8, k); g.lineTo(8, k); } g.stroke();
+      /* نخِ در حال کشیده‌شدن از قرقره، با افت طبیعی */
+      const sx = W - 48, sy = 36, ex = nx + Math.max(8, s * .65), ey = ny - Math.max(18, s * 1.6);
+      g.strokeStyle = "rgba(12,7,18,.45)"; g.lineWidth = 2.1;
+      g.beginPath(); g.moveTo(ex, ey); g.quadraticCurveTo((ex + sx) / 2, Math.max(ey, sy) + 30 + Math.sin(now / 320) * 3, sx - 10, sy + 8); g.stroke();
+      g.strokeStyle = "rgba(255,238,198,.92)"; g.lineWidth = 1;
+      g.beginPath(); g.moveTo(ex, ey); g.quadraticCurveTo((ex + sx) / 2, Math.max(ey, sy) + 29 + Math.sin(now / 320) * 3, sx - 10, sy + 7); g.stroke();
+      /* قرقره‌ی نخ با لبه‌های فلزی و شیارهای واقعی‌تر */
+      g.save(); g.translate(sx, sy);
+      g.fillStyle = "rgba(0,0,0,.28)"; g.beginPath(); g.ellipse(1, 3, 15, 17, 0, 0, Math.PI * 2); g.fill();
+      const spool = g.createLinearGradient(-13, 0, 13, 0); spool.addColorStop(0, "#785b32"); spool.addColorStop(.22, "#f0d69a"); spool.addColorStop(.55, "#c6a25d"); spool.addColorStop(1, "#72522a");
+      g.fillStyle = spool; g.beginPath(); g.roundRect(-12, -15, 24, 30, 5); g.fill();
+      g.strokeStyle = "rgba(255,248,222,.55)"; g.lineWidth = 1;
+      for (let k = -9; k <= 9; k += 4) { g.beginPath(); g.moveTo(-8, k); g.lineTo(8, k); g.stroke(); }
+      g.fillStyle = "#3d2a19"; g.beginPath(); g.ellipse(0, 0, 3, 4, 0, 0, Math.PI * 2); g.fill();
       g.restore();
-      /* هاله و خود سوزن */
-      const gl = g.createRadialGradient(nx, ny, 0, nx, ny, 20); gl.addColorStop(0, "rgba(255,236,190,.5)"); gl.addColorStop(1, "rgba(255,236,190,0)");
-      g.fillStyle = gl; g.beginPath(); g.arc(nx, ny, 20, 0, 7); g.fill();
-      const ng = g.createLinearGradient(nx, ny, ex, ey); ng.addColorStop(0, "#fff7dc"); ng.addColorStop(1, "#d9b974");
-      g.strokeStyle = ng; g.lineWidth = 2.4; g.beginPath(); g.moveTo(nx, ny); g.lineTo(ex, ey); g.stroke();
-      g.strokeStyle = "#1d1527"; g.lineWidth = 1; g.beginPath(); g.ellipse(ex - 0.5, ey + 2, 1, 2.6, 0.3, 0, 7); g.stroke();
+      /* سوزن باریک فولادی، سوراخ سوزن و برق نوک */
+      const gl = g.createRadialGradient(nx, ny, 0, nx, ny, 16); gl.addColorStop(0, "rgba(255,236,190,.35)"); gl.addColorStop(1, "rgba(255,236,190,0)");
+      g.fillStyle = gl; g.beginPath(); g.arc(nx, ny, 16, 0, Math.PI * 2); g.fill();
+      const ng = g.createLinearGradient(nx, ny, ex, ey); ng.addColorStop(0, "#fffdf2"); ng.addColorStop(.45, "#b9c0ca"); ng.addColorStop(1, "#657080");
+      g.strokeStyle = ng; g.lineWidth = Math.max(1.1, s * .08); g.beginPath(); g.moveTo(nx, ny); g.lineTo(ex, ey); g.stroke();
+      g.strokeStyle = "rgba(255,255,255,.9)"; g.lineWidth = .65; g.beginPath(); g.moveTo(nx, ny); g.lineTo(nx + (ex - nx) * .7, ny + (ey - ny) * .7); g.stroke();
+      g.strokeStyle = "#25202b"; g.lineWidth = .8; g.beginPath(); g.ellipse(ex - .5, ey + 1.5, 1, 2.3, -.2, 0, Math.PI * 2); g.stroke();
     }
 
     function drawFinale(now) {
