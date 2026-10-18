@@ -65,13 +65,11 @@
       const shine = ctx.createLinearGradient(0, y, 0, y + bh);
       shine.addColorStop(0, "rgba(255,255,255,.34)"); shine.addColorStop(.38, "rgba(255,255,255,.07)"); shine.addColorStop(1, "rgba(0,0,0,.22)");
       ctx.fillStyle = shine; ctx.beginPath(); ctx.roundRect(x + .5, y + .5, bw - 1, bh - 1, Math.max(.8, s * .14)); ctx.fill();
-      /* سوراخ استوانه‌ایِ نخ، با لبه‌ی داخلی روشن */
-      if (s >= 7) {
-        ctx.fillStyle = "rgba(20,12,27,.72)";
-        ctx.beginPath(); ctx.ellipse(cx, cy + .1, s * .16, s * .105, 0, 0, Math.PI * 2); ctx.fill();
-        ctx.strokeStyle = "rgba(255,255,255,.26)"; ctx.lineWidth = .45;
-        ctx.beginPath(); ctx.ellipse(cx, cy - .1, s * .16, s * .105, 0, Math.PI, Math.PI * 2); ctx.stroke();
-      }
+      /* سطح یک‌دستِ منجوق؛ حجم با سایه‌ی کناره‌ها و برق شیشه‌ای ساخته می‌شود، نه سوراخ وسط */
+      ctx.strokeStyle = "rgba(0,0,0,.24)"; ctx.lineWidth = Math.max(.5, s * .045);
+      ctx.beginPath(); ctx.roundRect(x + .35, y + .35, bw - .7, bh - .7, Math.max(1, s * .17)); ctx.stroke();
+      ctx.strokeStyle = "rgba(255,255,255,.18)"; ctx.lineWidth = Math.max(.45, s * .035);
+      ctx.beginPath(); ctx.moveTo(x + s * .2, y + bh - .75); ctx.lineTo(x + bw - s * .2, y + bh - .75); ctx.stroke();
       ctx.restore();
     };
     const FLIP_ROWS = false, FLIP_COLS = true; /* هم‌جهت با پیش‌نمایش مچ توی builder.js */
@@ -299,38 +297,90 @@
     upBtns.appendChild(b);
   }
 
-  /* ---------- صفحه‌ی اصلی: نمایش زنده‌ی بافتن، وقتی بهش رسیدی خودکار شروع می‌شه ---------- */
+  /* ---------- صفحه‌ی اصلی: بافت زنده از طرح‌های واقعی گالری ---------- */
   const steps = $("steps");
   if (steps && $("heroCanvas")) {
-    const K = { K: "DB0010", W: "DB0200", R: "DB0727", O: "DB1133", Y: "DB0721", B: "DB0726", T: "DB0725", D: "DB1832", C: "DB0732", M: "DB1134" };
-    const art = (rows) => rows.map((s) => [...s].map((ch) => K[ch]));
-    const rep = (m, n, gap = []) => Array.from({ length: n }).flatMap(() => [...m, ...gap]);
-    const EYE = ["BBBBBBBBBBB", "BBBBWWWBBBB", "BBWWTTTWWBB", "BWTTTKTTTWB", "BWTTKKKTTWB", "BWTTTKTTTWB", "BBWWTTTWWBB", "BBBBWWWBBBB", "BBBBBBBBBBB"];
-    const DIA = ["MMMMDMMMM", "MMMDCDMMM", "MMDCCCDMM", "MDCCRCCDM", "DCCRRRCCD", "MDCCRCCDM", "MMDCCCDMM", "MMMDCDMMM", "MMMMDMMMM"];
-    const HEART = ["WWWWWWWWWWW", "WWRRWWWRRWW", "WRRRRWRRRRW", "WRRRRRRRRRW", "WRRRRRRRRRW", "WWRRRRRRRWW", "WWWRRRRRWWW", "WWWWRRRWWWW", "WWWWWRWWWWW"];
-    const STAR = ["KKKKYKKKK", "KKKKYKKKK", "KKYKYKYKK", "KKKYYYKKK", "YYYYOYYYY", "KKKYYYKKK", "KKYKYKYKK", "KKKKYKKKK", "KKKKYKKKK"];
-    const DEMOS = [
-      { name: "چشم‌نظر", data: art(rep(EYE, 3, ["BBBBBBBBBBB"])) },
-      { name: "لوزی‌های طلایی", data: art(rep(DIA, 3)) },
-      { name: "قلب", data: art(rep(HEART, 3)) },
-      { name: "ستاره‌ی شب", data: art(rep(STAR, 3)) },
-    ];
+    const works = (C.works || []).filter((work) => work && work.thumb && work.title);
     const sec = document.createElement("section"); sec.className = "sec"; sec.id = "loom";
     sec.innerHTML = `<h2>ببین چطور می‌بافم</h2>
-      <p class="lead">سوزن ردیف‌به‌ردیف می‌ره و برمی‌گرده، منجوق‌ها یکی‌یکی روی نخ می‌شینن. هر الگویی که توی استودیو می‌کشی، همین‌جوری برات بافته می‌شه.</p>
-      <div class="dl-loom"><canvas aria-label="نمایش بافته شدن یک دستبند"></canvas><div class="dl-cap"><span class="n"></span><span class="nm"></span></div></div>
-      <div class="btns"><a class="btn plum" href="builder.html">الگوی خودت رو بساز</a></div>`;
+      <p class="lead">این بار طرح‌های واقعی گالری خودم رو منجوق‌به‌منجوق می‌بینی؛ دانه‌ها برجسته‌ان، اما سطحشون صافه و سوراخی روشون نیست.</p>
+      <div class="dl-loom"><canvas aria-label="نمایش سه‌بعدی بافت یکی از دستبندهای گالری"></canvas><div class="dl-cap"><span class="n"></span><span class="nm"></span></div></div>
+      <div class="btns"><a class="btn plum" href="gallery.html">دیدن همه‌ی دستبندها</a><a class="btn line" href="builder.html">طرح خودت رو بساز</a></div>`;
     steps.insertAdjacentElement("beforebegin", sec);
     const nEl = sec.querySelector(".n"), nmEl = sec.querySelector(".nm");
     const loom = Loom(sec.querySelector("canvas"), { maxH: () => Math.min(440, innerHeight * 0.6), tick: null });
-    let i = 0, vis = false, timer = 0;
+    let i = 0, vis = false, timer = 0, runId = 0;
+    const beadColors = (C.palette || []).filter((p) => p && p.hex && p.code);
+    function imageFor(work) {
+      return new Promise((resolve, reject) => {
+        const im = new Image();
+        im.onload = () => resolve(im);
+        im.onerror = reject;
+        im.src = work.thumb;
+      });
+    }
+    async function patternFromWork(work) {
+      const im = await imageFor(work);
+      const longN = 42, shortN = 9;
+      const source = document.createElement("canvas"), sg = source.getContext("2d", { willReadFrequently: true });
+      source.width = longN; source.height = shortN;
+      /* از نوار میانی عکس نمونه می‌گیریم تا بافتِ خود دستبند، نه قاب عکس، به الگو تبدیل شود. */
+      const cropW = Math.min(im.naturalWidth * .94, im.naturalHeight * 4.2);
+      const cropH = cropW / 4.2;
+      const sx = (im.naturalWidth - cropW) / 2;
+      const sy = (im.naturalHeight - cropH) / 2;
+      sg.drawImage(im, sx, sy, cropW, cropH, 0, 0, longN, shortN);
+      const pixels = sg.getImageData(0, 0, longN, shortN).data;
+      const nearest = (r, g, b) => {
+        let best = beadColors[0], score = Infinity;
+        for (const p of beadColors) {
+          const rgb = C.hexRgb(p.hex), q = (r-rgb[0])**2 + (g-rgb[1])**2 + (b-rgb[2])**2;
+          if (q < score) { score = q; best = p; }
+        }
+        return best ? best.code : null;
+      };
+      const data = Array.from({length: longN}, (_, x) => Array.from({length: shortN}, (_, y) => {
+        const k = (y * longN + x) * 4, r = pixels[k], g = pixels[k+1], b = pixels[k+2], a = pixels[k+3];
+        if (a < 38 || (r > 247 && g > 247 && b > 247)) return null;
+        return nearest(r, g, b);
+      }));
+      /* ردیف‌های خالیِ حاشیه حذف می‌شوند؛ اگر عکس پس‌زمینه‌ی روشن داشته باشد، طرح همچنان قابل‌نمایش می‌ماند. */
+      if (!data.some((row) => row.some(Boolean))) {
+        for (let x = 0; x < longN; x++) for (let y = 0; y < shortN; y++) {
+          const k = (y * longN + x) * 4;
+          data[x][y] = nearest(pixels[k], pixels[k+1], pixels[k+2]);
+        }
+      }
+      return data;
+    }
     loom.onProgress = (p, n) => { nEl.textContent = `${C.faNum(p)} از ${C.faNum(n)} منجوق`; };
-    loom.onDone = () => { clearTimeout(timer); timer = setTimeout(() => { if (vis) run((i + 1) % DEMOS.length); }, 3000); };
-    function run(k) { i = k; nmEl.innerHTML = `الگو: <b>${DEMOS[k].name}</b>`; loom.load(DEMOS[k].data); loom.play(); }
-    loom.load(DEMOS[0].data); loom.skip(); nmEl.innerHTML = `الگو: <b>${DEMOS[0].name}</b>`; clearTimeout(timer);
-    if ("IntersectionObserver" in window) new IntersectionObserver((es) => es.forEach((e) => {
-      if (e.isIntersecting && !vis) { vis = true; run(i); } else if (!e.isIntersecting && vis) { vis = false; loom.stop(); clearTimeout(timer); }
-    }), { threshold: 0.4 }).observe(sec.querySelector(".dl-loom"));
+    loom.onDone = () => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { if (vis && works.length) run((i + 1) % works.length); }, 2400);
+    };
+    async function run(k) {
+      if (!works.length || !beadColors.length) return;
+      i = k; const id = ++runId, work = works[k];
+      nmEl.textContent = `طرح گالری: ${work.title}`;
+      try {
+        const pattern = await patternFromWork(work);
+        if (!vis || id !== runId) return;
+        loom.load(pattern); loom.play();
+      } catch (err) {
+        console.warn("loom: gallery image could not be converted", work.title, err);
+        if (id === runId) { nmEl.textContent = `طرح گالری: ${work.title} · عکس در دسترس نیست`; }
+      }
+    }
+    if (works.length) {
+      nmEl.textContent = `طرح گالری: ${works[0].title}`;
+      run(0);
+      if ("IntersectionObserver" in window) new IntersectionObserver((es) => es.forEach((e) => {
+        if (e.isIntersecting && !vis) { vis = true; run(i); }
+        else if (!e.isIntersecting && vis) { vis = false; runId++; loom.stop(); clearTimeout(timer); }
+      }), { threshold: 0.4 }).observe(sec.querySelector(".dl-loom"));
+    } else {
+      nmEl.textContent = "طرح‌های گالری به‌زودی اینجا بافته می‌شن";
+    }
   }
 
   /* ---------- بعد از پرداخت موفق: دستبندت همون‌جا شروع می‌کنه به بافته شدن ---------- */
