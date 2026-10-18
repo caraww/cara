@@ -1002,3 +1002,18 @@
   .wk-grid > .wk-card,
   .wk-grid > .wk-card > img { transition: none !important; }
 }
+
+
+/* Let product photos blend into the card instead of showing a white image tile.
+   Multiply makes near-white pixels transparent-looking on the gallery's light surface. */
+.wk-grid > .wk-card > img {
+  background: transparent !important;
+  mix-blend-mode: multiply;
+  padding: clamp(18px, 2.2vw, 28px) !important;
+}
+.wk-grid > .wk-card:hover > img {
+  background: transparent !important;
+}
+@media (max-width: 560px) {
+  .wk-grid > .wk-card > img { padding: 15px 9px !important; }
+}
