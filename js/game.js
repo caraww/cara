@@ -12,15 +12,21 @@
   let token, endAt, timer, busy = false, code = "";
   let local = false, L = null; /* حالت تمرین (وقتی سرور بازی در دسترس نیست) */
 
-  const api = (path, body) =>
-    fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body || {}) })
-      .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+  /* پیام خطای خود سرور (400/409/429/503) رو نگه می‌داره تا نمایش داده بشه؛ فقط وقتی بدنه‌ی قابل‌خوندن نیست throw می‌کنه */
+  const api = async (path, body) => {
+    const r = await fetch(path, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body || {}) });
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok && !j.error) throw new Error(r.status);
+    return j;
+  };
   const show = (id) => ["start", "game", "end"].forEach((x) => ($(x).hidden = x !== id));
   const setRemaining = (ms) => { endAt = performance.now() + ms; };
   const note = (t) => { $("gnote").textContent = t || ""; $("gnote").hidden = !t; };
 
-  fetch("/api/game/config").then((r) => r.json()).then((c) => { $("goal").textContent = $("goal2").textContent = fa(c.goal); })
-    .catch(() => { $("goal").textContent = $("goal2").textContent = fa(12); });
+  fetch("/api/game/config").then((r) => r.json()).then((c) => {
+    $("goal").textContent = $("goal2").textContent = fa(c.goal || 12);
+    if (c.percent) document.querySelectorAll(".pct").forEach((e) => { e.textContent = fa(c.percent) + "٪"; });
+  }).catch(() => { $("goal").textContent = $("goal2").textContent = fa(12); });
 
   function hud(s) {
     if (s) { $("score").textContent = fa(s.score); $("round").textContent = fa(s.round); }
@@ -69,7 +75,7 @@
     busy = true;
     try {
       const r = await api("/api/game/answer", { token, idx });
-      if (r.error) return alert(r.error);
+      if (r.error) { clearInterval(timer); alert(r.error); show("start"); return; }
       if (r.over) return end(r);
       if (r.token) token = r.token;
       if (r.remainingMs != null) setRemaining(r.remainingMs);
@@ -117,7 +123,8 @@
     btns.forEach((b) => { b.disabled = false; });
     show("game"); render(first);
     clearInterval(timer);
-    timer = setInterval(() => { if (hud() <= 0) { clearInterval(timer); local ? end({ score: L.score }) : pick(-1); } }, 100);
+    /* تایمر رو اینجا نمی‌کشیم: اگه pick(-1) به خاطر busy یا tooFast تموم نشه باید دوباره امتحان بشه؛ end() خودش تایمر رو می‌بنده */
+    timer = setInterval(() => { if (hud() <= 0) { local ? end({ score: L.score }) : pick(-1); } }, 100);
   }
 
   $("play").addEventListener("click", start);

@@ -22,18 +22,21 @@ try {
   if (!input || !note) return;
   if (new URLSearchParams(location.search).get("result") === "success") { try { localStorage.removeItem("cara-discount"); } catch (e) {} return; }
   try { const s = localStorage.getItem("cara-discount"); if (s && !input.value) input.value = s; } catch (e) {}
-  let t;
+  let t, pct = 10;
   async function check() {
     const v = input.value.trim();
     if (!v) { note.textContent = ""; return; }
     try {
       const j = await (await fetch("/api/game/code?c=" + encodeURIComponent(v))).json();
-      note.textContent = j.valid ? "✓ کد معتبره؛ ۱۰٪ تخفیف موقع رفتن به درگاه اعمال می‌شه." : "این کد معتبر نیست یا قبلاً استفاده شده.";
+      if (j.error) { note.textContent = j.error; note.style.color = ""; return; } /* مثلاً محدودیت تعداد درخواست */
+      note.textContent = j.valid ? `✓ کد معتبره؛ ${Number(pct).toLocaleString("fa-IR")}٪ تخفیف موقع رفتن به درگاه اعمال می‌شه.` : "این کد معتبر نیست یا قبلاً استفاده شده.";
       note.style.color = j.valid ? "" : "#c93a2b";
     } catch (e) {}
   }
   input.addEventListener("input", () => { clearTimeout(t); t = setTimeout(check, 400); });
   check();
+  /* درصد تخفیف از سرور (همون DISCOUNT توی Worker) */
+  fetch("/api/game/config").then((r) => r.json()).then((c) => { if (c.percent && c.percent !== pct) { pct = c.percent; check(); } }).catch(() => {});
 })();
 } catch (e) { console.error('checkout:discount', e); }
 

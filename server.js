@@ -248,6 +248,7 @@ async function createPayment(req, res) {
       /* سفارش مستقیم یه دستبند گالری، بدون استودیو و پالت */
       const w = findWork(body.workId);
       if (!w) return json(res, 400, { error: "این دستبند پیدا نشد." });
+      if (w.noOrder) return json(res, 400, { error: "این نمونه قابل سفارش مستقیم نیست." });
       priceToman = Math.round(w.price || WORK_PRICE);
       if (!priceToman)
         return json(res, 503, { error: "قیمت این دستبند هنوز تعیین نشده." });
@@ -386,12 +387,12 @@ http
           200,
           loadWorks().map((w) => ({
             id: String(w.id).trim(),
-            price: Math.round(w.price || WORK_PRICE) || 0,
+            price: w.noOrder ? 0 : Math.round(w.price || WORK_PRICE) || 0,
           })),
         );
       if (p === "/api/work" && req.method === "GET") {
         const w = findWork(url.searchParams.get("id"));
-        if (!w) return json(res, 404, { error: "not found" });
+        if (!w || w.noOrder) return json(res, 404, { error: "not found" });
         return json(res, 200, {
           id: w.id,
           title: w.title,

@@ -1,14 +1,15 @@
-/* ساخت js/works.js از عکس‌های پوشه‌ی img/bead works
+/* ساخت js/works.js از عکس‌های پوشه‌ی img/works-cutouts
    اجرا (از ریشه‌ی پروژه):  node tools/build-works.js
 
    - اسم فایل = عنوان کار توی سایت (فارسی هم کاملاً اوکیه): «چشم نظر آبی.jpg» → «چشم نظر آبی»
    - زیرخط _ توی اسم فایل به فاصله تبدیل می‌شه.
    - اگه اسم فایل فقط عدد باشه (1.jpg) عنوانی نمایش داده نمی‌شه.
-   - اختیاری: فایل img/bead works/info.json برای توضیح، برچسب، قیمت یا عنوان دلخواه:
+   - اختیاری: فایل img/works-cutouts/info.json برای توضیح، برچسب، قیمت یا عنوان دلخواه:
        {
          "چشم نظر آبی.jpg": { "note": "آبی و فیروزه‌ای", "tags": ["سنتی"], "price": 1800000 },
          "قلب": { "title": "قلب قرمز" }
        }
+     "آلبوم": { "noOrder": true } یعنی فقط نمونه‌ست؛ قیمت نمی‌گیره و قابل سفارش مستقیم نیست.
      کلید می‌تونه اسم فایل با پسوند یا بدون پسوند باشه. price به تومانه؛ اگه ننویسی قیمت پیش‌فرض (WORK_PRICE) اعمال می‌شه. */
 const fs = require("fs");
 const path = require("path");
@@ -188,6 +189,7 @@ const works = [...groups].map(([base, items]) => {
   w.note = meta.note ? String(meta.note) : "";
   w.tags = Array.isArray(meta.tags) ? meta.tags.map(String) : [];
   if (Number(meta.price) > 0) w.price = Math.round(Number(meta.price));
+  if (meta.noOrder) w.noOrder = true; /* نمونه‌ی غیرقابل‌سفارش: Worker قیمت نمی‌ده و دکمه‌ی سفارش نمایش داده نمی‌شه */
   return w;
 });
 

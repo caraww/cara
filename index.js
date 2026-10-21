@@ -1,4 +1,4 @@
-import { handleGame, checkCode, reserveCode, releaseCode, useCode, DISCOUNT } from "./game-worker.js";
+import { handleGame, checkCode, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
 export { GameDO } from "./game-worker.js"; /* Durable Object بازی */
 
 /* API سایت cara روی Cloudflare Worker: پرداخت با زیبال (zibal.ir) + ثبت و مدیریت سفارش‌ها.
@@ -7,6 +7,7 @@ export { GameDO } from "./game-worker.js"; /* Durable Object بازی */
      Variables (توی wrangler.jsonc):  PRICE_PER_BEAD   BASE_FEE   BASE_URL
      Secrets:    ZIBAL_MERCHANT  (کد merchant درگاه زیبال؛ برای تست بنویس zibal)
                  ADMIN_TOKEN     (یه رمز دلخواه برای صفحه‌ی admin.html)
+                 GAME_SECRET     (راز امضای بازی؛ حداقل ۱۶ کاراکتر و جدا از ADMIN_TOKEN؛ بدونش بازی فقط حالت تمرین داره)
                  TELEGRAM_BOT_TOKEN  و  TELEGRAM_CHAT_ID  (اعلان سفارش جدید توی تلگرام؛ اختیاری)
      اختیاری:    CALLBACK_URL    (پیش‌فرض: BASE_URL/api/payment-callback)
                  ZIBAL_BASE + ZIBAL_RELAY_KEY  (فقط اگه زیبال آی‌پی ثابت می‌خواد؛ zibal-relay.js رو ببین)
@@ -179,10 +180,10 @@ function autoPrice(id) {
 }
 function priceMap(list) {
   const out = {}, used = new Set();
-  for (const w of list) { const f = fixedPrice(w); if (f) { out[String(w.id)] = f; used.add(f); } }
+  for (const w of list) { if (w.noOrder) continue; const f = fixedPrice(w); if (f) { out[String(w.id)] = f; used.add(f); } }
   for (const w of list) {
     const id = String(w.id);
-    if (out[id]) continue;
+    if (w.noOrder || out[id]) continue; /* نمونه‌های noOrder (مثل «آلبوم») هیچ قیمتی نمی‌گیرن */
     let p = autoPrice(id);
     while (used.has(p)) p += 7000; /* دو دستبند هیچ‌وقت قیمت یکسان نمی‌گیرن */
     used.add(p); out[id] = p;
@@ -206,7 +207,7 @@ async function worksInfo(env) {
 async function workInfo(env, url) {
   const { list, prices } = await pricedWorks(env);
   const w = list.find((x) => String(x.id) === String(url.searchParams.get("id")));
-  if (!w) return json({ error: "not found" }, 404);
+  if (!w || w.noOrder) return json({ error: "not found" }, 404);
   return json({ id: String(w.id), title: w.title || "", src: w.src, price: prices[String(w.id)] });
 }
 
@@ -232,6 +233,7 @@ async function createPayment(request, env) {
     const { list, prices } = await pricedWorks(env);
     const work = list.find((x) => String(x.id) === String(body.workId));
     if (!work) return json({ error: "این دستبند پیدا نشد؛ از گالری دوباره انتخابش کن." }, 404);
+    if (work.noOrder || !prices[String(work.id)]) return json({ error: "این نمونه قابل سفارش مستقیم نیست؛ از «عکس به الگو» یا «طراحی دستی» سفارش بده." }, 400);
     priceToman = prices[String(work.id)];
     extra = { kind: "work", work: { id: String(work.id), title: work.title || "", src: work.src } };
   } else {
@@ -245,6 +247,9 @@ async function createPayment(request, env) {
   /* کد تخفیف بازی (۱۰٪)؛ قیمت نهایی همیشه سمت سرور حساب می‌شه */
   let dc = null;
   if (body.discountCode) {
+    /* جلوی حدس زدن کدها از این مسیر (همون سهمیه‌ی /api/game/code) */
+    if (!(await rateLimit(env, "code:" + (request.headers.get("CF-Connecting-IP") || "unknown"), 30, 60 * 1000)))
+      return json({ error: "تعداد تلاش‌ها زیاده؛ یه دقیقه بعد دوباره امتحان کن." }, 429);
     dc = await checkCode(env, body.discountCode);
     if (!dc) return json({ error: "کد تخفیف نامعتبر یا قبلاً استفاده شده." }, 400);
     priceToman = Math.round(priceToman * (1 - DISCOUNT));
@@ -266,8 +271,9 @@ async function createPayment(request, env) {
     ...(dc ? { discountCode: dc } : {}),
     ...extra,
   };
+  /* رزرو اتمیک کد قبل از ساختن سفارش؛ اگه هم‌زمان یکی دیگه گرفتتش، این سفارش ساخته نمی‌شه */
+  if (dc && !(await reserveCode(env, dc, order.id))) return json({ error: "کد تخفیف نامعتبر یا قبلاً استفاده شده." }, 400);
   await saveOrder(env, order);
-  if (dc) await reserveCode(env, dc, order.id);
 
   /* Worker دیگه خودش با زیبال حرف نمی‌زنه (فایروال هاست آی‌پی Cloudflare رو می‌بنده).
      یه بلیت امضاشده می‌سازیم؛ مرورگر مشتری (آی‌پی ایرانی) با اون می‌ره pay.php روی هاست و اون درخواست رو به زیبال می‌ده. */
