@@ -1164,3 +1164,22 @@
 .wk-grid figcaption {
   background: #fff;
 }
+
+
+/* FIX: force truly white gallery card and image backgrounds.
+   These selectors intentionally override earlier decorative gradients. */
+.wk-grid > .wk-card,
+.wk-grid > .wk-card:hover {
+  background: #fff !important;
+  background-image: none !important;
+}
+.wk-grid > .wk-card > img,
+.wk-grid > .wk-card:hover > img {
+  background: #fff !important;
+  background-image: none !important;
+}
+.wk-grid > .wk-card figcaption,
+.wk-grid > .wk-card figcaption .wk-price {
+  background: #fff !important;
+  background-image: none !important;
+}
