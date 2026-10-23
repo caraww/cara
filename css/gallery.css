@@ -1317,3 +1317,17 @@ html body main.wrap #wkGrid > .wk-card:hover {
     background-color: transparent !important;
   }
 }
+
+
+/* FINAL: remove decorative shadows from gallery cards and bracelet images. */
+html body main.wrap #wkGrid > .wk-card,
+html body main.wrap #wkGrid > .wk-card:hover,
+html body main.wrap #wkGrid > .wk-card:focus-within {
+  box-shadow: none !important;
+}
+html body main.wrap #wkGrid > .wk-card > img,
+html body main.wrap #wkGrid > .wk-card:hover > img,
+html body main.wrap #wkGrid > .wk-card:focus-within > img {
+  filter: none !important;
+  box-shadow: none !important;
+}
