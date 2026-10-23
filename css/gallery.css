@@ -1242,3 +1242,27 @@ html body main.wrap #wkGrid > .wk-card:focus-within {
     border-radius: 14px !important;
   }
 }
+
+
+/* List/grid view: round the visible thumbnail corners on mobile too.
+   The lightbox already has its own styling; these rules target only gallery cards. */
+html body main.wrap #wkGrid > .wk-card {
+  border-radius: 22px !important;
+  overflow: hidden !important;
+  clip-path: inset(0 round 22px);
+}
+html body main.wrap #wkGrid > .wk-card > img {
+  border-radius: 16px !important;
+  clip-path: inset(0 round 16px);
+}
+@media (max-width: 760px) {
+  html body main.wrap #wkGrid > .wk-card {
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    clip-path: inset(0 round 18px);
+  }
+  html body main.wrap #wkGrid > .wk-card > img {
+    border-radius: 14px !important;
+    clip-path: inset(0 round 14px);
+  }
+}
