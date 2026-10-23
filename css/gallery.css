@@ -1152,3 +1152,15 @@
   .wk-grid > .wk-card figcaption span:not(.wk-price) { font-size: 11px; }
   .wk-grid > .wk-card figcaption .wk-price { font-size: 12.5px; }
 }
+
+
+/* هماهنگ با نمونه‌کارهای صفحه‌ی اصلی: قاب عکس گالری سفید و ساده */
+.wk-grid > * {
+  background: #fff !important;
+}
+.wk-grid img {
+  background: #fff;
+}
+.wk-grid figcaption {
+  background: #fff;
+}

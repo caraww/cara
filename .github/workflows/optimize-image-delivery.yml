@@ -1,0 +1,78 @@
+name: Optimize image delivery
+
+on:
+  push:
+    branches:
+      - perf/image-delivery
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: image-delivery-optimization
+  cancel-in-progress: false
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+        with:
+          ref: perf/image-delivery
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Generate optimized gallery derivatives
+        run: node tools/build-works.js
+      - name: Optimize homepage hero without changing its design
+        run: |
+          node - <<'NODE'
+          const sharp = require("sharp");
+          (async () => {
+            const input = "img/hero-bracelet.webp";
+            const output = "img/hero-bracelet-optimized.webp";
+            const meta = await sharp(input).metadata();
+            await sharp(input)
+              .rotate()
+              .resize({ width: 1000, height: 1200, fit: "inside", withoutEnlargement: true })
+              .webp({ quality: 78, effort: 6 })
+              .toFile(output);
+            const result = await sharp(output).metadata();
+            if (!result.width || !result.height || result.width > 1000 || result.height > 1200) {
+              throw new Error("Optimized hero dimensions are invalid");
+            }
+            console.log("Hero optimized:", meta.width, "x", meta.height, "->", result.width, "x", result.height);
+          })().catch((e) => { console.error(e); process.exit(1); });
+          NODE
+      - name: Verify generated images
+        run: |
+          test -s img/hero-bracelet-optimized.webp
+          test -s js/works.js
+          test -s data/works.json
+          node - <<'NODE'
+          const fs = require("fs");
+          const works = JSON.parse(fs.readFileSync("data/works.json", "utf8"));
+          if (!Array.isArray(works) || !works.length) throw new Error("Gallery data is empty");
+          for (const w of works) {
+            if (!w.title || !w.thumb || !w.src) throw new Error("Invalid gallery item: " + JSON.stringify(w));
+          }
+          console.log("Verified", works.length, "gallery entries.");
+          NODE
+      - name: Commit generated assets to optimization branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html gallery.html js/works.js data/works.json img/works-thumbs img/works-view img/hero-bracelet-optimized.webp
+          if git diff --cached --quiet; then
+            echo "No generated changes."
+            exit 0
+          fi
+          git commit -m "Optimize hero and gallery image delivery"
+          git push origin HEAD:perf/image-delivery
