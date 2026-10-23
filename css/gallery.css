@@ -1342,3 +1342,17 @@ html body main.wrap #wkGrid > .wk-card:focus-within > img {
     box-shadow: none !important;
   }
 }
+
+
+/* MOBILE ONLY: remove the halo/shadow around bracelet photos inside gallery cards. */
+@media (max-width: 760px) {
+  html body main.wrap #wkGrid > .wk-card > img,
+  html body main.wrap #wkGrid > .wk-card:hover > img,
+  html body main.wrap #wkGrid > .wk-card:focus-within > img {
+    -webkit-filter: none !important;
+    filter: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    background-image: none !important;
+  }
+}
