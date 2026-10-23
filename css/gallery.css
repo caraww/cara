@@ -1331,3 +1331,14 @@ html body main.wrap #wkGrid > .wk-card:focus-within > img {
   filter: none !important;
   box-shadow: none !important;
 }
+
+
+/* Mobile-only fix: remove the bracelet photo's drop shadow inside gallery card containers. */
+@media (max-width: 760px) {
+  html body main.wrap #wkGrid > .wk-card > img,
+  html body main.wrap #wkGrid > .wk-card:hover > img,
+  html body main.wrap #wkGrid > .wk-card:focus-within > img {
+    filter: none !important;
+    box-shadow: none !important;
+  }
+}
