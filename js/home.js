@@ -76,7 +76,7 @@ try {
   /* پالت آرام و تک‌رنگ: طیف بنفش‌های خاکستری و فقط یک مهره‌ی طلایی در مرکز هر لوزی */
   const SET = ["#E7D9F7", "#C8B2E8", "#A88BD0", "#8869B3", "#6E5196", "#563C78"], GOLD = "#E4BE70";
   const R2 = 175 * 175, CW = 24, CH = 18, BASE = 0.94, BW = CW - 1.1, BH = CH - 1.1;
-  let mx = -1, my = -1, W, H, cols, rows, ticking = false, cleared = false, sprites = [], jx, jy, ci;
+  let mx = -1, my = -1, W, H, cols, rows, ticking = false, cleared = false, heroVisible = true, sprites = [], jx, jy, ci;
   const rnd = (x, y) => { const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return s - Math.floor(s); };
   /* هر مهره‌ی دلیکای استوانه‌ای یک بار رندر می‌شود: لبه‌ی تیره، بدنه‌ی شیشه‌ای،
      برق باریک روی سطح و سایه‌ی اتصال؛ در هر فریم فقط sprite آماده کشیده می‌شود. */
@@ -127,6 +127,7 @@ try {
     cleared = false; draw();
   }
   function draw() {
+    if (!heroVisible) return;
     const p = reduce ? 0 : Math.min(1, scrollY / (H * 0.85));
     if (p >= 1) { if (!cleared) { g.clearRect(0, 0, W, H); cleared = true; } return; }
     cleared = false; g.clearRect(0, 0, W, H);
@@ -151,7 +152,14 @@ try {
     }
     g.globalAlpha = 1;
   }
-  addEventListener("scroll", () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { draw(); ticking = false; }); } }, { passive: true });
+  if ("IntersectionObserver" in window) {
+    const heroObserver = new IntersectionObserver((entries) => {
+      heroVisible = entries[0].isIntersecting;
+      if (heroVisible) draw();
+    }, { rootMargin: "100px 0px" });
+    heroObserver.observe(hero);
+  }
+  addEventListener("scroll", () => { if (heroVisible && !ticking) { ticking = true; requestAnimationFrame(() => { draw(); ticking = false; }); } }, { passive: true });
   let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(size, 120); }); size();
 
   /* نخ مهره‌ای بالای صفحه = میزان اسکرول */
@@ -167,7 +175,7 @@ try {
 
   /* نشانگر روی هیرو */
   let pq = false;
-  hero.addEventListener("pointermove", (e) => { if (reduce) return; const r = hero.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; if (!pq) { pq = true; requestAnimationFrame(() => { draw(); pq = false; }); } });
+  hero.addEventListener("pointermove", (e) => { if (reduce || !heroVisible) return; const r = hero.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; if (!pq) { pq = true; requestAnimationFrame(() => { draw(); pq = false; }); } });
   hero.addEventListener("pointerleave", () => { mx = -1; draw(); });
 
   /* کلیک روی هر رنگ = کپی کد */
