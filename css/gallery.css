@@ -1356,3 +1356,14 @@ html body main.wrap #wkGrid > .wk-card:focus-within > img {
     background-image: none !important;
   }
 }
+
+
+/* FINAL polish: restore a very subtle shadow around each gold-outlined gallery card.
+   Photo shadows remain disabled, especially on mobile. */
+html body main.wrap #wkGrid > .wk-card,
+html body main.wrap #wkGrid > .wk-card:focus-within {
+  box-shadow: 0 2px 8px rgba(45, 32, 54, .055) !important;
+}
+html body main.wrap #wkGrid > .wk-card:hover {
+  box-shadow: 0 4px 12px rgba(45, 32, 54, .075) !important;
+}
