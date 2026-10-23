@@ -1303,3 +1303,18 @@ html body main.wrap #wkGrid > .wk-card:hover {
     border-radius: 0 !important;
   }
 }
+
+
+/* Mobile fix: the white image box was covering the rounded gold top corners.
+   Keep the image surface white, but clip its own top corners to the card shape. */
+@media (max-width: 760px) {
+  html body main.wrap #wkGrid > .wk-card > img,
+  html body main.wrap #wkGrid > .wk-card:hover > img,
+  html body main.wrap #wkGrid > .wk-card:focus-within > img {
+    border-radius: 17px 17px 0 0 !important;
+    -webkit-clip-path: inset(0 round 17px 17px 0 0) !important;
+    clip-path: inset(0 round 17px 17px 0 0) !important;
+    background: transparent !important;
+    background-color: transparent !important;
+  }
+}
