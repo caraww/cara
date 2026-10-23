@@ -2,11 +2,11 @@
 (window.CARA = window.CARA || {}).works = [
  {
   "id": "آبشار رنگی",
-  "src": "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.png?v=mvf83wru",
-  "thumb": "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.png?v=mvf83wru",
+  "src": "img/works-view/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.webp?v=mvktfd14",
+  "thumb": "img/works-thumbs/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.webp?v=mvktfd14",
   "images": [
-   "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.png?v=mvf83wru",
-   "img/works-cutouts/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C__2.jpg?v=mvf83wrw"
+   "img/works-view/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C.webp?v=mvktfd14",
+   "img/works-view/%D8%A2%D8%A8%D8%B4%D8%A7%D8%B1%20%D8%B1%D9%86%DA%AF%DB%8C__2.webp?v=mvktfd14"
   ],
   "w": 615,
   "h": 820,
@@ -21,8 +21,8 @@
  },
  {
   "id": "آلبوم",
-  "src": "img/works-cutouts/%D8%A2%D9%84%D8%A8%D9%88%D9%85.JPG?v=mvf83ws4",
-  "thumb": "img/works-cutouts/%D8%A2%D9%84%D8%A8%D9%88%D9%85.JPG?v=mvf83ws4",
+  "src": "img/works-view/%D8%A2%D9%84%D8%A8%D9%88%D9%85.webp?v=mvktfd15",
+  "thumb": "img/works-thumbs/%D8%A2%D9%84%D8%A8%D9%88%D9%85.webp?v=mvktfd15",
   "w": 2945,
   "h": 2945,
   "title": "آلبوم",
@@ -36,8 +36,8 @@
  },
  {
   "id": "اسب",
-  "src": "img/works-cutouts/%D8%A7%D8%B3%D8%A8.png?v=mvf83wsh",
-  "thumb": "img/works-cutouts/%D8%A7%D8%B3%D8%A8.png?v=mvf83wsh",
+  "src": "img/works-view/%D8%A7%D8%B3%D8%A8.webp?v=mvktfd17",
+  "thumb": "img/works-thumbs/%D8%A7%D8%B3%D8%A8.webp?v=mvktfd17",
   "w": 892,
   "h": 1191,
   "title": "اسب",
@@ -51,8 +51,8 @@
  },
  {
   "id": "خطر",
-  "src": "img/works-cutouts/%D8%AE%D8%B7%D8%B1.jpg?v=mvf83wsl",
-  "thumb": "img/works-cutouts/%D8%AE%D8%B7%D8%B1.jpg?v=mvf83wsl",
+  "src": "img/works-view/%D8%AE%D8%B7%D8%B1.webp?v=mvktfd18",
+  "thumb": "img/works-thumbs/%D8%AE%D8%B7%D8%B1.webp?v=mvktfd18",
   "w": 1376,
   "h": 1639,
   "title": "خطر",
@@ -68,8 +68,8 @@
  },
  {
   "id": "درفش کاویانی",
-  "src": "img/works-cutouts/%D8%AF%D8%B1%D9%81%D8%B4%20%DA%A9%D8%A7%D9%88%DB%8C%D8%A7%D9%86%DB%8C.png?v=mvf83wt6",
-  "thumb": "img/works-cutouts/%D8%AF%D8%B1%D9%81%D8%B4%20%DA%A9%D8%A7%D9%88%DB%8C%D8%A7%D9%86%DB%8C.png?v=mvf83wt6",
+  "src": "img/works-view/%D8%AF%D8%B1%D9%81%D8%B4%20%DA%A9%D8%A7%D9%88%DB%8C%D8%A7%D9%86%DB%8C.webp?v=mvktfd1c",
+  "thumb": "img/works-thumbs/%D8%AF%D8%B1%D9%81%D8%B4%20%DA%A9%D8%A7%D9%88%DB%8C%D8%A7%D9%86%DB%8C.webp?v=mvktfd1c",
   "w": 1400,
   "h": 1400,
   "title": "درفش کاویانی",
@@ -83,8 +83,8 @@
  },
  {
   "id": "ریک اند مورتی",
-  "src": "img/works-cutouts/%D8%B1%DB%8C%DA%A9%20%D8%A7%D9%86%D8%AF%20%D9%85%D9%88%D8%B1%D8%AA%DB%8C.png?v=mvf83wtm",
-  "thumb": "img/works-cutouts/%D8%B1%DB%8C%DA%A9%20%D8%A7%D9%86%D8%AF%20%D9%85%D9%88%D8%B1%D8%AA%DB%8C.png?v=mvf83wtm",
+  "src": "img/works-view/%D8%B1%DB%8C%DA%A9%20%D8%A7%D9%86%D8%AF%20%D9%85%D9%88%D8%B1%D8%AA%DB%8C.webp?v=mvktfd1d",
+  "thumb": "img/works-thumbs/%D8%B1%DB%8C%DA%A9%20%D8%A7%D9%86%D8%AF%20%D9%85%D9%88%D8%B1%D8%AA%DB%8C.webp?v=mvktfd1d",
   "w": 1050,
   "h": 1400,
   "title": "ریک اند مورتی",
@@ -98,8 +98,8 @@
  },
  {
   "id": "زنجیر",
-  "src": "img/works-cutouts/%D8%B2%D9%86%D8%AC%DB%8C%D8%B1.png?v=mvf83wtq",
-  "thumb": "img/works-cutouts/%D8%B2%D9%86%D8%AC%DB%8C%D8%B1.png?v=mvf83wtq",
+  "src": "img/works-view/%D8%B2%D9%86%D8%AC%DB%8C%D8%B1.webp?v=mvktfd1e",
+  "thumb": "img/works-thumbs/%D8%B2%D9%86%D8%AC%DB%8C%D8%B1.webp?v=mvktfd1e",
   "w": 750,
   "h": 750,
   "title": "زنجیر",
@@ -113,8 +113,8 @@
  },
  {
   "id": "شطرنج",
-  "src": "img/works-cutouts/%D8%B4%D8%B7%D8%B1%D9%86%D8%AC.png?v=mvf83wtz",
-  "thumb": "img/works-cutouts/%D8%B4%D8%B7%D8%B1%D9%86%D8%AC.png?v=mvf83wtz",
+  "src": "img/works-view/%D8%B4%D8%B7%D8%B1%D9%86%D8%AC.webp?v=mvktfd1g",
+  "thumb": "img/works-thumbs/%D8%B4%D8%B7%D8%B1%D9%86%D8%AC.webp?v=mvktfd1g",
   "w": 1400,
   "h": 736,
   "title": "شطرنج",
@@ -129,8 +129,8 @@
  },
  {
   "id": "طاووس",
-  "src": "img/works-cutouts/%D8%B7%D8%A7%D9%88%D9%88%D8%B3.PNG?v=mvf83wum",
-  "thumb": "img/works-cutouts/%D8%B7%D8%A7%D9%88%D9%88%D8%B3.PNG?v=mvf83wum",
+  "src": "img/works-view/%D8%B7%D8%A7%D9%88%D9%88%D8%B3.webp?v=mvktfd1k",
+  "thumb": "img/works-thumbs/%D8%B7%D8%A7%D9%88%D9%88%D8%B3.webp?v=mvktfd1k",
   "w": 1536,
   "h": 2048,
   "title": "طاووس",
@@ -145,8 +145,8 @@
  },
  {
   "id": "قالی",
-  "src": "img/works-cutouts/%D9%82%D8%A7%D9%84%DB%8C.png?v=mvf83wus",
-  "thumb": "img/works-cutouts/%D9%82%D8%A7%D9%84%DB%8C.png?v=mvf83wus",
+  "src": "img/works-view/%D9%82%D8%A7%D9%84%DB%8C.webp?v=mvktfd1l",
+  "thumb": "img/works-thumbs/%D9%82%D8%A7%D9%84%DB%8C.webp?v=mvktfd1l",
   "w": 750,
   "h": 750,
   "title": "قالی",
@@ -160,8 +160,8 @@
  },
  {
   "id": "قلب طلا",
-  "src": "img/works-cutouts/%D9%82%D9%84%D8%A8%20%D8%B7%D9%84%D8%A7.png?v=mvf83wuz",
-  "thumb": "img/works-cutouts/%D9%82%D9%84%D8%A8%20%D8%B7%D9%84%D8%A7.png?v=mvf83wuz",
+  "src": "img/works-view/%D9%82%D9%84%D8%A8%20%D8%B7%D9%84%D8%A7.webp?v=mvktfd1m",
+  "thumb": "img/works-thumbs/%D9%82%D9%84%D8%A8%20%D8%B7%D9%84%D8%A7.webp?v=mvktfd1m",
   "w": 1194,
   "h": 896,
   "title": "قلب طلا",
@@ -174,8 +174,8 @@
  },
  {
   "id": "کوکا",
-  "src": "img/works-cutouts/%DA%A9%D9%88%DA%A9%D8%A7.png?v=mvf83wwm",
-  "thumb": "img/works-cutouts/%DA%A9%D9%88%DA%A9%D8%A7.png?v=mvf83wwm",
+  "src": "img/works-view/%DA%A9%D9%88%DA%A9%D8%A7.webp?v=mvktfd1v",
+  "thumb": "img/works-thumbs/%DA%A9%D9%88%DA%A9%D8%A7.webp?v=mvktfd1v",
   "w": 1400,
   "h": 733,
   "title": "کوکا",
@@ -189,8 +189,8 @@
  },
  {
   "id": "لابستر",
-  "src": "img/works-cutouts/%D9%84%D8%A7%D8%A8%D8%B3%D8%AA%D8%B1.png?v=mvf83wv5",
-  "thumb": "img/works-cutouts/%D9%84%D8%A7%D8%A8%D8%B3%D8%AA%D8%B1.png?v=mvf83wv5",
+  "src": "img/works-view/%D9%84%D8%A7%D8%A8%D8%B3%D8%AA%D8%B1.webp?v=mvktfd1m",
+  "thumb": "img/works-thumbs/%D9%84%D8%A7%D8%A8%D8%B3%D8%AA%D8%B1.webp?v=mvktfd1m",
   "w": 615,
   "h": 820,
   "title": "لابستر",
@@ -204,8 +204,8 @@
  },
  {
   "id": "ماریو",
-  "src": "img/works-cutouts/%D9%85%D8%A7%D8%B1%DB%8C%D9%88.png?v=mvf83wvf",
-  "thumb": "img/works-cutouts/%D9%85%D8%A7%D8%B1%DB%8C%D9%88.png?v=mvf83wvf",
+  "src": "img/works-view/%D9%85%D8%A7%D8%B1%DB%8C%D9%88.webp?v=mvktfd1o",
+  "thumb": "img/works-thumbs/%D9%85%D8%A7%D8%B1%DB%8C%D9%88.webp?v=mvktfd1o",
   "w": 1050,
   "h": 1400,
   "title": "ماریو",
@@ -219,8 +219,8 @@
  },
  {
   "id": "و من یتق ..",
-  "src": "img/works-cutouts/%D9%88%20%D9%85%D9%86%20%DB%8C%D8%AA%D9%82%20...png?v=mvf83ww0",
-  "thumb": "img/works-cutouts/%D9%88%20%D9%85%D9%86%20%DB%8C%D8%AA%D9%82%20...png?v=mvf83ww0",
+  "src": "img/works-view/%D9%88%20%D9%85%D9%86%20%DB%8C%D8%AA%D9%82%20...webp?v=mvktfd1t",
+  "thumb": "img/works-thumbs/%D9%88%20%D9%85%D9%86%20%DB%8C%D8%AA%D9%82%20...webp?v=mvktfd1t",
   "w": 1050,
   "h": 1400,
   "title": "و من یتق ..",
@@ -233,8 +233,8 @@
  },
  {
   "id": "هزار چشم",
-  "src": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20.png?v=mvf83wvw",
-  "thumb": "img/works-cutouts/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20.png?v=mvf83wvw",
+  "src": "img/works-view/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20.webp?v=mvktfd1r",
+  "thumb": "img/works-thumbs/%D9%87%D8%B2%D8%A7%D8%B1%20%DA%86%D8%B4%D9%85%20.webp?v=mvktfd1r",
   "w": 1310,
   "h": 1200,
   "title": "هزار چشم",
