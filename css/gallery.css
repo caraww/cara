@@ -1282,3 +1282,24 @@ html body main.wrap #wkGrid > .wk-card:hover {
   border-color: rgba(184,151,90,.42) !important;
   outline-color: rgba(184,151,90,.42) !important;
 }
+
+
+/* Mobile corner fix: let border-radius + overflow clip the card naturally.
+   clip-path was clipping the top border on some mobile browsers. */
+@media (max-width: 760px) {
+  html body main.wrap #wkGrid > .wk-card,
+  html body main.wrap #wkGrid > .wk-card:hover,
+  html body main.wrap #wkGrid > .wk-card:focus-within {
+    -webkit-clip-path: none !important;
+    clip-path: none !important;
+    border-radius: 18px !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+  }
+  html body main.wrap #wkGrid > .wk-card > img,
+  html body main.wrap #wkGrid > .wk-card:hover > img {
+    -webkit-clip-path: none !important;
+    clip-path: none !important;
+    border-radius: 0 !important;
+  }
+}
