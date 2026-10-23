@@ -8,7 +8,8 @@ import { DurableObject } from "cloudflare:workers";
 
 const TOTAL_MS = 60000, PENALTY_MS = 3000, BONUS_MS = 1000, MIN_GAP_MS = 300, RESERVE_MS = 20 * 60 * 1000;
 const GRACE_MS = 2 * 60 * 1000; /* بعد از تموم شدن زمان، توکن بازی فقط این‌قدر معتبره (جلوی استفاده‌ی دوباره از توکن قدیمی) */
-export const DISCOUNT = 0.1;
+export const DISCOUNT = 0.1, DISCOUNT2 = 0.15; /* ۱۰٪ با GAME_GOAL امتیاز، ۱۵٪ با GAME_GOAL2 */
+const CODE_TTL_MS = 7 * 24 * 60 * 60 * 1000; /* کد ۷ روز اعتبار داره */
 
 /* هر شیء (Durable Object) با اسمش یه کار اتمیک انجام می‌ده؛ اسم‌ها:
      st.i        → شماره‌ی آخرین مرحله‌ی یه بازی (هر توکن فقط یک بار قابل استفاده‌ست)
@@ -75,6 +76,8 @@ export async function rateLimit(env, key, max, windowMs) {
 const enc = new TextEncoder();
 const json = (o, c = 200) => new Response(JSON.stringify(o), { status: c, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" } });
 const goalOf = (env) => Number(env.GAME_GOAL) || 12;
+const goal2Of = (env) => Math.max(goalOf(env) + 1, Number(env.GAME_GOAL2) || 20);
+const capOf = (env) => Number(env.GAME_DAILY_CAP) || 30;
 /* فقط GAME_SECRET؛ توکن بازی دست مرورگره، پس اگه با ADMIN_TOKEN امضا بشه می‌شه رمز ادمین رو آفلاین حدس زد */
 const secretOf = (env) => { const s = String(env.GAME_SECRET || ""); return s.length >= 16 ? s : ""; };
 const b64 = (buf) => btoa(String.fromCharCode(...new Uint8Array(buf))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
@@ -124,9 +127,15 @@ export async function checkCode(env, raw) {
   if (!/^CARA-[0-9A-F]{8}$/.test(code)) return null;
   const r = await getRec(env, code);
   if (!r || r.usedBy) return null;
+  if (r.createdAt && Date.now() - r.createdAt > CODE_TTL_MS) return null; /* منقضی */
   if (r.reservedBy && Date.now() - r.reservedAt < RESERVE_MS) return null;
   if (env.GAME && !(await codeDO(env, code).codeAvailable(RESERVE_MS))) return null;
   return code;
+}
+/* درصد تخفیف این کد (۰٫۱ یا ۰٫۱۵)؛ کدهای قدیمی بدون درصد ۱۰٪ حساب می‌شن */
+export async function codeDiscount(env, code) {
+  const r = await getRec(env, code);
+  return r && r.percent ? r.percent / 100 : DISCOUNT;
 }
 /* رزرو اتمیک؛ true یعنی رزرو شد. اگه false برگشت، سفارش رو نساز (کد همزمان توسط یکی دیگه رزرو شده) */
 export async function reserveCode(env, code, orderId) {
@@ -148,15 +157,19 @@ export async function useCode(env, code, orderId) {
 
 async function finish(env, request, st) {
   const out = { over: true, score: st.c, goal: goalOf(env) };
-  if (st.c >= out.goal) {
+  /* بازی‌ای که سریع‌تر از توان آدم تموم شده کد نمی‌گیره */
+  const human = Date.now() - (st.s || 0) >= st.c * 700;
+  if (st.c >= out.goal && human && !(await rateLimit(env, "codes:day", capOf(env), 24 * 60 * 60 * 1000))) out.capped = true;
+  else if (st.c >= out.goal && human) {
     /* هر بازی یک کد، هر IP روزی یک کد؛ هر دو اتمیک (دو درخواست هم‌زمان نمی‌تونن دو کد بگیرن) */
     const first = await stub(env, "fin:" + st.i).claim(60 * 60 * 1000);
     const free = first && (await stub(env, "ip:" + ipOf(request)).claim(24 * 60 * 60 * 1000));
     if (!first || !free) out.limited = true;
     else {
       const code = "CARA-" + [...crypto.getRandomValues(new Uint8Array(4))].map((b) => b.toString(16).padStart(2, "0")).join("").toUpperCase();
-      await putRec(env, code, { createdAt: Date.now(), reservedBy: null, reservedAt: 0, usedBy: null });
-      out.code = code;
+      const percent = st.c >= goal2Of(env) ? DISCOUNT2 * 100 : DISCOUNT * 100;
+      await putRec(env, code, { createdAt: Date.now(), percent, reservedBy: null, reservedAt: 0, usedBy: null });
+      out.code = code; out.percent = percent;
     }
   }
   return json(out);
@@ -169,19 +182,21 @@ export async function handleGame(request, env, url) {
   /* بدون راز بازی یا بدون Durable Object، کد دادن امن نیست؛ کلاینت می‌افته روی حالت تمرین */
   if (!secretOf(env)) return json({ error: "بازی روی سرور تنظیم نشده (GAME_SECRET)." }, 503);
   if (!env.GAME) return json({ error: "محافظ بازی (binding با اسم GAME) تنظیم نشده." }, 503);
-  if (p === "/api/game/config" && request.method === "GET") return json({ goal: goalOf(env), percent: DISCOUNT * 100 });
+  if (p === "/api/game/config" && request.method === "GET") return json({ goal: goalOf(env), percent: DISCOUNT * 100, goal2: goal2Of(env), percent2: DISCOUNT2 * 100 });
   if (p === "/api/game/code" && request.method === "GET") {
     if (!(await rateLimit(env, "code:" + ipOf(request), 30, 60 * 1000))) return json({ error: "تعداد درخواست زیاده؛ کمی بعد دوباره امتحان کن." }, 429);
-    return json({ valid: !!(await checkCode(env, url.searchParams.get("c"))) });
+    const c = await checkCode(env, url.searchParams.get("c"));
+    return json({ valid: !!c, percent: c ? Math.round((await codeDiscount(env, c)) * 100) : undefined });
   }
   if (request.method !== "POST") return json({ error: "not found" }, 404);
 
   if (p === "/api/game/start") {
     if (!(await rateLimit(env, "start:" + ipOf(request), 20, 60 * 1000))) return json({ error: "تعداد درخواست زیاده؛ کمی بعد دوباره امتحان کن." }, 429);
-    const st = { i: crypto.randomUUID(), r: 1, c: 0, d: Date.now() + TOTAL_MS, t: 0, n: 0 };
+    const st = { i: crypto.randomUUID(), r: 1, c: 0, d: Date.now() + TOTAL_MS, t: 0, n: 0, s: Date.now() };
     return json({ remainingMs: TOTAL_MS, ...(await makeRound(env, st)) });
   }
   if (p === "/api/game/answer") {
+    if (!(await rateLimit(env, "ans:" + ipOf(request), 300, 60 * 1000))) return json({ error: "تعداد درخواست زیاده؛ کمی صبر کن." }, 429);
     const b = await request.json().catch(() => ({}));
     const st = await open(env, b.token);
     if (!st) return json({ error: "بازی معتبر نیست؛ دوباره شروع کن." }, 400);

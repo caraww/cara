@@ -84,7 +84,7 @@ try {
     ta.remove(); return ok;
   };
   async function share(w) {
-    const data = { title: `دستبند منجوقی ${w.title} | cara`, text: w.note || "یکی از دستبندهای دست‌باف cara", url: location.origin + location.pathname + "#" + encodeURIComponent(w.id) };
+    const data = { title: `دستبند منجوقی ${w.title} | cara`, text: w.note || "یکی از دستبندهای دست‌باف cara", url: location.origin + "/bracelet/" + encodeURIComponent(String(w.id).trim().replace(/[\s\u200c]+/g, "-").replace(/[\/\\?#%.]+/g, "")) + ".html" };
     if (navigator.share) {
       try { await navigator.share(data); return; } catch (err) { if (err && err.name === "AbortError") return; }
     }
@@ -131,7 +131,7 @@ try {
     const im = e.target;
     /* If a full-size derivative is missing, try this work's thumbnail before giving up. */
     const work = list[cur];
-    if (work && work.thumb && raw !== work.thumb && !im.dataset.thumbTried) {
+    if (work && work.thumb && !im.dataset.thumbTried && !im.src.endsWith(work.thumb.split("?")[0])) {
       im.dataset.thumbTried = "1";
       im.src = work.thumb;
       return;
@@ -237,7 +237,7 @@ try {
     .then((list) => {
       list.forEach((w) => { prices[String(w.id).trim()] = w.price; });
       loaded = true;
-      cards(); lightbox(); jsonLd();
+      cards(); lightbox(); /* JSON-LD محصول‌ها ثابت توی gallery.html و صفحه‌ی هر محصوله؛ نسخه‌ی پویا دوبار تعریفشون می‌کرد */
     })
     .catch(() => {}); /* اگه Worker جواب نداد، گالری بدون قیمت کار می‌کنه */
 })();

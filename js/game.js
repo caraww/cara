@@ -25,6 +25,8 @@
 
   fetch("/api/game/config").then((r) => r.json()).then((c) => {
     $("goal").textContent = $("goal2").textContent = fa(c.goal || 12);
+    if (c.goal2) $("goalHi").textContent = fa(c.goal2);
+    if (c.percent2) $("pctHi").textContent = fa(c.percent2) + "٪";
     if (c.percent) document.querySelectorAll(".pct").forEach((e) => { e.textContent = fa(c.percent) + "٪"; });
   }).catch(() => { $("goal").textContent = $("goal2").textContent = fa(12); });
 
@@ -93,7 +95,9 @@
     code = r.code || "";
     $("win").hidden = !code;
     $("limited").hidden = !r.limited;
-    $("lose").hidden = !!(code || r.limited || local);
+    $("capped").hidden = !r.capped;
+    if (r.percent) $("winPct").textContent = fa(r.percent) + "٪";
+    $("lose").hidden = !!(code || r.limited || r.capped || local);
     if (local) { $("lose").hidden = false; $("lose").textContent = "این دور در حالت تمرین بود و کد تخفیف نداره؛ اتصال به سرور بازی برقرار نشد."; }
     if (code) {
       $("code").textContent = code;

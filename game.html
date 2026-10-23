@@ -4,10 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" href="img/cara-favicon.png?v=2" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" />
-    <link rel="stylesheet" href="css/studio.css" />
+    <link rel="stylesheet" href="/css/fonts.css"><link rel="stylesheet" href="css/studio.css" />
 <link rel="stylesheet" href="css/decor.css" />
     <title>بازی منجوق متفاوت | کارا (cara)</title>
     <meta name="description" content="منجوقی که رنگش فرق داره رو پیدا کن و کد تخفیف ۱۰٪ سفارش بعدیت رو بگیر." />
@@ -59,6 +56,7 @@
         <section class="card" id="start">
           <p class="sub">توی هر راند یه منجوق رنگش یه کم با بقیه فرق داره؛ روش بزن. هر راند سخت‌تر می‌شه. هر جواب درست ۱ ثانیه به زمانت اضافه می‌کنه و کلیک اشتباه ۳ ثانیه ازش کم می‌کنه.</p>
           <p class="sub">با <b id="goal"></b> امتیاز یا بیشتر، کد تخفیف <b class="pct">۱۰٪</b> سفارش بعدیت رو می‌گیری 🎁</p>
+          <p class="sub">با <b id="goalHi">۲۰</b> امتیاز، کد <b id="pctHi">۱۵٪</b>! کد ۷ روز اعتبار داره و یک‌بار مصرفه.</p>
           <div class="gacts"><button type="button" class="gbtn" id="play">شروع بازی</button></div>
           <p class="gnote" id="gnote" hidden></p>
         </section>
@@ -73,13 +71,14 @@
           <h2>پایان بازی!</h2>
           <p>امتیاز تو: <b id="final"></b></p>
           <div id="win" hidden>
-            <p>تبریک! 🎉 کد تخفیف <span class="pct">۱۰٪</span> تو (یک‌بار مصرف):</p>
+            <p>تبریک! 🎉 کد تخفیف <span id="winPct">۱۰٪</span> تو (۷ روز اعتبار، یک‌بار مصرف):</p>
             <div class="code" id="code"></div><br />
             <div class="gacts"><button type="button" class="gbtn line" id="copy">کپی کد</button>
             <a class="gbtn" href="builder.html">برو طراحی دستبند</a></div>
             <p class="sub" style="margin-top:12px">کد رو توی صفحه‌ی سفارش وارد کن.</p>
           </div>
           <p id="limited" class="sub" hidden>امروز قبلاً کد گرفتی؛ هر نفر روزی یک کد می‌تونه بگیره.</p>
+          <p id="capped" class="sub" hidden>سهمیه‌ی کدهای امروز تموم شد؛ فردا دوباره بیا!</p>
           <p id="lose" class="sub" hidden>برای کد باید حداقل <b id="goal2"></b> امتیاز بگیری. دوباره تلاش کن!</p>
           <div class="gacts"><button type="button" class="gbtn" id="again">بازی دوباره</button></div>
         </section>
@@ -87,5 +86,6 @@
     </main>
 <script src="js/game.js?v=3"></script>
 <script src="js/decor.js?v=14" defer></script>
-  </body>
+  <script src="/js/contact.js" defer></script>
+</body>
 </html>

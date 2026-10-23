@@ -29,7 +29,7 @@ try {
     try {
       const j = await (await fetch("/api/game/code?c=" + encodeURIComponent(v))).json();
       if (j.error) { note.textContent = j.error; note.style.color = ""; return; } /* مثلاً محدودیت تعداد درخواست */
-      note.textContent = j.valid ? `✓ کد معتبره؛ ${Number(pct).toLocaleString("fa-IR")}٪ تخفیف موقع رفتن به درگاه اعمال می‌شه.` : "این کد معتبر نیست یا قبلاً استفاده شده.";
+      note.textContent = j.valid ? `✓ کد معتبره؛ ${Number(j.percent || pct).toLocaleString("fa-IR")}٪ تخفیف موقع رفتن به درگاه اعمال می‌شه.` : "این کد معتبر نیست، منقضی شده یا قبلاً استفاده شده.";
       note.style.color = j.valid ? "" : "#c93a2b";
     } catch (e) {}
   }

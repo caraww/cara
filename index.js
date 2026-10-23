@@ -1,4 +1,4 @@
-import { handleGame, checkCode, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
+import { handleGame, checkCode, codeDiscount, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
 export { GameDO } from "./game-worker.js"; /* Durable Object بازی */
 
 /* API سایت cara روی Cloudflare Worker: پرداخت با زیبال (zibal.ir) + ثبت و مدیریت سفارش‌ها.
@@ -214,6 +214,9 @@ async function workInfo(env, url) {
 async function createPayment(request, env) {
   const C = cfg(env);
   if (!env.ORDERS) return json({ error: "ذخیره‌ساز سفارش (KV) به Worker وصل نشده." }, 500);
+  /* جلوی انبار شدن سفارش‌های pending توسط ربات */
+  if (!(await rateLimit(env, "pay:" + (request.headers.get("CF-Connecting-IP") || "unknown"), 10, 10 * 60 * 1000)))
+    return json({ error: "تعداد تلاش‌ها زیاده؛ چند دقیقه بعد دوباره امتحان کن." }, 429);
   let body;
   try { body = await request.json(); } catch { return json({ error: "درخواست معتبر نیست." }, 400); }
   const c = (body && body.customer) || {};
@@ -252,7 +255,7 @@ async function createPayment(request, env) {
       return json({ error: "تعداد تلاش‌ها زیاده؛ یه دقیقه بعد دوباره امتحان کن." }, 429);
     dc = await checkCode(env, body.discountCode);
     if (!dc) return json({ error: "کد تخفیف نامعتبر یا قبلاً استفاده شده." }, 400);
-    priceToman = Math.round(priceToman * (1 - DISCOUNT));
+    priceToman = Math.round(priceToman * (1 - ((await codeDiscount(env, dc)) || DISCOUNT)));
   }
 
   if (!C.merchant) return json({ error: "کد درگاه (ZIBAL_MERCHANT) روی Worker تنظیم نشده." }, 503);
@@ -350,22 +353,13 @@ async function paymentCallback(request, env, url, ctx) {
       const o3 = await settle(C, env, o2, true, ctx, { result: 100, amount: t.a, refNumber: t.r, cardNumber: t.c });
       return back(o3.status === "paid" ? "success" : "failed", o3);
     }
-    let id = trackId && (await env.ORDERS.get("pn:" + trackId));
-    if (!id && /^[0-9a-f-]{36}$/i.test(orderId)) id = orderId;
-    const order = id && (await getOrder(env, id));
-    if (!order) { console.error("callback for unknown order", url.search, JSON.stringify(body)); return back("failed"); }
-    if (trackId && order.trackId && trackId !== order.trackId) { console.error("callback trackId mismatch", url.search); return back("failed"); }
-    if (order.status === "paid") return back("success", order);
-
-    if (success !== "1") { /* لغو یا ناموفق توی درگاه؛ نیازی به verify نیست */
-      order.status = "failed";
-      order.cancelStatus = status;
-      await saveOrder(env, order);
-      if (order.discountCode) await releaseCode(env, order.discountCode, order.id);
-      return back(status === "3" ? "canceled" : "failed", order);
+    /* بدون امضا هیچ سفارشی تغییر نمی‌کنه (قبلاً این مسیر می‌تونست سفارش رو «ناموفق» کنه و کد تخفیف رو آزاد کنه) */
+    if (/^[0-9a-f-]{36}$/i.test(orderId)) {
+      const known = await getOrder(env, orderId);
+      if (known && known.status === "paid") return back("success", known);
     }
-    const o = await settle(C, env, order, true, ctx);
-    return back(o.status === "paid" ? "success" : "failed", o);
+    console.error("unsigned callback ignored", url.search);
+    return back("failed");
   } catch (e) {
     console.error(e);
     return back("failed");
@@ -463,7 +457,13 @@ async function notifyPaid(C, env, o) {
    POST /api/admin/orders {id, action:"delete", confirm}           → حذف یه سفارش (برای پرداخت‌شده‌ی واقعی confirm = ۸ حرف اول کد سفارش)
    POST /api/admin/orders {action:"purge", scope:"sandbox|unpaid"} → حذف گروهی آزمایشی‌ها / ناموفق‌های قدیمی
    POST /api/admin/orders {id, tracking, note}                     → کد رهگیری پست و یادداشت */
+/* سقف درخواست قبل از بررسی رمز، تا حدس زدن رمز عملاً ممکن نباشه */
+async function adminGate(request, env) {
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  return (await rateLimit(env, "adm:" + ip, 120, 10 * 60 * 1000)) ? null : json({ error: "تعداد درخواست زیاده؛ چند دقیقه بعد دوباره امتحان کن." }, 429);
+}
 async function admin(request, env, url, ctx) {
+  const gate = await adminGate(request, env); if (gate) return gate;
   if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
   if (!env.ORDERS) return json({ error: "KV وصل نیست." }, 500);
   if (request.method === "POST") {
@@ -518,6 +518,7 @@ async function admin(request, env, url, ctx) {
    curl.exe -H "Authorization: Bearer ADMIN_TOKEN" "https://caraw.ir/api/admin/debug?zibal=1"
    با ?zibal=1 یه درخواست آزمایشی ۱۰٬۰۰۰ ریالی به زیبال می‌فرسته و جواب خامش رو نشون می‌ده (فقط یه تراکنش در انتظار می‌سازه) */
 async function debug(request, env, url) {
+  const gate = await adminGate(request, env); if (gate) return gate;
   if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
   const C = cfg(env), raw = String(env.ZIBAL_MERCHANT || "");
   const out = { sandbox: C.sandbox, hasMerchant: !!C.merchant, merchant: { length: raw.length, cleanLength: C.merchant.length, masked: C.merchant.slice(0, 2) + "…" + C.merchant.slice(-2) },

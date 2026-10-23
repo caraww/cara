@@ -60,7 +60,7 @@ try {
     if (!works.length) { const s = document.getElementById("samples"); if (s) s.hidden = true; }
     else {
       const pick = [...works].sort(() => Math.random() - 0.5).slice(0, 4);
-      mg.innerHTML = pick.map((s) => `<a href="gallery.html#${encodeURIComponent(s.id)}"><img src="${esc(s.thumb)}" alt="${esc(s.title)}"${s.w ? ` width="${s.w}" height="${s.h}"` : ""} loading="lazy" decoding="async"><b>${esc(s.title)}</b></a>`).join("");
+      mg.innerHTML = pick.map((s) => `<a href="/bracelet/${encodeURIComponent(String(s.id).trim().replace(/[\s\u200c]+/g, "-").replace(/[\/\\?#%.]+/g, ""))}.html"><img src="${esc(s.thumb)}" alt="${esc(s.title)}"${s.w ? ` width="${s.w}" height="${s.h}"` : ""} loading="lazy" decoding="async"><b>${esc(s.title)}</b></a>`).join("");
       mg.addEventListener("error", (e) => { if (e.target.tagName === "IMG") e.target.closest("a").hidden = true; }, true);
     }
   }

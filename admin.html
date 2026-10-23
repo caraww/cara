@@ -5,9 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex,nofollow">
 <link rel="icon" type="image/png" href="img/cara-favicon.png?v=2">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap">
-<title>cara — سفارش‌ها</title>
+<link rel="stylesheet" href="/css/fonts.css"><title>cara — سفارش‌ها</title>
 <style>
 :root{--ink:#221a2c;--muted:#6b6377;--line:#ddd6e6;--bg:#f6f4f8;--tint:#ece6f2;--gold:#b8975a;--plum:#3b2650;--ok:#1f7a4d;--bad:#b3261e;--warn:#9a6a00}
 *{box-sizing:border-box}
@@ -93,7 +91,7 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
   </section>
 </main>
 <div id="toast" role="status"></div>
-<script src="js/palette.js?v=32"></script>
+<script src="js/palette.js?v=34"></script>
 <script>
 (() => {
   const $ = (s, r = document) => r.querySelector(s);
@@ -259,7 +257,7 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
     sender = sender.trim() || "cara · caraw.ir";
     const labels = list.map((r) => `<section class="l"><div class="to"><small>گیرنده</small><b>${esc(r.name)}</b><p>${esc(r.address)}</p><div class="ph">${esc(r.phone)}</div></div><div class="from"><small>فرستنده</small><span>${esc(sender)}</span><em>#${esc(r.code)}</em></div></section>`).join("");
     const css = "@page{size:A4;margin:8mm}*{box-sizing:border-box}body{margin:0;font:14px/1.8 Vazirmatn,Tahoma,sans-serif;color:#000}.g{display:grid;grid-template-columns:1fr 1fr;gap:6mm}.l{border:1.5px dashed #555;border-radius:3mm;padding:5mm;height:88mm;break-inside:avoid;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}small{display:block;color:#555;font-size:11px}.to b{font-size:20px;font-weight:900}.to p{margin:4px 0;font-size:16px;white-space:pre-wrap;word-break:break-word}.ph{font-size:18px;font-weight:700;direction:ltr;text-align:right}.from{border-top:1px solid #999;padding-top:3mm;font-size:12px}.from span{display:block;white-space:pre-wrap}.from em{font-style:normal;direction:ltr;color:#555}";
-    const doc = '<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap"><style>' + css + '</style></head><body><div class="g">' + labels + "</div></body></html>";
+    const doc = '<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><style>' + css + '</style></head><body><div class="g">' + labels + "</div></body></html>";
     const fr = document.createElement("iframe");
     fr.style.cssText = "position:fixed;width:0;height:0;border:0;right:0;bottom:0";
     document.body.appendChild(fr);
