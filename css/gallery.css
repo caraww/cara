@@ -1207,3 +1207,38 @@ html body main.wrap #wkGrid > .wk-card > figcaption .wk-price {
   background-color: #fff !important;
   background-image: none !important;
 }
+
+
+/* Focused polish: white enlarged-image stage and reliably rounded mobile cards.
+   Kept at the end so earlier decorative styles cannot restore gradients/square corners. */
+html body dialog#lb.wk-lb .wk-stage,
+html body dialog#lb.wk-lb .wk-stage:focus-within {
+  background: #fff !important;
+  background-color: #fff !important;
+  background-image: none !important;
+  border-radius: 26px !important;
+  overflow: hidden !important;
+  box-shadow: none !important;
+}
+html body dialog#lb.wk-lb .wk-stage #lbImg {
+  background: #fff !important;
+  background-color: #fff !important;
+  border-radius: 18px !important;
+}
+html body main.wrap #wkGrid > .wk-card,
+html body main.wrap #wkGrid > .wk-card:hover,
+html body main.wrap #wkGrid > .wk-card:focus-within {
+  border-radius: 22px !important;
+  overflow: hidden !important;
+}
+@media (max-width: 760px) {
+  html body dialog#lb.wk-lb .wk-stage,
+  html body dialog#lb.wk-lb .wk-stage:focus-within {
+    margin: 10px !important;
+    border-radius: 22px !important;
+    overflow: hidden !important;
+  }
+  html body dialog#lb.wk-lb .wk-stage #lbImg {
+    border-radius: 14px !important;
+  }
+}
