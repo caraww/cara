@@ -1183,3 +1183,27 @@
   background: #fff !important;
   background-image: none !important;
 }
+
+
+/* FINAL targeted fix: the bracelet cards rendered by gallery.html (#wkGrid).
+   Use the grid ID to beat earlier, more-specific !important gradients. */
+html body main.wrap #wkGrid > .wk-card,
+html body main.wrap #wkGrid > .wk-card:hover,
+html body main.wrap #wkGrid > .wk-card:focus-within {
+  background: #fff !important;
+  background-color: #fff !important;
+  background-image: none !important;
+}
+html body main.wrap #wkGrid > .wk-card > img,
+html body main.wrap #wkGrid > .wk-card:hover > img,
+html body main.wrap #wkGrid > .wk-card:focus-within > img {
+  background: #fff !important;
+  background-color: #fff !important;
+  background-image: none !important;
+}
+html body main.wrap #wkGrid > .wk-card > figcaption,
+html body main.wrap #wkGrid > .wk-card > figcaption .wk-price {
+  background: #fff !important;
+  background-color: #fff !important;
+  background-image: none !important;
+}
