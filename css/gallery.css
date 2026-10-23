@@ -1268,15 +1268,17 @@ html body main.wrap #wkGrid > .wk-card > img {
 }
 
 
-/* Restore a clearly visible warm-gold outline on gallery cards.
-   Keep the card interior and caption white; preserve rounded mobile corners. */
+/* Restore the original subtle gold border from the gallery card design.
+   Keep it visible around rounded corners without making it darker or heavier. */
 html body main.wrap #wkGrid > .wk-card,
 html body main.wrap #wkGrid > .wk-card:hover,
 html body main.wrap #wkGrid > .wk-card:focus-within {
-  border: 1.5px solid #c6a15b !important;
-  box-shadow: 0 0 0 1px rgba(198,161,91,.12), 0 4px 14px rgba(75,55,25,.07) !important;
+  border: 1px solid rgba(184,151,90,.28) !important;
+  outline: 1px solid rgba(184,151,90,.28) !important;
+  outline-offset: -1px !important;
+  box-shadow: 0 1px 2px rgba(59,38,80,.06), 0 4px 12px rgba(59,38,80,.05) !important;
 }
 html body main.wrap #wkGrid > .wk-card:hover {
-  border-color: #ad8740 !important;
-  box-shadow: 0 0 0 1px rgba(173,135,64,.18), 0 8px 20px rgba(75,55,25,.10) !important;
+  border-color: rgba(184,151,90,.42) !important;
+  outline-color: rgba(184,151,90,.42) !important;
 }
