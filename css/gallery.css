@@ -548,8 +548,7 @@
 .wk-grid>*{
   border-radius:30px;
   border-color:rgba(184,151,90,.28);
-  background:
-    radial-gradient(circle at 50% 30%,#fff 0,#fbf9fd 45%,var(--wk-tint) 100%);
+  background:#fff;
   box-shadow:0 10px 30px rgba(59,38,80,.08),inset 0 0 0 6px rgba(255,255,255,.7);
 }
 .wk-grid>*:hover{box-shadow:0 26px 54px rgba(59,38,80,.18),inset 0 0 0 6px rgba(255,255,255,.85)}
