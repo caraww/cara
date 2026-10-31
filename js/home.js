@@ -8,215 +8,477 @@
    ۱) نوار ثابت پایین موبایل (قبلاً inline توی index.html)
    ================================================================== */
 try {
-(function () {
-  var bar = document.getElementById("mCta"), hero = document.querySelector(".hero");
-  if (!bar || !hero || !("IntersectionObserver" in window)) return;
-  new IntersectionObserver(function (e) {
-    var on = !e[0].isIntersecting;
-    bar.classList.toggle("on", on);
-    bar.setAttribute("aria-hidden", on ? "false" : "true");
-    bar.querySelectorAll("a").forEach(function (a) { a.tabIndex = on ? 0 : -1; });
-  }, { threshold: 0.15 }).observe(hero);
-})();
-} catch (e) { console.error('home:mcta', e); }
+  (function () {
+    var bar = document.getElementById("mCta"),
+      hero = document.querySelector(".hero");
+    if (!bar || !hero || !("IntersectionObserver" in window)) return;
+    new IntersectionObserver(
+      function (e) {
+        var on = !e[0].isIntersecting;
+        bar.classList.toggle("on", on);
+        bar.setAttribute("aria-hidden", on ? "false" : "true");
+        bar.querySelectorAll("a").forEach(function (a) {
+          a.tabIndex = on ? 0 : -1;
+        });
+      },
+      { threshold: 0.15 },
+    ).observe(hero);
+  })();
+} catch (e) {
+  console.error("home:mcta", e);
+}
 
 /* ==================================================================
    ۲) صفحه‌ی اصلی (قبلاً home.js)
    ================================================================== */
 try {
-(() => {
-  const top = document.querySelector(".top");
-  const onScroll = () => top.classList.toggle("solid", scrollY > 20);
-  addEventListener("scroll", onScroll, { passive: true }); onScroll();
+  (() => {
+    const top = document.querySelector(".top");
+    const onScroll = () => top.classList.toggle("solid", scrollY > 20);
+    addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
 
-  const chips = document.getElementById("chips");
-  if (chips) {
-    /* عکس واقعی منجوق‌ها: برای هر رنگ سعی می‌کنه img/beads/<کد رنگ>.jpg رو لود کنه (مثلاً DB0680.jpg).
+    const chips = document.getElementById("chips");
+    if (chips) {
+      /* عکس واقعی منجوق‌ها: برای هر رنگ سعی می‌کنه img/beads/<کد رنگ>.jpg رو لود کنه (مثلاً DB0680.jpg).
        اگه jpg نبود png/webp رو امتحان می‌کنه؛ اگه هیچ عکسی نبود همون منجوق کشیده‌شده می‌مونه.
        دیگه لازم نیست کدها رو دستی این‌جا بنویسی؛ فقط اسم فایل باید دقیقاً کد رنگ باشه (حروف بزرگ). */
-    const EXTS = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG", "WEBP"];
-    const shade = (hex, k) => { const t = k < 0 ? 0 : 255; return `rgb(${CARA.hexRgb(hex).map((v) => Math.round(v + (t - v) * Math.abs(k))).join(",")})`; };
-    const beadSVG = (hex, i) => `<svg viewBox="0 0 100 78" aria-hidden="true"><defs>
+      const EXTS = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG", "WEBP"];
+      const shade = (hex, k) => {
+        const t = k < 0 ? 0 : 255;
+        return `rgb(${CARA.hexRgb(hex)
+          .map((v) => Math.round(v + (t - v) * Math.abs(k)))
+          .join(",")})`;
+      };
+      const beadSVG = (
+        hex,
+        i,
+      ) => `<svg viewBox="0 0 100 78" aria-hidden="true"><defs>
       <linearGradient id="b${i}" x1="0" x2="1"><stop offset="0" stop-color="${shade(hex, -0.38)}"/><stop offset=".3" stop-color="${shade(hex, 0.22)}"/><stop offset=".6" stop-color="${hex}"/><stop offset="1" stop-color="${shade(hex, -0.45)}"/></linearGradient>
       <radialGradient id="t${i}" cx=".4" cy=".35"><stop offset="0" stop-color="${shade(hex, 0.5)}"/><stop offset="1" stop-color="${shade(hex, -0.05)}"/></radialGradient></defs>
       <path d="M12 30v26c0 10 17 16 38 16s38-6 38-16V30z" fill="url(#b${i})"/><ellipse cx="50" cy="30" rx="38" ry="17" fill="url(#t${i})"/>
       <ellipse cx="50" cy="30" rx="17" ry="8" fill="${shade(hex, -0.7)}"/><ellipse cx="50" cy="28.5" rx="17" ry="6.2" fill="${shade(hex, -0.88)}" opacity=".75"/>
       <path d="M22 45c1 5 5 8 10 10" stroke="rgba(255,255,255,.55)" stroke-width="3" fill="none" stroke-linecap="round"/></svg>`;
-    /* js/beads.js (با tools/build-beads.js ساخته می‌شه) می‌گه کدوم عکس‌ها واقعاً هستن؛ بدون اون همون امتحان پسوندها انجام می‌شه */
-    const BF = CARA.beadFiles;
-    const bead = (p, i) => !BF ? `<img src="img/beads/${p.code}.${EXTS[0]}" data-e="0" alt="${p.name}" loading="lazy">` : BF[p.code] ? `<img src="img/beads/${BF[p.code]}" data-e="${EXTS.length}" alt="${p.name}" loading="lazy">` : beadSVG(p.hex, i);
-    CARA.palette.forEach((p, i) => chips.insertAdjacentHTML("beforeend", `<li data-i="${i}" tabindex="0" role="button" aria-label="کپی کد ${p.code}"><div class="bead">${bead(p, i)}</div><b>${p.code}</b><span>${p.name}</span></li>`));
-    /* خطای لود عکس بابل نمی‌شه، پس توی فاز capture می‌گیریمش: ساختار بعدی یا برگشت به منجوق کشیده‌شده */
-    chips.addEventListener("error", (e) => {
-      const im = e.target; if (im.tagName !== "IMG") return;
-      const n = Number(im.dataset.e) + 1, li = im.closest("li"), p = CARA.palette[Number(li.dataset.i)];
-      if (n < EXTS.length) { im.dataset.e = n; im.src = `img/beads/${p.code}.${EXTS[n]}`; }
-      else li.querySelector(".bead").innerHTML = beadSVG(p.hex, Number(li.dataset.i));
-    }, true);
-  
+      /* js/beads.js (با tools/build-beads.js ساخته می‌شه) می‌گه کدوم عکس‌ها واقعاً هستن؛ بدون اون همون امتحان پسوندها انجام می‌شه */
+      const BF = CARA.beadFiles;
+      const bead = (p, i) =>
+        !BF
+          ? `<img src="img/beads/${p.code}.${EXTS[0]}" data-e="0" alt="${p.name}" loading="lazy">`
+          : BF[p.code]
+            ? `<img src="img/beads/${BF[p.code]}" data-e="${EXTS.length}" alt="${p.name}" loading="lazy">`
+            : beadSVG(p.hex, i);
+      CARA.palette.forEach((p, i) =>
+        chips.insertAdjacentHTML(
+          "beforeend",
+          `<li data-i="${i}" tabindex="0" role="button" aria-label="کپی کد ${p.code}"><div class="bead">${bead(p, i)}</div><b>${p.code}</b><span>${p.name}</span></li>`,
+        ),
+      );
+      /* خطای لود عکس بابل نمی‌شه، پس توی فاز capture می‌گیریمش: ساختار بعدی یا برگشت به منجوق کشیده‌شده */
+      chips.addEventListener(
+        "error",
+        (e) => {
+          const im = e.target;
+          if (im.tagName !== "IMG") return;
+          const n = Number(im.dataset.e) + 1,
+            li = im.closest("li"),
+            p = CARA.palette[Number(li.dataset.i)];
+          if (n < EXTS.length) {
+            im.dataset.e = n;
+            im.src = `img/beads/${p.code}.${EXTS[n]}`;
+          } else
+            li.querySelector(".bead").innerHTML = beadSVG(
+              p.hex,
+              Number(li.dataset.i),
+            );
+        },
+        true,
+      );
     }
 
-  /* چند عکس تصادفی از کارهای خودم (js/works.js با tools/build-works.js ساخته می‌شه) */
-  const mg = document.getElementById("miniGal"), works = CARA.works || [];
-  const esc = (t) => String(t).replace(/[&<>"]/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[m]);
-  if (mg) {
-    if (!works.length) { const s = document.getElementById("samples"); if (s) s.hidden = true; }
-    else {
-      const pick = [...works].sort(() => Math.random() - 0.5).slice(0, 4);
-      mg.innerHTML = pick.map((s) => `<a href="/bracelet/${encodeURIComponent(String(s.id).trim().replace(/[\s\u200c]+/g, "-").replace(/[\/\\?#%.]+/g, ""))}.html"><img src="${esc(s.thumb)}" alt="${esc(s.title)}"${s.w ? ` width="${s.w}" height="${s.h}"` : ""} loading="lazy" decoding="async"><b>${esc(s.title)}</b></a>`).join("");
-      mg.addEventListener("error", (e) => { if (e.target.tagName === "IMG") e.target.closest("a").hidden = true; }, true);
-    }
-  }
-
-  /* هیرو: زمین مهره؛ با اسکرول، مهره‌ها از وسط به دو طرف کنار می‌روند */
-  const cv = document.getElementById("heroCanvas"), g = cv.getContext("2d"), hero = cv.parentElement;
-  /* افزایش وضوح بافت منجوق‌ها؛ تغییر قبلی زیر لایه‌های هیرو خیلی کم‌رنگ دیده می‌شد. */
-  cv.style.opacity = "0.82";
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  /* پالت آرام و تک‌رنگ: طیف بنفش‌های خاکستری و فقط یک مهره‌ی طلایی در مرکز هر لوزی */
-  const SET = ["#E7D9F7", "#C8B2E8", "#A88BD0", "#8869B3", "#6E5196", "#563C78"], GOLD = "#E4BE70";
-  const R2 = 175 * 175, CW = 24, CH = 18, BASE = 0.94, BW = CW - 1.1, BH = CH - 1.1;
-  let mx = -1, my = -1, W, H, cols, rows, ticking = false, cleared = false, heroVisible = true, sprites = [], jx, jy, ci;
-  const rnd = (x, y) => { const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453; return s - Math.floor(s); };
-  /* هر مهره‌ی دلیکای استوانه‌ای یک بار رندر می‌شود: لبه‌ی تیره، بدنه‌ی شیشه‌ای،
-     برق باریک روی سطح و سایه‌ی اتصال؛ در هر فریم فقط sprite آماده کشیده می‌شود. */
-  const mix = (hex, target, amount) => {
-    const a = CARA.hexRgb(hex), b = CARA.hexRgb(target);
-    return "rgb(" + a.map((v, i) => Math.round(v + (b[i] - v) * amount)).join(",") + ")";
-  };
-  const sprite = (hex, d) => {
-    const c = document.createElement("canvas");
-    c.width = Math.ceil(BW * d); c.height = Math.ceil(BH * d);
-    const s = c.getContext("2d"); s.scale(d, d);
-    const x = 0.55, y = 0.45, w = BW - 1.1, h = BH - 1.0, r = Math.min(3.2, h * 0.23);
-    /* شکاف بسیار باریک بین مهره‌ها باعث می‌شود بافت، شبیه یک سطح پلاستیکی صاف نشود. */
-    s.fillStyle = "rgba(5,3,10,.58)";
-    s.beginPath(); s.roundRect(0.05, 0.05, BW - 0.1, BH - 0.1, r + 0.5); s.fill();
-    const body = s.createLinearGradient(x, y, x + w, y + h * 0.2);
-    body.addColorStop(0, mix(hex, "#000000", .42));
-    body.addColorStop(.18, mix(hex, "#ffffff", .13));
-    body.addColorStop(.48, mix(hex, "#ffffff", .24));
-    body.addColorStop(.72, hex);
-    body.addColorStop(1, mix(hex, "#000000", .38));
-    s.fillStyle = body;
-    s.beginPath(); s.roundRect(x, y, w, h, r); s.fill();
-    /* برق نرم شیشه‌ای، نه نقطه‌ی سفید کارتونی */
-    const shine = s.createLinearGradient(0, y, 0, y + h * .62);
-    shine.addColorStop(0, "rgba(255,255,255,.34)");
-    shine.addColorStop(.42, "rgba(255,255,255,.08)");
-    shine.addColorStop(1, "rgba(255,255,255,0)");
-    s.fillStyle = shine;
-    s.beginPath(); s.roundRect(x + 1, y + .45, w - 2, h * .55, Math.max(1, r - .8)); s.fill();
-    s.strokeStyle = "rgba(255,255,255,.18)"; s.lineWidth = .45;
-    s.beginPath(); s.moveTo(x + r, y + .55); s.lineTo(x + w - r, y + .55); s.stroke();
-    s.fillStyle = "rgba(0,0,0,.2)";
-    s.beginPath(); s.roundRect(x + .7, y + h * .78, w - 1.4, h * .14, 1); s.fill();
-    return c;
-  };
-  function size() {
-    W = hero.clientWidth; H = hero.clientHeight;
-    const d = Math.min(2, devicePixelRatio || 1);
-    cv.width = W * d; cv.height = H * d; g.setTransform(d, 0, 0, d, 0, 0);
-    cols = Math.ceil(W / CW) + 1; rows = Math.ceil(H / CH) + 1;
-    sprites = [...SET, GOLD].map((h) => sprite(h, d));
-    const n = cols * rows; jx = new Float32Array(n); jy = new Float32Array(n); ci = new Uint8Array(n);
-    for (let y = 0; y < rows; y++) for (let x = 0; x < cols; x++) {
-      const i = y * cols + x, dd = Math.abs((x % 14) - 7) + Math.abs((y % 14) - 7);
-      jx[i] = 0.35 + rnd(x, y) * 0.4; jy[i] = (rnd(y, x) - 0.5) * 160; ci[i] = dd === 0 ? 6 : Math.min(5, Math.floor(dd / 2.4));
-    }
-    cleared = false; draw();
-  }
-  function draw() {
-    if (!heroVisible) return;
-    const p = reduce ? 0 : Math.min(1, scrollY / (H * 0.85));
-    if (p >= 1) { if (!cleared) { g.clearRect(0, 0, W, H); cleared = true; } return; }
-    cleared = false; g.clearRect(0, 0, W, H);
-    for (let y = 0; y < rows; y++) {
-      const q = Math.min(1, Math.max(0, p * 1.6 - (y / rows) * 0.6)), e = q * q * (3 - 2 * q), a = (1 - e) * BASE;
-      if (a < 0.02) continue;
-      g.globalAlpha = a;
-      /* نخ‌های افقیِ زیر بافت، فقط در فاصله‌ی باریک ردیف‌ها دیده می‌شوند. */
-      g.strokeStyle = "rgba(228,211,187,.17)";
-      g.lineWidth = .55;
-      g.beginPath(); g.moveTo(0, y * CH + CH - .25); g.lineTo(W, y * CH + CH - .25); g.stroke();
-      for (let x = 0; x < cols; x++) {
-        const i = y * cols + x, dir = (x + 0.5) * CW < W / 2 ? -1 : 1, px = x * CW + dir * e * W * jx[i] + 1;
-        if (px > W || px + BW < 0) continue;
-        const py = y * CH + e * jy[i] + 1;
-        if (mx > 0) { /* هاله‌ی مهره‌ها دور نشانگر: نزدیک‌ترها طلایی می‌شوند */
-          const dx = px + BW / 2 - mx, dy = py + BH / 2 - my, dd = dx * dx + dy * dy;
-          if (dd < R2) { const k = 1 - dd / R2; g.globalAlpha = Math.min(1, a + k * 0.75); g.drawImage(sprites[k > 0.6 ? 6 : Math.max(0, ci[i] - 2)], px, py, BW, BH); g.globalAlpha = a; continue; }
-        }
-        g.drawImage(sprites[ci[i]], px, py, BW, BH);
+    /* چند عکس تصادفی از کارهای خودم (js/works.js با tools/build-works.js ساخته می‌شه) */
+    const mg = document.getElementById("miniGal"),
+      works = CARA.works || [];
+    const esc = (t) =>
+      String(t).replace(
+        /[&<>"]/g,
+        (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[m],
+      );
+    if (mg) {
+      if (!works.length) {
+        const s = document.getElementById("samples");
+        if (s) s.hidden = true;
+      } else {
+        const pick = [...works].sort(() => Math.random() - 0.5).slice(0, 4);
+        mg.innerHTML = pick
+          .map(
+            (s) =>
+              `<a href="/bracelet/${encodeURIComponent(
+                String(s.id)
+                  .trim()
+                  .replace(/[\s\u200c]+/g, "-")
+                  .replace(/[\/\\?#%.]+/g, ""),
+              )}.html"><img src="${esc(s.thumb)}" alt="${esc(s.title)}"${s.w ? ` width="${s.w}" height="${s.h}"` : ""} loading="lazy" decoding="async"><b>${esc(s.title)}</b></a>`,
+          )
+          .join("");
+        mg.addEventListener(
+          "error",
+          (e) => {
+            if (e.target.tagName === "IMG") e.target.closest("a").hidden = true;
+          },
+          true,
+        );
       }
     }
-    g.globalAlpha = 1;
-  }
-  if ("IntersectionObserver" in window) {
-    const heroObserver = new IntersectionObserver((entries) => {
-      heroVisible = entries[0].isIntersecting;
-      if (heroVisible) draw();
-    }, { rootMargin: "100px 0px" });
-    heroObserver.observe(hero);
-  }
-  addEventListener("scroll", () => { if (heroVisible && !ticking) { ticking = true; requestAnimationFrame(() => { draw(); ticking = false; }); } }, { passive: true });
-  let rz; addEventListener("resize", () => { clearTimeout(rz); rz = setTimeout(size, 120); }); size();
 
-  /* نخ مهره‌ای بالای صفحه = میزان اسکرول */
-  const bar = document.getElementById("threadBar");
-  const prog = () => { const m = document.documentElement.scrollHeight - innerHeight; bar.style.setProperty("--p", (m > 0 ? (scrollY / m) * 100 : 0) + "%"); };
-  addEventListener("scroll", prog, { passive: true }); prog();
-
-  /* ورود نرم بخش‌ها هنگام اسکرول */
-  if (!reduce && "IntersectionObserver" in window) {
-    const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { threshold: 0.15 });
-    document.querySelectorAll(".sec h2, .lead, .path, .mini-gal a, .steps li, .chips li").forEach((el, i) => { el.classList.add("rv"); el.style.setProperty("--d", (i % 6) * 0.06 + "s"); io.observe(el); });
-  }
-
-  /* نشانگر روی هیرو */
-  let pq = false;
-  hero.addEventListener("pointermove", (e) => { if (reduce || !heroVisible) return; const r = hero.getBoundingClientRect(); mx = e.clientX - r.left; my = e.clientY - r.top; if (!pq) { pq = true; requestAnimationFrame(() => { draw(); pq = false; }); } });
-  hero.addEventListener("pointerleave", () => { mx = -1; draw(); });
-
-  /* کلیک روی هر رنگ = کپی کد */
-  const toast = document.createElement("div"); toast.className = "toast"; toast.setAttribute("role", "status"); document.body.appendChild(toast);
-  let tt;
-  chips.addEventListener("click", (e) => {
-    const li = e.target.closest("li"); if (!li) return;
-    const code = li.querySelector("b").textContent;
-    Promise.resolve(navigator.clipboard && navigator.clipboard.writeText(code)).catch(() => {}).finally(() => {
-      toast.textContent = `کد ${code} کپی شد`; toast.classList.add("on"); clearTimeout(tt); tt = setTimeout(() => toast.classList.remove("on"), 1600);
+    /* هیرو: زمین مهره؛ با اسکرول، مهره‌ها از وسط به دو طرف کنار می‌روند */
+    const cv = document.getElementById("heroCanvas"),
+      g = cv.getContext("2d"),
+      hero = cv.parentElement;
+    /* افزایش وضوح بافت منجوق‌ها؛ تغییر قبلی زیر لایه‌های هیرو خیلی کم‌رنگ دیده می‌شد. */
+    cv.style.opacity = "0.82";
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    /* پالت آرام و تک‌رنگ: طیف بنفش‌های خاکستری و فقط یک مهره‌ی طلایی در مرکز هر لوزی */
+    const SET = [
+        "#E7D9F7",
+        "#C8B2E8",
+        "#A88BD0",
+        "#8869B3",
+        "#6E5196",
+        "#563C78",
+      ],
+      GOLD = "#E4BE70";
+    const R2 = 175 * 175,
+      CW = 24,
+      CH = 18,
+      BASE = 0.94,
+      BW = CW - 1.1,
+      BH = CH - 1.1;
+    let mx = -1,
+      my = -1,
+      W,
+      H,
+      cols,
+      rows,
+      ticking = false,
+      cleared = false,
+      heroVisible = true,
+      sprites = [],
+      jx,
+      jy,
+      ci;
+    const rnd = (x, y) => {
+      const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453;
+      return s - Math.floor(s);
+    };
+    /* هر مهره‌ی دلیکای استوانه‌ای یک بار رندر می‌شود: لبه‌ی تیره، بدنه‌ی شیشه‌ای،
+     برق باریک روی سطح و سایه‌ی اتصال؛ در هر فریم فقط sprite آماده کشیده می‌شود. */
+    const mix = (hex, target, amount) => {
+      const a = CARA.hexRgb(hex),
+        b = CARA.hexRgb(target);
+      return (
+        "rgb(" +
+        a.map((v, i) => Math.round(v + (b[i] - v) * amount)).join(",") +
+        ")"
+      );
+    };
+    const sprite = (hex, d) => {
+      const c = document.createElement("canvas");
+      c.width = Math.ceil(BW * d);
+      c.height = Math.ceil(BH * d);
+      const s = c.getContext("2d");
+      s.scale(d, d);
+      const x = 0.55,
+        y = 0.45,
+        w = BW - 1.1,
+        h = BH - 1.0,
+        r = Math.min(3.2, h * 0.23);
+      /* شکاف بسیار باریک بین مهره‌ها باعث می‌شود بافت، شبیه یک سطح پلاستیکی صاف نشود. */
+      s.fillStyle = "rgba(5,3,10,.58)";
+      s.beginPath();
+      s.roundRect(0.05, 0.05, BW - 0.1, BH - 0.1, r + 0.5);
+      s.fill();
+      const body = s.createLinearGradient(x, y, x + w, y + h * 0.2);
+      body.addColorStop(0, mix(hex, "#000000", 0.42));
+      body.addColorStop(0.18, mix(hex, "#ffffff", 0.13));
+      body.addColorStop(0.48, mix(hex, "#ffffff", 0.24));
+      body.addColorStop(0.72, hex);
+      body.addColorStop(1, mix(hex, "#000000", 0.38));
+      s.fillStyle = body;
+      s.beginPath();
+      s.roundRect(x, y, w, h, r);
+      s.fill();
+      /* برق نرم شیشه‌ای، نه نقطه‌ی سفید کارتونی */
+      const shine = s.createLinearGradient(0, y, 0, y + h * 0.62);
+      shine.addColorStop(0, "rgba(255,255,255,.34)");
+      shine.addColorStop(0.42, "rgba(255,255,255,.08)");
+      shine.addColorStop(1, "rgba(255,255,255,0)");
+      s.fillStyle = shine;
+      s.beginPath();
+      s.roundRect(x + 1, y + 0.45, w - 2, h * 0.55, Math.max(1, r - 0.8));
+      s.fill();
+      s.strokeStyle = "rgba(255,255,255,.18)";
+      s.lineWidth = 0.45;
+      s.beginPath();
+      s.moveTo(x + r, y + 0.55);
+      s.lineTo(x + w - r, y + 0.55);
+      s.stroke();
+      s.fillStyle = "rgba(0,0,0,.2)";
+      s.beginPath();
+      s.roundRect(x + 0.7, y + h * 0.78, w - 1.4, h * 0.14, 1);
+      s.fill();
+      return c;
+    };
+    function size() {
+      W = hero.clientWidth;
+      H = hero.clientHeight;
+      const d = Math.min(2, devicePixelRatio || 1);
+      cv.width = W * d;
+      cv.height = H * d;
+      g.setTransform(d, 0, 0, d, 0, 0);
+      cols = Math.ceil(W / CW) + 1;
+      rows = Math.ceil(H / CH) + 1;
+      sprites = [...SET, GOLD].map((h) => sprite(h, d));
+      const n = cols * rows;
+      jx = new Float32Array(n);
+      jy = new Float32Array(n);
+      ci = new Uint8Array(n);
+      for (let y = 0; y < rows; y++)
+        for (let x = 0; x < cols; x++) {
+          const i = y * cols + x,
+            dd = Math.abs((x % 14) - 7) + Math.abs((y % 14) - 7);
+          jx[i] = 0.35 + rnd(x, y) * 0.4;
+          jy[i] = (rnd(y, x) - 0.5) * 160;
+          ci[i] = dd === 0 ? 6 : Math.min(5, Math.floor(dd / 2.4));
+        }
+      cleared = false;
+      draw();
+    }
+    function draw() {
+      if (!heroVisible) return;
+      const p = reduce ? 0 : Math.min(1, scrollY / (H * 0.85));
+      if (p >= 1) {
+        if (!cleared) {
+          g.clearRect(0, 0, W, H);
+          cleared = true;
+        }
+        return;
+      }
+      cleared = false;
+      g.clearRect(0, 0, W, H);
+      for (let y = 0; y < rows; y++) {
+        const q = Math.min(1, Math.max(0, p * 1.6 - (y / rows) * 0.6)),
+          e = q * q * (3 - 2 * q),
+          a = (1 - e) * BASE;
+        if (a < 0.02) continue;
+        g.globalAlpha = a;
+        /* نخ‌های افقیِ زیر بافت، فقط در فاصله‌ی باریک ردیف‌ها دیده می‌شوند. */
+        g.strokeStyle = "rgba(228,211,187,.17)";
+        g.lineWidth = 0.55;
+        g.beginPath();
+        g.moveTo(0, y * CH + CH - 0.25);
+        g.lineTo(W, y * CH + CH - 0.25);
+        g.stroke();
+        for (let x = 0; x < cols; x++) {
+          const i = y * cols + x,
+            dir = (x + 0.5) * CW < W / 2 ? -1 : 1,
+            px = x * CW + dir * e * W * jx[i] + 1;
+          if (px > W || px + BW < 0) continue;
+          const py = y * CH + e * jy[i] + 1;
+          if (mx > 0) {
+            /* هاله‌ی مهره‌ها دور نشانگر: نزدیک‌ترها طلایی می‌شوند */
+            const dx = px + BW / 2 - mx,
+              dy = py + BH / 2 - my,
+              dd = dx * dx + dy * dy;
+            if (dd < R2) {
+              const k = 1 - dd / R2;
+              g.globalAlpha = Math.min(1, a + k * 0.75);
+              g.drawImage(
+                sprites[k > 0.6 ? 6 : Math.max(0, ci[i] - 2)],
+                px,
+                py,
+                BW,
+                BH,
+              );
+              g.globalAlpha = a;
+              continue;
+            }
+          }
+          g.drawImage(sprites[ci[i]], px, py, BW, BH);
+        }
+      }
+      g.globalAlpha = 1;
+    }
+    if ("IntersectionObserver" in window) {
+      const heroObserver = new IntersectionObserver(
+        (entries) => {
+          heroVisible = entries[0].isIntersecting;
+          if (heroVisible) draw();
+        },
+        { rootMargin: "100px 0px" },
+      );
+      heroObserver.observe(hero);
+    }
+    addEventListener(
+      "scroll",
+      () => {
+        if (heroVisible && !ticking) {
+          ticking = true;
+          requestAnimationFrame(() => {
+            draw();
+            ticking = false;
+          });
+        }
+      },
+      { passive: true },
+    );
+    let rz;
+    addEventListener("resize", () => {
+      clearTimeout(rz);
+      rz = setTimeout(size, 120);
     });
-  });
-  /* با کیبورد هم می‌شه کد رنگ رو کپی کرد */
-  chips.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.tagName === "LI") { e.preventDefault(); e.target.click(); } });
-})();
-} catch (e) { console.error('home:main', e); }
+    size();
+
+    /* نخ مهره‌ای بالای صفحه = میزان اسکرول */
+    const bar = document.getElementById("threadBar");
+    const prog = () => {
+      const m = document.documentElement.scrollHeight - innerHeight;
+      bar.style.setProperty("--p", (m > 0 ? (scrollY / m) * 100 : 0) + "%");
+    };
+    addEventListener("scroll", prog, { passive: true });
+    prog();
+
+    /* ورود نرم بخش‌ها هنگام اسکرول */
+    if (!reduce && "IntersectionObserver" in window) {
+      const io = new IntersectionObserver(
+        (es) =>
+          es.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add("in");
+              io.unobserve(e.target);
+            }
+          }),
+        { threshold: 0.15 },
+      );
+      document
+        .querySelectorAll(
+          ".sec h2, .lead, .path, .mini-gal a, .steps li, .chips li",
+        )
+        .forEach((el, i) => {
+          el.classList.add("rv");
+          el.style.setProperty("--d", (i % 6) * 0.06 + "s");
+          io.observe(el);
+        });
+    }
+
+    /* نشانگر روی هیرو */
+    let pq = false;
+    hero.addEventListener("pointermove", (e) => {
+      if (reduce || !heroVisible) return;
+      const r = hero.getBoundingClientRect();
+      mx = e.clientX - r.left;
+      my = e.clientY - r.top;
+      if (!pq) {
+        pq = true;
+        requestAnimationFrame(() => {
+          draw();
+          pq = false;
+        });
+      }
+    });
+    hero.addEventListener("pointerleave", () => {
+      mx = -1;
+      draw();
+    });
+
+    /* کلیک روی هر رنگ = کپی کد */
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.setAttribute("role", "status");
+    document.body.appendChild(toast);
+    let tt;
+    chips.addEventListener("click", (e) => {
+      const li = e.target.closest("li");
+      if (!li) return;
+      const code = li.querySelector("b").textContent;
+      Promise.resolve(
+        navigator.clipboard && navigator.clipboard.writeText(code),
+      )
+        .catch(() => {})
+        .finally(() => {
+          toast.textContent = `کد ${code} کپی شد`;
+          toast.classList.add("on");
+          clearTimeout(tt);
+          tt = setTimeout(() => toast.classList.remove("on"), 1600);
+        });
+    });
+    /* با کیبورد هم می‌شه کد رنگ رو کپی کرد */
+    chips.addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target.tagName === "LI") {
+        e.preventDefault();
+        e.target.click();
+      }
+    });
+  })();
+} catch (e) {
+  console.error("home:main", e);
+}
 
 /* ==================================================================
    ۳) هیروی محصول: دستبند با اسکرول می‌چرخه و کارت‌ها پیدا می‌شن (قبلاً hero.js)
    ================================================================== */
 try {
-(() => {
-  const pin = document.getElementById("pin"), hero = pin && pin.querySelector(".hero2");
-  if (!pin || !hero) return;
-  const img = hero.querySelector(".prod img"), cards = [...hero.querySelectorAll(".fc")], hint = hero.querySelector(".hint");
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (reduce) { img.style.transform = "none"; return; }
-  let tick = false;
-  const mob = matchMedia("(max-width: 820px)");
-  function update() {
-    tick = false;
-    let p;
-    if (mob.matches) { p = Math.min(1, Math.max(0, -hero.getBoundingClientRect().top / (hero.offsetHeight * 0.8) + 0.15)); } /* موبایل: هیرو نمی‌چسبه، فقط با رد شدنش دستبند می‌چرخه */
-    else { const m = pin.offsetHeight - innerHeight; p = m > 0 ? Math.min(1, Math.max(0, -pin.getBoundingClientRect().top / m / 0.8)) : 0; } /* دسکتاپ: انیمیشن تا ۸۰٪ مسیر تموم می‌شه */
-    const e = p * p * (3 - 2 * p);
-    img.style.transform = `rotateY(${24 - e * 48}deg) rotateZ(${-14 + e * 30}deg) scale(${1 + e * 0.1})`;
-    hero.style.setProperty("--p", p.toFixed(3));
-    cards.forEach((c) => c.classList.toggle("on", p >= Number(c.dataset.at)));
-    if (hint) hint.style.opacity = p > 0.05 ? 0 : 1;
-  }
-  const req = () => { if (!tick) { tick = true; requestAnimationFrame(update); } };
-  addEventListener("scroll", req, { passive: true }); addEventListener("resize", req); update();
-})();
-} catch (e) { console.error('home:hero', e); }
+  (() => {
+    const pin = document.getElementById("pin"),
+      hero = pin && pin.querySelector(".hero2");
+    if (!pin || !hero) return;
+    const img = hero.querySelector(".prod img") || document.createElement("i"),
+      cards = [...hero.querySelectorAll(".fc")],
+      hint = hero.querySelector(".hint");
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      img.style.transform = "none";
+      return;
+    }
+    let tick = false;
+    const mob = matchMedia("(max-width: 820px)");
+    function update() {
+      tick = false;
+      let p;
+      if (mob.matches) {
+        p = Math.min(
+          1,
+          Math.max(
+            0,
+            -hero.getBoundingClientRect().top / (hero.offsetHeight * 0.8) +
+              0.15,
+          ),
+        );
+      } /* موبایل: هیرو نمی‌چسبه، فقط با رد شدنش دستبند می‌چرخه */ else {
+        const m = pin.offsetHeight - innerHeight;
+        p =
+          m > 0
+            ? Math.min(
+                1,
+                Math.max(0, -pin.getBoundingClientRect().top / m / 0.8),
+              )
+            : 0;
+      } /* دسکتاپ: انیمیشن تا ۸۰٪ مسیر تموم می‌شه */
+      const e = p * p * (3 - 2 * p);
+      img.style.transform = `rotateY(${24 - e * 48}deg) rotateZ(${-14 + e * 30}deg) scale(${1 + e * 0.1})`;
+      hero.style.setProperty("--p", p.toFixed(3));
+      cards.forEach((c) => c.classList.toggle("on", p >= Number(c.dataset.at)));
+      if (hint) hint.style.opacity = p > 0.05 ? 0 : 1;
+    }
+    const req = () => {
+      if (!tick) {
+        tick = true;
+        requestAnimationFrame(update);
+      }
+    };
+    addEventListener("scroll", req, { passive: true });
+    addEventListener("resize", req);
+    update();
+  })();
+} catch (e) {
+  console.error("home:hero", e);
+}
