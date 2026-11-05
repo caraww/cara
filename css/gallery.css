@@ -1418,3 +1418,11 @@ html body main.wrap #wkGrid > .wk-card:hover {
     white-space: normal;
   }
 }
+
+
+/* Restore the original generous image size in the mobile gallery lightbox. */
+@media (max-width: 760px) {
+  .wk-stage {
+    height: min(62vh, 520px);
+  }
+}
