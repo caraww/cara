@@ -266,11 +266,17 @@
           src="img/cara-logo.png?v=2"
           alt="cara"
       /></a>
-      <nav>
-        <a href="#paths">شروع</a><a href="gallery.html">نمونه‌ها</a
-        ><a href="#steps">مراحل</a><a href="#beads">رنگ منجوق‌ها</a
-        ><a href="game.html">بازی</a
-        ><a class="cta" href="builder.html">طراحی دستبند</a>
+      <button class="menu-toggle" type="button" aria-label="باز کردن منو" aria-expanded="false" aria-controls="mainNav">
+        <span></span><span></span><span></span>
+      </button>
+      <nav id="mainNav" aria-label="منوی اصلی">
+        <a href="#paths">شروع</a>
+        <a href="upload.html">ساخت الگو از عکس</a>
+        <a href="gallery.html">گالری</a>
+        <a href="#steps">مراحل</a>
+        <a href="#beads">رنگ منجوق‌ها</a>
+        <a href="game.html">بازی</a>
+        <a class="cta" href="builder.html">طراحی دستبند</a>
       </nav>
     </header>
     <main>
@@ -499,6 +505,36 @@
     <script src="js/hero-bracelet.js?v=1" defer></script>
     <script src="js/decor.js?v=14" defer></script>
     <script src="/js/contact.js" defer></script>
-  <script src="/js/pwa.js" defer></script>
+<script>
+      (() => {
+        const header = document.querySelector(".top");
+        const toggle = header?.querySelector(".menu-toggle");
+        const nav = header?.querySelector("#mainNav");
+        if (!toggle || !nav) return;
+        const closeMenu = () => {
+          header.classList.remove("menu-open");
+          toggle.setAttribute("aria-expanded", "false");
+          toggle.setAttribute("aria-label", "باز کردن منو");
+        };
+        toggle.addEventListener("click", () => {
+          const open = header.classList.toggle("menu-open");
+          toggle.setAttribute("aria-expanded", String(open));
+          toggle.setAttribute("aria-label", open ? "بستن منو" : "باز کردن منو");
+        });
+        nav.addEventListener("click", (event) => {
+          if (event.target.closest("a")) closeMenu();
+        });
+        document.addEventListener("click", (event) => {
+          if (!header.contains(event.target)) closeMenu();
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") closeMenu();
+        });
+        window.addEventListener("resize", () => {
+          if (window.innerWidth > 850) closeMenu();
+        });
+      })();
+    </script>
+      <script src="/js/pwa.js" defer></script>
 </body>
 </html>
