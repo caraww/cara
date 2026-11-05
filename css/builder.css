@@ -924,3 +924,35 @@
     padding: 8px;
   }
 }
+
+
+/* Keep all text-panel controls and expanded settings reachable on small screens. */
+@media (max-width: 760px) {
+  body:has(.builder) .sp-card {
+    overflow: visible;
+  }
+  body:has(.builder) .sp-body,
+  body:has(.builder) .sp-inner,
+  body:has(.builder) .sp-sub {
+    overflow: visible;
+    width: 100%;
+  }
+  body:has(.builder) .sp-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+  body:has(.builder) .sp-inner .sp-row {
+    width: 100%;
+    gap: 10px;
+  }
+  body:has(.builder) .sp-inner .sp-f {
+    flex: 1 1 130px;
+  }
+  body:has(.builder) .sp-inner select,
+  body:has(.builder) .sp-inner input {
+    max-width: 100%;
+    min-width: 0;
+  }
+}
