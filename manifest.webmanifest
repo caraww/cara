@@ -1,0 +1,30 @@
+{
+  "id": "/",
+  "name": "کارا | cara",
+  "short_name": "cara",
+  "description": "فروشگاه دستبندهای منجوقی دست‌باف و ابزار طراحی دستبند کارا",
+  "lang": "fa",
+  "dir": "rtl",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#1d1527",
+  "theme_color": "#1d1527",
+  "categories": ["shopping", "lifestyle"],
+  "icons": [
+    {
+      "src": "/img/cara-app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/img/cara-favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
