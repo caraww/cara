@@ -956,3 +956,47 @@
     min-width: 0;
   }
 }
+
+
+/* Mobile: keep the text-to-pattern editor inside its own card. */
+@media (max-width: 760px) {
+  body:has(.builder) .sp-wrap {
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    min-width: 0;
+  }
+  body:has(.builder) #textCard {
+    grid-column: 1 / -1;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  body:has(.builder) #textCard *,
+  body:has(.builder) #textCard *::before,
+  body:has(.builder) #textCard *::after { box-sizing: border-box; }
+  body:has(.builder) #textCard .sp-body,
+  body:has(.builder) #textCard .sp-f,
+  body:has(.builder) #textCard .sp-row,
+  body:has(.builder) #textCard .sp-pal,
+  body:has(.builder) #textCard .sp-prev {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+  body:has(.builder) #textCard .sp-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+  body:has(.builder) #textCard .sp-pal {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+  body:has(.builder) #textCard .sp-f textarea,
+  body:has(.builder) #textCard .sp-f select,
+  body:has(.builder) #textCard .sp-f input {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+}
