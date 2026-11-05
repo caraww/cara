@@ -21,6 +21,22 @@
     <meta name="apple-mobile-web-app-title" content="cara" />
     <link rel="canonical" href="https://caraw.ir/game.html" />
     <style>
+      /* Keep game navigation steady on tap; no hover/tap movement. */
+      .top nav a,
+      .top nav a:hover,
+      .top nav a:active,
+      .top nav a:focus-visible {
+        transform: none !important;
+      }
+      .top nav a::after {
+        transition: none !important;
+      }
+      @view-transition {
+        navigation: none;
+      }
+      .top {
+        view-transition-name: none;
+      }
       .gm {
         max-width: 460px;
         margin: 0 auto;
