@@ -880,3 +880,47 @@
   .builder > aside:first-child.mb-pinned .current,
   .builder > aside:first-child.mb-pinned .sp-recent { display: none; }
 }
+
+
+/* Mobile text-to-pattern panel: compact spacing and prevent the card from spilling out. */
+@media (max-width: 760px) {
+  body:has(.builder) .sp-card {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 18px;
+  }
+  body:has(.builder) .sp-head {
+    min-width: 0;
+    gap: 3px 8px;
+    padding: 12px 14px;
+  }
+  body:has(.builder) .sp-head small {
+    flex: 1 1 100%;
+    line-height: 1.6;
+  }
+  body:has(.builder) .sp-body {
+    width: 100%;
+    min-width: 0;
+    gap: 12px;
+    padding: 12px 14px 16px;
+  }
+  body:has(.builder) .sp-f,
+  body:has(.builder) .sp-row,
+  body:has(.builder) .sp-sub,
+  body:has(.builder) .sp-inner {
+    min-width: 0;
+    max-width: 100%;
+  }
+  body:has(.builder) .sp-f textarea {
+    min-height: 58px;
+  }
+  body:has(.builder) .sp-prev {
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    max-width: 100%;
+    padding: 8px;
+  }
+}
