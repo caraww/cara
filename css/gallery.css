@@ -1367,3 +1367,54 @@ html body main.wrap #wkGrid > .wk-card:focus-within {
 html body main.wrap #wkGrid > .wk-card:hover {
   box-shadow: 0 4px 12px rgba(45, 32, 54, .075) !important;
 }
+
+
+/* Mobile gallery lightbox: keep the whole description inside the viewport. */
+@media (max-width: 760px) {
+  .wk-lb,
+  .wk-lb[open] {
+    width: calc(100vw - 20px);
+    max-width: calc(100vw - 20px);
+    max-height: calc(100dvh - 24px);
+    margin: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
+  }
+  .wk-lb[open] {
+    display: block;
+  }
+  .wk-stage {
+    width: 100%;
+    height: min(42dvh, 320px);
+    min-width: 0;
+  }
+  .wk-info {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    max-height: none;
+    overflow: visible;
+    box-sizing: border-box;
+    padding: 16px 16px 22px;
+    gap: 10px;
+  }
+  .wk-info h2,
+  .wk-info #lbNote,
+  .wk-info .tags,
+  .wk-info .btns {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+  .wk-info .btn-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+  .wk-info .btn-row .btn {
+    min-width: 0;
+    padding-inline: 8px;
+    white-space: normal;
+  }
+}
