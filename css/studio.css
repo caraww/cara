@@ -777,3 +777,86 @@ dialog::backdrop{background:rgba(27,18,38,.55);backdrop-filter:blur(3px)}
     font-size: 12px;
   }
 }
+
+
+/* Match the compact, button-free mobile header on Gallery, Game and Upload */
+@media (max-width: 850px) {
+  body:has(.gal-tools) .top,
+  body:has(.gm) .top,
+  body:has(.ws-page) .top {
+    height: auto;
+    min-height: 72px;
+    padding: 9px 16px 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 7px 12px;
+  }
+  body:has(.gal-tools) .top .logo,
+  body:has(.gm) .top .logo,
+  body:has(.ws-page) .top .logo {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  body:has(.gal-tools) .top .logo img,
+  body:has(.gm) .top .logo img,
+  body:has(.ws-page) .top .logo img {
+    height: 34px !important;
+  }
+  body:has(.gal-tools) .top nav,
+  body:has(.gm) .top nav,
+  body:has(.ws-page) .top nav {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 5px 9px;
+    white-space: normal;
+  }
+  body:has(.gal-tools) .top nav a,
+  body:has(.gm) .top nav a,
+  body:has(.ws-page) .top nav a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 34px;
+    padding: 4px 8px;
+    border-radius: 9px;
+    font-size: clamp(12px, 3.4vw, 14px);
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+  body:has(.gal-tools) .top nav .btn.sm,
+  body:has(.gm) .top nav .btn.sm,
+  body:has(.ws-page) .top nav .btn.sm {
+    min-height: 34px;
+    padding-inline: 12px;
+  }
+  body:has(.gal-tools) .wrap,
+  body:has(.gm) .wrap,
+  body:has(.ws-page) .wrap {
+    padding-top: 132px;
+  }
+}
+@media (max-width: 380px) {
+  body:has(.gal-tools) .top,
+  body:has(.gm) .top,
+  body:has(.ws-page) .top {
+    padding-inline: 8px;
+    gap: 5px 6px;
+  }
+  body:has(.gal-tools) .top nav,
+  body:has(.gm) .top nav,
+  body:has(.ws-page) .top nav {
+    gap: 4px 5px;
+  }
+  body:has(.gal-tools) .top nav a,
+  body:has(.gm) .top nav a,
+  body:has(.ws-page) .top nav a {
+    padding-inline: 6px;
+    font-size: 12px;
+  }
+}
