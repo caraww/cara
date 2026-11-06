@@ -333,16 +333,21 @@
             </a>
           </div>
           <div class="cara-weaving__media">
-            <video
-              controls
-              playsinline
-              preload="metadata"
-              poster="/img/hero-bracelet-optimized.webp"
-              aria-label="ویدئوی مراحل بافت دستبند منجوقی cara"
-            >
-              <source src="/media/cara-weaving.mp4" type="video/mp4" />
-              مرورگر شما از پخش ویدئو پشتیبانی نمی‌کند.
-            </video>
+            <div class="cara-weaving__stage">
+              <!-- Replace media/cara-weaving.mp4 with your vertical MP4 at the same path. -->
+              <video
+                class="cara-weaving__video"
+                controls
+                playsinline
+                preload="none"
+                width="540"
+                height="960"
+                aria-label="ویدئوی مراحل بافت دستبند منجوقی cara"
+              >
+                <source src="/media/cara-weaving.mp4" type="video/mp4" />
+                مرورگر شما از پخش ویدئو پشتیبانی نمی‌کند.
+              </video>
+            </div>
             <span class="cara-weaving__caption">ساخته‌شده با دست، منجوق‌به‌منجوق</span>
           </div>
         </div>
