@@ -1,1 +1,1 @@
-Trigger corrected FFmpeg video optimization workflow.
+Trigger corrected vertical-video encode.
