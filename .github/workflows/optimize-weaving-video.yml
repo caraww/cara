@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: optimize-weaving-video-v3
+  group: optimize-weaving-video-v4
   cancel-in-progress: false
 
 jobs:
@@ -37,7 +37,7 @@ jobs:
       - name: Verify source video
         run: |
           test -s media/cara-weaving.MP4
-          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height -show_entries format=duration,size -of json media/cara-weaving.MP4
+          ffmpeg -v error -i media/cara-weaving.MP4 -map 0:v:0 -frames:v 1 -f null -
 
       - name: Encode web-optimized MP4
         run: |
@@ -48,7 +48,7 @@ jobs:
             -c:a aac -b:a 96k -movflags +faststart \
             -sn -dn media/cara-weaving.optimized.mp4
           test -s media/cara-weaving.optimized.mp4
-          ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height -show_entries format=duration,size -of json media/cara-weaving.optimized.mp4
+          ffmpeg -v error -i media/cara-weaving.optimized.mp4 -map 0:v:0 -frames:v 1 -f null -
 
       - name: Replace source only when optimized file is smaller
         run: |
