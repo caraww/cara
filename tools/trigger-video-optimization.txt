@@ -1,1 +1,1 @@
-Trigger web video optimization using bundled FFmpeg.
+Trigger corrected FFmpeg video optimization workflow.
