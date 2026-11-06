@@ -338,7 +338,9 @@
                 class="cara-weaving__video"
                 controls
                 playsinline
-                preload="none"
+                muted
+                loop
+                preload="metadata"
                 width="540"
                 height="960"
                 aria-label="ویدئوی مراحل بافت دستبند منجوقی cara"
@@ -530,6 +532,32 @@
     <script src="js/works.js?v=mw4zjnz1"></script>
     <script src="js/beads.js"></script>
     <script src="js/home.js?v=9"></script>
+    <script>
+      (() => {
+        const video = document.querySelector(".cara-weaving__video");
+        if (!video) return;
+
+        video.muted = true;
+
+        if ("IntersectionObserver" in window) {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting && entry.intersectionRatio >= 0.25) {
+                  video.play().catch(() => {});
+                } else {
+                  video.pause();
+                }
+              });
+            },
+            { threshold: [0, 0.25], rootMargin: "0px 0px -8% 0px" }
+          );
+          observer.observe(video);
+        } else {
+          video.play().catch(() => {});
+        }
+      })();
+    </script>
     <script src="js/hero-bracelet.js?v=1" defer></script>
     <script src="js/decor.js?v=14" defer></script>
     <script src="/js/contact.js" defer></script>
