@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: optimize-weaving-video-v4
+  group: optimize-weaving-video-v5
   cancel-in-progress: false
 
 jobs:
@@ -43,7 +43,7 @@ jobs:
         run: |
           ffmpeg -hide_banner -y -i media/cara-weaving.MP4 \
             -map 0:v:0 -map '0:a?' \
-            -vf "scale='min(720,iw)':-2:force_original_aspect_ratio=decrease" \
+            -vf "scale=720:-2" \
             -c:v libx264 -preset slow -crf 25 -pix_fmt yuv420p \
             -c:a aac -b:a 96k -movflags +faststart \
             -sn -dn media/cara-weaving.optimized.mp4
