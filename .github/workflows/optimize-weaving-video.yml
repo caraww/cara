@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: optimize-weaving-video
+  group: optimize-weaving-video-v2
   cancel-in-progress: false
 
 jobs:
@@ -29,8 +29,11 @@ jobs:
 
       - name: Install FFmpeg
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg
+          if command -v ffmpeg >/dev/null 2>&1; then
+            ffmpeg -version | head -n 1
+          else
+            sudo apt-get install -y ffmpeg
+          fi
 
       - name: Verify source video
         run: |
