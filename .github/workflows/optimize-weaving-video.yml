@@ -12,7 +12,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: optimize-weaving-video-v2
+  group: optimize-weaving-video-v3
   cancel-in-progress: false
 
 jobs:
@@ -27,13 +27,12 @@ jobs:
           ref: main
           fetch-depth: 0
 
-      - name: Install FFmpeg
+      - name: Install FFmpeg static binary
         run: |
-          if command -v ffmpeg >/dev/null 2>&1; then
-            ffmpeg -version | head -n 1
-          else
-            sudo apt-get install -y ffmpeg
-          fi
+          npm install --no-save ffmpeg-static
+          ffmpeg_path=$(node -p "require('ffmpeg-static')")
+          test -x "$ffmpeg_path"
+          echo "$(dirname "$ffmpeg_path")" >> "$GITHUB_PATH"
 
       - name: Verify source video
         run: |
