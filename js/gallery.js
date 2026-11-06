@@ -84,7 +84,8 @@ try {
     ta.remove(); return ok;
   };
   async function share(w) {
-    const data = { title: `دستبند منجوقی ${w.title} | cara`, text: w.note || "یکی از دستبندهای دست‌باف cara", url: location.origin + "/bracelet/" + encodeURIComponent(String(w.id).trim().replace(/[\s\u200c]+/g, "-").replace(/[\/\\?#%.]+/g, "")) + ".html" };
+    const slug = String(w.id).normalize("NFC").trim().replace(/[.،؛:!?؟]+/g, "").replace(/[\s\u200c]+/g, "-").replace(/[\/\\?#%]+/g, "").replace(/-+/g, "-").replace(/^-|-$/g, "");
+    const data = { title: `دستبند منجوقی ${w.title} | cara`, text: w.note || "یکی از دستبندهای دست‌باف cara", url: new URL("/bracelet/" + encodeURIComponent(slug) + ".html", location.origin).href };
     if (navigator.share) {
       try { await navigator.share(data); return; } catch (err) { if (err && err.name === "AbortError") return; }
     }
