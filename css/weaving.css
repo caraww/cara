@@ -1,0 +1,132 @@
+/* Editorial video feature — wide frame, portrait video kept uncropped. */
+.cara-weaving {
+  width: min(1240px, 100%);
+  margin: clamp(76px, 9vw, 116px) auto 0;
+  padding: 0 max(22px, 5vw);
+}
+.cara-weaving__inner {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(340px, 440px);
+  align-items: center;
+  gap: clamp(30px, 5vw, 72px);
+  overflow: hidden;
+  padding: clamp(30px, 5vw, 58px);
+  border: 1px solid rgba(184, 151, 90, .25);
+  border-radius: 30px;
+  color: #f6f1fa;
+  background:
+    radial-gradient(ellipse at 10% 0%, rgba(133, 98, 164, .28), transparent 46%),
+    linear-gradient(125deg, #21172c, #352342 58%, #241a30);
+  box-shadow: 0 24px 60px rgba(39, 24, 55, .13);
+}
+.cara-weaving__inner::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: .14;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(232, 214, 183, .8) .7px, transparent .9px);
+  background-size: 15px 15px;
+  mask-image: linear-gradient(110deg, #000, transparent 72%);
+}
+.cara-weaving__copy { max-width: 620px; }
+.cara-weaving__eyebrow {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: #d3b77f;
+  font: 700 11px/1.5 Arial, sans-serif;
+  letter-spacing: .2em;
+  direction: ltr;
+}
+.cara-weaving__copy h2 {
+  margin: 0;
+  color: #fbf8ff;
+  font-size: clamp(27px, 3.5vw, 42px);
+  line-height: 1.55;
+  font-weight: 900;
+}
+.cara-weaving__copy h2::after {
+  content: "";
+  display: block;
+  width: 76px;
+  height: 3px;
+  margin-top: 15px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, #b8975a, #e8d6b7);
+}
+.cara-weaving__copy p {
+  max-width: 34em;
+  margin: 22px 0 28px;
+  color: #d0c5da;
+  font-size: clamp(16px, 1.4vw, 19px);
+  line-height: 2.1;
+}
+.cara-weaving__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #f0dba9;
+  font-weight: 800;
+  transition: gap .2s ease, color .2s ease;
+}
+.cara-weaving__link:hover { gap: 18px; color: #fff1cc; }
+.cara-weaving__media {
+  width: 100%;
+  max-width: 440px;
+  justify-self: center;
+  text-align: center;
+}
+.cara-weaving__stage {
+  min-height: 490px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  padding: 18px;
+  border: 1px solid rgba(255, 255, 255, .13);
+  border-radius: 26px;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(151, 116, 174, .22), transparent 58%),
+    linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.018));
+  box-shadow: inset 0 1px rgba(255,255,255,.08), 0 18px 42px rgba(0,0,0,.2);
+}
+.cara-weaving__video {
+  display: block;
+  width: auto;
+  height: min(455px, 100%);
+  max-width: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: contain;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 18px;
+  background: #120d18;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .32);
+}
+.cara-weaving__caption {
+  display: block;
+  margin-top: 12px;
+  color: #c5b6d1;
+  font-size: 13px;
+}
+@media (max-width: 760px) {
+  .cara-weaving { margin-top: 72px; padding-inline: 18px; }
+  .cara-weaving__inner {
+    grid-template-columns: 1fr;
+    gap: 26px;
+    padding: 28px 22px;
+    border-radius: 24px;
+  }
+  .cara-weaving__copy p { margin: 18px 0 22px; }
+  .cara-weaving__media { max-width: 100%; }
+  .cara-weaving__stage {
+    min-height: 0;
+    padding: 16px;
+    border-radius: 22px;
+  }
+  .cara-weaving__video { height: min(68vh, 460px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cara-weaving__link { transition: none; }
+}
