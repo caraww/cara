@@ -1426,3 +1426,20 @@ html body main.wrap #wkGrid > .wk-card:hover {
     height: min(62vh, 520px);
   }
 }
+
+
+/* Final gallery image-surface rule: keep product image areas pure white, not tinted or gradient. */
+.wk-grid > .wk-card,
+.wk-grid > * {
+  background: #fff !important;
+}
+.wk-grid img {
+  background: #fff !important;
+}
+.wk-stage {
+  background: #fff !important;
+  box-shadow: inset 0 0 0 1px rgba(184, 151, 90, .24) !important;
+}
+.wk-stage #lbImg {
+  background: #fff !important;
+}
