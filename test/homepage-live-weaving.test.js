@@ -45,8 +45,11 @@ test("weaving styles include mobile layout and reduced-motion handling", () => {
   assert.match(css, /max-width: 560px/);
   assert.match(css, /prefers-reduced-motion: reduce/);
   assert.match(css, /\.wv-scroll/);
-  assert.match(css, /text-align: right/);
+  assert.match(css, /text-align: right !important/);
   assert.match(css, /direction: rtl/);
-  assert.match(css, /font-family: inherit/);
+  assert.match(css, /font-family: var\(--font, "Vazirmatn"/);
+  assert.match(css, /font-size: 17px !important/);
+  assert.match(css, /font-weight: 700 !important/);
+  assert.match(html, /css\/weave\.css\?v=2/);
   assert.match(css, /font-weight: 700/);
 });
