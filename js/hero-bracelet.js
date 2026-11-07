@@ -34,14 +34,39 @@ function sprite(hex,dark){
   return c;
 }
 const SP=HEX.map(h=>[sprite(h,true),sprite(h,false)]);
-const SH=(()=>{const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d"),r=x.createRadialGradient(24,20,2,24,24,26);r.addColorStop(0,"rgba(255,246,220,.75)");r.addColorStop(1,"rgba(255,246,220,0)");x.beginPath();x.roundRect(2,2,44,44,15);x.fillStyle=r;x.fill();return c})();
+const SH=(()=>{const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d"),r=x.createRadialGradient(24,20,2,24,24,26);r.addColorStop(0,"rgba(255,246,220,.75)");r.addColorStop(1,"rgba(255,246,220,0)");x.beginPath();x.roundRect(2,2,44,44,15);x.fillStyle=r;x.fill();return c/* Animate only while the hero is visible and the tab is active. */
+function tick(t){
+  frame=0;
+  render(t);
+  if(inViewport&&!document.hidden&&!RM) frame=requestAnimationFrame(tick);
+}
+function syncAnimation(){
+  const shouldAnimate=inViewport&&!document.hidden&&!RM&&w>0&&h>0;
+  if(shouldAnimate&&!frame) frame=requestAnimationFrame(tick);
+  else if(!shouldAnimate){
+    if(frame){cancelAnimationFrame(frame);frame=0}
+    render(performance.now());
+  }
+}
+document.addEventListener("visibilitychange",syncAnimation);
+if("IntersectionObserver" in window){
+  const observer=new IntersectionObserver(entries=>{
+    inViewport=entries.some(entry=>entry.isIntersecting);
+    syncAnimation();
+  },{rootMargin:"120px 0px"});
+  observer.observe(cv);
+}else{
+  inViewport=true;
+  syncAnimation();
+}
+})();
 const SHD=(()=>{const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d"),r=x.createRadialGradient(24,24,4,24,24,24);r.addColorStop(0,"rgba(0,0,0,.85)");r.addColorStop(1,"rgba(0,0,0,0)");x.fillStyle=r;x.fillRect(0,0,48,48);return c})();
-let w=0,h=0,mx=0,my=0;
-function fit(){const r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);w=r.width;h=r.height;cv.width=w*d;cv.height=h*d;g.setTransform(d,0,0,d,0,0)}
+let w=0,h=0,mx=0,my=0,frame=0,inViewport=false;
+function fit(){const r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);w=r.width;h=r.height;cv.width=w*d;cv.height=h*d;g.setTransform(d,0,0,d,0,0);if(!frame)render(performance.now())}
 fit();if(window.ResizeObserver)new ResizeObserver(fit).observe(cv);else addEventListener("resize",fit);
 addEventListener("pointermove",e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
 const clamp=x=>Math.max(0,Math.min(1,x)),ease=x=>1-Math.pow(1-x,3);
-function draw(t){
+function render(t){
   g.clearRect(0,0,w,h);
   const s=w/560,cx=w/2,cy=h/2+14*s,R=215*s,Ry=(80+my*45)*s,bs=TAU*R/N;
   const rot=Math.PI/2-9.5/N*TAU+(RM?0:t*.00011+Math.sin(t/2800)*.12+mx*.7),la=RM?0:t*.0012;
@@ -72,7 +97,7 @@ function draw(t){
       if(pass){g.globalAlpha=d*(.22+lit*.6);g.drawImage(SH,x-W2/2,y-H2/2-bs*.1,W2,H2)}
     }
   }
-  g.globalAlpha=1;requestAnimationFrame(draw);
+  g.globalAlpha=1;
 }
-requestAnimationFrame(draw);
+
 })();
