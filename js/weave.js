@@ -8,7 +8,7 @@
   if (!cv) return;
   const g = cv.getContext("2d"), RM = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const MAX_COLS = 90, PAD = 18;
-  let fg = "DB1832", bg = "DB0010", cells = [], cols = 0, rows = 0, total = 0, cs = 12;
+  let fg = "DB1832", bg = "DB2359", cells = [], cols = 0, rows = 0, total = 0, cs = 12;
   let t = 0, playing = false, last = 0, raf = 0, timer = 0, seq = 0, fontWaited = false;
   const hex = (code) => C.byCode(code).hex;
   const warn = (m) => { const w = $("wvWarn"); w.textContent = m || ""; w.hidden = !m; };
