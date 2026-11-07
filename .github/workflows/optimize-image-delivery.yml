@@ -3,25 +3,26 @@ name: Optimize image delivery
 on:
   push:
     branches:
-      - perf/image-delivery
+      - perf/image-delivery-safe-v2
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: image-delivery-optimization
+  group: image-delivery-optimization-safe-v2
   cancel-in-progress: false
 
 jobs:
   optimize:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
-      - name: Check out branch
+      - name: Check out safe optimization branch
         uses: actions/checkout@v4
         with:
-          ref: perf/image-delivery
+          ref: perf/image-delivery-safe-v2
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -29,8 +30,12 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Generate optimized gallery derivatives
+      - name: Generate optimized gallery derivatives without deleting existing assets
+        env:
+          CARA_REQUIRE_SHARP: "1"
         run: node tools/build-works.js
+      - name: Regenerate static SEO pages and gallery schema
+        run: node tools/build-pages.js
       - name: Optimize homepage hero without changing its design
         run: |
           node - <<'NODE'
@@ -51,28 +56,38 @@ jobs:
             console.log("Hero optimized:", meta.width, "x", meta.height, "->", result.width, "x", result.height);
           })().catch((e) => { console.error(e); process.exit(1); });
           NODE
-      - name: Verify generated images
+      - name: Verify generated images and catalog references
         run: |
           test -s img/hero-bracelet-optimized.webp
-          test -s js/works.js
-          test -s data/works.json
           node - <<'NODE'
           const fs = require("fs");
+          const path = require("path");
           const works = JSON.parse(fs.readFileSync("data/works.json", "utf8"));
           if (!Array.isArray(works) || !works.length) throw new Error("Gallery data is empty");
           for (const w of works) {
             if (!w.title || !w.thumb || !w.src) throw new Error("Invalid gallery item: " + JSON.stringify(w));
+            if (!w.src.startsWith("img/works-view/") || !w.thumb.startsWith("img/works-thumbs/")) {
+              throw new Error("Gallery item is not using optimized derivatives: " + w.id);
+            }
+            const paths = [w.src, w.thumb, ...(w.images || [])];
+            for (const value of paths) {
+              const file = decodeURIComponent(value.split("?")[0]);
+              if (!fs.existsSync(path.resolve(file))) throw new Error("Missing generated image: " + file);
+              if (fs.statSync(path.resolve(file)).size > 500000) throw new Error("Image derivative is unexpectedly large: " + file);
+            }
           }
-          console.log("Verified", works.length, "gallery entries.");
+          console.log("Verified", works.length, "optimized gallery entries.");
           NODE
-      - name: Commit generated assets to optimization branch
+      - name: Run regression tests
+        run: npm test
+      - name: Commit generated assets to the safe optimization branch
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html gallery.html js/works.js data/works.json img/works-thumbs img/works-view img/hero-bracelet-optimized.webp
+          git add index.html gallery.html js/works.js data/works.json img/works-thumbs img/works-view img/hero-bracelet-optimized.webp bracelet colors sitemap.xml robots.txt
           if git diff --cached --quiet; then
             echo "No generated changes."
             exit 0
           fi
-          git commit -m "Optimize hero and gallery image delivery"
-          git push origin HEAD:perf/image-delivery
+          git commit -m "Optimize gallery image delivery and regenerate SEO pages"
+          git push origin HEAD:perf/image-delivery-safe-v2
