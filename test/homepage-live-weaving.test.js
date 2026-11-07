@@ -47,6 +47,9 @@ test("weaving styles include mobile layout and reduced-motion handling", () => {
   assert.match(css, /prefers-reduced-motion: reduce/);
   assert.match(css, /\.wv-scroll/);
   assert.match(css, /text-align: right !important/);
+  assert.match(css, /\.wv-heading h2::after/);
+  assert.match(css, /width: 104px/);
+  assert.match(css, /radial-gradient\(circle, var\(--gold\)/);
   assert.match(css, /direction: rtl/);
   assert.match(css, /font-family: var\(--font, "Vazirmatn"/);
   assert.match(css, /font-size: 17px !important/);
