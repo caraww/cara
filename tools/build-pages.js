@@ -13,7 +13,7 @@ const works = JSON.parse(fs.readFileSync(path.join(ROOT, "data/works.json"), "ut
 require(path.join(ROOT, "lib/works-pricing.js"));
 const prices = globalThis.CARA_WORK_PRICING.priceMap(works);
 let beadFiles = {};
-try { beadFiles = JSON.parse(fs.readFileSync(path.join(ROOT, "js/beads.js"), "utf8").replace(/^[^{]*/, "").replace(/;\s*$/, "")); } catch {}
+try { const beadSource = fs.readFileSync(path.join(ROOT, "js/beads.js"), "utf8"); const match = beadSource.match(/\.beadFiles\s*=\s*(\{[\s\S]*?\})\s*;/); if (match) beadFiles = JSON.parse(match[1]); } catch {}
 const today = new Date().toISOString().slice(0, 10);
 
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
