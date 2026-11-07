@@ -1,0 +1,34 @@
+name: Inspect weaving video frames
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - tools/trigger-video-inspection.txt
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    if: github.event.head_commit.message == 'Inspect weaving video frames'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract representative frames
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg imagemagick
+          mkdir -p /tmp/video-inspection
+          duration=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 media/cara-weaving.MP4)
+          for pct in 20 50 80; do
+            sec=$(awk -v d="$duration" -v p="$pct" 'BEGIN { printf "%.2f", d*p/100 }')
+            ffmpeg -hide_banner -loglevel error -ss "$sec" -i media/cara-weaving.MP4 -frames:v 1 -q:v 2 "/tmp/video-inspection/frame-${pct}.jpg"
+          done
+          identify /tmp/video-inspection/*.jpg
+          montage /tmp/video-inspection/frame-20.jpg /tmp/video-inspection/frame-50.jpg /tmp/video-inspection/frame-80.jpg -tile 1x3 -geometry 720x+8+8 /tmp/video-inspection/contact-sheet.jpg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: weaving-video-inspection
+          path: /tmp/video-inspection/
+          retention-days: 2
