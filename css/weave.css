@@ -5,7 +5,14 @@
   padding: 0 max(22px, 5vw);
 }
 .wv-home__inner { max-width: 1040px; margin: 0 auto; }
-.wv-heading { max-width: 760px; margin: 0 0 28px auto; text-align: right; direction: rtl; }
+.wv-heading {
+  display: block;
+  width: 100%;
+  max-width: 760px;
+  margin: 0 0 28px auto;
+  direction: rtl;
+  text-align: right !important;
+}
 .wv-heading h2 {
   margin: 0;
   color: var(--ink, #221a2c);
@@ -14,8 +21,17 @@
   font-size: clamp(28px, 3.4vw, 44px);
   line-height: 1.5;
   letter-spacing: -.35px;
-  text-align: right;
+  text-align: right !important;
   font-weight: 900;
+}
+.wv-heading h2::after {
+  content: "";
+  display: block;
+  width: 104px;
+  height: 12px;
+  margin-top: 12px;
+  margin-right: 0;
+  background: radial-gradient(circle, var(--gold) 0 3.2px, transparent 3.8px) 0 50%/17px 12px repeat-x;
 }
 .wv-heading p {
   max-width: 34em;
@@ -23,6 +39,7 @@
   color: var(--muted, #6b6377);
   font-size: clamp(16px, 1.4vw, 19px);
   line-height: 2;
+  text-align: right !important;
 }
 .wv-home .cara-weaving__eyebrow { margin-bottom: 10px; }
 .wv-stage {
@@ -113,13 +130,15 @@
 .wv-sw button[aria-pressed="true"] { border-color: var(--ink,#221a2c); outline: 2px solid #fff; outline-offset: -5px; }
 .wv-warn:not([hidden]) { margin: 6px 0 12px; color: #c93a2b; font-weight: 700; }
 .wv-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.wv-actions .btn {
+.wv-actions .btn,
+.wv-actions button.btn {
   min-height: 46px;
   cursor: pointer;
-  font-family: inherit;
-  font-size: 17px;
-  font-weight: 700;
-  line-height: 1.5;
+  font-family: var(--font, "Vazirmatn", Tahoma, system-ui, sans-serif) !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0 !important;
 }
 .wv-done p { margin: 0 0 12px; color: var(--ink,#221a2c); font-weight: 700; }
 .wv-done[hidden], .wv-warn[hidden] { display: none !important; }
