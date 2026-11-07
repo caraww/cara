@@ -108,9 +108,11 @@ test("the real page generator creates a non-orderable Album page with alternativ
     fs.copyFileSync(path.join(root, "js/palette.js"), path.join(temp, "js/palette.js"));
     fs.copyFileSync(path.join(root, "js/beads.js"), path.join(temp, "js/beads.js"));
     fs.copyFileSync(path.join(root, "data/works.json"), path.join(temp, "data/works.json"));
-    for (const file of ["index.html", "gallery.html", "builder.html", "upload.html", "game.html", "checkout.html", "name-bracelet.html"]) {
+    for (const file of ["index.html", "builder.html", "upload.html", "game.html", "checkout.html", "name-bracelet.html"]) {
       fs.writeFileSync(path.join(temp, file), "<!doctype html><html><body><main></main></body></html>");
     }
+    fs.writeFileSync(path.join(temp, "gallery.html"),
+      "<!doctype html><html><head><!-- GALLERY-JSON-LD:START --><!-- GALLERY-JSON-LD:END --></head><body><main></main></body></html>");
     const run = spawnSync(process.execPath, ["tools/build-pages.js"], { cwd: temp, encoding: "utf8" });
     assert.equal(run.status, 0, run.stderr || run.stdout);
     const albumPath = path.join(temp, "bracelet", "آلبوم.html");
