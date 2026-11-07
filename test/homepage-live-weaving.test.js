@@ -39,8 +39,9 @@ test("decor keeps the shared loom dialog and restores the original homepage loom
   const decor = read("js/decor.js");
   assert.match(decor, /function Loom\(/);
   assert.match(decor, /function openWeave\(/);
-  assert.match(decor, /Homepage live weaving is rendered by the interactive weave\.js section/);
-  assert.doesNotMatch(decor, /steps\.insertAdjacentElement\("beforebegin", sec\)/);
+  assert.match(decor, /sec\.id = "loom-demo"/);
+  assert.match(decor, /منجوق به منجوق می‌رم و میام/);
+  assert.match(decor, /steps\.insertAdjacentElement\("beforebegin", sec\)/);
 });
 
 test("homepage weaving script parses and has reduced-motion support", () => {
