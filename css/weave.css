@@ -4,7 +4,7 @@
   margin: clamp(76px, 9vw, 116px) auto 0;
   padding: 0 max(22px, 5vw);
 }
-.wv-home__inner { max-width: 1040px; margin: 0 auto; }
+.wv-home__inner { width: 100%; max-width: none; margin: 0; }
 .wv-heading {
   display: block;
   width: 100%;
