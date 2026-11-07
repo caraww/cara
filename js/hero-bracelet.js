@@ -20,24 +20,25 @@ const PAT=Array.from({length:PER},(_,r)=>Array.from({length:W},(_,j)=>{
 }));
 const mix=(h,k)=>{const n=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));return"rgb("+n.map(v=>Math.round(k>0?v+(255-v)*k:v*(1+k))).join(",")+")"};
 /* منجوق برجسته: شیب نور، هایلایت، لبه‌ی تیره */
+function roundedRect(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 function sprite(hex,dark){
   const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d");
   const k=dark?-.5:0,gr=x.createLinearGradient(0,0,0,48);
   gr.addColorStop(0,mix(hex,.3+k));gr.addColorStop(.45,mix(hex,k));gr.addColorStop(1,mix(hex,-.4+k));
-  x.beginPath();x.roundRect(2,2,44,44,15);x.fillStyle=gr;x.fill();
+  roundedRect(x,2,2,44,44,15);x.fillStyle=gr;x.fill();
   x.save();x.clip();
   const sp=x.createRadialGradient(17,13,1,17,13,22);sp.addColorStop(0,"rgba(255,255,255,"+(dark?.25:.7)+")");sp.addColorStop(1,"rgba(255,255,255,0)");
   x.fillStyle=sp;x.fillRect(0,0,48,48);
   x.fillStyle="rgba(0,0,0,.28)";x.fillRect(0,36,48,12);
   x.restore();
-  x.beginPath();x.roundRect(2,2,44,44,15);x.strokeStyle="rgba(0,0,0,.45)";x.lineWidth=2.5;x.stroke();
+  roundedRect(x,2,2,44,44,15);x.strokeStyle="rgba(0,0,0,.45)";x.lineWidth=2.5;x.stroke();
   return c;
 }
 const SP=HEX.map(h=>[sprite(h,true),sprite(h,false)]);
-const SH=(()=>{const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d"),r=x.createRadialGradient(24,20,2,24,24,26);r.addColorStop(0,"rgba(255,246,220,.75)");r.addColorStop(1,"rgba(255,246,220,0)");x.beginPath();x.roundRect(2,2,44,44,15);x.fillStyle=r;x.fill();return c})();
+const SH=(()=>{const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d"),r=x.createRadialGradient(24,20,2,24,24,26);r.addColorStop(0,"rgba(255,246,220,.75)");r.addColorStop(1,"rgba(255,246,220,0)");roundedRect(x,2,2,44,44,15);x.fillStyle=r;x.fill();return c})();
 const SHD=(()=>{const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d"),r=x.createRadialGradient(24,24,4,24,24,24);r.addColorStop(0,"rgba(0,0,0,.85)");r.addColorStop(1,"rgba(0,0,0,0)");x.fillStyle=r;x.fillRect(0,0,48,48);return c})();
 let w=0,h=0,mx=0,my=0,frame=0,inViewport=false;
-function fit(){const r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);w=r.width;h=r.height;cv.width=w*d;cv.height=h*d;g.setTransform(d,0,0,d,0,0);if(!frame)render(performance.now())}
+function fit(){const r=cv.getBoundingClientRect(),p=cv.parentElement?.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2),fallback=Math.max(1,Math.min(p?.width||innerWidth,innerWidth<=820?innerWidth*.82:620,innerHeight*.78));w=r.width||fallback;h=r.height||w;cv.width=Math.max(1,Math.round(w*d));cv.height=Math.max(1,Math.round(h*d));g.setTransform(d,0,0,d,0,0);render(performance.now())}
 fit();if(window.ResizeObserver)new ResizeObserver(fit).observe(cv);else addEventListener("resize",fit);
 addEventListener("pointermove",e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
 const clamp=x=>Math.max(0,Math.min(1,x)),ease=x=>1-Math.pow(1-x,3);
