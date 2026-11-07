@@ -954,6 +954,16 @@
     filter: drop-shadow(0 20px 24px rgba(0, 0, 0, 0.36));
   }
 }
+/* Nudge the bracelet slightly upward without changing its horizontal pose. */
+.hero2 .prod canvas {
+  top: -24px;
+}
+@media (max-width: 820px) {
+  .hero2 .prod canvas {
+    top: -14px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .hero2 .prod canvas {
     will-change: auto;
