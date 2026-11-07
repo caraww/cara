@@ -297,7 +297,10 @@
       out.hidden = false; msg.hidden = true;
       const used = new Set(data.flat()).size, info = $("info");
       info.hidden = false; info.textContent = `${fa(w)} × ${fa(h)} · ${fa(w * h)} منجوق · ${fa(used)} رنگ`;
-      C.savePattern(w, h, data); /* ذخیره خودکار برای سازنده و سفارش */
+      if (!C.savePattern(w, h, data)) {
+        msg.hidden = false;
+        msg.textContent = "الگو ساخته شد، اما در مرورگر ذخیره نشد؛ فضای ذخیره‌سازی را آزاد کن و دوباره امتحان کن.";
+      } /* ذخیره خودکار برای سازنده و سفارش */
     } catch (err) {
       console.error(err); msg.hidden = false; msg.textContent = "تبدیل عکس به مشکل خورد؛ یه عکس دیگه امتحان کن.";
     }

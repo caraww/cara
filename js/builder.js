@@ -347,13 +347,16 @@ try {
   function queueSummary() { if (!sumQ) { sumQ = true; requestAnimationFrame(() => { sumQ = false; summary(); }); } }
   function changed() {
     summary(); $("saved").textContent = "";
-    clearTimeout(saveT); saveT = setTimeout(() => { C.savePattern(w, h, data); $("saved").textContent = "ذخیره شد ✓"; }, 350);
+    clearTimeout(saveT); saveT = setTimeout(() => { const saved = C.savePattern(w, h, data); $("saved").textContent = saved ? "ذخیره شد ✓" : "ذخیره نشد؛ فضای ذخیره‌سازی مرورگر در دسترس نیست."; }, 350);
     document.dispatchEvent(new CustomEvent("studio:change"));
   }
   addEventListener("pagehide", () => C.savePattern(w, h, data));
   $("next").addEventListener("click", (e) => {
     if (!summary().total) { e.preventDefault(); $("saved").textContent = "اول چندتا منجوق بچین."; return; }
-    C.savePattern(w, h, data);
+    if (!C.savePattern(w, h, data)) {
+      e.preventDefault();
+      $("saved").textContent = "ذخیره نشد؛ فضای ذخیره‌سازی مرورگر در دسترس نیست.";
+    }
   });
 
   /* ساخت لینک قابل‌اشتراک از خود الگو؛ طرح در hash است و به سرور ارسال نمی‌شود. */

@@ -128,7 +128,10 @@ if (typeof module !== "undefined") {
           savedAt: new Date().toISOString(),
         }),
       );
-    } catch {}
+      return true;
+    } catch {
+      return false;
+    }
   }
   function drawBead(g, x, y, w, h, hex) {
     const r = Math.min(w, h) * 0.28;
@@ -160,7 +163,8 @@ if (typeof module !== "undefined") {
       }),
     );
   }
-  window.CARA = {
+  const caraNamespace = window.CARA && typeof window.CARA === "object" ? window.CARA : {};
+  window.CARA = Object.assign(caraNamespace, {
     palette: P,
     L: CARA_LIMITS,
     byCode,
@@ -171,5 +175,5 @@ if (typeof module !== "undefined") {
     savePattern,
     drawBead,
     drawPattern,
-  };
+  });
 }

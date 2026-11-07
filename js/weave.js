@@ -128,7 +128,10 @@
   function save(to) {
     if (!total) return;
     const grid = Array.from({ length: cols }, (_, r) => Array.from({ length: rows }, (_, c) => cells[r][rows - 1 - c]));
-    C.savePattern(grid[0].length, grid.length, grid);
+    if (!C.savePattern(grid[0].length, grid.length, grid)) {
+      warn("ذخیره‌ی الگو در مرورگر ممکن نشد؛ فضای ذخیره‌سازی را آزاد کن و دوباره امتحان کن.");
+      return;
+    }
     location.href = to;
   }
 
