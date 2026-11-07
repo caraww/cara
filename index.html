@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="/css/fonts.css" />
     <link rel="stylesheet" href="css/home.css?v=4" />
     <link rel="stylesheet" href="css/weaving.css?v=5" />
+    <link rel="stylesheet" href="css/weave.css?v=1" />
     <meta
       name="description"
       content="خرید دستبند منجوقی دست‌باف با منجوق‌های دلیکای میوکی. طرح دلخواهت رو خودت بکش یا از روی عکس الگو بساز؛ دستبند رو با دست می‌بافم و برات پست می‌کنم."
@@ -397,6 +398,56 @@
         >
       </section>
 
+      <section class="wv-home" id="loom" aria-labelledby="wvTitle">
+        <div class="wv-home__inner">
+          <header class="wv-heading">
+            <span class="cara-weaving__eyebrow">LIVE BEAD WEAVING</span>
+            <h2 id="wvTitle">ببین چطور می‌بافم</h2>
+            <p>اسمت رو بنویس و رنگ‌ها رو انتخاب کن؛ منجوق‌ها یکی‌یکی روی دار می‌شینن و تعدادشون رو همون لحظه می‌بینی.</p>
+          </header>
+
+          <div class="wv-stage" aria-label="پیش‌نمایش بافت">
+            <div class="wv-scroll"><canvas id="wvCanvas" role="img" aria-label="دستبند منجوقی در حال بافته شدن"></canvas></div>
+            <div class="wv-meter"><span id="wvCount">۰ منجوق</span><div class="wv-bar"><i id="wvFill"></i></div></div>
+          </div>
+
+          <div class="wv-card">
+            <div class="wv-row">
+              <label class="wv-field">اسم
+                <input id="wvName" type="text" maxlength="14" value="سارا" autocomplete="off" placeholder="مثلاً سارا یا Sara" />
+              </label>
+              <div class="wv-field">رنگ اسم<div class="wv-sw" id="wvFg"></div></div>
+              <div class="wv-field">رنگ زمینه<div class="wv-sw" id="wvBg"></div></div>
+            </div>
+            <div class="wv-row">
+              <label class="wv-field">پهنای دستبند: <b id="wvWOut">۱۱</b> خونه
+                <input id="wvAcross" type="range" min="7" max="15" value="11" />
+              </label>
+              <label class="wv-field">سرعت بافت
+                <select id="wvSpeed">
+                  <option value="10">آرام</option>
+                  <option value="28" selected>معمولی</option>
+                  <option value="80">سریع</option>
+                </select>
+              </label>
+            </div>
+            <p class="wv-warn" id="wvWarn" role="alert" hidden></p>
+            <div class="wv-actions">
+              <button class="btn dark" id="wvPlay" type="button">مکث</button>
+              <button class="btn line" id="wvAgain" type="button">از اول ببافش</button>
+            </div>
+          </div>
+
+          <div class="wv-done" id="wvDone" hidden>
+            <p id="wvMsg" role="status"></p>
+            <div class="wv-actions">
+              <button class="btn dark" id="wvOrder" type="button">ادامه سفارش</button>
+              <button class="btn line" id="wvEdit" type="button">ویرایش توی استودیو</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="sec" id="steps">
         <h2>از الگو تا مچ دستت</h2>
         <ol class="steps">
@@ -559,6 +610,7 @@
       })();
     </script>
     <script src="js/hero-bracelet.js?v=1" defer></script>
+    <script src="js/weave.js?v=1" defer></script>
     <script src="js/decor.js?v=14" defer></script>
     <script src="/js/contact.js" defer></script>
 <script>
