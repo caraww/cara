@@ -110,7 +110,9 @@ try {
     $("lbNum").textContent = `${fa(cur + 1)} از ${fa(list.length)}`;
     $("lbFav").setAttribute("aria-pressed", favs.has(w.id));
     $("lbMake").href = "upload.html?src=" + encodeURIComponent(w.src);
-    [list[(cur + 1) % list.length], list[(cur - 1 + list.length) % list.length]].forEach((n) => { new Image().src = n.src; }); /* عکس بعدی و قبلی از قبل لود می‌شه */
+    /* Do not preload neighboring full-resolution photos: several large decodes at once can exhaust mobile memory. */
+    lbImg.decoding = "async";
+    lbImg.loading = "eager";
     try { history.replaceState(null, "", "#" + encodeURIComponent(w.id)); } catch {}
   }
   function open(id) {
