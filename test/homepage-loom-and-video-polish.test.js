@@ -91,6 +91,12 @@ test("all homepage content uses one shared 1240px frame and matching gutters", (
   assert.match(html, /id="braceletCanvas"[\s\S]*?width="560"[\s\S]*?height="560"/);
 });
 
+test("hero bracelet easing is initialized before the first fit render", () => {
+  const js = read("js/hero-bracelet.js");
+  assert.ok(js.indexOf("const clamp=") < js.indexOf("fit();"));
+  assert.ok(js.indexOf("const clamp=") < js.indexOf("function render(t)"));
+});
+
 test("hero bracelet is redrawn after the page layout finishes", () => {
   const js = read("js/hero-bracelet.js");
   assert.match(js, /requestAnimationFrame\(\(\)=>requestAnimationFrame\(\(\)=>\{fit\(\);inViewport=true;syncAnimation\(\)\}\)\)/);
