@@ -254,7 +254,8 @@
         }
       }
     </style>
-  </head>
+      <link rel="stylesheet" href="css/weaving.css?v=6" />
+</head>
   <body>
     <div class="thread" aria-hidden="true"><i id="threadBar"></i></div>
     <header class="top">
@@ -317,6 +318,42 @@
           <span class="hint" aria-hidden="true">اسکرول کن ↓</span>
         </section>
       </div>
+
+      <section class="cara-weaving" id="weaving" aria-labelledby="weaving-title">
+        <div class="cara-weaving__inner">
+          <div class="cara-weaving__copy">
+            <span class="cara-weaving__eyebrow">HANDMADE, ONE BEAD AT A TIME</span>
+            <h2 id="weaving-title">ببین چطور میبافم</h2>
+            <p>
+              هر دستبند با دونه های منجوق شکل میگیره؛ با حوصله،
+              ظرافت و دست‌های خودم. این چند لحظه، بخشی از مسیر ساختشه تا
+              قبل از انتخاب، دنیای پشت هر دستبند رو هم ببینی.
+            </p>
+            <a class="cara-weaving__link" href="gallery.html">
+              دیدن دستبندهای بافته‌شده <span aria-hidden="true">←</span>
+            </a>
+          </div>
+          <div class="cara-weaving__media">
+            <div class="cara-weaving__stage">
+              <video
+                class="cara-weaving__video"
+                controls
+                playsinline
+                muted
+                loop
+                preload="metadata"
+                width="540"
+                height="960"
+                aria-label="ویدئوی مراحل بافت دستبند منجوقی cara"
+              >
+                <source src="/media/cara-weaving.MP4" type="video/mp4" />
+                مرورگر شما از پخش ویدئو پشتیبانی نمی‌کند.
+              </video>
+            </div>
+            <span class="cara-weaving__caption">ساخته‌شده با دست، منجوق‌به‌منجوق</span>
+          </div>
+        </div>
+      </section>
 
       <section class="wv-home" id="loom" aria-labelledby="wvTitle">
         <div class="wv-home__inner">
@@ -548,6 +585,25 @@
     <script src="js/beads.js"></script>
     <script src="js/home.js?v=9"></script>
     
+    <script>
+      (() => {
+        const video = document.querySelector(".cara-weaving__video");
+        if (!video) return;
+        video.muted = true;
+        if ("IntersectionObserver" in window) {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && entry.intersectionRatio >= 0.25) video.play().catch(() => {});
+              else video.pause();
+            });
+          }, { threshold: [0, 0.25], rootMargin: "0px 0px -8% 0px" });
+          observer.observe(video);
+        }
+        document.addEventListener("visibilitychange", () => {
+          if (document.hidden) video.pause();
+        });
+      })();
+    </script>
     <script src="js/hero-bracelet.js?v=1" defer></script>
     <script src="js/weave.js?v=1" defer></script>
     <script src="js/decor.js?v=14" defer></script>
