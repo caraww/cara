@@ -8,7 +8,7 @@
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
   align-items: center;
   gap: clamp(30px, 5vw, 72px);
   overflow: hidden;
@@ -75,8 +75,7 @@
 .cara-weaving__link:hover { gap: 18px; color: #fff1cc; }
 .cara-weaving__media {
   width: 100%;
-  width: 100%;
-  max-width: 360px;
+  max-width: 420px;
   justify-self: center;
   text-align: center;
 }
@@ -97,12 +96,12 @@
   width: 100%;
   height: auto;
   max-width: 100%;
-  aspect-ratio: 9 / 16;
-  object-fit: contain;
-  border: 1px solid rgba(255, 255, 255, .16);
-  border-radius: 18px;
+  aspect-ratio: auto;
+  object-fit: initial;
+  border: 0;
+  border-radius: 14px;
   background: transparent;
-  box-shadow: 0 14px 34px rgba(0, 0, 0, .32);
+  box-shadow: none;
 }
 .cara-weaving__caption {
   display: block;
@@ -119,7 +118,7 @@
     border-radius: 24px;
   }
   .cara-weaving__copy p { margin: 18px 0 22px; }
-  .cara-weaving__media { max-width: 360px; width: 100%; }
+  .cara-weaving__media { max-width: 420px; width: 100%; }
   .cara-weaving__stage {
     min-height: 0;
     padding: 0;
