@@ -13,7 +13,7 @@ const works = JSON.parse(fs.readFileSync(path.join(ROOT, "data/works.json"), "ut
 require(path.join(ROOT, "lib/works-pricing.js"));
 const prices = globalThis.CARA_WORK_PRICING.priceMap(works);
 let beadFiles = {};
-try { beadFiles = JSON.parse(fs.readFileSync(path.join(ROOT, "js/beads.js"), "utf8").replace(/^[^{]*/, "").replace(/;\s*$/, "")); } catch {}
+try { const beadSource = fs.readFileSync(path.join(ROOT, "js/beads.js"), "utf8"); const match = beadSource.match(/\.beadFiles\s*=\s*(\{[\s\S]*?\})\s*;/); if (match) beadFiles = JSON.parse(match[1]); } catch {}
 const today = new Date().toISOString().slice(0, 10);
 
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -52,7 +52,7 @@ ${FONT}
 <link rel="canonical" href="${SITE}${o.path}">
 <meta property="og:type" content="website"><meta property="og:locale" content="fa_IR"><meta property="og:site_name" content="کارا (cara)">
 <meta property="og:title" content="${esc(o.title)}"><meta property="og:description" content="${esc(o.desc)}"><meta property="og:url" content="${SITE}${o.path}">
-<meta property="og:image" content="${esc(o.image || SITE + "/img/og-image.png?v=2")}"><meta name="twitter:card" content="summary_large_image">
+<meta property="og:image" content="${esc(o.image || SITE + "/img/og-image.png?v=2")}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(o.title)}"><meta name="twitter:description" content="${esc(o.desc)}"><meta name="twitter:image" content="${esc(o.image || SITE + "/img/og-image.png?v=2")}">
 <script type="application/ld+json">${JSON.stringify(o.ld)}</script>
 <style>
 .pg{max-width:980px;margin:auto;padding:100px 18px 40px}.crumb{font-size:14px;color:var(--muted);margin-bottom:10px}.crumb a{text-decoration:underline}
@@ -164,7 +164,7 @@ for (const p of PAL) {
 <p>می‌تونی همین رنگ رو توی استودیوی طراحی دستبند برداری و خونه‌به‌خونه الگوت رو بچینی؛ تعداد منجوق هر رنگ و قیمت هم همون موقع حساب می‌شه.</p>
 <div class="btns"><a class="btn dark" href="/builder.html">طراحی دستبند با این رنگ</a><a class="btn" href="/upload.html">تبدیل عکس به الگو</a></div></div></div>
 <h2>رنگ‌های نزدیک</h2><div class="rel">${near.map(swatchCard).join("")}</div>`;
-  write(`colors/${p.code}.html`, HEAD({ title, desc, path: cUrl(p), ld }) + body + FOOT);
+  write(`colors/${p.code}.html`, HEAD({ title, desc, path: cUrl(p), image: beadFiles[p.code] ? SITE + `/img/beads/${beadFiles[p.code]}` : undefined, ld }) + body + FOOT);
   urls.push(cUrl(p));
 }
 {
