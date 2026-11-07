@@ -55,7 +55,7 @@ test("hero bracelet canvas has visible square dimensions on desktop and mobile",
   const css = read("css/hero.css");
   assert.match(css, /\.hero2 \.prod canvas \{/);
   assert.match(css, /width: min\(100%, 620px, 78vh\)/);
-  assert.match(css, /height: min\(100%, 620px, 78vh\)/);
+  assert.match(css, /height: auto;/);
   assert.match(css, /aspect-ratio: 1 \/ 1/);
   assert.match(css, /grid-column: 1 \/ -1/);
   assert.match(css, /width: min\(82vw, 36vh, 360px\)/);
