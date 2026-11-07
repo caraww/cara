@@ -916,3 +916,25 @@
     margin: 0 auto 8px;
   }
 }
+
+
+/* The hero bracelet is drawn on canvas, not an img. Keep its scroll pose on the real artwork. */
+.hero2 .prod canvas {
+  position: relative;
+  z-index: 1;
+  display: block;
+  transform-origin: 50% 54%;
+  backface-visibility: hidden;
+  will-change: transform;
+  filter: drop-shadow(0 30px 34px rgba(0, 0, 0, 0.4))
+    drop-shadow(0 5px 14px rgba(207, 174, 108, 0.08));
+}
+@media (max-width: 820px) {
+  .hero2 .prod canvas {
+    transform-origin: 50% 50%;
+    filter: drop-shadow(0 20px 24px rgba(0, 0, 0, 0.36));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero2 .prod canvas { will-change: auto; backface-visibility: visible; }
+}
