@@ -34,32 +34,7 @@ function sprite(hex,dark){
   return c;
 }
 const SP=HEX.map(h=>[sprite(h,true),sprite(h,false)]);
-const SH=(()=>{const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d"),r=x.createRadialGradient(24,20,2,24,24,26);r.addColorStop(0,"rgba(255,246,220,.75)");r.addColorStop(1,"rgba(255,246,220,0)");x.beginPath();x.roundRect(2,2,44,44,15);x.fillStyle=r;x.fill();return c/* Animate only while the hero is visible and the tab is active. */
-function tick(t){
-  frame=0;
-  render(t);
-  if(inViewport&&!document.hidden&&!RM) frame=requestAnimationFrame(tick);
-}
-function syncAnimation(){
-  const shouldAnimate=inViewport&&!document.hidden&&!RM&&w>0&&h>0;
-  if(shouldAnimate&&!frame) frame=requestAnimationFrame(tick);
-  else if(!shouldAnimate){
-    if(frame){cancelAnimationFrame(frame);frame=0}
-    render(performance.now());
-  }
-}
-document.addEventListener("visibilitychange",syncAnimation);
-if("IntersectionObserver" in window){
-  const observer=new IntersectionObserver(entries=>{
-    inViewport=entries.some(entry=>entry.isIntersecting);
-    syncAnimation();
-  },{rootMargin:"120px 0px"});
-  observer.observe(cv);
-}else{
-  inViewport=true;
-  syncAnimation();
-}
-})();
+const SH=(()=>{const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d"),r=x.createRadialGradient(24,20,2,24,24,26);r.addColorStop(0,"rgba(255,246,220,.75)");r.addColorStop(1,"rgba(255,246,220,0)");x.beginPath();x.roundRect(2,2,44,44,15);x.fillStyle=r;x.fill();return c})();
 const SHD=(()=>{const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d"),r=x.createRadialGradient(24,24,4,24,24,24);r.addColorStop(0,"rgba(0,0,0,.85)");r.addColorStop(1,"rgba(0,0,0,0)");x.fillStyle=r;x.fillRect(0,0,48,48);return c})();
 let w=0,h=0,mx=0,my=0,frame=0,inViewport=false;
 function fit(){const r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);w=r.width;h=r.height;cv.width=w*d;cv.height=h*d;g.setTransform(d,0,0,d,0,0);if(!frame)render(performance.now())}
@@ -100,4 +75,29 @@ function render(t){
   g.globalAlpha=1;
 }
 
+/* Animate only while the hero is visible and the tab is active. */
+function tick(t){
+  frame=0;
+  render(t);
+  if(inViewport&&!document.hidden&&!RM) frame=requestAnimationFrame(tick);
+}
+function syncAnimation(){
+  const shouldAnimate=inViewport&&!document.hidden&&!RM&&w>0&&h>0;
+  if(shouldAnimate&&!frame) frame=requestAnimationFrame(tick);
+  else if(!shouldAnimate){
+    if(frame){cancelAnimationFrame(frame);frame=0}
+    render(performance.now());
+  }
+}
+document.addEventListener("visibilitychange",syncAnimation);
+if("IntersectionObserver" in window){
+  const observer=new IntersectionObserver(entries=>{
+    inViewport=entries.some(entry=>entry.isIntersecting);
+    syncAnimation();
+  },{rootMargin:"120px 0px"});
+  observer.observe(cv);
+}else{
+  inViewport=true;
+  syncAnimation();
+}
 })();
