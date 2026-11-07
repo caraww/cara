@@ -68,6 +68,13 @@ test("build-pages generates gallery JSON-LD and bracelet pages from the same cat
     const duck = products.find((p) => p.name === "دستبند منجوقی اردک تک تک");
     assert.equal(duck.offers.price, String(prices["اردک تک تک"] * 10));
 
+    for (const file of fs.readdirSync(path.join(temp, "bracelet"))) {
+      const page = fs.readFileSync(path.join(temp, "bracelet", file), "utf8");
+      const titleMatch = page.match(/<title>([\s\S]*?)<\/title>/);
+      assert.ok(titleMatch, file + " must have a title");
+      assert.ok([...titleMatch[1]].length <= 60, file + " title must be at most 60 characters");
+    }
+
     const albumPage = fs.readFileSync(path.join(temp, "bracelet", "آلبوم.html"), "utf8");
     assert.ok(!albumPage.includes("سفارش این دستبند"));
     assert.ok(!albumPage.includes("checkout.html?work="));
