@@ -431,12 +431,13 @@ try {
     const pin = document.getElementById("pin"),
       hero = pin && pin.querySelector(".hero2");
     if (!pin || !hero) return;
-    const img = hero.querySelector(".prod img") || document.createElement("i"),
+    const bracelet = hero.querySelector(".prod canvas"),
       cards = [...hero.querySelectorAll(".fc")],
       hint = hero.querySelector(".hint");
+    if (!bracelet) return;
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
-      img.style.transform = "none";
+      bracelet.style.transform = "none";
       return;
     }
     let tick = false;
@@ -464,7 +465,7 @@ try {
             : 0;
       } /* دسکتاپ: انیمیشن تا ۸۰٪ مسیر تموم می‌شه */
       const e = p * p * (3 - 2 * p);
-      img.style.transform = `rotateY(${24 - e * 48}deg) rotateZ(${-14 + e * 30}deg) scale(${1 + e * 0.1})`;
+      bracelet.style.transform = `rotateY(${24 - e * 48}deg) rotateZ(${-14 + e * 30}deg) scale(${1 + e * 0.1})`;
       hero.style.setProperty("--p", p.toFixed(3));
       cards.forEach((c) => c.classList.toggle("on", p >= Number(c.dataset.at)));
       if (hint) hint.style.opacity = p > 0.05 ? 0 : 1;
