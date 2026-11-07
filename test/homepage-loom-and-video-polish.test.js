@@ -32,11 +32,12 @@ test("name bracelet starts with Cara in gold on purple", () => {
 });
 
 
-test("the original spinning hero bracelet canvas receives its scroll transform", () => {
+test("hero bracelet stays horizontal instead of tilting with scroll", () => {
   const home = read("js/home.js");
   const heroCss = read("css/hero.css");
   assert.match(home, /hero\.querySelector\("\.prod canvas"\)/);
-  assert.match(home, /bracelet\.style\.transform = `rotateY\(/);
+  assert.match(home, /bracelet\.style\.transform = "none"/);
+  assert.doesNotMatch(home, /bracelet\.style\.transform = `rotate[YZ]\(/);
   assert.doesNotMatch(home, /hero\.querySelector\("\.prod img"\)/);
   assert.match(heroCss, /\.hero2 \.prod canvas \{/);
 });
@@ -101,4 +102,12 @@ test("hero bracelet is redrawn after the page layout finishes", () => {
   const js = read("js/hero-bracelet.js");
   assert.match(js, /requestAnimationFrame\(\(\)=>requestAnimationFrame\(\(\)=>\{fit\(\);inViewport=true;syncAnimation\(\)\}\)\)/);
   assert.match(js, /new ResizeObserver\(fit\)\.observe\(cv\)/);
+});
+
+
+test("gallery lightbox does not preload multiple full-size neighboring images", () => {
+  const gallery = read("js/gallery.js");
+  assert.doesNotMatch(gallery, /new Image\(\)\.src = n\.src/);
+  assert.match(gallery, /lbImg\.decoding = "async"/);
+  assert.match(gallery, /Do not preload neighboring full-resolution photos/);
 });
