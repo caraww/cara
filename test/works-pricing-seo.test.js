@@ -9,6 +9,7 @@ const root = path.join(__dirname, "..");
 require(path.join(root, "lib/works-pricing.js"));
 const { priceMap } = globalThis.CARA_WORK_PRICING;
 const works = JSON.parse(fs.readFileSync(path.join(root, "data/works.json"), "utf8"));
+const sourceInfo = JSON.parse(fs.readFileSync(path.join(root, "img/works-cutouts/info.json"), "utf8"));
 const vm = require("node:vm");
 const browserContext = { window: { CARA: {} } };
 vm.runInNewContext(fs.readFileSync(path.join(root, "js/works.js"), "utf8"), browserContext);
@@ -30,6 +31,7 @@ test("shared pricing preserves the current fixed, auto, and noOrder rules", () =
   assert.equal(prices["ریک اند مورتی"], 4000000);
   assert.equal(prices["آلبوم"], undefined);
   assert.equal(prices["اردک تک تک"], 2127000);
+  assert.equal(sourceInfo["اردک تک تک.jpg"].price, 2127000, "the source metadata pins the existing auto price without changing its amount");
   assert.equal(prices["اردک تک تک"], priceMap(works)["اردک تک تک"]);
   assert.deepEqual(priceMap(browserWorks), prices, "Worker browser catalog and SEO source catalog must resolve identical prices");
   assert.equal(Object.keys(prices).length, works.filter((w) => !w.noOrder).length);
