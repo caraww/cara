@@ -17,9 +17,14 @@ const browserWorks = JSON.parse(JSON.stringify(browserContext.window.CARA.works)
 const baseline = require("./fixtures/works-main-baseline.json");
 
 function sourceMeta(work) {
+  const normalize = (value) => String(value).normalize("NFC").replace(/ي/g, "ی").replace(/ك/g, "ک").trim();
   const file = decodeURIComponent(String(work.src).split("?")[0].split("/").pop());
-  const stem = file.replace(/\.[^.]+$/, "");
-  return sourceInfo[file] || sourceInfo[stem] || {};
+  const fileStem = file.replace(/\.[^.]+$/, "");
+  const bySource = Object.entries(sourceInfo).find(([key]) => {
+    const keyStem = key.replace(/\.[^.]+$/, "");
+    return normalize(keyStem) === normalize(work.id) || normalize(keyStem) === normalize(fileStem);
+  });
+  return bySource ? bySource[1] : {};
 }
 
 function runGalleryOrderPath(workId) {
