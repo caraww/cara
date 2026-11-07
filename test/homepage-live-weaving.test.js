@@ -16,7 +16,8 @@ test("homepage contains one interactive live-weaving section and all controls", 
   assert.match(html, /اسمت رو بنویس و رنگ‌ها رو انتخاب کن؛ منجوق‌ها یکی‌یکی روی دار می‌شینن و تعدادشون رو همون لحظه می‌بینی/);
   assert.doesNotMatch(html, /<h2 id="wvTitle">ببین چطور می‌بافم/);
   assert.match(html, /<section class="cara-weaving" id="weaving"/);
-  assert.match(html, /<h2 id="weaving-title">ببین چطور میبافم<\/h2>/);
+  assert.match(html, /پشت صحنه‌ی بافت دستبندها/);
+  assert.doesNotMatch(html, /ببین چطور میبافم/);
   assert.match(html, /src="\/media\/cara-weaving\.MP4"/);
   assert.match(html, /css\/weaving\.css\?v=6/);
   assert.match(html, /querySelector\("\.cara-weaving__video"\)/);
