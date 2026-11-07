@@ -60,3 +60,19 @@ test("hero bracelet canvas has visible square dimensions on desktop and mobile",
   assert.match(css, /grid-column: 1 \/ -1/);
   assert.match(css, /width: min\(82vw, 36vh, 360px\)/);
 });
+
+
+test("hero bracelet sizing does not depend on percentage height and has a safe canvas fallback", () => {
+  const css = read("css/hero.css");
+  const js = read("js/hero-bracelet.js");
+  assert.match(css, /\.hero2 \.prod canvas \{[\s\S]*?height: auto;[\s\S]*?aspect-ratio: 1 \/ 1/);
+  assert.match(js, /r\.width\|\|fallback/);
+  assert.match(js, /function roundedRect\(/);
+});
+
+test("homepage feature frames share the same outer section width", () => {
+  const weaving = read("css/weaving.css");
+  const nameWeaving = read("css/weave.css");
+  assert.match(weaving, /\.cara-weaving__inner \{[\s\S]*?width: 100%;[\s\S]*?max-width: none/);
+  assert.match(nameWeaving, /\.wv-home__inner \{ width: 100%; max-width: none;/);
+});
