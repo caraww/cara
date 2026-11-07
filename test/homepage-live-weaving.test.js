@@ -16,8 +16,7 @@ test("homepage contains one interactive live-weaving section and all controls", 
   assert.match(html, /اسمت رو بنویس و رنگ‌ها رو انتخاب کن؛ منجوق‌ها یکی‌یکی روی دار می‌شینن و تعدادشون رو همون لحظه می‌بینی/);
   assert.doesNotMatch(html, /<h2 id="wvTitle">ببین چطور می‌بافم/);
   assert.match(html, /<section class="cara-weaving" id="weaving"/);
-  assert.match(html, /پشت صحنه‌ی بافت دستبندها/);
-  assert.doesNotMatch(html, /ببین چطور میبافم/);
+  assert.match(html, /ببین چطور میبافم/);
   assert.match(html, /src="\/media\/cara-weaving\.MP4"/);
   assert.match(html, /css\/weaving\.css\?v=6/);
   assert.match(html, /querySelector\("\.cara-weaving__video"\)/);
@@ -36,7 +35,7 @@ test("weaving script loads after the shared palette and before decor", () => {
   assert.match(html, /href="css\/weave\.css\?v=2"/);
 });
 
-test("decor keeps the shared loom dialog but no longer injects a second homepage loom", () => {
+test("decor keeps the shared loom dialog and restores the original homepage loom animation", () => {
   const decor = read("js/decor.js");
   assert.match(decor, /function Loom\(/);
   assert.match(decor, /function openWeave\(/);
