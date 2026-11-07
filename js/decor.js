@@ -252,7 +252,40 @@
     upBtns.appendChild(b);
   }
 
-  /* Homepage live weaving is rendered by the interactive weave.js section. */
+  /* Homepage loom demo: restore the original four-pattern needle-and-bead animation. */
+/* ---------- صفحه‌ی اصلی: نمایش زنده‌ی بافتن، وقتی بهش رسیدی خودکار شروع می‌شه ---------- */
+  const steps = $("steps");
+  if (steps && $("heroCanvas")) {
+    const K = { K: "DB0010", W: "DB0200", R: "DB0727", O: "DB1133", Y: "DB0721", B: "DB0726", T: "DB0725", D: "DB1832", C: "DB0732", M: "DB1134" };
+    const art = (rows) => rows.map((s) => [...s].map((ch) => K[ch]));
+    const rep = (m, n, gap = []) => Array.from({ length: n }).flatMap(() => [...m, ...gap]);
+    const EYE = ["BBBBBBBBBBB", "BBBBWWWBBBB", "BBWWTTTWWBB", "BWTTTKTTTWB", "BWTTKKKTTWB", "BWTTTKTTTWB", "BBWWTTTWWBB", "BBBBWWWBBBB", "BBBBBBBBBBB"];
+    const DIA = ["MMMMDMMMM", "MMMDCDMMM", "MMDCCCDMM", "MDCCRCCDM", "DCCRRRCCD", "MDCCRCCDM", "MMDCCCDMM", "MMMDCDMMM", "MMMMDMMMM"];
+    const HEART = ["WWWWWWWWWWW", "WWRRWWWRRWW", "WRRRRWRRRRW", "WRRRRRRRRRW", "WRRRRRRRRRW", "WWRRRRRRRWW", "WWWRRRRRWWW", "WWWWRRRWWWW", "WWWWWRWWWWW"];
+    const STAR = ["KKKKYKKKK", "KKKKYKKKK", "KKYKYKYKK", "KKKYYYKKK", "YYYYOYYYY", "KKKYYYKKK", "KKYKYKYKK", "KKKKYKKKK", "KKKKYKKKK"];
+    const DEMOS = [
+      { name: "چشم‌نظر", data: art(rep(EYE, 3, ["BBBBBBBBBBB"])) },
+      { name: "لوزی‌های طلایی", data: art(rep(DIA, 3)) },
+      { name: "قلب", data: art(rep(HEART, 3)) },
+      { name: "ستاره‌ی شب", data: art(rep(STAR, 3)) },
+    ];
+    const sec = document.createElement("section"); sec.className = "sec"; sec.id = "loom-demo";
+    sec.innerHTML = `<h2>منجوق به منجوق می‌رم و میام</h2>
+      <p class="lead">سوزن ردیف‌به‌ردیف می‌ره و برمی‌گرده، منجوق‌ها یکی‌یکی روی نخ می‌شینن. هر الگویی که توی استودیو می‌کشی، همین‌جوری برات بافته می‌شه.</p>
+      <div class="dl-loom"><canvas aria-label="نمایش بافته شدن یک دستبند"></canvas><div class="dl-cap"><span class="n"></span><span class="nm"></span></div></div>
+      <div class="btns"><a class="btn plum" href="builder.html">الگوی خودت رو بساز</a></div>`;
+    steps.insertAdjacentElement("beforebegin", sec);
+    const nEl = sec.querySelector(".n"), nmEl = sec.querySelector(".nm");
+    const loom = Loom(sec.querySelector("canvas"), { maxH: () => Math.min(440, innerHeight * 0.6), tick: null });
+    let i = 0, vis = false, timer = 0;
+    loom.onProgress = (p, n) => { nEl.textContent = `${C.faNum(p)} از ${C.faNum(n)} منجوق`; };
+    loom.onDone = () => { clearTimeout(timer); timer = setTimeout(() => { if (vis) run((i + 1) % DEMOS.length); }, 3000); };
+    function run(k) { i = k; nmEl.innerHTML = `الگو: <b>${DEMOS[k].name}</b>`; loom.load(DEMOS[k].data); loom.play(); }
+    loom.load(DEMOS[0].data); loom.skip(); nmEl.innerHTML = `الگو: <b>${DEMOS[0].name}</b>`; clearTimeout(timer);
+    if ("IntersectionObserver" in window) new IntersectionObserver((es) => es.forEach((e) => {
+      if (e.isIntersecting && !vis) { vis = true; run(i); } else if (!e.isIntersecting && vis) { vis = false; loom.stop(); clearTimeout(timer); }
+    }), { threshold: 0.4 }).observe(sec.querySelector(".dl-loom"));
+  }
 
   /* ---------- بعد از پرداخت موفق: دستبندت همون‌جا شروع می‌کنه به بافته شدن ---------- */
   document.addEventListener("submit", (e) => {
