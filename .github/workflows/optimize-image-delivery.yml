@@ -36,29 +36,8 @@ jobs:
         run: node tools/build-works.js
       - name: Regenerate static SEO pages and gallery schema
         run: node tools/build-pages.js
-      - name: Optimize homepage hero without changing its design
-        run: |
-          node - <<'NODE'
-          const sharp = require("sharp");
-          (async () => {
-            const input = "img/hero-bracelet.webp";
-            const output = "img/hero-bracelet-optimized.webp";
-            const meta = await sharp(input).metadata();
-            await sharp(input)
-              .rotate()
-              .resize({ width: 1000, height: 1200, fit: "inside", withoutEnlargement: true })
-              .webp({ quality: 78, effort: 6 })
-              .toFile(output);
-            const result = await sharp(output).metadata();
-            if (!result.width || !result.height || result.width > 1000 || result.height > 1200) {
-              throw new Error("Optimized hero dimensions are invalid");
-            }
-            console.log("Hero optimized:", meta.width, "x", meta.height, "->", result.width, "x", result.height);
-          })().catch((e) => { console.error(e); process.exit(1); });
-          NODE
       - name: Verify generated images and catalog references
         run: |
-          test -s img/hero-bracelet-optimized.webp
           node - <<'NODE'
           const fs = require("fs");
           const path = require("path");
@@ -84,7 +63,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html gallery.html js/works.js data/works.json img/works-thumbs img/works-view img/hero-bracelet-optimized.webp bracelet colors sitemap.xml robots.txt
+          git add index.html gallery.html js/works.js data/works.json img/works-thumbs img/works-view bracelet colors sitemap.xml robots.txt
           if git diff --cached --quiet; then
             echo "No generated changes."
             exit 0
