@@ -12,6 +12,7 @@ test("homepage contains one interactive live-weaving section and all controls", 
     assert.match(html, new RegExp('id="' + id + '"'));
   }
   assert.match(html, /اسمت رو با منجوق بنویس/);
+  assert.match(html, /اسمت رو بنویس و رنگ‌ها رو انتخاب کن؛ منجوق‌ها یکی‌یکی روی دار می‌شینن و تعدادشون رو همون لحظه می‌بینی/);
   assert.doesNotMatch(html, /<h2 id="wvTitle">ببین چطور می‌بافم/);
   assert.match(html, /cara-weaving__video/);
 });
@@ -22,7 +23,7 @@ test("weaving script loads after the shared palette and before decor", () => {
   const weave = html.indexOf('src="js/weave.js?v=1"');
   const decor = html.indexOf('src="js/decor.js?v=14"');
   assert.ok(palette >= 0 && weave > palette && decor > weave);
-  assert.match(html, /href="css\/weave\.css\?v=1"/);
+  assert.match(html, /href="css\/weave\.css\?v=2"/);
 });
 
 test("decor keeps the shared loom dialog but no longer injects a second homepage loom", () => {
@@ -50,6 +51,5 @@ test("weaving styles include mobile layout and reduced-motion handling", () => {
   assert.match(css, /font-family: var\(--font, "Vazirmatn"/);
   assert.match(css, /font-size: 17px !important/);
   assert.match(css, /font-weight: 700 !important/);
-  assert.match(html, /css\/weave\.css\?v=2/);
   assert.match(css, /font-weight: 700/);
 });
