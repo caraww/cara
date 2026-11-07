@@ -115,7 +115,7 @@ const VIEW_DIR = path.join(ROOT, "img", "works-view");
 async function derive(files) {
   const m = new Map();
   if (!sharp) return m;
-  for (const d of [THUMB_DIR, VIEW_DIR]) { fs.rmSync(d, { recursive: true, force: true }); fs.mkdirSync(d, { recursive: true }); } /* هر بار از نو؛ پس عکس پاک‌شده‌ها هم از این پوشه‌ها می‌رن */
+  for (const d of [THUMB_DIR, VIEW_DIR]) fs.mkdirSync(d, { recursive: true }); /* پوشه‌ها ممکن است فایل دستی هم داشته باشند؛ فقط خروجی‌های هم‌نام بازتولید می‌شوند و هیچ فایل دیگری حذف نمی‌شود. */
   for (const f of files) {
     const name = f.replace(EXT, "") + ".webp", src = path.join(DIR, f);
     try {
