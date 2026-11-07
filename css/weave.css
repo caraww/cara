@@ -5,16 +5,21 @@
   padding: 0 max(22px, 5vw);
 }
 .wv-home__inner { max-width: 1040px; margin: 0 auto; }
-.wv-heading { max-width: 760px; margin: 0 auto 28px; text-align: center; }
+.wv-heading { max-width: 760px; margin: 0 0 28px auto; text-align: right; direction: rtl; }
 .wv-heading h2 {
   margin: 0;
   color: var(--ink, #221a2c);
-  font-size: clamp(27px, 3.5vw, 42px);
-  line-height: 1.55;
+  max-width: 18em;
+  margin: 0 0 0 auto;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.5;
+  letter-spacing: -.35px;
+  text-align: right;
   font-weight: 900;
 }
 .wv-heading p {
-  margin: 12px auto 0;
+  max-width: 34em;
+  margin: 14px 0 0;
   color: var(--muted, #6b6377);
   font-size: clamp(16px, 1.4vw, 19px);
   line-height: 2;
@@ -108,7 +113,14 @@
 .wv-sw button[aria-pressed="true"] { border-color: var(--ink,#221a2c); outline: 2px solid #fff; outline-offset: -5px; }
 .wv-warn:not([hidden]) { margin: 6px 0 12px; color: #c93a2b; font-weight: 700; }
 .wv-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
-.wv-actions .btn { min-height: 46px; cursor: pointer; }
+.wv-actions .btn {
+  min-height: 46px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.5;
+}
 .wv-done p { margin: 0 0 12px; color: var(--ink,#221a2c); font-weight: 700; }
 .wv-done[hidden], .wv-warn[hidden] { display: none !important; }
 @media (max-width: 560px) {
