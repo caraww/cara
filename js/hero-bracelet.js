@@ -38,11 +38,11 @@ const SP=HEX.map(h=>[sprite(h,true),sprite(h,false)]);
 const SH=(()=>{const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d"),r=x.createRadialGradient(24,20,2,24,24,26);r.addColorStop(0,"rgba(255,246,220,.75)");r.addColorStop(1,"rgba(255,246,220,0)");roundedRect(x,2,2,44,44,15);x.fillStyle=r;x.fill();return c})();
 const SHD=(()=>{const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d"),r=x.createRadialGradient(24,24,4,24,24,24);r.addColorStop(0,"rgba(0,0,0,.85)");r.addColorStop(1,"rgba(0,0,0,0)");x.fillStyle=r;x.fillRect(0,0,48,48);return c})();
 let w=0,h=0,mx=0,my=0,frame=0,inViewport=false;
-function fit(){const r=cv.getBoundingClientRect(),p=cv.parentElement?.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2),fallback=Math.max(1,Math.min(p?.width||innerWidth,innerWidth<=820?innerWidth*.82:620,innerHeight*.78));w=r.width||fallback;h=r.height||w;cv.width=Math.max(1,Math.round(w*d));cv.height=Math.max(1,Math.round(h*d));g.setTransform(d,0,0,d,0,0);render(performance.now())}
+function fit(){const r=cv.getBoundingClientRect(),p=cv.parentElement?.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2),fallback=Math.max(1,Math.min(p?.width||innerWidth,innerWidth<=820?innerWidth*.82:620,innerHeight*.78));if(!r.width)cv.style.width=fallback+"px";else if(cv.style.width)cv.style.width="";if(!r.height&&!r.width)cv.style.height=fallback+"px";else if(cv.style.height)cv.style.height="";const box=cv.getBoundingClientRect();w=box.width||fallback;h=box.height||w;cv.width=Math.max(1,Math.round(w*d));cv.height=Math.max(1,Math.round(h*d));g.setTransform(d,0,0,d,0,0);render(performance.now())}
 fit();
-if(window.ResizeObserver)new ResizeObserver(fit).observe(cv);
+if(window.ResizeObserver){const ro=new ResizeObserver(fit);ro.observe(cv);if(cv.parentElement)ro.observe(cv.parentElement);}
 addEventListener("resize",fit,{passive:true});
-addEventListener("load",()=>{fit();syncAnimation()},{once:true});
+addEventListener("load",()=>{requestAnimationFrame(()=>requestAnimationFrame(()=>{fit();inViewport=true;syncAnimation()}))},{once:true});
 addEventListener("pointermove",e=>{mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5});
 const clamp=x=>Math.max(0,Math.min(1,x)),ease=x=>1-Math.pow(1-x,3);
 function render(t){
