@@ -44,7 +44,7 @@ test("the original spinning hero bracelet canvas receives its scroll transform",
 test("weaving heading and frame follow the homepage heading and card rhythm", () => {
   const css = read("css/weaving.css");
   assert.match(css, /width: min\(1240px, 100%\)/);
-  assert.match(css, /max-width: 1040px/);
+  assert.match(css, /max-width: none/);
   assert.match(css, /border-radius: 26px/);
   assert.match(css, /width: 102px/);
   assert.match(css, /radial-gradient\(circle, #b8975a 0 3\.2px, transparent 3\.8px\)/);
@@ -55,8 +55,24 @@ test("hero bracelet canvas has visible square dimensions on desktop and mobile",
   const css = read("css/hero.css");
   assert.match(css, /\.hero2 \.prod canvas \{/);
   assert.match(css, /width: min\(100%, 620px, 78vh\)/);
-  assert.match(css, /height: min\(100%, 620px, 78vh\)/);
+  assert.match(css, /height: auto;/);
   assert.match(css, /aspect-ratio: 1 \/ 1/);
   assert.match(css, /grid-column: 1 \/ -1/);
   assert.match(css, /width: min\(82vw, 36vh, 360px\)/);
+});
+
+
+test("hero bracelet sizing does not depend on percentage height and has a safe canvas fallback", () => {
+  const css = read("css/hero.css");
+  const js = read("js/hero-bracelet.js");
+  assert.match(css, /\.hero2 \.prod canvas \{[\s\S]*?height: auto;[\s\S]*?aspect-ratio: 1 \/ 1/);
+  assert.match(js, /r\.width\|\|fallback/);
+  assert.match(js, /function roundedRect\(/);
+});
+
+test("homepage feature frames share the same outer section width", () => {
+  const weaving = read("css/weaving.css");
+  const nameWeaving = read("css/weave.css");
+  assert.match(weaving, /\.cara-weaving__inner \{[\s\S]*?width: 100%;[\s\S]*?max-width: none/);
+  assert.match(nameWeaving, /\.wv-home__inner \{ width: 100%; max-width: none;/);
 });
