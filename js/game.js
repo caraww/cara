@@ -60,8 +60,13 @@
     const size = Math.min(7, 2 + Math.floor((L.round + 1) / 2)), d = 0.045 + 0.085 * Math.exp(-L.round / 6), C = 0.13;
     const hue = Math.random() * 360, l = 0.58 + Math.random() * 0.17, dir = l > 0.665 ? -1 : 1;
     L.odd = Math.floor(Math.random() * size * size);
-    const base = `oklch(${l.toFixed(3)} ${C} ${hue.toFixed(1)})`;
-    const odd = `oklch(${(l + dir * d).toFixed(3)} ${(C + dir * d * 0.4).toFixed(3)} ${((hue + d * 60) % 360).toFixed(1)})`;
+    const supportsOklch = typeof CSS !== "undefined" && CSS.supports && CSS.supports("color", "oklch(0.6 0.13 30)");
+    const base = supportsOklch
+      ? `oklch(${l.toFixed(3)} ${C} ${hue.toFixed(1)})`
+      : `hsl(${hue.toFixed(1)} ${(55 + Math.random() * 20).toFixed(1)}% ${(l * 100).toFixed(1)}%)`;
+    const odd = supportsOklch
+      ? `oklch(${(l + dir * d).toFixed(3)} ${(C + dir * d * 0.4).toFixed(3)} ${((hue + d * 60) % 360).toFixed(1)})`
+      : `hsl(${hue.toFixed(1)} ${(55 + Math.random() * 20 + dir * 5).toFixed(1)}% ${((l + dir * d) * 100).toFixed(1)}%)`;
     const cells = Array.from({ length: size * size }, (_, i) => (i === L.odd ? odd : base));
     return { size, cells, round: L.round, score: L.score };
   }
@@ -77,7 +82,7 @@
     busy = true;
     try {
       const r = await api("/api/game/answer", { token, idx });
-      if (r.error) { clearInterval(timer); alert(r.error); show("start"); return; }
+      if (r.error) { clearInterval(timer); note(r.error); show("start"); return; }
       if (r.over) return end(r);
       if (r.token) token = r.token;
       if (r.remainingMs != null) setRemaining(r.remainingMs);
