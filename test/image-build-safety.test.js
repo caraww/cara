@@ -48,5 +48,5 @@ test("build-works preserves unrelated files and writes WebP thumb/view paths", (
 
 test("homepage does not preload an image unused by the canvas hero", () => {
   const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
-  assert.doesNotMatch(html, /hero-bracelet-optimized\\.webp/);
+  assert.doesNotMatch(html, /hero-bracelet-optimized\.webp/);
 });
