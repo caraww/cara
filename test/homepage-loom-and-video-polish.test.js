@@ -44,7 +44,7 @@ test("the original spinning hero bracelet canvas receives its scroll transform",
 test("weaving heading and frame follow the homepage heading and card rhythm", () => {
   const css = read("css/weaving.css");
   assert.match(css, /width: min\(1240px, 100%\)/);
-  assert.match(css, /max-width: 1040px/);
+  assert.match(css, /max-width: none/);
   assert.match(css, /border-radius: 26px/);
   assert.match(css, /width: 102px/);
   assert.match(css, /radial-gradient\(circle, #b8975a 0 3\.2px, transparent 3\.8px\)/);
