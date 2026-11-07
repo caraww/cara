@@ -109,7 +109,13 @@ if (!fs.existsSync(DIR)) {
 /* عکس‌های سبک: از هر عکس یه نسخه‌ی کوچیک برای کارت‌ها (۷۰۰ پیکسل) و یه نسخه‌ی نمایش بزرگ (۱۶۰۰ پیکسل) به شکل webp می‌سازه.
    عکس‌های اصلی ۳۰۰۰×۴۰۰۰ پیکسلی چند مگابایتن و باعث می‌شن گالری کند و ناقص لود بشه. اگه sharp نصب نباشه، همون عکس اصلی استفاده می‌شه (npm install). */
 let sharp = null;
-try { sharp = require("sharp"); } catch { console.warn("⚠ sharp نصب نیست؛ بدون عکس سبک ادامه می‌دم (npm install)"); }
+try { sharp = require("sharp"); } catch (e) {
+  if (process.env.CARA_REQUIRE_SHARP === "1") {
+    console.error("sharp is required for this image build:", e.message);
+    process.exit(1);
+  }
+  console.warn("⚠ sharp نصب نیست؛ بدون عکس سبک ادامه می‌دم (npm install)");
+}
 const THUMB_DIR = path.join(ROOT, "img", "works-thumbs");
 const VIEW_DIR = path.join(ROOT, "img", "works-view");
 async function derive(files) {
