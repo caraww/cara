@@ -1,4 +1,5 @@
 import { handleGame, checkCode, codeDiscount, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
+import "./lib/works-pricing.js";
 export { GameDO } from "./game-worker.js"; /* Durable Object بازی */
 
 /* API سایت cara روی Cloudflare Worker: پرداخت با زیبال (zibal.ir) + ثبت و مدیریت سفارش‌ها.
@@ -157,39 +158,8 @@ async function loadWorks(C) {
 }
 const findWork = async (C, id) => (await loadWorks(C)).find((w) => String(w.id) === String(id)) || null;
 
-/* ===== قیمت دستبندها (تومان) =====
-   اولویت: ۱) PRICE_OVERRIDES  ۲) ریک و مورتی  ۳) فیلد price توی works.js  ۴) قیمت خودکار غیررند که برای هر دستبند فرق داره
-   برای تغییر قیمت یه دستبند، شناسه یا بخشی از عنوانش رو اینجا بنویس، مثلاً:  "هزار چشم": 2987000 */
-const PRICE_OVERRIDES = {};
-const RICK_MORTY_PRICE = 4000000;
-const norm = (s) => String(s || "").replace(/ي/g, "ی").replace(/ك/g, "ک").replace(/[\s\u200c_-]/g, "").toLowerCase();
-const isRickMorty = (w) => /ریک|مورتی|rick|morty/.test(norm([w.title, w.id, w.file, w.src].join("|")));
-function fixedPrice(w) {
-  const key = norm((w.title || "") + "|" + (w.id || ""));
-  for (const [k, v] of Object.entries(PRICE_OVERRIDES)) if (norm(k) && key.includes(norm(k))) return Math.round(Number(v));
-  if (isRickMorty(w)) return RICK_MORTY_PRICE;
-  return Math.round(Number(w.price)) || 0;
-}
-/* قیمت خودکار: از شناسه‌ی دستبند ساخته می‌شه، پس همیشه ثابته (بین ۱٬۴۵۰٬۰۰۰ تا ۲٬۹۵۰٬۰۰۰ و غیررند) */
-function autoPrice(id) {
-  let h = 2166136261;
-  for (const ch of String(id)) { h ^= ch.codePointAt(0); h = Math.imul(h, 16777619) >>> 0; }
-  let p = Math.round((1450000 + (h % 1500000)) / 1000) * 1000;
-  if (p % 5000 === 0) p += 3000;
-  return p;
-}
-function priceMap(list) {
-  const out = {}, used = new Set();
-  for (const w of list) { if (w.noOrder) continue; const f = fixedPrice(w); if (f) { out[String(w.id)] = f; used.add(f); } }
-  for (const w of list) {
-    const id = String(w.id);
-    if (w.noOrder || out[id]) continue; /* نمونه‌های noOrder (مثل «آلبوم») هیچ قیمتی نمی‌گیرن */
-    let p = autoPrice(id);
-    while (used.has(p)) p += 7000; /* دو دستبند هیچ‌وقت قیمت یکسان نمی‌گیرن */
-    used.add(p); out[id] = p;
-  }
-  return out;
-}
+/* Pricing policy is shared with the static SEO page generator to prevent price drift. */
+const priceMap = globalThis.CARA_WORK_PRICING.priceMap;
 /* محصول آزمایشی ۵٬۰۰۰ تومانی: فقط وقتی TEST_MODE="1" باشه وجود داره و توی گالری نمایش داده نمی‌شه (فقط با لینک مستقیم قابل سفارشه) */
 const TEST_WORK = { id: "cara-test-5000", title: "تست پرداخت", src: "img/cara-favicon.png", price: 5000 };
 async function pricedWorks(env) {

@@ -100,14 +100,19 @@ test("all non-Album IDs, prices and orderability match the main-branch baseline"
 test("the real page generator creates a non-orderable Album page with alternatives", () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), "cara-build-pages-"));
   try {
-    for (const dir of ["tools", "data", "js", "css"]) fs.mkdirSync(path.join(temp, dir), { recursive: true });
+    for (const dir of ["tools", "lib", "data", "js", "css"]) fs.mkdirSync(path.join(temp, dir), { recursive: true });
     fs.copyFileSync(path.join(root, "tools/build-pages.js"), path.join(temp, "tools/build-pages.js"));
+    fs.mkdirSync(path.join(temp, "lib"), { recursive: true });
+    fs.copyFileSync(path.join(root, "lib/works-pricing.js"), path.join(temp, "lib/works-pricing.js"));
+    fs.copyFileSync(path.join(root, "lib/works-pricing.js"), path.join(temp, "lib/works-pricing.js"));
     fs.copyFileSync(path.join(root, "js/palette.js"), path.join(temp, "js/palette.js"));
     fs.copyFileSync(path.join(root, "js/beads.js"), path.join(temp, "js/beads.js"));
     fs.copyFileSync(path.join(root, "data/works.json"), path.join(temp, "data/works.json"));
-    for (const file of ["index.html", "gallery.html", "builder.html", "upload.html", "game.html", "checkout.html", "name-bracelet.html"]) {
+    for (const file of ["index.html", "builder.html", "upload.html", "game.html", "checkout.html", "name-bracelet.html"]) {
       fs.writeFileSync(path.join(temp, file), "<!doctype html><html><body><main></main></body></html>");
     }
+    fs.writeFileSync(path.join(temp, "gallery.html"),
+      "<!doctype html><html><head><!-- GALLERY-JSON-LD:START --><!-- GALLERY-JSON-LD:END --></head><body><main></main></body></html>");
     const run = spawnSync(process.execPath, ["tools/build-pages.js"], { cwd: temp, encoding: "utf8" });
     assert.equal(run.status, 0, run.stderr || run.stdout);
     const albumPath = path.join(temp, "bracelet", "آلبوم.html");

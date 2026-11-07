@@ -10,6 +10,8 @@ const ROOT = path.resolve(__dirname, "..");
 const SITE = "https://caraw.ir";
 const { CARA_PALETTE: PAL } = require(path.join(ROOT, "js/palette.js"));
 const works = JSON.parse(fs.readFileSync(path.join(ROOT, "data/works.json"), "utf8"));
+require(path.join(ROOT, "lib/works-pricing.js"));
+const prices = globalThis.CARA_WORK_PRICING.priceMap(works);
 let beadFiles = {};
 try { beadFiles = JSON.parse(fs.readFileSync(path.join(ROOT, "js/beads.js"), "utf8").replace(/^[^{]*/, "").replace(/;\s*$/, "")); } catch {}
 const today = new Date().toISOString().slice(0, 10);
@@ -64,12 +66,15 @@ const urls = ["/", "/builder.html", "/upload.html", "/gallery.html", "/game.html
 const list = works.filter((w) => titleOf(w));
 for (const w of list) {
   const t = titleOf(w), imgs = (w.images && w.images.length ? w.images : [w.src]).map((s) => SITE + abs(bare(s)));
-  const orderable = !w.noOrder && Number(w.price) > 0;
+  const price = Number(prices[String(w.id)]) || 0;
+  const orderable = !w.noOrder && price > 0;
   const rel = list.filter((x) => x !== w && (x.tags || []).some((g) => (w.tags || []).includes(g))).concat(list.filter((x) => x !== w)).filter((x, i, a) => a.indexOf(x) === i).slice(0, 4);
-  const title = `دستبند منجوقی ${t} | دست‌باف، سفارش آنلاین | کارا`;
-  const desc = `${(w.note || "").slice(0, 120)} دستبند منجوقی ${t} با منجوق دلیکای میوکی، دست‌باف و آماده‌ی ارسال تا یک هفته.`.trim();
+  const title = orderable ? `دستبند منجوقی ${t} | دست‌باف، سفارش آنلاین | کارا` : `نمونه دستبند منجوقی ${t} | کارا`;
+  const desc = orderable
+    ? `${(w.note || "").slice(0, 120)} دستبند منجوقی ${t} با منجوق دلیکای میوکی، دست‌باف و آماده‌ی ارسال تا یک هفته.`.trim()
+    : `${(w.note || "").slice(0, 120)} این صفحه نمونه‌ای از دستبند منجوقی ${t} است؛ برای سفارش طرح دلخواهت از عکس به الگو یا طراحی دستی استفاده کن.`.trim();
   const product = { "@type": "Product", name: `دستبند منجوقی ${t}`, description: w.note || t, image: imgs, brand: { "@type": "Brand", name: "cara" }, url: SITE + urlOf(w) };
-  if (orderable) product.offers = { "@type": "Offer", priceCurrency: "IRR", price: String(Number(w.price) * 10), availability: "https://schema.org/MadeToOrder", url: SITE + urlOf(w), seller: { "@type": "Organization", name: "cara" } };
+  if (orderable) product.offers = { "@type": "Offer", priceCurrency: "IRR", price: String(price * 10), availability: "https://schema.org/MadeToOrder", url: SITE + urlOf(w), seller: { "@type": "Organization", name: "cara" } };
   const ld = { "@context": "https://schema.org", "@graph": [product, crumbLd([["خانه", "/"], ["گالری", "/gallery.html"], [t, urlOf(w)]])] };
   const body = `<div class="crumb"><a href="/">خانه</a> › <a href="/gallery.html">گالری</a> › ${esc(t)}</div>
 <h1>دستبند منجوقی ${esc(t)}</h1>
@@ -77,13 +82,55 @@ for (const w of list) {
 ${w.images && w.images.length > 1 ? `<div class="pg-thumbs">${w.images.slice(1).map((s) => `<img src="${esc(abs(s))}" alt="دستبند منجوقی ${esc(t)}، عکس دیگر" loading="lazy">`).join("")}</div>` : ""}</div>
 <div><p>${esc(w.note || "")}</p>
 ${(w.tags || []).length ? `<div class="tags">${w.tags.map((g) => `<span>${esc(g)}</span>`).join("")}</div>` : ""}
-${orderable ? `<div class="pg-price">${fa(w.price)} تومان</div><div class="btns"><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a><a class="btn" href="/upload.html?src=${encodeURIComponent(w.src)}">از روی این عکس الگو بساز</a></div>`
+${orderable ? `<div class="pg-price">${fa(price)} تومان</div><div class="btns"><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a><a class="btn" href="/upload.html?src=${encodeURIComponent(w.src)}">از روی این عکس الگو بساز</a></div>`
  : `<div class="btns"><a class="btn dark" href="/upload.html">عکس خودت رو به الگو تبدیل کن</a><a class="btn" href="/builder.html">طراحی دستی</a></div>`}
 <p style="margin-top:16px;color:var(--muted);font-size:16px">دست‌باف با منجوق دلیکای میوکی ژاپنی. حداکثر تا یک هفته بعد از سفارش آماده و برات پست می‌شه. می‌تونی همین طرح رو توی <a href="/builder.html" style="text-decoration:underline">استودیو</a> عوض کنی یا طرح خودت رو بسازی.</p></div></div>
 <h2>دستبندهای دیگه</h2><div class="rel">${rel.map((x) => `<a href="${urlOf(x)}"><img src="${esc(abs(x.thumb || x.src))}" alt="دستبند منجوقی ${esc(titleOf(x))}" loading="lazy">${esc(titleOf(x))}</a>`).join("")}</div>`;
   write(`bracelet/${slug(w.id)}.html`, HEAD({ title, desc, path: urlOf(w), image: imgs[0], ld }) + body + FOOT);
   urls.push(urlOf(w));
 }
+/* ---------- JSON-LD گالری: همیشه از داده و قیمت‌گذاری مشترک ساخته می‌شود ---------- */
+const galleryLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "گالری دستبندهای منجوقی دست‌باف کارا",
+  itemListElement: list.map((w, i) => {
+    const title = titleOf(w);
+    const imagePaths = (w.images && w.images.length ? w.images : [w.src]).map((src) => SITE + abs(bare(src)));
+    const product = {
+      "@type": "Product",
+      name: `دستبند منجوقی ${title}`,
+      description: w.note || title,
+      image: imagePaths,
+      brand: { "@type": "Brand", name: "cara" },
+      url: SITE + urlOf(w),
+    };
+    const price = Number(prices[String(w.id)]) || 0;
+    if (!w.noOrder && price > 0) {
+      product.offers = {
+        "@type": "Offer",
+        priceCurrency: "IRR",
+        price: String(price * 10),
+        availability: "https://schema.org/MadeToOrder",
+        url: SITE + urlOf(w),
+      };
+    }
+    return { "@type": "ListItem", position: i + 1, item: product };
+  }),
+};
+{
+  const file = path.join(ROOT, "gallery.html");
+  let html = fs.readFileSync(file, "utf8");
+  const markerRe = /<!-- GALLERY-JSON-LD:START -->[\s\S]*?<!-- GALLERY-JSON-LD:END -->/;
+  if (!markerRe.test(html)) throw new Error("gallery.html is missing GALLERY-JSON-LD markers");
+  const block = `<!-- GALLERY-JSON-LD:START -->
+    <script type="application/ld+json">\n${JSON.stringify(galleryLd, null, 2)}\n    </script>
+    <!-- GALLERY-JSON-LD:END -->`;
+  html = html.replace(markerRe, block);
+  fs.writeFileSync(file, html);
+  console.log("✓ JSON-LD گالری از منبع داده ساخته شد");
+}
+
 console.log(`✓ ${list.length} صفحه‌ی دستبند`);
 
 /* ---------- صفحه‌ی رنگ‌ها ---------- */
