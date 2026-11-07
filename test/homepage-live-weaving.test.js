@@ -8,13 +8,21 @@ const read = (path) => fs.readFileSync(path, "utf8");
 test("homepage contains one interactive live-weaving section and all controls", () => {
   const html = read("index.html");
   assert.equal((html.match(/id="loom"/g) || []).length, 1);
+  assert.equal((html.match(/id="heroCanvas"/g) || []).length, 1, "existing animated hero canvas must remain");
   for (const id of ["wvCanvas", "wvCount", "wvFill", "wvName", "wvFg", "wvBg", "wvAcross", "wvSpeed", "wvWarn", "wvPlay", "wvAgain", "wvDone", "wvOrder", "wvEdit"]) {
     assert.match(html, new RegExp('id="' + id + '"'));
   }
   assert.match(html, /اسمت رو با منجوق بنویس/);
   assert.match(html, /اسمت رو بنویس و رنگ‌ها رو انتخاب کن؛ منجوق‌ها یکی‌یکی روی دار می‌شینن و تعدادشون رو همون لحظه می‌بینی/);
   assert.doesNotMatch(html, /<h2 id="wvTitle">ببین چطور می‌بافم/);
-  assert.doesNotMatch(html, /cara-weaving__video|cara-weaving|از نزدیک ببین چطور می‌بافمش|css\/weaving\.css/);
+  assert.match(html, /<section class="cara-weaving" id="weaving"/);
+  assert.match(html, /پشت صحنه‌ی بافت دستبندها/);
+  assert.doesNotMatch(html, /ببین چطور میبافم/);
+  assert.match(html, /src="\/media\/cara-weaving\.MP4"/);
+  assert.match(html, /css\/weaving\.css\?v=6/);
+  assert.match(html, /querySelector\("\.cara-weaving__video"\)/);
+  assert.ok(html.indexOf('<section class="cara-weaving"') < html.indexOf('<section class="wv-home"'), "video section should appear before interactive name weaving");
+  assert.equal((html.match(/<section class="cara-weaving"/g) || []).length, 1);
   assert.equal((html.match(/<section class="wv-home"/g) || []).length, 1);
   assert.ok(html.indexOf('<section class="wv-home"') < html.indexOf('<section class="sec" id="paths">'), "live weaving must replace the old weaving section in place");
 });
