@@ -70,7 +70,7 @@ test("build-pages generates gallery JSON-LD and bracelet pages from the same cat
 
     for (const file of fs.readdirSync(path.join(temp, "bracelet"))) {
       const page = fs.readFileSync(path.join(temp, "bracelet", file), "utf8");
-      const titleMatch = page.match(/<title>([\\s\\S]*?)<\\/title>/);
+      const titleMatch = page.match(/<title>([\s\S]*?)<\/title>/);
       assert.ok(titleMatch, file + " must have a title");
       assert.ok([...titleMatch[1]].length <= 60, file + " title must be at most 60 characters");
     }
