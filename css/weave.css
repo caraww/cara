@@ -24,6 +24,15 @@
   text-align: right !important;
   font-weight: 900;
 }
+.wv-heading h2::after {
+  content: "";
+  display: block;
+  width: 104px;
+  height: 12px;
+  margin-top: 12px;
+  margin-right: 0;
+  background: radial-gradient(circle, var(--gold) 0 3.2px, transparent 3.8px) 0 50%/17px 12px repeat-x;
+}
 .wv-heading p {
   max-width: 34em;
   margin: 14px 0 0;
