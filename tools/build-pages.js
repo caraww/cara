@@ -119,10 +119,10 @@ const galleryLd = {
 {
   const file = path.join(ROOT, "gallery.html");
   let html = fs.readFileSync(file, "utf8");
-  const markerRe = /<!-- GALLERY-JSON-LD:START -->[\\s\\S]*?<!-- GALLERY-JSON-LD:END -->/;
+  const markerRe = /<!-- GALLERY-JSON-LD:START -->[\s\S]*?<!-- GALLERY-JSON-LD:END -->/;
   if (!markerRe.test(html)) throw new Error("gallery.html is missing GALLERY-JSON-LD markers");
   const block = `<!-- GALLERY-JSON-LD:START -->
-    <script type="application/ld+json">\\n${JSON.stringify(galleryLd, null, 2)}\\n    </script>
+    <script type="application/ld+json">\n${JSON.stringify(galleryLd, null, 2)}\n    </script>
     <!-- GALLERY-JSON-LD:END -->`;
   html = html.replace(markerRe, block);
   fs.writeFileSync(file, html);
