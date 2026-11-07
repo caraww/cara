@@ -66,6 +66,7 @@ test("build-pages generates gallery JSON-LD and bracelet pages from the same cat
     const albumPage = fs.readFileSync(path.join(temp, "bracelet", "آلبوم.html"), "utf8");
     assert.ok(!albumPage.includes("سفارش این دستبند"));
     assert.ok(!albumPage.includes("checkout.html?work="));
+    assert.ok(albumPage.includes("<title>نمونه دستبند منجوقی آلبوم | کارا</title>"));
     const duckPage = fs.readFileSync(path.join(temp, "bracelet", "اردک-تک-تک.html"), "utf8");
     assert.ok(duckPage.includes("سفارش این دستبند"));
     assert.ok(duckPage.includes("۲٬۱۲۷٬۰۰۰ تومان"));
