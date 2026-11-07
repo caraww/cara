@@ -69,8 +69,10 @@ for (const w of list) {
   const price = Number(prices[String(w.id)]) || 0;
   const orderable = !w.noOrder && price > 0;
   const rel = list.filter((x) => x !== w && (x.tags || []).some((g) => (w.tags || []).includes(g))).concat(list.filter((x) => x !== w)).filter((x, i, a) => a.indexOf(x) === i).slice(0, 4);
-  const title = `دستبند منجوقی ${t} | دست‌باف، سفارش آنلاین | کارا`;
-  const desc = `${(w.note || "").slice(0, 120)} دستبند منجوقی ${t} با منجوق دلیکای میوکی، دست‌باف و آماده‌ی ارسال تا یک هفته.`.trim();
+  const title = orderable ? `دستبند منجوقی ${t} | دست‌باف، سفارش آنلاین | کارا` : `نمونه دستبند منجوقی ${t} | کارا`;
+  const desc = orderable
+    ? `${(w.note || "").slice(0, 120)} دستبند منجوقی ${t} با منجوق دلیکای میوکی، دست‌باف و آماده‌ی ارسال تا یک هفته.`.trim()
+    : `${(w.note || "").slice(0, 120)} این صفحه نمونه‌ای از دستبند منجوقی ${t} است؛ برای سفارش طرح دلخواهت از عکس به الگو یا طراحی دستی استفاده کن.`.trim();
   const product = { "@type": "Product", name: `دستبند منجوقی ${t}`, description: w.note || t, image: imgs, brand: { "@type": "Brand", name: "cara" }, url: SITE + urlOf(w) };
   if (orderable) product.offers = { "@type": "Offer", priceCurrency: "IRR", price: String(price * 10), availability: "https://schema.org/MadeToOrder", url: SITE + urlOf(w), seller: { "@type": "Organization", name: "cara" } };
   const ld = { "@context": "https://schema.org", "@graph": [product, crumbLd([["خانه", "/"], ["گالری", "/gallery.html"], [t, urlOf(w)]])] };
