@@ -47,7 +47,7 @@ The Worker callback route is /api/payment-callback. The default callback URL is 
 
 The Worker accepts a signed callback when d and sig are supplied as query or form fields:
 
-- sig must equal HMAC-SHA256(REL​AY_SECRET, exact d string), compared safely.
+- sig must equal HMAC-SHA256(RELAY_SECRET, exact d string), compared safely.
 - d must decode as base64url JSON.
 - Required payload fields: o (existing order UUID) and e (future expiry).
 - Optional settlement fields consumed by the Worker include t (gateway track ID), a (verified amount in rial), r (reference number), and c (masked card number).
