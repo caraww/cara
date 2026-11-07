@@ -24,6 +24,17 @@ const bare = (p) => String(p).split("?")[0];
 const urlOf = (w) => `/bracelet/${encodeURIComponent(slug(w.id))}.html`;
 const NUM = /^[\s0-9۰-۹.\-_)]+$/;
 const titleOf = (w) => (w.title && !NUM.test(w.title) ? w.title : "");
+/* Keep generated result titles concise while retaining the product keyword and full H1/schema name. */
+const seoTitle = (name, sample = false) => {
+  const prefix = sample ? "نمونه دستبند منجوقی " : "دستبند منجوقی ";
+  const suffix = " | کارا";
+  const chars = [...String(name).trim()];
+  const room = 60 - [...prefix].length - [...suffix].length;
+  const shortName = chars.length > room
+    ? chars.slice(0, room - 1).join("").trimEnd() + "…"
+    : chars.join("");
+  return prefix + shortName + suffix;
+};
 const write = (rel, txt) => { const f = path.join(ROOT, rel); fs.mkdirSync(path.dirname(f), { recursive: true }); fs.writeFileSync(f, txt); };
 
 /* اگه tools/self-host-fonts.js اجرا شده باشه فونت از خود سایت لود می‌شه */
@@ -69,7 +80,7 @@ for (const w of list) {
   const price = Number(prices[String(w.id)]) || 0;
   const orderable = !w.noOrder && price > 0;
   const rel = list.filter((x) => x !== w && (x.tags || []).some((g) => (w.tags || []).includes(g))).concat(list.filter((x) => x !== w)).filter((x, i, a) => a.indexOf(x) === i).slice(0, 4);
-  const title = orderable ? `دستبند منجوقی ${t} | دست‌باف، سفارش آنلاین | کارا` : `نمونه دستبند منجوقی ${t} | کارا`;
+  const title = seoTitle(t, !orderable);
   const desc = orderable
     ? `${(w.note || "").slice(0, 120)} دستبند منجوقی ${t} با منجوق دلیکای میوکی، دست‌باف و آماده‌ی ارسال تا یک هفته.`.trim()
     : `${(w.note || "").slice(0, 120)} این صفحه نمونه‌ای از دستبند منجوقی ${t} است؛ برای سفارش طرح دلخواهت از عکس به الگو یا طراحی دستی استفاده کن.`.trim();
