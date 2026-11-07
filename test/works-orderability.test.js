@@ -100,8 +100,9 @@ test("all non-Album IDs, prices and orderability match the main-branch baseline"
 test("the real page generator creates a non-orderable Album page with alternatives", () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), "cara-build-pages-"));
   try {
-    for (const dir of ["tools", "data", "js", "css"]) fs.mkdirSync(path.join(temp, dir), { recursive: true });
+    for (const dir of ["tools", "lib", "data", "js", "css"]) fs.mkdirSync(path.join(temp, dir), { recursive: true });
     fs.copyFileSync(path.join(root, "tools/build-pages.js"), path.join(temp, "tools/build-pages.js"));
+    fs.copyFileSync(path.join(root, "lib/works-pricing.js"), path.join(temp, "lib/works-pricing.js"));
     fs.copyFileSync(path.join(root, "js/palette.js"), path.join(temp, "js/palette.js"));
     fs.copyFileSync(path.join(root, "js/beads.js"), path.join(temp, "js/beads.js"));
     fs.copyFileSync(path.join(root, "data/works.json"), path.join(temp, "data/works.json"));
