@@ -87,7 +87,7 @@ test("all homepage content uses one shared 1240px frame and matching gutters", (
   assert.match(frame, /padding-inline: var\(--page-frame-gutter\)/);
   assert.match(frame, /\.hero\.hero2 \{[\s\S]*?padding-inline: max\(/);
   assert.match(frame, /\.foot \{[\s\S]*?padding-inline: max\(/);
-  assert.match(html, /css\/page-frame\.css\?v=1/);
+  assert.match(html, /css\/page-frame\.css\?v=2/);
   assert.match(html, /id="braceletCanvas"[\s\S]*?width="560"[\s\S]*?height="560"/);
 });
 
