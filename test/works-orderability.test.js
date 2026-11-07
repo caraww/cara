@@ -18,11 +18,13 @@ const baseline = require("./fixtures/works-main-baseline.json");
 
 function sourceMeta(work) {
   const normalize = (value) => String(value).normalize("NFC").replace(/ي/g, "ی").replace(/ك/g, "ک").trim();
-  const byId = Object.entries(sourceInfo).find(([key]) => normalize(key.replace(/\.[^.]+$/, "")) === normalize(work.id));
-  if (byId) return byId[1];
   const file = decodeURIComponent(String(work.src).split("?")[0].split("/").pop());
-  const stem = file.replace(/\.[^.]+$/, "");
-  return sourceInfo[file] || sourceInfo[stem] || {};
+  const fileStem = file.replace(/\.[^.]+$/, "");
+  const bySource = Object.entries(sourceInfo).find(([key]) => {
+    const keyStem = key.replace(/\.[^.]+$/, "");
+    return normalize(keyStem) === normalize(work.id) || normalize(keyStem) === normalize(fileStem);
+  });
+  return bySource ? bySource[1] : {};
 }
 
 function runGalleryOrderPath(workId) {
