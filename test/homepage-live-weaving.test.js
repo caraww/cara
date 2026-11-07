@@ -11,7 +11,8 @@ test("homepage contains one interactive live-weaving section and all controls", 
   for (const id of ["wvCanvas", "wvCount", "wvFill", "wvName", "wvFg", "wvBg", "wvAcross", "wvSpeed", "wvWarn", "wvPlay", "wvAgain", "wvDone", "wvOrder", "wvEdit"]) {
     assert.match(html, new RegExp('id="' + id + '"'));
   }
-  assert.match(html, /از نزدیک ببین چطور می‌بافمش/);
+  assert.match(html, /اسمت رو با منجوق بنویس/);
+  assert.doesNotMatch(html, /<h2 id="wvTitle">ببین چطور می‌بافم<\\/h2>/);
   assert.match(html, /cara-weaving__video/);
 });
 
