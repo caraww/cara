@@ -1,0 +1,34 @@
+/* offline.css — self-contained offline page styling */
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #1d1527;
+  color: #f3edf8;
+  font: 16px/2 Vazirmatn, Tahoma, sans-serif;
+  text-align: center;
+}
+main {
+  width: min(440px, 100%);
+  padding: 38px 26px;
+  border: 1px solid #55435f;
+  border-radius: 26px;
+  background: linear-gradient(145deg, #30203d, #21182b);
+  box-shadow: 0 24px 80px #09060d66;
+}
+img { width: 82px; height: 82px; object-fit: contain; margin-bottom: 12px; }
+h1 { font-size: 25px; margin: 8px 0; color: #e2c58c; }
+p { color: #c9bfd2; margin: 8px 0 22px; }
+button {
+  border: 0;
+  border-radius: 999px;
+  background: #c5a46a;
+  color: #20172a;
+  padding: 12px 26px;
+  font: 700 15px/1.7 Vazirmatn, Tahoma, sans-serif;
+  cursor: pointer;
+}
+button:focus-visible { outline: 3px solid #f3e2b4; outline-offset: 4px; }

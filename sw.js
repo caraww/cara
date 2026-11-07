@@ -1,10 +1,16 @@
-const CACHE_NAME = "cara-pwa-v3";
+const CACHE_NAME = "cara-pwa-v4";
 const CORE_ASSETS = [
   "/",
   "/offline.html",
   "/manifest.webmanifest",
   "/img/cara-favicon.png",
-  "/img/cara-app-icon.svg"
+  "/img/cara-app-icon.svg",
+  "/css/fonts.css",
+  "/css/offline.css",
+  "/js/offline.js",
+  "/fonts/vazirmatn-arabic-400.woff2",
+  "/fonts/vazirmatn-arabic-700.woff2",
+  "/fonts/vazirmatn-arabic-900.woff2"
 ];
 
 self.addEventListener("install", (event) => {
