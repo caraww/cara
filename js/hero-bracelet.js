@@ -1,7 +1,7 @@
 /* دستبند چشم برای هیرو — فقط به <canvas id="braceletCanvas"> نیاز داره */
 (()=>{
 const cv0=document.getElementById("braceletCanvas");if(!cv0)return;
-const cv=document.getElementById("braceletCanvas"),g=cv.getContext("2d"),TAU=Math.PI*2,RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const cv=cv0,g=cv.getContext("2d");if(!g)return;const TAU=Math.PI*2,RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
 /* رنگ‌های پالت خودت: مشکی براق DB0010، سفید DB0200، سرخابی DB0654 */
 const HEX=["#171717","#F0EDF2","#791D27"];
 const N=120,W=13,PER=30,CC=6;
