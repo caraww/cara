@@ -102,3 +102,11 @@ test("hero bracelet is redrawn after the page layout finishes", () => {
   assert.match(js, /requestAnimationFrame\(\(\)=>requestAnimationFrame\(\(\)=>\{fit\(\);inViewport=true;syncAnimation\(\)\}\)\)/);
   assert.match(js, /new ResizeObserver\(fit\)\.observe\(cv\)/);
 });
+
+
+test("gallery lightbox does not preload multiple full-size neighboring images", () => {
+  const gallery = read("js/gallery.js");
+  assert.doesNotMatch(gallery, /new Image\(\)\.src = n\.src/);
+  assert.match(gallery, /lbImg\.decoding = "async"/);
+  assert.match(gallery, /Do not preload neighboring full-resolution photos/);
+});
