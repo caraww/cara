@@ -76,3 +76,23 @@ test("homepage feature frames share the same outer section width", () => {
   assert.match(weaving, /\.cara-weaving__inner \{[\s\S]*?width: 100%;[\s\S]*?max-width: none/);
   assert.match(nameWeaving, /\.wv-home__inner \{ width: 100%; max-width: none;/);
 });
+
+
+test("all homepage content uses one shared 1240px frame and matching gutters", () => {
+  const frame = read("css/page-frame.css");
+  const html = read("index.html");
+  assert.match(frame, /--page-frame-width: 1240px/);
+  assert.match(frame, /\.sec,[\s\S]*?\.cara-weaving,[\s\S]*?\.wv-home/);
+  assert.match(frame, /width: min\(var\(--page-frame-width\), 100%\)/);
+  assert.match(frame, /padding-inline: var\(--page-frame-gutter\)/);
+  assert.match(frame, /\.hero\.hero2 \{[\s\S]*?padding-inline: max\(/);
+  assert.match(frame, /\.foot \{[\s\S]*?padding-inline: max\(/);
+  assert.match(html, /css\/page-frame\.css\?v=1/);
+  assert.match(html, /id="braceletCanvas"[\s\S]*?width="560"[\s\S]*?height="560"/);
+});
+
+test("hero bracelet is redrawn after the page layout finishes", () => {
+  const js = read("js/hero-bracelet.js");
+  assert.match(js, /addEventListener\("load",\(\)=>\{fit\(\);syncAnimation\(\)\},\{once:true\}\)/);
+  assert.match(js, /new ResizeObserver\(fit\)\.observe\(cv\)/);
+});
