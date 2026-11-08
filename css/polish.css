@@ -481,3 +481,16 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { box-shadow: 
   header.top.has-mobile-menu nav a[href*="builder.html"] { background: var(--cara-accent); border-color: var(--cara-accent); color: #fff !important; }
 }
 @media (prefers-reduced-motion:reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
+
+/* Final token bridge: keep legacy component variables aligned with Gallery. */
+:root {
+  --cara-ink: #242431;
+  --cara-plum: #343B64;
+  --cara-plum-deep: #22243B;
+  --cara-lilac: #EEEEF5;
+  --cara-paper: #E9E9ED;
+  --cara-muted: #626273;
+  --cara-line: #D4D4DF;
+  --cara-gold: #9B8FC1;
+  --g3: #343B64;
+}
