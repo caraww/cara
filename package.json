@@ -23,5 +23,10 @@
     "sharp@0.32.6": true,
     "sharp@0.35.5": true,
     "onnxruntime-node@1.17.3": true
+  },
+  "overrides": {
+    "@imgly/background-removal-node": {
+      "sharp": "$sharp"
+    }
   }
 }
