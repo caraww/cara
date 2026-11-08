@@ -12,9 +12,14 @@ test("homepage hero renders all four bracelets with the original rotating 3D Del
   const css = read("css/hero-lineup.css");
   assert.match(html, /id="caraBraceletLineup"/);
   for (const id of ["thousand-eyes", "waterfall", "duck", "peacock"]) assert.match(html, new RegExp('data-bracelet="' + id + '"'));
-  assert.match(html, /hero-lineup\.js\?v=2/);
+  assert.match(html, /hero-lineup\.js\?v=3/);
   assert.match(script, /const palettes=\{/);
   assert.match(script, /const models=\{/);
+  assert.match(script, /"F8F5EC"/);
+  assert.match(script, /"111111111"/);
+  assert.match(script, /featherWidth/);
+  assert.match(script, /const flow=r\*\.62/);
+  assert.match(css, /translateY\(7px\)/);
   assert.match(script, /function sprite\(/);
   assert.match(script, /Miyuki Delica thread opening/);
   assert.match(script, /const rot=.*t\*\.00011/s);
