@@ -22,10 +22,10 @@ test("homepage hero uses a minimal signature art direction", () => {
 });
 
 
-test("mobile navigation remains physically left anchored alongside the new gallery hero", () => {
+test("legacy hero canvas stays hidden while mobile navigation remains left anchored", () => {
   const html = read("index.html");
   const polish = read("css/polish.css");
-  assert.doesNotMatch(html, /js\/hero-bracelet\.js/);
+  assert.match(html, /id="braceletCanvas"[^>]*hidden/);
   assert.ok(polish.includes("left:14px !important"));
   assert.ok(polish.includes("right:auto !important"));
   assert.ok(polish.includes("inset-inline-start:auto !important"));
