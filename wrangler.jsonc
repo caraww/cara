@@ -19,14 +19,6 @@
 
   // مقادیر فقط برای Preview؛ از درگاه و callback واقعی استفاده نمی‌شود.
   "previews": {
-    "d1_databases": [
-      {
-        "binding": "ACCOUNTS_DB",
-        "database_name": "cara-accounts-preview",
-        "database_id": "f0cecd56-c14b-4adf-80f3-109e51ad050d",
-        "migrations_dir": "migrations",
-      },
-    ],
     "vars": {
       "BASE_URL": "https://preview.invalid",
       "PRICE_PER_BEAD": "1500",
