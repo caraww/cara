@@ -84,3 +84,12 @@ Do not store raw session or public tracking tokens. Store a cryptographic hash a
 - Users can see only their own account orders.
 - /track reveals no address, phone, internal note, or payment secret.
 - Existing checkout, pricing, discount reservation, callback, and order lifecycle tests continue to pass.
+
+
+## Implementation status — account foundation
+
+- The first D1 migration is staged at `migrations/0001_accounts.sql` on a feature branch. It creates users, verified provider identity links, hashed sessions, saved designs, guest/account carts, cart items, and hashed order-access tokens.
+- A Node regression test checks the schema's core security and ownership constraints.
+- This migration has **not** been applied to a Cloudflare D1 database. No D1 database binding, production route, login UI, provider callback, or session endpoint is enabled yet.
+- Existing checkout, payment settlement, and the ORDERS KV namespace remain unchanged.
+- Next implementation step: provision a separate preview D1 database, attach it only to a preview Worker, apply this migration, and exercise the schema before implementing provider verification and secure cookie sessions.
