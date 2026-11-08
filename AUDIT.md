@@ -514,3 +514,23 @@
 - **تست‌های CI:** در PR #90، #92 و #93 اجرای npm test موفق گزارش شد. هنوز build کامل، تست زنده‌ی Cloudflare/زیبال، Lighthouse و مرورگر واقعی اجرا نشده‌اند.
 - **انتشار:** merge کد Worker در GitHub به‌تنهایی به معنی deploy شدن آن روی Cloudflare نیست. مخزن دستور deploy دستی Wrangler دارد و در این بازبینی دسترسی عملیاتی به حساب Cloudflare/secretهای deploy وجود نداشت؛ بنابراین Worker تغییر‌یافته هنوز به‌عنوان نسخه‌ی live تأیید نشده است. هیچ پرداخت واقعی یا سفارش زنده‌ای آزمایش نشده است.
 - **مرحله‌ی بعد:** تکمیل بررسی پرداخت و relay فقط پس از دسترسی به قرارداد PHP خارج از مخزن و محیط sandbox؛ سپس build pipeline و SEO/content. تغییر payment settlement بدون تست و توضیح کتبی انجام نمی‌شود.
+
+
+## پیشرفت اجرای فازها پس از 2026-11-08
+
+### ادغام‌شده در main با CI موفق
+- PR #90: رفع SyntaxError و assertion منسوخ در تست hero/loom.
+- PR #92: حذف push مستقیم workflowهای ویدئو به main؛ اجرای دستی و artifact-only.
+- PR #93: rate limit در Worker در نبود/خرابی Durable Object به‌صورت fail-closed.
+- PR #94: تعریف `npm run build`، `npm run check:palette` و اجرای build کامل در CI؛ Sharp برای build تصاویر اجباری است.
+- PR #95: skip link فارسی و main landmark در صفحات اصلی؛ generator نیز برای صفحات تولیدی اصلاح شد.
+- PR #96: خروج CSS/JS صفحه‌ی name-bracelet از HTML، ثبت PWA، بهبود دسترس‌پذیری و بررسی موفقیت ذخیره‌ی الگو.
+- PR #97: مستندسازی build و تفاوت انتشار GitHub Pages و Cloudflare Worker.
+- PR #98: workflow انتشار دستی Cloudflare Worker با ورودی صریح DEPLOY، اعتبارسنجی dry-run و نیاز به secret/variable حساب.
+
+### محدودیت‌های انتشار و پوشش
+- CI در PRهای فوق palette check، build و npm test را با موفقیت اجرا کرده است؛ این معادل تست مرورگر واقعی یا Lighthouse نیست.
+- تغییرات Worker در main ادغام شده‌اند، اما انتشار Cloudflare هنوز اجرا نشده؛ workflow دستی آماده است و به `CLOUDFLARE_API_TOKEN` در GitHub Actions Secrets و `CLOUDFLARE_ACCOUNT_ID` در Actions Variables نیاز دارد.
+- تغییرات صفحات اصلی در main ادغام شده‌اند؛ وضعیت انتشار زنده‌ی GitHub Pages از این محیط قابل تأیید نبود.
+- صفحات تولیدشده‌ی bracelet/ و colors/ در خروجی build در CI تولید می‌شوند؛ برای اطمینان از حضور skip link در نسخه‌ی استاتیک live باید خروجی build تولید و در مخزن/فرایند Pages منتشر شود.
+- فازهای باقی‌مانده: shared HTML partials و asset hashing؛ بهینه‌سازی کامل تصاویر/فونت و Lighthouse؛ SEO و صفحات محتوایی؛ تکمیل accessibility؛ audit و تست پرداخت/relay پس از دسترسی به PHP خارج مخزن و sandbox؛ طراحی و پیاده‌سازی حساب/سبد؛ قابلیت‌های خلاقانه؛ CI و تست‌های مرورگر.
