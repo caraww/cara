@@ -93,16 +93,16 @@
 
   function draw(canvas,model,time) {
     const ctx=canvas.getContext("2d");
-    const W=canvas.width,H=canvas.height;
+    const W=canvas.width,H=canvas.height,dx=(W-420)/2,dy=(H-220)/2;
     ctx.clearRect(0,0,W,H);
-    const glow=ctx.createRadialGradient(210,82,8,210,100,210);
+    const glow=ctx.createRadialGradient(210+dx,82+dy,8,210+dx,100+dy,210);
     glow.addColorStop(0,"rgba(234,213,176,.16)");
     glow.addColorStop(1,"rgba(234,213,176,0)");
     ctx.fillStyle=glow;
     ctx.fillRect(0,0,W,H);
 
     const cols=38, rows=6, beads=[];
-    const point=t=>({x:54+t*312,y:150-105*Math.sin(Math.PI*t)});
+    const point=t=>({x:54+dx+t*312,y:150+dy-105*Math.sin(Math.PI*t)});
     for(let x=0;x<cols;x++) {
       const t=x/(cols-1), p=point(t), before=point(Math.max(0,t-.003)), after=point(Math.min(1,t+.003));
       const angle=Math.atan2(after.y-before.y,after.x-before.x);
@@ -119,7 +119,7 @@
     ctx.lineWidth=15;
     ctx.lineCap="round";
     ctx.beginPath();
-    ctx.moveTo(54,150);ctx.quadraticCurveTo(210,238,366,150);ctx.stroke();
+    ctx.moveTo(54+dx,150+dy);ctx.quadraticCurveTo(210+dx,238+dy,366+dx,150+dy);ctx.stroke();
     ctx.restore();
     beads.forEach(b=>bead(ctx,b.x,b.y,b.angle,b.color,b.shine));
 
@@ -141,11 +141,11 @@
     ctx.strokeStyle="rgba(28,24,28,.9)";
     ctx.lineWidth=2.4;
     ctx.beginPath();
-    ctx.moveTo(left.x,left.y+7);ctx.bezierCurveTo(40,195,95,201,153,190);
-    ctx.moveTo(right.x,right.y+7);ctx.bezierCurveTo(380,195,325,201,267,190);
+    ctx.moveTo(left.x,left.y+7);ctx.bezierCurveTo(40+dx,195+dy,95+dx,201+dy,153+dx,190+dy);
+    ctx.moveTo(right.x,right.y+7);ctx.bezierCurveTo(380+dx,195+dy,325+dx,201+dy,267+dx,190+dy);
     ctx.stroke();
     ctx.fillStyle="#17151a";
-    ctx.beginPath();ctx.roundRect(188,184,44,12,6);ctx.fill();
+    ctx.beginPath();ctx.roundRect(188+dx,184+dy,44,12,6);ctx.fill();
   }
 
   const entries=cards.map(card=>({
