@@ -138,3 +138,19 @@
     -webkit-text-fill-color: #fff !important;
   }
 }
+
+
+/* Purple order CTA on builder and photo-to-pattern pages: white label wins all states. */
+@media (max-width: 850px) {
+  body:has(.builder) .top.has-mobile-menu nav#builderNav a.btn.dark[href="checkout.html"],
+  body:has(.ws-page) .top.has-mobile-menu nav a.btn.dark[href="checkout.html"],
+  body:has(.builder) .top.has-mobile-menu nav#builderNav a.btn.dark[href="checkout.html"]:visited,
+  body:has(.ws-page) .top.has-mobile-menu nav a.btn.dark[href="checkout.html"]:visited,
+  body:has(.builder) .top.has-mobile-menu nav#builderNav a.btn.dark[href="checkout.html"]:hover,
+  body:has(.ws-page) .top.has-mobile-menu nav a.btn.dark[href="checkout.html"]:hover,
+  body:has(.builder) .top.has-mobile-menu nav#builderNav a.btn.dark[href="checkout.html"]:active,
+  body:has(.ws-page) .top.has-mobile-menu nav a.btn.dark[href="checkout.html"]:active {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+}
