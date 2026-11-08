@@ -10,14 +10,16 @@
   <link rel="stylesheet" href="/css/fonts.css">
   <link rel="stylesheet" href="/css/offline.css">
   <script src="/js/offline.js" defer></script>
-
   <link rel="stylesheet" href="/css/accessibility.css">
 </head>
 <body>
-  <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a><main id="main-content" tabindex="-1">
-  <img src="/img/cara-app-icon.svg" alt="cara">
-  <h1>فعلاً آفلاین هستی</h1>
-  <p>بعضی صفحه‌ها و فایل‌های کارا در دسترس‌اند، اما برای دیدن محصولات به‌روز، ثبت سفارش و پرداخت باید دوباره به اینترنت وصل بشی.</p>
-  <button id="retry" type="button">تلاش دوباره</button>
-</main></body>
+  <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
+  <main id="main-content" tabindex="-1">
+    <img src="/img/cara-app-icon.svg" alt="cara">
+    <h1>فعلاً آفلاین هستی</h1>
+    <p>بعضی صفحه‌ها و فایل‌های کارا در دسترس‌اند، اما برای دیدن محصولات به‌روز، ثبت سفارش و پرداخت باید دوباره به اینترنت وصل بشی.</p>
+    <p id="connection-status" class="connection-status" role="status" aria-live="polite" aria-atomic="true"></p>
+    <button id="retry" type="button">تلاش دوباره</button>
+  </main>
+</body>
 </html>
