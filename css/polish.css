@@ -683,3 +683,11 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   html { scroll-behavior:auto; }
   *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
 }
+
+/* Physical-left hamburger placement wins over RTL logical positioning in legacy rules. */
+@media (max-width:850px) {
+  header.top.has-mobile-menu .menu-toggle {
+    left:14px !important; right:auto !important;
+    inset-inline-start:auto !important; inset-inline-end:auto !important;
+  }
+}
