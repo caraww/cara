@@ -1,0 +1,117 @@
+/* Swipeable four-design Miyuki Delica hero showcase. */
+.hero.hero2 {
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:auto minmax(0,1fr);
+  gap:0;
+  padding:104px max(24px,5vw) 34px;
+}
+.hero2 .hero-copy {
+  justify-self:center;width:min(100%,920px);max-width:920px;
+  text-align:center;padding:0;
+}
+.hero2 .hero-copy::before {margin-inline:auto;}
+.hero2 .hero-copy h1 {max-width:18em;margin-inline:auto;font-size:clamp(34px,4.2vw,56px);}
+.hero2 .hero-copy p {max-width:44em;margin:14px auto 20px;font-size:clamp(14px,1.2vw,17px);}
+.hero2 .hero-copy .btns {justify-content:center;}
+.hero2 .prod {
+  width:min(100%,760px);height:auto;min-height:0;justify-self:center;
+  align-self:center;margin:0 auto;padding:0;display:grid;place-items:center;
+}
+.cara-bracelet-lineup {
+  position:relative;z-index:2;width:min(100%,680px);
+  display:grid;justify-items:center;gap:3px;outline:none;
+  touch-action:pan-y;user-select:none;-webkit-user-select:none;
+}
+.cara-bracelet-lineup__viewport {
+  position:relative;width:100%;aspect-ratio:1/0.82;
+  display:grid;place-items:center;isolation:isolate;overflow:hidden;
+  border-radius:28px;
+  background:radial-gradient(ellipse at 50% 48%,rgba(234,213,176,.12),rgba(111,76,137,.08) 48%,transparent 74%);
+}
+.cara-bracelet-lineup__slides {
+  position:absolute;inset:0;display:grid;place-items:center;perspective:1000px;
+}
+.cara-bracelet-card {
+  position:absolute;inset:0;margin:0;padding:12px 42px 8px;
+  display:grid;grid-template-rows:minmax(0,1fr) auto;place-items:center;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transform:translateX(34px) scale(.94) rotateY(-8deg);
+  transition:opacity .45s ease,transform .6s cubic-bezier(.2,.75,.2,1),visibility .45s;
+}
+.cara-bracelet-card.is-active {
+  opacity:1;visibility:visible;pointer-events:auto;
+  transform:translateX(0) scale(1) rotateY(0);z-index:1;
+}
+.cara-bracelet-card__art {
+  display:block;width:100%;height:100%;max-width:100%;max-height:100%;
+  object-fit:contain;pointer-events:none;
+  filter:drop-shadow(0 26px 28px rgba(0,0,0,.38)) drop-shadow(0 5px 14px rgba(207,174,108,.1));
+}
+.cara-bracelet-card figcaption {
+  color:#f4e7c9;text-align:center;font-size:clamp(15px,1.4vw,19px);
+  font-weight:900;padding-bottom:3px;
+}
+.cara-bracelet-lineup__arrow {
+  position:absolute;z-index:3;top:50%;display:grid;place-items:center;
+  width:42px;height:42px;padding:0 0 4px;border:1px solid rgba(234,213,176,.42);
+  border-radius:50%;background:rgba(25,15,37,.76);color:#f7e7bd;
+  font:inherit;font-size:28px;line-height:1;cursor:pointer;
+  transform:translateY(-50%);backdrop-filter:blur(10px);
+  transition:background .2s,border-color .2s,scale .2s;
+}
+.cara-bracelet-lineup__arrow:hover {background:rgba(207,174,108,.2);border-color:#ead5a5;scale:1.08;}
+.cara-bracelet-lineup__arrow--prev {right:10px;}
+.cara-bracelet-lineup__arrow--next {left:10px;}
+.cara-bracelet-lineup__controls {
+  width:min(88%,440px);display:flex;align-items:center;justify-content:space-between;
+  gap:14px;padding:4px 6px;
+}
+.cara-bracelet-lineup__title {color:#f7e7bd;font-size:16px;font-weight:900;}
+.cara-bracelet-lineup__count {color:rgba(226,214,238,.62);font-size:12px;white-space:nowrap;}
+.cara-bracelet-lineup__dots {display:flex;align-items:center;gap:7px;flex:none;}
+.cara-bracelet-lineup__dot {
+  width:7px;height:7px;padding:0;border:0;border-radius:99px;
+  background:rgba(234,213,176,.35);cursor:pointer;
+  transition:width .25s,background .25s;
+}
+.cara-bracelet-lineup__dot.is-active {width:23px;background:#ead5a5;}
+.cara-bracelet-lineup__hint,.cara-bracelet-lineup__note {
+  margin:2px 0 0;color:rgba(226,214,238,.55);font-size:11px;letter-spacing:.02em;
+}
+.cara-bracelet-lineup__arrow:focus-visible,.cara-bracelet-lineup__dot:focus-visible,
+.cara-bracelet-lineup:focus-visible {outline:2px solid #fff0c6;outline-offset:4px;}
+@media (min-width:821px) {
+  .hero.hero2 {min-height:700px;}
+  .hero2 .prod::before {width:min(34vw,460px);}
+  .hero2 .prod::after {width:min(40vw,540px);}
+}
+@media (max-width:820px) {
+  .hero.hero2 {display:block;height:auto;min-height:0;padding:90px 18px 28px;}
+  .hero2 .hero-copy {text-align:center;margin:0 auto 14px;}
+  .hero2 .hero-copy::before {margin-bottom:12px;font-size:10px;}
+  .hero2 .hero-copy h1 {font-size:clamp(28px,7.2vw,38px);line-height:1.38;}
+  .hero2 .hero-copy p {font-size:13.5px;line-height:1.8;margin:10px auto 15px;}
+  .hero2 .hero-copy .btns {justify-content:center;flex-wrap:nowrap;gap:8px;}
+  .hero2 .hero-copy .btns .btn {flex:1 1 0;min-width:0;min-height:43px;padding:7px 8px;font-size:12px;}
+  .hero2 .prod {width:100%;display:grid;margin-top:8px;}
+  .cara-bracelet-lineup {width:min(100%,440px);}
+  .cara-bracelet-lineup__viewport {aspect-ratio:1/0.88;}
+  .cara-bracelet-card {padding:8px 30px 6px;}
+  .cara-bracelet-lineup__arrow {width:34px;height:34px;font-size:24px;}
+  .cara-bracelet-lineup__arrow--prev {right:3px;}
+  .cara-bracelet-lineup__arrow--next {left:3px;}
+  .cara-bracelet-lineup__controls {width:96%;}
+  .cara-bracelet-lineup__title {font-size:14px;}
+  .cara-bracelet-lineup__note {font-size:10px;}
+}
+@media (max-width:360px) {
+  .hero.hero2 {padding-inline:13px;}
+  .hero2 .hero-copy h1 {font-size:27px;}
+  .cara-bracelet-card {padding-inline:24px;}
+  .cara-bracelet-lineup__arrow {width:30px;height:30px;}
+}
+@media (prefers-reduced-motion:reduce) {
+  .cara-bracelet-card,.cara-bracelet-card.is-active,.cara-bracelet-lineup__dot,.cara-bracelet-lineup__arrow {
+    transition:none;transform:none;
+  }
+}

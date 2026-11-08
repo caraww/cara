@@ -93,7 +93,8 @@
     <title>کارا (cara) — دستبند منجوقی دست‌باف | طراحی و سفارش آنلاین</title>
     <link rel="stylesheet" href="css/decor.css" />
     <link rel="stylesheet" href="css/hero.css?v=8" />
-    <link rel="stylesheet" href="css/hero-carousel.css?v=2" />
+    <link rel="stylesheet" href="css/hero-carousel.css?v=3" />
+    <link rel="stylesheet" href="css/hero-lineup.css?v=1" />
     <style>
       /* ===== فوتر صفحه‌ی اصلی: تاریک، ستون‌بندی منظم، نخ مهره‌ای بالاش ===== */
       .foot {
@@ -296,21 +297,35 @@
             </div>
           </div>
           <div class="prod" aria-label="پیش‌نمایش دستبندهای دست‌باف cara">
-            <section class="hero-showcase" id="heroShowcase" role="region" aria-roledescription="نمایش دستبندها" aria-label="سه مدل سه‌بعدی دستبند میوکی دلیکا" tabindex="0">
-              <div class="hero-showcase__viewport">
-                <div class="hero-showcase__slides" id="heroShowcaseSlides"></div>
-                <button class="hero-showcase__arrow hero-showcase__arrow--prev" type="button" aria-label="دستبند قبلی">›</button>
-                <button class="hero-showcase__arrow hero-showcase__arrow--next" type="button" aria-label="دستبند بعدی">‹</button>
-              </div>
-              <div class="hero-showcase__footer">
-                <div class="hero-showcase__caption" aria-live="polite">
-                  <span class="hero-showcase__eyebrow">دست‌ساز، مهره‌به‌مهره</span>
-                  <strong id="heroShowcaseTitle">دستبندهای دست‌باف</strong>
-                  <span id="heroShowcaseCount">۱ از ۳</span>
+            <section class="cara-bracelet-lineup" id="caraBraceletLineup" aria-label="نمایش چهار دستبند دست‌باف cara" tabindex="0">
+              <div class="cara-bracelet-lineup__viewport">
+                <div class="cara-bracelet-lineup__slides">
+                  <figure class="cara-bracelet-card" data-bracelet="thousand-eyes">
+                    <canvas class="cara-bracelet-card__art" width="560" height="560" role="img" aria-label="بازسازی سه‌بعدی دستبند هزارچشم با مهره‌های مشکی، سفید و زرشکی"></canvas>
+                    <figcaption>هزارچشم</figcaption>
+                  </figure>
+                  <figure class="cara-bracelet-card" data-bracelet="waterfall">
+                    <canvas class="cara-bracelet-card__art" width="560" height="560" role="img" aria-label="بازسازی سه‌بعدی دستبند آبشار رنگی با موج‌های زرد، نارنجی، قرمز و سرمه‌ای"></canvas>
+                    <figcaption>آبشار رنگی</figcaption>
+                  </figure>
+                  <figure class="cara-bracelet-card" data-bracelet="duck">
+                    <canvas class="cara-bracelet-card__art" width="560" height="560" role="img" aria-label="بازسازی سه‌بعدی دستبند اردک تک‌تک با اردک‌های زرد روی زمینه روشن"></canvas>
+                    <figcaption>اردک تک‌تک</figcaption>
+                  </figure>
+                  <figure class="cara-bracelet-card" data-bracelet="peacock">
+                    <canvas class="cara-bracelet-card__art" width="560" height="560" role="img" aria-label="بازسازی سه‌بعدی دستبند طاووس با نقش چشم‌های فیروزه‌ای و سفید"></canvas>
+                    <figcaption>طاووس</figcaption>
+                  </figure>
                 </div>
-                <div class="hero-showcase__dots" id="heroShowcaseDots" aria-label="انتخاب دستبند"></div>
+                <button class="cara-bracelet-lineup__arrow cara-bracelet-lineup__arrow--prev" type="button" aria-label="دستبند قبلی">›</button>
+                <button class="cara-bracelet-lineup__arrow cara-bracelet-lineup__arrow--next" type="button" aria-label="دستبند بعدی">‹</button>
               </div>
-              <p class="hero-showcase__hint">برای دیدن مدل بعدی، بکش <span aria-hidden="true">← →</span></p>
+              <div class="cara-bracelet-lineup__controls">
+                <strong class="cara-bracelet-lineup__title" aria-live="polite">هزارچشم</strong>
+                <span class="cara-bracelet-lineup__count">۱ از ۴</span>
+                <div class="cara-bracelet-lineup__dots" aria-label="انتخاب دستبند"></div>
+              </div>
+              <p class="cara-bracelet-lineup__note">برای دیدن طرح بعدی، روی دستبند بکش</p>
             </section>
             <canvas id="braceletCanvas" width="560" height="560" hidden aria-hidden="true" tabindex="-1"></canvas>
           </div>
@@ -605,8 +620,7 @@
         });
       })();
     </script>
-    <script src="js/hero-bracelet.js?v=6" defer></script>
-    <script src="js/hero-gallery-carousel.js?v=2" defer></script>
+    <script src="js/hero-lineup.js?v=1" defer></script>
     <script src="js/weave.js?v=1" defer></script>
     <script src="js/decor.js?v=14" defer></script>
     <script src="/js/contact.js" defer></script>
