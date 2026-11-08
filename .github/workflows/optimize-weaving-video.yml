@@ -1,31 +1,25 @@
 name: Optimize homepage weaving video
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - .github/workflows/optimize-weaving-video.yml
-      - tools/trigger-video-optimization.txt
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: optimize-weaving-video-v5
+  group: optimize-weaving-video-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   optimize:
-    if: github.event.head_commit.message == 'Run homepage video optimization'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - name: Check out main
+      - name: Check out selected ref
         uses: actions/checkout@v4
         with:
-          ref: main
-          fetch-depth: 0
+          ref: ${{ github.ref }}
+          fetch-depth: 1
 
       - name: Install FFmpeg static binary
         run: |
@@ -46,32 +40,27 @@ jobs:
             -vf "scale=720:-2" \
             -c:v libx264 -preset slow -crf 25 -pix_fmt yuv420p \
             -c:a aac -b:a 96k -movflags +faststart \
-            -sn -dn media/cara-weaving.optimized.mp4
-          test -s media/cara-weaving.optimized.mp4
-          ffmpeg -v error -i media/cara-weaving.optimized.mp4 -map 0:v:0 -frames:v 1 -f null -
+            -sn -dn /tmp/cara-weaving.optimized.mp4
+          test -s /tmp/cara-weaving.optimized.mp4
+          ffmpeg -v error -i /tmp/cara-weaving.optimized.mp4 -map 0:v:0 -frames:v 1 -f null -
 
-      - name: Replace source only when optimized file is smaller
+      - name: Compare output size
         run: |
           original=$(stat -c%s media/cara-weaving.MP4)
-          optimized=$(stat -c%s media/cara-weaving.optimized.mp4)
+          optimized=$(stat -c%s /tmp/cara-weaving.optimized.mp4)
           echo "Original bytes: $original"
           echo "Optimized bytes: $optimized"
           if [ "$optimized" -ge "$original" ]; then
-            echo "Optimized output is not smaller; preserving original."
-            rm media/cara-weaving.optimized.mp4
+            echo "Optimized output is not smaller; no artifact will be uploaded."
             exit 0
           fi
-          mv media/cara-weaving.optimized.mp4 media/cara-weaving.MP4
           echo "Saved reduction: $((100 - optimized * 100 / original))%"
 
-      - name: Commit optimized video
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add media/cara-weaving.MP4
-          if git diff --cached --quiet; then
-            echo "No smaller video to commit."
-            exit 0
-          fi
-          git commit -m "Optimize homepage weaving video for web"
-          git push origin HEAD:main
+      - name: Upload optimized video artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cara-weaving-optimized
+          path: /tmp/cara-weaving.optimized.mp4
+          if-no-files-found: ignore
+          retention-days: 7
