@@ -4,7 +4,7 @@
 
 ```
 cara-site/
-├─ *.html            صفحه‌ها (index, builder, upload, gallery, checkout, game, admin)
+├─ *.html            صفحه‌ها (index, builder, upload, gallery, checkout, game, name-bracelet, admin, offline)
 ├─ css/              ← css/README.md
 ├─ js/               اسکریپت‌های مرورگر
 ├─ img/              (توی این بسته نیست؛ همون پوشه‌ی خودت)
@@ -24,7 +24,8 @@ cara-site/
 | gallery | studio → gallery → decor | palette → works → gallery → decor |
 | checkout | studio → decor | palette → checkout → decor |
 | game | studio → decor | game → decor |
-| admin | inline | palette |
+| name-bracelet | studio → decor → name-bracelet → accessibility | palette → name-bracelet → decor → pwa → contact |
+| admin | inline + accessibility | palette |
 
 ## JS
 | فایل | کارش |
@@ -82,3 +83,12 @@ npm test
 CI روی هر Pull Request ابتدا palette sync و build کامل را اجرا می‌کند و بعد تست‌های Node را می‌گذراند. build به Sharp نیاز دارد و در صورت نبودن آن باید fail شود، نه اینکه تصاویر اصلی را به‌جای نسخه‌ی سبک منتشر کند.
 
 **انتشار:** فایل‌های استاتیک از مسیر GitHub Pages پروژه منتشر می‌شوند. Worker پرداخت/بازی جداست و تغییر فایل‌های `index.js`، `game-worker.js` یا `wrangler.jsonc` به‌تنهایی آن را روی Cloudflare منتشر نمی‌کند؛ پس از تست sandbox و بررسی تنظیمات، دستور `npx wrangler deploy` باید جداگانه اجرا شود. هیچ secretای را در مخزن قرار نده.
+
+### انتشار Worker روی Cloudflare از GitHub Actions
+
+برای فعال‌کردن انتشار دستی، در تنظیمات مخزن این دو مقدار را اضافه کن:
+
+- Actions secret با نام \`CLOUDFLARE_API_TOKEN\` (توکنی با دسترسی لازم برای انتشار Worker و bindingهای همین پروژه)
+- Actions variable با نام \`CLOUDFLARE_ACCOUNT_ID\`
+
+سپس در Actions، workflow با نام **Deploy Cloudflare Worker** را از شاخه‌ی \`main\` اجرا کن و در ورودی تأیید دقیقاً \`DEPLOY\` بنویس. workflow ابتدا bundle/config را با \`--dry-run\` اعتبارسنجی می‌کند و فقط در صورت موفقیت deploy واقعی را انجام می‌دهد. هیچ‌وقت token را در چت یا فایل مخزن قرار نده.
