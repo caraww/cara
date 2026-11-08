@@ -4,7 +4,7 @@
 
 ```
 cara-site/
-├─ *.html            صفحه‌ها (index, builder, upload, gallery, checkout, game, admin)
+├─ *.html            صفحه‌ها (index, builder, upload, gallery, checkout, game, name-bracelet, admin, offline)
 ├─ css/              ← css/README.md
 ├─ js/               اسکریپت‌های مرورگر
 ├─ img/              (توی این بسته نیست؛ همون پوشه‌ی خودت)
