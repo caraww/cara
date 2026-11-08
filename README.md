@@ -24,7 +24,8 @@ cara-site/
 | gallery | studio → gallery → decor | palette → works → gallery → decor |
 | checkout | studio → decor | palette → checkout → decor |
 | game | studio → decor | game → decor |
-| admin | inline | palette |
+| name-bracelet | studio → decor → name-bracelet → accessibility | palette → name-bracelet → decor → pwa → contact |
+| admin | inline + accessibility | palette |
 
 ## JS
 | فایل | کارش |
