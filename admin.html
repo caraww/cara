@@ -55,9 +55,11 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
 #toast{position:fixed;inset-inline:0;bottom:22px;margin:auto;width:max-content;max-width:90vw;background:var(--ink);color:#fff;padding:6px 22px;border-radius:999px;opacity:0;transform:translateY(12px);transition:.3s;pointer-events:none;z-index:9}
 #toast.on{opacity:1;transform:none}
 </style>
+  <link rel="stylesheet" href="/css/accessibility.css">
 </head>
 <body>
-<main>
+  <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
+<main id="main-content" tabindex="-1">
   <section id="login" hidden>
     <h1>سفارش‌های cara</h1>
     <p class="muted" style="margin:0">رمز ADMIN_TOKEN رو بنویس.</p>

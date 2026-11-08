@@ -1,0 +1,33 @@
+/* Keyboard-only skip navigation shared by all Cara pages. */
+.skip-link {
+  position: fixed;
+  inset-block-start: 12px;
+  inset-inline-start: 12px;
+  z-index: 10000;
+  display: inline-block;
+  padding: 12px 18px;
+  border: 2px solid #b8975a;
+  border-radius: 12px;
+  background: #fff;
+  color: #1d1527;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  text-decoration: none;
+  box-shadow: 0 4px 18px rgb(0 0 0 / 18%);
+  transform: translateY(calc(-100% - 24px));
+}
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+  outline: 3px solid #b8975a;
+  outline-offset: 3px;
+}
+#main-content:focus {
+  outline: 2px solid #b8975a;
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .skip-link { transition: transform 160ms ease; }
+}
