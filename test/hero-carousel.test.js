@@ -6,7 +6,7 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 
-test("homepage hero keeps four photo-guided 3D Delica bracelets visible together", () => {
+test("homepage hero lets users swipe between four photo-guided 3D Delica bracelets", () => {
   const html = read("index.html");
   const script = read("js/hero-lineup.js");
   const css = read("css/hero-lineup.css");
@@ -22,7 +22,12 @@ test("homepage hero keeps four photo-guided 3D Delica bracelets visible together
   assert.match(script, /requestAnimationFrame/);
   assert.match(script, /IntersectionObserver/);
   assert.match(script, /prefers-reduced-motion/);
-  assert.match(css, /grid-template-columns: repeat\(4,minmax\(0,1fr\)\)/);
-  assert.match(css, /grid-template-columns: repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(html, /cara-bracelet-lineup__arrow--prev/);
+  assert.match(html, /cara-bracelet-lineup__arrow--next/);
+  assert.match(script, /pointerdown/);
+  assert.match(script, /pointerup/);
+  assert.match(script, /function show\(next\)/);
+  assert.match(css, /cara-bracelet-lineup__slides/);
+  assert.match(css, /\.cara-bracelet-card\.is-active/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
 });
