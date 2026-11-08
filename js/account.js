@@ -10,7 +10,11 @@
     const response = await fetch(path, { credentials: "same-origin", cache: "no-store", ...options,
       headers: { ...(options.body ? { "Content-Type": "application/json" } : {}), ...(options.headers || {}) } });
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || "درخواست انجام نشد.");
+    if (!response.ok) {
+      const error = new Error(data.error || "درخواست انجام نشد.");
+      error.status = response.status;
+      throw error;
+    }
     return data;
   }
 
@@ -64,7 +68,14 @@
       const title = document.createElement("h3"); title.textContent = item.title || "طرح بدون عنوان";
       const date = document.createElement("p"); date.className = "account-note"; date.textContent = new Date(item.updatedAt * 1000).toLocaleDateString("fa-IR");
       const open = document.createElement("button"); open.className = "btn sm accent"; open.type = "button"; open.textContent = "باز کردن در استودیو";
-      open.addEventListener("click", () => { localStorage.setItem("cara-pattern", JSON.stringify(item.design)); location.href = "/builder.html"; });
+      open.addEventListener("click", () => {
+        try {
+          localStorage.setItem("cara-pattern", JSON.stringify(item.design));
+          location.href = "/builder.html";
+        } catch {
+          message("designMessage", "ذخیره‌سازی مرورگر در دسترس نیست؛ فضای ذخیره‌سازی را بررسی کن و دوباره امتحان کن.");
+        }
+      });
       const remove = document.createElement("button"); remove.className = "btn sm"; remove.type = "button"; remove.textContent = "حذف طرح";
       remove.addEventListener("click", async () => {
         if (!confirm("این طرح از حساب کاربری حذف شود؟")) return;
@@ -92,16 +103,32 @@
   }
 
   async function loadAccount() {
+    let data;
     try {
-      const data = await api("/api/account/me");
-      user = data.user;
-      loginPanel.hidden = true; dashboard.hidden = false;
-      $("welcomeName").textContent = "سلام " + (user.displayName || "دوست cara") + "!";
-      $("welcomeHandle").textContent = user.username ? "@" + user.username : "حساب تلگرام تأییدشده";
-      await Promise.all([loadDesigns(), loadOrders()]);
-    } catch {
-      loginPanel.hidden = false; dashboard.hidden = true;
-      await installTelegramLogin();
+      data = await api("/api/account/me");
+    } catch (error) {
+      loginPanel.hidden = false;
+      dashboard.hidden = true;
+      if (error.status === 401) await installTelegramLogin();
+      else message("loginMessage", error.message || "فعلاً بررسی حساب ممکن نیست؛ کمی بعد دوباره تلاش کن.");
+      return;
+    }
+
+    user = data.user;
+    loginPanel.hidden = true;
+    dashboard.hidden = false;
+    $("welcomeName").textContent = "سلام " + (user.displayName || "دوست cara") + "!";
+    $("welcomeHandle").textContent = user.username ? "@" + user.username : "حساب تلگرام تأییدشده";
+
+    /* شکست بارگذاری یک بخش نباید کاربر واردشده را از داشبورد بیرون بیندازد. */
+    const results = await Promise.allSettled([loadDesigns(), loadOrders()]);
+    if (results[0].status === "rejected") {
+      $("designList").replaceChildren();
+      message("designMessage", results[0].reason?.message || "دریافت طرح‌ها ممکن نشد؛ صفحه را دوباره بارگذاری کن.");
+    }
+    if (results[1].status === "rejected") {
+      $("orderList").replaceChildren();
+      message("ordersMessage", results[1].reason?.message || "دریافت سفارش‌ها ممکن نشد؛ صفحه را دوباره بارگذاری کن.");
     }
   }
 
