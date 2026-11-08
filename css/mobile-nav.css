@@ -154,3 +154,19 @@
     -webkit-text-fill-color: #fff !important;
   }
 }
+
+
+/* Global mobile menu order CTA contrast fix — applies on every page. */
+@media (max-width: 850px) {
+  .top.has-mobile-menu nav a.btn.dark[href$="checkout.html"],
+  .top.has-mobile-menu nav a.btn.dark[href$="checkout.html"]:link,
+  .top.has-mobile-menu nav a.btn.dark[href$="checkout.html"]:visited,
+  .top.has-mobile-menu nav a.btn.dark[href$="checkout.html"]:hover,
+  .top.has-mobile-menu nav a.btn.dark[href$="checkout.html"]:focus,
+  .top.has-mobile-menu nav a.btn.dark[href$="checkout.html"]:active {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    text-shadow: none !important;
+    opacity: 1 !important;
+  }
+}
