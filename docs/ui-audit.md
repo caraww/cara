@@ -132,3 +132,99 @@
 ## 6) وضعیت فاز A و گام لازم برای تکمیل
 
 این فایل یک **ممیزی اولیه‌ی سورس** است، نه تأیید بصری نهایی. برای تکمیل بخش الزامی اسکرین‌شات‌ها و اندازه‌گیری‌های واقعی لازم است اجرای مرورگر به سایت زنده یا یک clone کامل با assetها و وابستگی‌ها دسترسی داشته باشد. پس از فراهم شدن آن دسترسی، باید تصاویر و یافته‌های مشاهده‌ای به همین سند اضافه شوند. تا آن زمان هیچ مسیر طراحی انتخاب یا پیاده‌سازی نمی‌شود.
+
+
+## 7) بررسی تکمیلی: CSS load order، پوشش صفحات، فونت و مرجع رنگ منجوق
+
+### ترتیب واقعی CSS در فایل‌های HTML ریشه (main)
+
+این جدول از تگ‌های `<link rel="stylesheet">` در هر فایل استخراج شده و وضعیت فعلی مخزن را نشان می‌دهد؛ این جدول جایگزین سند CSS نیست، بلکه اختلاف‌ها را قابل مشاهده می‌کند.
+
+| صفحه | ترتیب واقعی CSS |
+|---|---|
+| index | fonts → home?v=4 → weave?v=3 → decor → hero?v=8 → weaving?v=8 → page-frame?v=2 → accessibility → mobile-nav → polish?v=1 |
+| builder | fonts → studio?v=mobile-nav-2 → decor → builder?v=20261105-textlayout3 → accessibility → mobile-nav → polish?v=1 |
+| upload | fonts → studio?v=mobile-nav-2 → decor → upload → accessibility → mobile-nav → polish?v=1 |
+| gallery | fonts → studio?v=mobile-nav-2 → gallery?v=20261107-whiteframes → decor → accessibility → mobile-nav → polish?v=1 |
+| checkout | fonts → studio?v=20261105-nav → decor → accessibility → mobile-nav → polish?v=1 |
+| game | fonts → studio?v=mobile-nav-2 → decor → game → accessibility → mobile-nav → polish?v=1 |
+| name-bracelet | fonts → studio → decor → name-bracelet → accessibility → mobile-nav → polish?v=1 |
+| account | fonts → studio → decor → mobile-nav → account → polish?v=1 |
+| admin | fonts → accessibility → polish?v=1 |
+| customers | fonts → accessibility → polish?v=1 |
+| offline | fonts → offline؛ accessibility بارگذاری می‌شود اما mobile-nav و polish در این صفحه نیستند |
+
+**اختلاف مستندات:** README ریشه هنوز نقشه‌ی کوتاه قدیمی (home→decor، studio→decor و غیره) را نشان می‌دهد. `css/README.md` هم برای index فقط home→decor می‌گوید، برای checkout/game فقط studio→decor و برای admin می‌گوید CSS مشترک ندارد؛ اما HTML فعلی چندین لایه‌ی جدیدتر را اضافه می‌کند. بنابراین قاعده‌ی «توکن‌ها در یک فایل که همه‌ی صفحات اول بارگذاری کنند» باید در یک PR مستقل و با نقشه‌ی دقیق مهاجرت شود. به‌خصوص offline، صفحات تولیدی `bracelet/*.html` و `colors/*.html` باید در طرح مهاجرت فراموش نشوند.
+
+### پوشش دقیق صفحات موجود در درخت main
+
+- ۱۱ صفحه‌ی HTML در ریشه: account، admin، builder، checkout، customers، gallery، game، index، name-bracelet، offline، upload.
+- ۱۷ صفحه‌ی تولیدی در `bracelet/`: آبشار-رنگی، آلبوم، اردک-تک-تک، اسب، خطر، درفش-کاویانی، ریک-اند-مورتی، زنجیر، شطرنج، طاووس، قالی، قلب-طلا، لابستر، ماریو، هزار-چشم، و-من-یتق-، کوکا.
+- ۳۳ صفحه‌ی جزئیات رنگ در `colors/` به‌علاوه‌ی `colors/index.html`.
+- صفحه‌ی مستقل `404.html` در tree نیست.
+- «weave» صفحه‌ی مستقل HTML نیست و باید به‌عنوان بخش در index ثبت شود.
+
+### منبع واحد Delica و ۳۳ رنگ فیزیکی
+
+`js/palette.js` شامل ۳۳ کد/رنگ است. این فهرست فقط برای مرجع audit درج شده و در هیچ شرایطی توکن UI نیست؛ رنگ‌های hex، نام‌ها و کدها باید عیناً حفظ شوند.
+
+| کد | نام | HEX |
+|---|---|---|
+| FGB0370 | سفید ابریشمی | #E9E6E3 |
+| DB0010 | مشکی براق | #171717 |
+| DB0654 | سرخابی | #791D27 |
+| DB0757 | قرمز مات | #D81718 |
+| DB2103 | نارنجی روشن | #F79F0D |
+| DB0310 | مشکی مات | #272726 |
+| DB0732 | کرم | #E9CFAB |
+| DB0726 | آبی کبالت | #251A82 |
+| DB0727 | قرمز | #DF2A1B |
+| DB0157 | کرم هفت رنگ | #EDCAA1 |
+| DB1498 | خاکستری روشن | #A29EA1 |
+| DB0725 | فیروزه‌ای | #50A7CD |
+| DB0321 | نقره‌ای متالیک | #7C7370 |
+| DB0721 | زرد لیمویی | #F1E00A |
+| DB2359 | بنفش | #5E4697 |
+| DB0756 | کبالت مات | #282094 |
+| DB1133 | نارنجی | #F98B0A |
+| DB0724 | سبز چمنی | #4C8241 |
+| DB0774 | قرمز شفاف | #8D181B |
+| DB1134 | عنابی | #672226 |
+| DB2109 | دارچینی | #905A25 |
+| DB0351 | سفید مات | #ECE9ED |
+| DB0200 | سفید | #F0EDF2 |
+| DB2264 | سبز خاکستری | #657C6E |
+| DB0785 | بنفش مات شفاف | #35295E |
+| DB0628 | آبی ابریشمی | #6F9CAC |
+| DB0766 | سبز فسفری | #A4B12B |
+| DB1832 | طلایی | #B08B4B |
+| DB1582 | زرد طلایی | #FABC03 |
+| DB0680 | قهوه‌ای براق | #6B4128 |
+| DB1268 | آبی مات | #5AA3B3 |
+| DB2116 | صورتی | #F2A9B8 |
+| DB0389 | کرم گندمی | #E6C8A8 |
+
+یادداشت کیفیت داده: خود فایل palette دو رنگ آخر را «تقریبی» مشخص می‌کند؛ این موضوع باید به‌عنوان عدم قطعیت داده‌ی رنگ فیزیکی ثبت شود، نه مجوز تغییر رنگ UI یا palette. در فاز B باید ۳۳ swatch دقیق روی هر سه سطح پیشنهادی کنار هم نمایش داده شوند؛ ارزیابی «تضاد/محو شدن» بصری با اسکرین‌شات و نمونه‌ی واقعی صفحه انجام می‌شود.
+
+### فونت‌ها و مجوز
+
+- فقط خانواده‌ی Vazirmatn در CSS فونت فعلی تعریف شده است.
+- ۱۵ فایل woff2 موجودند: سه subset (Arabic، Latin، Latin-ext) × پنج وزن (300، 400، 500، 700، 900).
+- مجموع حجم فایل‌ها بر اساس metadata درخت GitHub: **513,460 bytes (~501 KiB)**؛ این مجموع همه‌ی فایل‌هاست، نه حجم دانلود هر صفحه. مرورگر subsetهای لازم را بر اساس unicode-range درخواست می‌کند.
+- `font-display: swap` تعریف شده است. Preload و subsetهای واقعی باید با Network panel در مرورگر سنجیده شوند؛ فقط یک preload بحرانی باید نگه داشته شود.
+- فایل مجوز OFL یا متن مجوز فونت در درخت مخزن پیدا نشد. بنابراین در این ممیزی نمی‌توان مجوز فایل‌های باینری موجود را از داخل مخزن تأیید کرد. پیش از پیشنهاد/بسته‌بندی فونت در فاز B، منبع رسمی upstream و فایل SIL Open Font License باید جداگانه بررسی و همراه assetها نگهداری شوند.
+- اسکریپت `tools/self-host-fonts.js` و تست `test/self-host-fonts.test.js` در مخزن وجود دارند؛ پیش از تغییر تعداد فایل‌ها باید بررسی شوند تا build خودکار فونت، unicode-range، preload و تست‌ها با معماری جدید سازگار بمانند.
+
+## 8) وضعیت تکمیل فاز A پس از بررسی تکمیلی
+
+- [x] خواندن ساختار HTML/CSS و سندهای README
+- [x] استخراج CSS load order واقعی برای ۱۱ صفحه‌ی ریشه
+- [x] فهرست‌برداری از ۱۷ صفحه‌ی اثر و ۳۳ صفحه‌ی رنگ
+- [x] ثبت ۳۳ کد/HEX منجوق به‌عنوان داده‌ی immutable
+- [x] شمارش فایل‌ها و حجم woff2 و شناسایی نبود مجوز در tree مخزن
+- [ ] اسکرین‌شات واقعی همه‌ی صفحات در 375/768/1280
+- [ ] بررسی تعاملی tap target، keyboard، focus، overflow، empty/error/success state
+- [ ] Lighthouse Mobile baseline
+- [ ] تست cross-browser
+
+فاز A هنوز **ناتمام** است تا سه مورد آخر با اجرای واقعی مرورگر انجام شوند. فاز B و هر نوع تغییر بصری در سایت همچنان متوقف است تا این محدودیت روشن و رفع شود.
