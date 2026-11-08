@@ -16,7 +16,7 @@ test("shared mobile navigation creates an accessible menu and prevents content o
   assert.match(js, /getBoundingClientRect\(\)\.height/);
   assert.match(css, /\.top\.has-mobile-menu\.menu-open nav/);
   assert.match(css, /display: none !important/);
-  assert.match(css, /display: flex !important/);
+  assert.match(css, /display: flex !important/);\n  assert.match(css, /body:has\\(\\.wrap\\) \\.top\\.has-mobile-menu nav/);\n  assert.match(css, /body:has\\(\\.builder\\) \\.top\\.has-mobile-menu nav#builderNav/);\n  assert.match(css, /body:has\\(\\.wrap\\) \\.top\\.has-mobile-menu\\.menu-open nav/);
   assert.ok(css.includes("width: min(188px, calc(100vw - 28px))"));
   assert.ok(css.includes("max-height: min(48vh, 340px)"));
   assert.ok(css.includes("background: rgba(248, 246, 250, .80)"));
