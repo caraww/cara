@@ -30,9 +30,9 @@ test("all primary and generated pages receive the shared mobile menu", () => {
     assert.match(html, /mobile-nav\.css/, page + " loads mobile nav CSS");
     assert.match(html, /mobile-nav\.js/, page + " loads mobile nav JS");
   }
-  const palette = fs.readFileSync(path.join(root, "js/palette.js"), "utf8");
-  assert.match(palette, /mobile-nav\.css/);
-  assert.match(palette, /mobile-nav\.js/);
+  const contact = fs.readFileSync(path.join(root, "js/contact.js"), "utf8");
+  assert.match(contact, /mobile-nav\.css/);
+  assert.match(contact, /mobile-nav\.js/);
   const template = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
   assert.match(template, /mobile-nav\.css/);
   assert.match(template, /mobile-nav\.js/);
