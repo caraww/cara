@@ -5,7 +5,12 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "build:beads": "node tools/build-beads.js",
+    "build:works": "node -e \"process.env.CARA_REQUIRE_SHARP='1'; require('./tools/build-works.js')\"",
+    "build:pages": "node tools/build-pages.js",
+    "build": "npm run build:beads && npm run build:works && npm run build:pages",
+    "check:palette": "node tools/sync-valid.js index.js --check"
   },
   "engines": {
     "node": ">=18"
