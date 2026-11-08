@@ -4,26 +4,24 @@ const fs = require("node:fs");
 const path = require("node:path");
 const root = path.join(__dirname, "..");
 
-test("shared mobile navigation creates an accessible menu and prevents content overlap", () => {
+test("shared mobile navigation is left-anchored, accessible, and overlays without blank page space", () => {
   const js = fs.readFileSync(path.join(root, "js/mobile-nav.js"), "utf8");
   const css = fs.readFileSync(path.join(root, "css/mobile-nav.css"), "utf8");
+  const polish = fs.readFileSync(path.join(root, "css/polish.css"), "utf8");
   assert.match(js, /aria-controls/);
   assert.match(js, /aria-expanded/);
   assert.match(js, /event\.key === "Escape"/);
   assert.match(js, /toggle\.focus\(\)/);
   assert.match(js, /window\.innerWidth > 850/);
-  assert.match(js, /mobile-nav-spacer/);
-  assert.match(js, /getBoundingClientRect\(\)\.height/);
-  assert.match(css, /\.top\.has-mobile-menu\.menu-open nav/);
+  assert.doesNotMatch(js, /mobile-nav-spacer|getBoundingClientRect\(\)\.height|syncSpacer/);
+  assert.match(css, /left: 14px/);
+  assert.match(css, /right: auto/);
   assert.match(css, /display: none !important/);
   assert.match(css, /display: flex !important/);
-  assert.match(css, /body:has\(\.wrap\) \.top\.has-mobile-menu nav/);
-  assert.match(css, /body:has\(\.builder\) \.top\.has-mobile-menu nav#builderNav/);
-  assert.match(css, /body:has\(\.wrap\) \.top\.has-mobile-menu\.menu-open nav/);
-  assert.ok(css.includes("width: min(188px, calc(100vw - 28px))"));
-  assert.ok(css.includes("max-height: min(48vh, 340px)"));
-  assert.ok(css.includes("background: rgba(248, 246, 250, .80)"));
-  assert.ok(css.includes("backdrop-filter: blur(18px) saturate(145%)"));
+  assert.ok(css.includes("width: min(196px, calc(100vw - 24px))"));
+  assert.ok(css.includes("background: rgba(255,255,255,.985)"));
+  assert.match(polish, /left:14px !important/);
+  assert.match(polish, /inset-inline-start:auto !important/);
 });
 
 test("all primary and generated pages receive the shared mobile menu", () => {
