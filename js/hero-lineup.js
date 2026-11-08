@@ -77,7 +77,7 @@
     const cap=x.createLinearGradient(0,6,0,22);
     cap.addColorStop(0,mix(hex,.34+k));cap.addColorStop(.55,mix(hex,.08+k));cap.addColorStop(1,mix(hex,-.22+k));
     x.fillStyle=cap;x.fill();x.strokeStyle="rgba(255,255,255,.24)";x.lineWidth=1.2;x.stroke();
-    /* Thread opening is on the top rim; the visible center stays solid. */
+    /* Miyuki Delica thread opening is on the top rim; the visible center stays solid. */
     x.beginPath();x.ellipse(24,9.5,3.3,1.8,0,0,TAU);x.fillStyle="rgba(20,15,18,.78)";x.fill();
     x.beginPath();x.ellipse(24,9.1,2.1,.8,0,Math.PI,TAU);
     x.strokeStyle="rgba(255,255,255,.3)";x.lineWidth=.7;x.stroke();
@@ -107,7 +107,8 @@
   function fit(entry){
     const c=entry.canvas,rect=c.getBoundingClientRect(),box=rect.width||Math.min(innerWidth<=820?innerWidth*.82:620,innerHeight*.78);
     const size=Math.max(1,box);dpr=Math.min(devicePixelRatio||1,2);
-    c.width=Math.round(size*dpr);c.height=Math.round(size*dpr);
+    const pixelSize=Math.round(size*dpr);
+    if(c.width!==pixelSize||c.height!==pixelSize){c.width=pixelSize;c.height=pixelSize;}
     const ctx=c.getContext("2d");ctx.setTransform(dpr,0,0,dpr,0,0);
     return {ctx,w:size,h:size};
   }
