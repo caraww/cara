@@ -9,7 +9,8 @@ test("offline page uses external cached CSS/JS and stays noindex", () => {
   assert.match(html, /name="robots" content="noindex, nofollow"/);
   assert.match(html, /href="\/css\/fonts\.css"/);
   assert.match(html, /href="\/css\/offline\.css"/);
-  assert.match(html, /src="\/js\/offline\.js" defer/);\n  assert.match(html, /id="connection-status"[^>]*role="status"[^>]*aria-live="polite"/);
+  assert.match(html, /src="\/js\/offline\.js" defer/);
+  assert.match(html, /id="connection-status"[^>]*role="status"[^>]*aria-live="polite"/);
   assert.doesNotMatch(html, /<style\b|onclick=/);
 });
 
@@ -27,9 +28,12 @@ test("service worker precaches offline styles, retry script, and local font weig
   ]) assert.ok(sw.includes('"' + asset + '"'), asset);
 });
 
-test("offline retry is attached through an external event listener", () => {
+test("offline retry and connection feedback use external event listeners", () => {
   const js = fs.readFileSync(path.join(root, "js/offline.js"), "utf8");
   assert.match(js, /addEventListener\("click"/);
-  assert.match(js, /location\.reload\(\)/);\n  assert.match(js, /addEventListener\("online"/);\n  assert.match(js, /addEventListener\("offline"/);\n  assert.match(js, /connection-status/);
+  assert.match(js, /location\.reload\(\)/);
+  assert.match(js, /addEventListener\("online"/);
+  assert.match(js, /addEventListener\("offline"/);
+  assert.match(js, /connection-status/);
   assert.doesNotMatch(js, /setAttribute\("onclick"/);
 });
