@@ -10,9 +10,9 @@ const featureReady = worker.includes('p === "/api/order-status"') &&
   js.includes('fetch("/api/order-status?id="');
 
 test("checkout never trusts a success query parameter without server confirmation", { skip: !featureReady }, () => {
-  assert.match(js, /fetch\("\/api\/order-status\?id="/);
-  assert.match(js, /data\.status !== "paid"/);
-  assert.doesNotMatch(js, /res === "success" \? \`<p class="ok">/);
+  assert.ok(js.includes('fetch("/api/order-status?id="'));
+  assert.ok(js.includes('data.status !== "paid"'));
+  assert.ok(!js.includes('box.innerHTML = res === "success"'));
 });
 
 test("checkout only clears saved pattern and discount after server-confirmed payment", { skip: !featureReady }, () => {
@@ -20,18 +20,18 @@ test("checkout only clears saved pattern and discount after server-confirmed pay
   const clearPattern = js.indexOf('localStorage.removeItem("cara-pattern")');
   const clearDiscount = js.indexOf('localStorage.removeItem("cara-discount")');
   assert.ok(paidCheck >= 0 && clearPattern > paidCheck && clearDiscount > paidCheck);
-  assert.match(js, /الگوت محفوظ می‌مونه/);
+  assert.ok(js.includes("الگوت محفوظ می‌مونه"));
 });
 
 test("Worker exposes only minimal public order status for UUID order IDs", { skip: !featureReady }, () => {
-  assert.match(worker, /p === "\/api\/order-status" && request\.method === "GET"/);
+  assert.ok(worker.includes('p === "/api/order-status" && request.method === "GET"'));
   const endpoint = worker.slice(worker.indexOf('p === "/api/order-status"'), worker.indexOf('p === "/api/create-payment"'));
-  assert.match(endpoint, /status: String\(order\.status/);
-  assert.match(endpoint, /fulfillment: String\(order\.fulfillment/);
-  assert.doesNotMatch(endpoint, /customer|priceToman|pattern|discountCode/);
+  assert.ok(endpoint.includes("status: String(order.status"));
+  assert.ok(endpoint.includes("fulfillment: String(order.fulfillment"));
+  assert.ok(!/customer|priceToman|pattern|discountCode/.test(endpoint));
 });
 
 test("discount storage is not cleared based on an unverified query parameter", { skip: !featureReady }, () => {
-  assert.match(js, /has\("result"\)\) return/);
-  assert.doesNotMatch(js, /get\("result"\) === "success".*removeItem\("cara-discount"\)/);
+  assert.ok(js.includes('has("result")) return'));
+  assert.ok(!js.includes('get("result") === "success".*removeItem("cara-discount")'));
 });
