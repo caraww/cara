@@ -13,7 +13,10 @@ test("shared mobile navigation creates an accessible menu and restores focus on 
   assert.match(js, /toggle\.focus\(\)/);
   assert.match(js, /window\.innerWidth > 850/);
   assert.match(css, /\.top\.has-mobile-menu\.menu-open nav/);
-  assert.ok(css.includes("max-height: min(62vh, 440px)"));
+  assert.ok(css.includes("width: min(196px, calc(100vw - 32px))"));
+  assert.ok(css.includes("max-height: min(44vh, 320px)"));
+  assert.ok(css.includes("background: rgba(255, 253, 251, .48)"));
+  assert.ok(css.includes("backdrop-filter: blur(16px) saturate(135%)"));
 });
 
 test("all primary pages and generated landing pages load the shared mobile menu", () => {
