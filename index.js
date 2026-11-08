@@ -435,6 +435,30 @@ async function adminGate(request, env) {
   const ip = request.headers.get("CF-Connecting-IP") || "unknown";
   return (await rateLimit(env, "adm:" + ip, 120, 10 * 60 * 1000)) ? null : json({ error: "تعداد درخواست زیاده؛ چند دقیقه بعد دوباره امتحان کن." }, 429);
 }
+async function adminCustomers(request, env) {
+  const gate = await adminGate(request, env); if (gate) return gate;
+  if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
+  if (request.method !== "GET") return json({ error: "method not allowed" }, 405);
+  if (!env.ACCOUNTS_DB) return json({ error: "پایگاه داده‌ی حساب‌ها در دسترس نیست." }, 503);
+  const result = await env.ACCOUNTS_DB.prepare(
+    `SELECT u.id, u.created_at, p.display_name, p.username, p.phone, p.phone_verified_at,
+            p.marketing_sms_consent, p.marketing_sms_consent_at, p.marketing_sms_revoked_at
+     FROM users u LEFT JOIN user_profiles p ON p.user_id = u.id
+     WHERE u.status = 'active' ORDER BY u.created_at DESC LIMIT 5000`
+  ).all();
+  return json((result.results || []).map((row) => ({
+    id: row.id,
+    displayName: row.display_name || "",
+    username: row.username || null,
+    phone: row.phone || "",
+    phoneVerified: !!row.phone_verified_at,
+    marketingSmsConsent: !!row.marketing_sms_consent,
+    marketingSmsConsentAt: row.marketing_sms_consent_at || null,
+    marketingSmsRevokedAt: row.marketing_sms_revoked_at || null,
+    createdAt: row.created_at,
+    marketingEligible: !!(row.phone && row.phone_verified_at && row.marketing_sms_consent),
+  })));
+}
 async function admin(request, env, url, ctx) {
   const gate = await adminGate(request, env); if (gate) return gate;
   if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
@@ -536,6 +560,7 @@ export default {
       if (p === "/api/create-payment" && request.method === "POST") return await createPayment(request, env);
       if (p === "/api/payment-callback") return await paymentCallback(request, env, url, ctx);
       if (p === "/api/admin/debug") return await debug(request, env, url);
+      if (p === "/api/admin/customers") return await adminCustomers(request, env);
       if (p === "/api/admin/orders") return await admin(request, env, url, ctx);
       const gameRes = await handleGame(request, env, url);
       if (gameRes) return gameRes;
