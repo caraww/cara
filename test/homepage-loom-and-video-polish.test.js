@@ -102,7 +102,7 @@ test("hero bracelet easing is initialized before the first fit render", () => {
 test("hero bracelet is redrawn after the page layout finishes", () => {
   const js = read("js/hero-bracelet.js");
   assert.match(js, /requestAnimationFrame\(\(\)=>requestAnimationFrame\(\(\)=>\{fit\(\);inViewport=true;syncAnimation\(\)\}\)\)/);
-  assert.match(js, /new ResizeObserver\(fit\)\.observe\(cv\)/);
+  assert.match(js, /const ro=new ResizeObserver\(fit\);ro\.observe\(cv\)/);
 });
 
 
