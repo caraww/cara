@@ -27,10 +27,10 @@ The lavender detail is decorative, not used as small text or a required control 
 
 1. Page-specific/base stylesheet (for example `home.css` or `studio.css`)
 2. Page decoration and page-specific styles
-3. `/css/polish.css?v=2`
+3. `/css/polish.css?v=3`
 4. `/css/tokens.css`, imported at the top of `polish.css`
 
-Generated bracelet/color pages load the shared `polish.css?v=2` from `lib/generated-page-layout.js`. The standalone bead-color index also loads it explicitly. The offline screen loads tokens directly.
+Generated bracelet/color pages load the shared `polish.css?v=3` from `lib/generated-page-layout.js`. The standalone bead-color index also loads it explicitly. The offline screen loads tokens directly.
 
 ## Scope and invariants
 
