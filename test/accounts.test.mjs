@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { webcrypto } from "node:crypto";
 
-const { verifyTelegramLogin, sha256, SESSION_TTL } = await import("../lib/accounts.mjs");
+const { verifyTelegramLogin, sha256, normalizePhone, SESSION_TTL } = await import("../lib/accounts.mjs");
 
 async function signedPayload(fields, token = "test-bot-token") {
   const data = Object.entries(fields).sort(([a], [b]) => a.localeCompare(b))
@@ -41,4 +41,13 @@ test("session token hashes are SHA-256 hex and sessions have bounded lifetime", 
   const digest = await sha256("opaque-session-token");
   assert.match(digest, /^[a-f0-9]{64}$/);
   assert.equal(SESSION_TTL, 30 * 24 * 60 * 60);
+});
+
+test("Iranian phone numbers are normalized to E.164", () => {
+  assert.equal(normalizePhone("09123456789"), "+989123456789");
+  assert.equal(normalizePhone("۰۹۱۲۳۴۵۶۷۸۹"), "+989123456789");
+  assert.equal(normalizePhone("+989123456789"), "+989123456789");
+  assert.equal(normalizePhone("00989123456789"), "+989123456789");
+  assert.equal(normalizePhone("12345"), null);
+  assert.equal(normalizePhone(""), null);
 });

@@ -6,6 +6,7 @@ const path = require("node:path");
 const root = path.join(__dirname, "..");
 const schema = fs.readFileSync(path.join(root, "migrations/0001_accounts.sql"), "utf8");
 const auth = fs.readFileSync(path.join(root, "migrations/0002_account_sessions.sql"), "utf8");
+const contacts = fs.readFileSync(path.join(root, "migrations/0003_customer_contacts_and_sms_consent.sql"), "utf8");
 const handler = fs.readFileSync(path.join(root, "lib/accounts.mjs"), "utf8");
 
 test("account schema separates identity, sessions, saved designs, and carts", () => {
@@ -53,4 +54,23 @@ test("account API uses Telegram HMAC, fresh auth_date, hashed cookies, CSRF orig
   assert.ok(handler.includes("HttpOnly; Secure; SameSite=Lax"));
   assert.ok(handler.includes("requestIsSameOrigin"));
   assert.ok(handler.includes("DELETE FROM designs WHERE id = ? AND user_id = ?"));
+});
+
+test("customer contacts store optional phone, verification, and auditable marketing consent", () => {
+  assert.ok(contacts.includes("ADD COLUMN phone TEXT"));
+  assert.ok(contacts.includes("ADD COLUMN phone_verified_at INTEGER"));
+  assert.ok(contacts.includes("marketing_sms_consent INTEGER NOT NULL DEFAULT 0"));
+  assert.ok(contacts.includes("marketing_sms_consent_at INTEGER"));
+  assert.ok(contacts.includes("marketing_sms_revoked_at INTEGER"));
+  assert.ok(handler.includes('path === "/api/account/profile" && request.method === "PUT"'));
+  assert.ok(handler.includes("marketingSmsConsent === true"));
+  assert.ok(handler.includes("phoneChanged"));
+});
+
+test("admin customer contacts endpoint is protected and excludes unconsented or unverified contacts from marketing eligibility", () => {
+  const worker = fs.readFileSync(path.join(root, "index.js"), "utf8");
+  assert.ok(worker.includes('p === "/api/admin/customers"'));
+  assert.ok(worker.includes("if (!authed(request, env))"));
+  assert.ok(worker.includes("marketingEligible: !!(row.phone && row.phone_verified_at && row.marketing_sms_consent)"));
+  assert.ok(fs.readFileSync(path.join(root, "customers.html"), "utf8").includes("خروجی مجاز تبلیغات"));
 });

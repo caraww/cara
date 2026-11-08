@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="icon" href="/img/cara-favicon.png?v=2">
+  <link rel="stylesheet" href="/css/fonts.css">
+  <title>مشتریان cara</title>
+  <style>
+    :root{color-scheme:light;--ink:#221a2c;--muted:#6b6377;--line:#ddd6e6;--bg:#f6f4f8;--plum:#3b2650;--tint:#ece6f2;--ok:#1f7a4d;--warn:#9a6a00}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.9 Vazirmatn,Tahoma,sans-serif}
+    main{width:min(1120px,100%);margin:auto;padding:30px 18px 80px}h1{margin:0;font-size:27px;font-weight:900}
+    .muted{color:var(--muted)}.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0}
+    input,select,button{font:inherit}input[type=password],input[type=search],select{min-height:42px;padding:7px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+    input[type=search]{flex:1 1 220px}.btn{border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);padding:6px 14px;min-height:40px;text-decoration:none;cursor:pointer}
+    .btn.dark{background:var(--plum);border-color:var(--plum);color:#fff}.btn:disabled{opacity:.55;cursor:wait}
+    #login{max-width:420px;margin:12vh auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px}
+    #login form{display:grid;gap:12px;margin-top:14px}.err{color:#b3261e}
+    .summary{display:flex;flex-wrap:wrap;gap:8px 22px;color:var(--muted);margin:8px 0 14px}.summary b{color:var(--ink)}
+    .table-wrap{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px}
+    table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:11px 13px;text-align:right;border-bottom:1px solid #eee9f2;vertical-align:top}
+    th{background:#f0ecf4;font-size:13px;white-space:nowrap}td.id{direction:ltr;text-align:left;font:12px/1.8 monospace;max-width:210px;overflow-wrap:anywhere}
+    td.phone{direction:ltr;text-align:right;white-space:nowrap}small{display:block;color:var(--muted)}
+    .pill{display:inline-block;border-radius:999px;padding:1px 9px;background:var(--tint);font-size:12px}
+    .pill.ok{background:#e3f4ea;color:var(--ok)}.pill.warn{background:#fff1d2;color:var(--warn)}
+    #toast{margin-top:12px;color:var(--muted)}[hidden]{display:none!important}
+    @media(max-width:600px){main{padding:22px 12px 60px}h1{font-size:23px}}
+  </style>
+  <link rel="stylesheet" href="/css/accessibility.css">
+</head>
+<body>
+<main>
+  <section id="login" hidden>
+    <h1>مشتریان cara</h1>
+    <p class="muted">برای مشاهده اطلاعات مشتریان، رمز مدیریت را وارد کن.</p>
+    <form id="loginForm"><input id="token" type="password" autocomplete="current-password" placeholder="ADMIN_TOKEN" aria-label="رمز مدیریت"><button class="btn dark" type="submit">ورود</button></form>
+    <p id="loginError" class="err" role="alert" hidden></p>
+  </section>
+  <section id="app" hidden>
+    <h1>مشتریان و اطلاعات تماس</h1>
+    <p class="muted">فهرست حساب‌های ثبت‌شده؛ اطلاعات فقط برای مدیر قابل مشاهده است.</p>
+    <div class="bar">
+      <input id="search" type="search" placeholder="جستجو: نام، موبایل یا شناسه…" aria-label="جستجوی مشتری">
+      <select id="filter" aria-label="فیلتر رضایت پیامکی">
+        <option value="all">همه مشتریان</option>
+        <option value="consent">رضایت‌داده‌ها</option>
+        <option value="eligible">قابل استفاده تبلیغاتی</option>
+      </select>
+      <button class="btn" id="exportAll" type="button">خروجی فهرست فعلی CSV</button>
+      <button class="btn dark" id="exportMarketing" type="button">خروجی مجاز تبلیغات CSV</button>
+      <a class="btn" href="/admin.html">مدیریت سفارش‌ها</a>
+      <button class="btn" id="reload" type="button">به‌روزرسانی</button>
+      <button class="btn" id="logout" type="button">خروج</button>
+    </div>
+    <div class="summary" id="summary"></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>نام</th><th>شماره موبایل</th><th>شناسه تلگرام</th><th>شناسه حساب</th><th>تاریخ ثبت‌نام</th><th>رضایت تبلیغاتی</th><th>وضعیت شماره</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <p id="empty" class="muted" hidden>مشتری‌ای با این فیلتر پیدا نشد.</p>
+    <p id="toast" role="status" aria-live="polite"></p>
+  </section>
+</main>
+<script src="/js/admin-customers.js?v=1" defer></script>
+</body>
+</html>

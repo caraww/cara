@@ -52,6 +52,23 @@
         <button class="btn sm" type="button" id="logoutButton">خروج از حساب</button>
       </div>
 
+      <section class="account-card account-profile" aria-labelledby="profileTitle">
+        <div class="account-section-head">
+          <div><span class="account-eyebrow">CONTACT DETAILS</span><h2 id="profileTitle">اطلاعات تماس</h2></div>
+        </div>
+        <form id="profileForm" class="account-profile-form">
+          <label for="profilePhone">شماره موبایل</label>
+          <input id="profilePhone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" placeholder="مثلاً 09123456789" dir="ltr">
+          <label class="account-consent">
+            <input id="marketingSmsConsent" name="marketingSmsConsent" type="checkbox">
+            <span>مایلم پیامک‌های تبلیغاتی، تخفیف‌ها و خبرهای cara را دریافت کنم. این انتخاب اختیاری است و هر زمان بخواهم می‌توانم لغوش کنم.</span>
+          </label>
+          <button class="btn accent sm" type="submit" id="saveProfile">ذخیره اطلاعات تماس</button>
+          <p class="account-note" id="profileMessage" role="status" aria-live="polite"></p>
+          <p class="account-note">شماره موبایل تا زمان اضافه‌شدن تأیید پیامکی، تأییدنشده محسوب می‌شود و برای ارسال تبلیغات قابل استفاده نیست.</p>
+        </form>
+      </section>
+
       <section class="account-section" aria-labelledby="designsTitle">
         <div class="account-section-head">
           <div><span class="account-eyebrow">YOUR CREATIONS</span><h2 id="designsTitle">طرح‌های ذخیره‌شده</h2></div>
@@ -71,7 +88,7 @@
     </section>
   </main>
   <script src="/js/palette.js" defer></script>
-  <script src="/js/account.js?v=1" defer></script>
+  <script src="/js/account.js?v=2" defer></script>
   <script src="/js/mobile-nav.js" defer></script>
   <script src="/js/decor.js" defer></script>
   <script src="/js/pwa.js" defer></script>
