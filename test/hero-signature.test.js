@@ -22,7 +22,7 @@ test("homepage hero uses a minimal signature art direction", () => {
 });
 
 
-test("hero bracelet uses dimensional glass-bead rendering and mobile nav is physically left anchored", () => {
+test("hero bracelet uses classic glossy beads with individual shimmer and mobile nav is physically left anchored", () => {
   const bracelet = read("js/hero-bracelet.js");
   const polish = read("css/polish.css");
   assert.ok(bracelet.includes("c.width=c.height=48"));
