@@ -721,3 +721,32 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
     margin:0 !important;
   }
 }
+
+
+/* Hard-anchor the mobile menu to the viewport, not the RTL header's
+   containing block. This keeps both the trigger and opened panel physically left. */
+@media (max-width:850px) {
+  header.top.has-mobile-menu .menu-toggle {
+    position:fixed !important;
+    top:calc(env(safe-area-inset-top, 0px) + 12px) !important;
+    left:14px !important;
+    right:auto !important;
+    inset:calc(env(safe-area-inset-top, 0px) + 12px) auto auto 14px !important;
+    transform:none !important;
+    z-index:1002 !important;
+  }
+  header.top.has-mobile-menu nav,
+  header.top.has-mobile-menu nav[aria-label] {
+    position:fixed !important;
+    top:calc(env(safe-area-inset-top, 0px) + 74px) !important;
+    left:12px !important;
+    right:auto !important;
+    bottom:auto !important;
+    inset:calc(env(safe-area-inset-top, 0px) + 74px) auto auto 12px !important;
+    width:min(196px, calc(100vw - 24px)) !important;
+    max-width:calc(100vw - 24px) !important;
+    transform-origin:top left !important;
+    z-index:1001 !important;
+    direction:rtl !important;
+  }
+}
