@@ -7,7 +7,7 @@ const root = path.join(__dirname, "..");
 
 test("checkout validation errors are announced to assistive technology", () => {
   const html = fs.readFileSync(path.join(root, "checkout.html"), "utf8");
-  const match = html.match(/<p class="err" id="err"([^>]*)><\/p>/);
+  const result = html.match(/<div id="result"([^>]*)><\/div>/);\n  assert.ok(result, "payment result region must remain present");\n  assert.match(result[1], /\\brole="status"/);\n  assert.match(result[1], /\\baria-live="polite"/);\n  assert.match(result[1], /\\baria-atomic="true"/);\n  assert.match(result[1], /\\bhidden\\b/);\n  const match = html.match(/<p class="err" id="err"([^>]*)><\\/p>/);
   assert.ok(match, "checkout error region must remain present");
   assert.match(match[1], /\brole="alert"/);
   assert.match(match[1], /\baria-atomic="true"/);
