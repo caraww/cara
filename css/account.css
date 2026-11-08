@@ -24,3 +24,11 @@
 .account-empty{padding:24px;text-align:center;color:var(--muted);background:rgba(255,255,255,.55);border:1px dashed #cfc4db;border-radius:18px}
 .account-status{display:inline-flex;padding:5px 10px;border-radius:999px;background:#f0eaf5;color:#563477;font-size:12px}
 @media(max-width:640px){.account-wrap{padding-top:96px}.account-section-head h2{font-size:21px}.account-order{align-items:flex-start}}
+
+.account-profile{margin-top:24px}
+.account-profile-form{display:grid;gap:10px;max-width:560px}
+.account-profile-form>label:not(.account-consent){font-size:14px;font-weight:700}
+.account-profile-form input[type=tel]{width:100%;min-height:44px;padding:9px 12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font:inherit;direction:ltr;text-align:left}
+.account-consent{display:flex;align-items:flex-start;gap:10px;margin:6px 0;color:var(--muted);font-size:13px;line-height:1.9}
+.account-consent input{width:18px;height:18px;flex:none;margin-top:5px;accent-color:#79549a}
+.account-profile-form button{justify-self:start}
