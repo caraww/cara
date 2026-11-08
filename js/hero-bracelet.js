@@ -29,7 +29,7 @@ function sprite(hex,dark){
   wall.addColorStop(0,mix(hex,-.48+k));wall.addColorStop(.2,mix(hex,.08+k));
   wall.addColorStop(.5,mix(hex,k));wall.addColorStop(.82,mix(hex,.16+k));wall.addColorStop(1,mix(hex,-.5+k));
   roundedRect(x,5,13,38,30,7);x.fillStyle=wall;x.fill();
-  x.save();x.beginPath();x.roundRect(5,13,38,30,7);x.clip();
+  x.save();roundedRect(x,5,13,38,30,7);x.clip();
   const side=x.createLinearGradient(0,13,0,43);
   side.addColorStop(0,"rgba(255,255,255,.16)");side.addColorStop(.48,"rgba(255,255,255,0)");
   side.addColorStop(1,"rgba(0,0,0,.34)");x.fillStyle=side;x.fillRect(5,13,38,30);
