@@ -19,19 +19,36 @@ const PAT=Array.from({length:PER},(_,r)=>Array.from({length:W},(_,j)=>{
   return (!e&&Math.abs(dj)>3)?-1:c+e; /* نوار مشکی ۷ خونه، فقط چشم‌ها پهن‌تر (۱۱ خونه) از لبه‌ها بیرون می‌زنن */
 }));
 const mix=(h,k)=>{const n=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));return"rgb("+n.map(v=>Math.round(k>0?v+(255-v)*k:v*(1+k))).join(",")+")"};
-/* منجوق برجسته: شیب نور، هایلایت، لبه‌ی تیره */
+/* منجوق Miyuki Delica: بدنه‌ی استوانه‌ای کوتاه، لبه‌ی تخت و سوراخ نخ روی لبه‌ی بالایی */
 function roundedRect(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 function sprite(hex,dark){
   const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d");
-  const k=dark?-.5:0,gr=x.createLinearGradient(0,0,0,48);
-  gr.addColorStop(0,mix(hex,.3+k));gr.addColorStop(.45,mix(hex,k));gr.addColorStop(1,mix(hex,-.4+k));
-  roundedRect(x,2,2,44,44,15);x.fillStyle=gr;x.fill();
-  x.save();x.clip();
-  const sp=x.createRadialGradient(17,13,1,17,13,22);sp.addColorStop(0,"rgba(255,255,255,"+(dark?.25:.7)+")");sp.addColorStop(1,"rgba(255,255,255,0)");
-  x.fillStyle=sp;x.fillRect(0,0,48,48);
-  x.fillStyle="rgba(0,0,0,.28)";x.fillRect(0,36,48,12);
+  const k=dark?-.5:0;
+  /* دیواره‌ی عمودی استوانه؛ نه مهره‌ی کروی و نه حفره‌ی وسط */
+  const wall=x.createLinearGradient(4,0,44,0);
+  wall.addColorStop(0,mix(hex,-.48+k));wall.addColorStop(.2,mix(hex,.08+k));
+  wall.addColorStop(.5,mix(hex,k));wall.addColorStop(.82,mix(hex,.16+k));wall.addColorStop(1,mix(hex,-.5+k));
+  roundedRect(x,5,13,38,30,7);x.fillStyle=wall;x.fill();
+  x.save();roundedRect(x,5,13,38,30,7);x.clip();
+  const side=x.createLinearGradient(0,13,0,43);
+  side.addColorStop(0,"rgba(255,255,255,.16)");side.addColorStop(.48,"rgba(255,255,255,0)");
+  side.addColorStop(1,"rgba(0,0,0,.34)");x.fillStyle=side;x.fillRect(5,13,38,30);
   x.restore();
-  roundedRect(x,2,2,44,44,15);x.strokeStyle="rgba(0,0,0,.45)";x.lineWidth=2.5;x.stroke();
+  /* سطح بالایی تخت و بیضی‌شکلِ سیلندر */
+  x.beginPath();x.ellipse(24,14,19,8,0,0,Math.PI*2);
+  const cap=x.createLinearGradient(0,6,0,22);
+  cap.addColorStop(0,mix(hex,.34+k));cap.addColorStop(.55,mix(hex,.08+k));cap.addColorStop(1,mix(hex,-.22+k));
+  x.fillStyle=cap;x.fill();x.strokeStyle="rgba(255,255,255,.24)";x.lineWidth=1.2;x.stroke();
+  /* سوراخ عبور نخ فقط روی لبه‌ی بالایی؛ مرکز سطح کاملاً بسته می‌ماند */
+  x.beginPath();x.ellipse(24,9.5,3.3,1.8,0,0,Math.PI*2);
+  x.fillStyle="rgba(20,15,18,.78)";x.fill();
+  x.beginPath();x.ellipse(24,9.1,2.1,.8,0,Math.PI,Math.PI*2);
+  x.strokeStyle="rgba(255,255,255,.3)";x.lineWidth=.7;x.stroke();
+  /* برق باریک روی جداره‌ی لعاب‌دار */
+  x.beginPath();x.moveTo(10,19);x.quadraticCurveTo(8,29,10,37);
+  x.strokeStyle="rgba(255,255,255,"+(dark?.12:.3)+")";x.lineWidth=1.5;x.lineCap="round";x.stroke();
+  x.beginPath();x.moveTo(6,41);x.quadraticCurveTo(24,46,42,41);
+  x.strokeStyle="rgba(0,0,0,.3)";x.lineWidth=1.2;x.stroke();
   return c;
 }
 const SP=HEX.map(h=>[sprite(h,true),sprite(h,false)]);

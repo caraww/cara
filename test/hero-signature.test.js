@@ -26,7 +26,9 @@ test("hero bracelet uses classic glossy beads with individual shimmer and mobile
   const bracelet = read("js/hero-bracelet.js");
   const polish = read("css/polish.css");
   assert.ok(bracelet.includes("c.width=c.height=48"));
-  assert.ok(!bracelet.includes("x.ellipse(48,50,7.2,10.2"));
+  assert.ok(bracelet.includes("x.ellipse(24,14,19,8"));
+  assert.ok(bracelet.includes("x.ellipse(24,9.5,3.3,1.8"));
+  assert.ok(bracelet.includes("مرکز سطح کاملاً بسته می‌ماند"));
   assert.ok(bracelet.includes("const shimmer=RM?0:.08+.24"));
   assert.ok(bracelet.includes("Math.sin(t*.0017-i*.41-j*.83)"));
   assert.ok(bracelet.includes("Math.min(devicePixelRatio||1,2)"));
