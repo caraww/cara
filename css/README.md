@@ -8,6 +8,8 @@
 | `builder.css` | builder | studio-controls (بخش سازنده) + studio-pro + studio-minimal |
 | `upload.css` | upload | studio-controls (بخش آپلود) + upload-crop |
 | `gallery.css` | gallery | works + gallery-fix + gallery-soft + gallery-editorial + gallery-tools |
+| `name-bracelet.css` | name-bracelet | استایل اختصاصی ساخت دستبند اسم |
+| `accessibility.css` | همه‌ی صفحه‌ها، شامل admin و offline | skip link و focus مشترک |
 
 ## ترتیب لود
 - index:    home.css → decor.css
@@ -15,6 +17,8 @@
 - upload:   studio.css → decor.css → upload.css
 - gallery:  studio.css → gallery.css → decor.css   (گالری قبلاً هم decor رو بعد از فایل‌های خودش می‌گرفت)
 - checkout, game: studio.css → decor.css
+- name-bracelet: fonts.css → studio.css → decor.css → name-bracelet.css → accessibility.css
+- همه‌ی صفحه‌ها: accessibility.css در پایان CSSهای صفحه لود می‌شود
 - admin: CSS مشترک نداره (استایل خودش inline هست)
 
 ## حذف‌شده از studio.css (در هیچ صفحه‌ی استودیو استفاده نمی‌شد)
