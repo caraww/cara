@@ -1,6 +1,33 @@
 /* contact.js — دکمه‌ی ثابت تماس/اینستاگرام + یادآور الگوی ذخیره‌شده (همه‌ی صفحه‌ها به‌جز admin)
    سفارش‌دهنده‌ها اغلب قبل از پرداخت می‌خوان با یه آدم حرف بزنن؛ این دکمه راهش رو کوتاه می‌کنه. */
 (() => {
+  // Older generated color and bracelet pages rely on this shared script.
+  // Load the same mobile navigation assets there without duplicating newer pages.
+  const header = document.querySelector(".top");
+  if (header) {
+    const hasNavCss = [...document.querySelectorAll('link[rel="stylesheet"]')]
+      .some((link) => link.href.includes("/css/mobile-nav.css"));
+    const hasNavScript = [...document.scripts]
+      .some((script) => script.src.includes("/js/mobile-nav.js"));
+    const loadNavScript = () => {
+      if (hasNavScript || document.querySelector('script[data-cara-mobile-nav]')) return;
+      const script = document.createElement("script");
+      script.src = "/js/mobile-nav.js?v=20261108";
+      script.dataset.caraMobileNav = "true";
+      document.body.append(script);
+    };
+    if (!hasNavCss) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "/css/mobile-nav.css?v=20261108";
+      link.onload = loadNavScript;
+      link.onerror = loadNavScript;
+      document.head.append(link);
+    } else {
+      loadNavScript();
+    }
+  }
+
   if (document.getElementById("cara-contact")) return;
   const path = location.pathname, onCheckout = /checkout/.test(path);
   const stylesheet = document.createElement("link");
