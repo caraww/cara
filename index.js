@@ -442,12 +442,15 @@ async function adminCustomers(request, env) {
   if (!env.ACCOUNTS_DB) return json({ error: "پایگاه داده‌ی حساب‌ها در دسترس نیست." }, 503);
   const result = await env.ACCOUNTS_DB.prepare(
     `SELECT u.id, u.created_at, p.display_name, p.username, p.phone, p.phone_verified_at,
-            p.marketing_sms_consent, p.marketing_sms_consent_at, p.marketing_sms_revoked_at
+            p.marketing_sms_consent, p.marketing_sms_consent_at, p.marketing_sms_revoked_at,
+            t.provider_subject AS telegram_id
      FROM users u LEFT JOIN user_profiles p ON p.user_id = u.id
+     LEFT JOIN identity_links t ON t.user_id = u.id AND t.provider = 'telegram'
      WHERE u.status = 'active' ORDER BY u.created_at DESC LIMIT 5000`
   ).all();
   return json((result.results || []).map((row) => ({
     id: row.id,
+    telegramId: row.telegram_id || null,
     displayName: row.display_name || "",
     username: row.username || null,
     phone: row.phone || "",
