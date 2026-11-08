@@ -45,19 +45,22 @@ jobs:
           ffmpeg -v error -i /tmp/cara-weaving.optimized.mp4 -map 0:v:0 -frames:v 1 -f null -
 
       - name: Compare output size
+        id: compare
         run: |
           original=$(stat -c%s media/cara-weaving.MP4)
           optimized=$(stat -c%s /tmp/cara-weaving.optimized.mp4)
           echo "Original bytes: $original"
           echo "Optimized bytes: $optimized"
           if [ "$optimized" -ge "$original" ]; then
-            echo "Optimized output is not smaller; no artifact will be uploaded."
+            echo "smaller=false" >> "$GITHUB_OUTPUT"
+            echo "Output is not smaller; artifact upload will be skipped."
             exit 0
           fi
+          echo "smaller=true" >> "$GITHUB_OUTPUT"
           echo "Saved reduction: $((100 - optimized * 100 / original))%"
 
       - name: Upload optimized video artifact
-        if: success()
+        if: steps.compare.outputs.smaller == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: cara-weaving-optimized
