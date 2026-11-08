@@ -1,6 +1,6 @@
-const test = require("node:test");
-const assert = require("node:assert/strict");
-const { webcrypto } = require("node:crypto");
+import test from "node:test";
+import assert from "node:assert/strict";
+import { webcrypto } from "node:crypto";
 globalThis.crypto = webcrypto;
 
 const { verifyTelegramLogin, sha256, SESSION_TTL } = await import("../lib/accounts.mjs");
