@@ -10,11 +10,12 @@ test("account API errors retain their HTTP status for correct auth handling", ()
   assert.match(source, /if \(error\.status === 401\) await installTelegramLogin\(\)/);
 });
 
-test("an authenticated dashboard survives an independent designs or orders request failure", () => {
-  assert.match(source, /const results = await Promise\.allSettled\(\[loadDesigns\(\), loadOrders\(\)\]\)/);
-  assert.match(source, /results\[0\]\.status === "rejected"/);
-  assert.match(source, /results\[1\]\.status === "rejected"/);
+test("an authenticated dashboard remains visible while profile, designs, and orders load independently", () => {
+  assert.match(source, /await Promise\.allSettled\(\[loadProfile\(\), loadDesigns\(\), loadOrders\(\)\]\)/);
   assert.match(source, /dashboard\.hidden = false/);
+  assert.match(source, /catch \(error\) \{ message\("designMessage", error\.message\); return; \}/);
+  assert.match(source, /catch \(error\) \{ message\("ordersMessage", error\.message\); return; \}/);
+  assert.match(source, /\$\("profileForm"\)\.addEventListener\("submit"/);
 });
 
 test("opening a saved design handles unavailable browser storage without navigating", () => {
