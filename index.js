@@ -514,7 +514,7 @@ export default {
     const url = new URL(request.url);
     const p = url.pathname;
     try {
-      const accountResponse = await handleAccountRequest(request, env, url, rateLimit);
+      const accountResponse = await handleAccountRequest(request, env, url, rateLimit, cleanPattern);
       if (accountResponse) return accountResponse;
       if (p === "/api/config" && request.method === "GET") {
         const C = cfg(env);
