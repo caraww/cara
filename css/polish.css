@@ -688,3 +688,36 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
     inset-inline-start:auto !important; inset-inline-end:auto !important;
   }
 }
+
+
+/* Mobile nav: force physical-left anchoring after every legacy RTL rule.
+   Keep the panel attached to the left hamburger, with RTL text inside it. */
+@media (max-width:850px) {
+  header.top.has-mobile-menu { position:fixed !important; left:0 !important; right:0 !important; }
+  header.top.has-mobile-menu .menu-toggle {
+    position:absolute !important;
+    top:50% !important;
+    left:14px !important;
+    right:auto !important;
+    inset:50% auto auto 14px !important;
+    inset-inline-start:auto !important;
+    inset-inline-end:auto !important;
+    transform:translateY(-50%) !important;
+    direction:ltr !important;
+    z-index:60 !important;
+  }
+  header.top.has-mobile-menu nav,
+  header.top.has-mobile-menu nav[aria-label] {
+    position:absolute !important;
+    top:calc(100% + 8px) !important;
+    left:12px !important;
+    right:auto !important;
+    bottom:auto !important;
+    inset:calc(100% + 8px) auto auto 12px !important;
+    inset-inline-start:auto !important;
+    inset-inline-end:auto !important;
+    direction:rtl !important;
+    transform-origin:top left !important;
+    margin:0 !important;
+  }
+}
