@@ -1,0 +1,245 @@
+/* Interactive gallery-driven bracelet showcase in the homepage hero. */
+.hero2 .prod {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  overflow: visible;
+}
+.hero-showcase {
+  position: relative;
+  z-index: 2;
+  width: min(100%, 620px);
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  outline: none;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.hero-showcase__viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+.hero-showcase__viewport::before {
+  content: "";
+  position: absolute;
+  inset: 9%;
+  border: 1px solid rgba(234, 213, 176, .24);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,.085), rgba(111,76,137,.13) 48%, transparent 72%);
+  box-shadow: 0 0 0 16px rgba(234,213,176,.025), 0 0 70px rgba(207,174,108,.12);
+  pointer-events: none;
+}
+.hero-showcase__viewport::after {
+  content: "";
+  position: absolute;
+  inset: 3%;
+  border: 1px dashed rgba(234,213,176,.19);
+  border-radius: 50%;
+  transform: rotate(-12deg);
+  pointer-events: none;
+}
+.hero-showcase__slides {
+  position: absolute;
+  inset: 5%;
+  display: grid;
+  place-items: center;
+  perspective: 1000px;
+}
+.hero-showcase__slide {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(26px) scale(.91) rotateY(-12deg);
+  transition: opacity .65s ease, transform .8s cubic-bezier(.2,.75,.2,1), visibility .65s;
+  pointer-events: none;
+}
+.hero-showcase__slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0) scale(1) rotateY(0);
+  z-index: 1;
+}
+.hero-showcase__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 22px;
+  filter: drop-shadow(0 30px 34px rgba(0,0,0,.4)) drop-shadow(0 5px 14px rgba(207,174,108,.1));
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+.hero-showcase__slide.is-active[data-motion="0"] img {
+  animation: cara-waterfall-float 6.2s ease-in-out infinite;
+}
+.hero-showcase__slide.is-active[data-motion="1"] img {
+  animation: cara-duck-orbit 7s ease-in-out infinite;
+}
+.hero-showcase__slide.is-active[data-motion="2"] img {
+  animation: cara-peacock-glide 6.6s ease-in-out infinite;
+}
+@keyframes cara-waterfall-float {
+  0%,100% { transform: translateY(1px) rotate(-3deg) scale(1.01); }
+  50% { transform: translateY(-10px) rotate(1deg) scale(1.045); }
+}
+@keyframes cara-duck-orbit {
+  0%,100% { transform: translateY(-3px) rotate(2deg) scale(1.015); }
+  50% { transform: translateY(-8px) rotate(-2deg) scale(1.045); }
+}
+@keyframes cara-peacock-glide {
+  0%,100% { transform: translateY(0) rotate(-1deg) scale(1.02); }
+  50% { transform: translateY(-12px) rotate(3deg) scale(1.055); }
+}
+.hero-showcase__arrow {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0 0 4px;
+  border: 1px solid rgba(234,213,176,.42);
+  border-radius: 50%;
+  background: rgba(25,15,37,.72);
+  color: #f7e7bd;
+  font: inherit;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background .2s ease, border-color .2s ease, scale .2s ease;
+}
+.hero-showcase__arrow:hover {
+  background: rgba(207,174,108,.2);
+  border-color: #ead5a5;
+  scale: 1.08;
+}
+.hero-showcase__arrow--prev { right: 1%; }
+.hero-showcase__arrow--next { left: 1%; }
+.hero-showcase__footer {
+  width: min(86%, 390px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 0 4px;
+}
+.hero-showcase__caption {
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+  text-align: right;
+}
+.hero-showcase__eyebrow {
+  color: rgba(234,213,176,.72);
+  font-size: 11px;
+  letter-spacing: .08em;
+}
+.hero-showcase__caption strong {
+  color: #f7e7bd;
+  font-size: 16px;
+  font-weight: 800;
+}
+.hero-showcase__caption > span:last-child {
+  color: rgba(226,214,238,.58);
+  font-size: 11px;
+}
+.hero-showcase__dots {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex: none;
+}
+.hero-showcase__dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+  border: 0;
+  border-radius: 99px;
+  background: rgba(234,213,176,.35);
+  cursor: pointer;
+  transition: width .25s ease, background .25s ease;
+}
+.hero-showcase__dot.is-active {
+  width: 23px;
+  background: #ead5a5;
+}
+.hero-showcase__dot:focus-visible,
+.hero-showcase__arrow:focus-visible,
+.hero-showcase:focus-visible {
+  outline: 2px solid #fff0c6;
+  outline-offset: 4px;
+}
+.hero-showcase__hint {
+  margin: 2px 0 0;
+  color: rgba(226,214,238,.55);
+  font-size: 11px;
+  letter-spacing: .02em;
+}
+.hero-showcase__hint span {
+  display: inline-block;
+  direction: ltr;
+  margin-inline-start: 5px;
+  color: #ead5a5;
+}
+@media (min-width: 821px) {
+  .hero-showcase { width: min(100%, 620px); }
+  .hero-showcase__viewport { width: 100%; }
+}
+@media (max-width: 820px) {
+  .hero2 .prod {
+    display: grid;
+    grid-template-columns: minmax(0,1fr);
+    padding: 0;
+    margin-top: 8px;
+  }
+  .hero-showcase {
+    width: min(100%, 420px);
+    gap: 2px;
+  }
+  .hero-showcase__viewport {
+    width: min(100%, 360px);
+  }
+  .hero-showcase__slides { inset: 4%; }
+  .hero-showcase__arrow {
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+  }
+  .hero-showcase__footer { width: min(90%, 340px); }
+  .hero-showcase__caption strong { font-size: 14px; }
+  .hero-showcase__hint { font-size: 10px; }
+}
+@media (max-width: 380px) {
+  .hero-showcase__viewport { width: min(100%, 310px); }
+  .hero-showcase__footer { width: 96%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-showcase__slide,
+  .hero-showcase__slide.is-active {
+    transition: none;
+    transform: none;
+  }
+  .hero-showcase__slide.is-active img {
+    animation: none !important;
+  }
+  .hero-showcase__dot,
+  .hero-showcase__arrow { transition: none; }
+  .hero-showcase__hint { display: none; }
+}
