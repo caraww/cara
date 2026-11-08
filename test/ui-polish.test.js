@@ -16,6 +16,8 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     "account.html",
     "game.html",
     "name-bracelet.html",
+    "admin.html",
+    "customers.html",
   ]) {
     const html = read(file);
     assert.match(html, /\/css\/polish\.css\?v=1/, file + " should load polish.css");
