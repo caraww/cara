@@ -149,29 +149,79 @@
   }
 
   const entries=cards.map(card=>({
+    card,
     canvas:card.querySelector("canvas"),
     model:models[card.dataset.bracelet]
   })).filter(entry=>entry.canvas&&entry.model);
+  const root=document.getElementById("caraBraceletLineup");
+  const title=root.querySelector(".cara-bracelet-lineup__title");
+  const count=root.querySelector(".cara-bracelet-lineup__count");
+  const dotsRoot=root.querySelector(".cara-bracelet-lineup__dots");
   const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let visible=true, frame=0;
-  function render(t){entries.forEach(({canvas,model})=>draw(canvas,model,reduced?0:t));}
-  function tick(t){
+  let active=0, frame=0, visible=true, startX=0, startY=0, pointerId=null;
+  const dots=entries.map((entry,index)=>{
+    const dot=document.createElement("button");
+    dot.type="button";
+    dot.className="cara-bracelet-lineup__dot";
+    dot.setAttribute("aria-label","نمایش دستبند "+entry.card.querySelector("figcaption").textContent);
+    dot.addEventListener("click",()=>show(index));
+    dotsRoot.append(dot);
+    return dot;
+  });
+  function render(t) {
+    entries.forEach(({canvas,model},i)=>{
+      if(i===active) draw(canvas,model,reduced?0:t);
+    });
+  }
+  function show(next) {
+    active=(next+entries.length)%entries.length;
+    entries.forEach(({card},i)=>{
+      const on=i===active;
+      card.classList.toggle("is-active",on);
+      card.setAttribute("aria-hidden",on?"false":"true");
+    });
+    dots.forEach((dot,i)=>{
+      const on=i===active;
+      dot.classList.toggle("is-active",on);
+      dot.setAttribute("aria-current",on?"true":"false");
+    });
+    title.textContent=entries[active].card.querySelector("figcaption").textContent;
+    count.textContent=(active+1).toLocaleString("fa-IR")+" از "+entries.length.toLocaleString("fa-IR");
+    render(performance.now());
+  }
+  function tick(t) {
     frame=0;
     if(visible&&!document.hidden&&!reduced) render(t);
     if(visible&&!document.hidden&&!reduced) frame=requestAnimationFrame(tick);
   }
-  function sync(){
+  function sync() {
     if(visible&&!document.hidden&&!reduced&&!frame) frame=requestAnimationFrame(tick);
     else if((!visible||document.hidden||reduced)&&frame){cancelAnimationFrame(frame);frame=0;}
   }
-  render(0);
+  root.querySelector(".cara-bracelet-lineup__arrow--prev").addEventListener("click",()=>show(active-1));
+  root.querySelector(".cara-bracelet-lineup__arrow--next").addEventListener("click",()=>show(active+1));
+  root.addEventListener("keydown",e=>{
+    if(e.key==="ArrowLeft"){e.preventDefault();show(active+1);}
+    if(e.key==="ArrowRight"){e.preventDefault();show(active-1);}
+  });
+  root.addEventListener("pointerdown",e=>{
+    if(e.target.closest("button"))return;
+    pointerId=e.pointerId;startX=e.clientX;startY=e.clientY;
+  });
+  root.addEventListener("pointerup",e=>{
+    if(pointerId!==e.pointerId)return;
+    const dx=e.clientX-startX,dy=e.clientY-startY;pointerId=null;
+    if(Math.abs(dx)<42||Math.abs(dx)<Math.abs(dy)*1.15)return;
+    show(active+(dx<0?1:-1));
+  });
+  root.addEventListener("pointercancel",()=>{pointerId=null;});
   if("IntersectionObserver" in window) {
     const observer=new IntersectionObserver(items=>{
-      visible=items.some(item=>item.isIntersecting);
-      sync();
+      visible=items.some(item=>item.isIntersecting);sync();
     },{rootMargin:"100px"});
-    observer.observe(document.getElementById("caraBraceletLineup"));
+    observer.observe(root);
   } else {visible=true;sync();}
   document.addEventListener("visibilitychange",sync);
   window.addEventListener("pagehide",()=>{if(frame)cancelAnimationFrame(frame);},{once:true});
+  show(0);sync();
 })();
