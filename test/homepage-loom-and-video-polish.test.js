@@ -12,7 +12,7 @@ test("homepage keeps the original animated loom as a separate experience", () =>
   for (const pattern of ["چشم‌نظر", "لوزی‌های طلایی", "قلب", "ستاره‌ی شب"]) {
     assert.ok(decor.includes(pattern), `missing original loom pattern: ${pattern}`);
   }
-  assert.match(html, /id="heroCanvas"/);
+  assert.match(html, /id="braceletCanvas"/);
   assert.match(html, /id="wvCanvas"/);
   assert.match(html, /cara-weaving\.MP4/);
 });
