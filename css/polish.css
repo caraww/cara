@@ -156,7 +156,7 @@ button:disabled { cursor:not-allowed; }
   header.top.has-mobile-menu nav,
   header.top.has-mobile-menu nav[aria-label] {
     inset:calc(100% + 8px) auto auto 12px !important;
-    width:min(252px,calc(100vw - 24px)) !important;
+    width:min(196px,calc(100vw - 24px)) !important;
     max-width:calc(100vw - 24px);
     max-height:min(68svh,480px) !important;
     gap:4px !important;
