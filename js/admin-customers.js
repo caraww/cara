@@ -42,6 +42,7 @@
     $("rows").innerHTML = rows.map((item) => `<tr>
       <td>${esc(item.displayName || "بدون نام")}${item.username ? `<small dir="ltr">@${esc(item.username)}</small>` : ""}</td>
       <td class="phone">${item.phone ? esc(item.phone) : "—"}</td>
+      <td class="id">${esc(item.telegramId || "—")}</td>
       <td class="id">${esc(item.id)}</td>
       <td>${date(item.createdAt)}</td>
       <td><span class="pill ${item.marketingSmsConsent ? "ok" : ""}">${item.marketingSmsConsent ? "موافقت کرده" : "موافقت نکرده"}</span></td>
@@ -79,9 +80,9 @@
 
   function exportCsv(list, filename) {
     if (!list.length) { $("toast").textContent = "موردی برای خروجی وجود ندارد."; return; }
-    const header = ["نام", "نام کاربری تلگرام", "شماره موبایل", "شناسه حساب", "تاریخ ثبت‌نام", "رضایت پیامک تبلیغاتی", "تأیید شماره"];
+    const header = ["نام", "نام کاربری تلگرام", "شماره موبایل", "شناسه تلگرام", "شناسه حساب", "تاریخ ثبت‌نام", "رضایت پیامک تبلیغاتی", "تأیید شماره"];
     const lines = list.map((item) => [
-      item.displayName, item.username || "", item.phone, item.id, date(item.createdAt),
+      item.displayName, item.username || "", item.phone, item.telegramId || "", item.id, date(item.createdAt),
       item.marketingSmsConsent ? "بله" : "خیر", item.phoneVerified ? "بله" : "خیر",
     ].map(csvCell).join(","));
     const blob = new Blob(["\ufeff" + [header.map(csvCell).join(","), ...lines].join("\r\n")], { type: "text/csv;charset=utf-8" });
