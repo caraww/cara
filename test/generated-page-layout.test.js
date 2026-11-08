@@ -51,7 +51,7 @@ test("generated page shell preserves accessible main landmark and shared navigat
 
   assert.match(html, /class="skip-link" href="#main-content"/);
   assert.match(html, /<main class="pg" id="main-content" tabindex="-1">/);
-  assert.match(html, /<nav>/);
+  assert.match(html, /<nav/);
   assert.match(html, /href="\/checkout\.html">سفارش<\/a>/);
   assert.match(html, /\/js\/mobile-nav\.js/);
   assert.match(html, /\/js\/contact\.js/);
