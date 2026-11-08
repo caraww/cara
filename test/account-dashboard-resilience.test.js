@@ -22,3 +22,8 @@ test("opening a saved design handles unavailable browser storage without navigat
   assert.match(source, /localStorage\.setItem\("cara-pattern", JSON\.stringify\(item\.design\)\)/);
   assert.match(source, /ذخیره‌سازی مرورگر در دسترس نیست/);
 });
+
+test("non-authentication account API failures show an error instead of starting Telegram login", () => {
+  assert.match(source, /else message\("loginMessage", error\.message/);
+  assert.match(source, /return;\s*\}\s*user = data\.user/);
+});
