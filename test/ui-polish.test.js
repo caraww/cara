@@ -48,3 +48,23 @@ test("shared header rules do not target admin order-card .top elements", () => {
   assert.ok(css.includes("header.top {"));
   assert.equal(css.includes("\n.top {"), false);
 });
+
+
+test("mobile navigation is anchored to the physical left and overlays without a spacer", () => {
+  const css = read("css/mobile-nav.css");
+  const js = read("js/mobile-nav.js");
+  assert.match(css, /left:\s*14px/);
+  assert.match(css, /right:\s*auto/);
+  assert.match(css, /left:\s*12px\s*!important/);
+  assert.match(css, /display:\s*none\s*!important/);
+  assert.match(js, /menu-open/);
+  assert.doesNotMatch(js, /syncSpacer|spacer\.style\.height|header\.after\(spacer\)/);
+});
+
+test("mobile navigation remains accessible and closes on escape or link selection", () => {
+  const js = read("js/mobile-nav.js");
+  assert.match(js, /aria-expanded/);
+  assert.match(js, /aria-controls/);
+  assert.match(js, /event\.key === "Escape"/);
+  assert.match(js, /nav\.addEventListener\("click"/);
+});
