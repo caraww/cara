@@ -3,6 +3,16 @@
   const nav = header?.querySelector("nav");
   if (!header || !nav || header.querySelector(".menu-toggle")) return;
 
+  const spacer = document.createElement("div");
+  spacer.className = "mobile-nav-spacer";
+  spacer.setAttribute("aria-hidden", "true");
+  header.after(spacer);
+
+  const syncSpacer = () => {
+    const open = header.classList.contains("menu-open");
+    spacer.style.height = open ? `${Math.ceil(nav.getBoundingClientRect().height + 12)}px` : "0px";
+  };
+
   if (!nav.id) nav.id = "cara-main-nav";
   if (!nav.hasAttribute("aria-label")) nav.setAttribute("aria-label", "منوی اصلی");
 
@@ -16,6 +26,7 @@
   toggle.addEventListener("click", () => {
     const open = !header.classList.contains("menu-open");
     header.classList.toggle("menu-open", open);
+    syncSpacer();
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "بستن منو" : "باز کردن منو");
     if (open) nav.querySelector("a")?.focus();
@@ -24,6 +35,7 @@
   const close = ({ restoreFocus = false } = {}) => {
     if (!header.classList.contains("menu-open")) return;
     header.classList.remove("menu-open");
+    syncSpacer();
     toggle.setAttribute("aria-expanded", "false");
     toggle.setAttribute("aria-label", "باز کردن منو");
     if (restoreFocus) toggle.focus();
@@ -40,6 +52,7 @@
   });
   window.addEventListener("resize", () => {
     if (window.innerWidth > 850) close();
+    else if (header.classList.contains("menu-open")) syncSpacer();
   });
 
   nav.before(toggle);

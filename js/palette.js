@@ -177,3 +177,33 @@ if (typeof module !== "undefined") {
     drawPattern,
   });
 }
+
+
+// Older generated color/bracelet pages may not yet contain direct mobile-nav tags.
+// Bootstrap the shared stylesheet and controller there without duplicating newer pages.
+if (typeof document !== "undefined") {
+  const header = document.querySelector(".top");
+  if (header) {
+    const hasNavCss = [...document.querySelectorAll('link[rel="stylesheet"]')]
+      .some((link) => link.href.includes("/css/mobile-nav.css"));
+    const hasNavScript = [...document.scripts]
+      .some((script) => script.src.includes("/js/mobile-nav.js"));
+    const loadNavScript = () => {
+      if (hasNavScript || document.querySelector('script[data-cara-mobile-nav]')) return;
+      const script = document.createElement("script");
+      script.src = "/js/mobile-nav.js?v=20261108";
+      script.dataset.caraMobileNav = "true";
+      document.body.append(script);
+    };
+    if (!hasNavCss) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "/css/mobile-nav.css?v=20261108";
+      link.onload = loadNavScript;
+      link.onerror = loadNavScript;
+      document.head.append(link);
+    } else {
+      loadNavScript();
+    }
+  }
+}
