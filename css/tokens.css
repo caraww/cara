@@ -1,0 +1,42 @@
+/* cara Gallery design tokens — loaded through polish.css after each page's base styles.
+   Order: page stylesheet(s) → decor/accessibility/mobile-nav → polish.css → tokens.css (imported first by polish.css).
+   Product bead colors remain exclusively defined in js/palette.js. */
+:root {
+  color-scheme: light;
+  --cara-bg: #E9E9ED;
+  --cara-surface: #FFFFFF;
+  --cara-text: #242431;
+  --cara-muted: #626273;
+  --cara-line: #D4D4DF;
+  --cara-accent: #343B64;
+  --cara-detail: #9B8FC1;
+  --cara-accent-soft: #EEEEF5;
+  --cara-radius-sm: 12px;
+  --cara-radius-md: 18px;
+  --cara-radius-lg: 26px;
+  --cara-shadow-soft: 0 8px 24px rgba(36, 36, 49, .055);
+  --cara-shadow-card: 0 18px 42px rgba(36, 36, 49, .10);
+
+  /* Legacy aliases used by the existing page styles. */
+  --bg: var(--cara-bg);
+  --paper: var(--cara-bg);
+  --panel: var(--cara-surface);
+  --ink: var(--cara-text);
+  --muted: var(--cara-muted);
+  --line: var(--cara-line);
+  --tint: var(--cara-accent-soft);
+  --plum: var(--cara-accent);
+  --night: #22243B;
+  --gold: var(--cara-detail);
+  --accent: var(--cara-accent);
+  --accent-2: var(--cara-accent);
+  --hot: var(--cara-accent);
+  --cara-ink: var(--cara-text);
+  --cara-plum: var(--cara-accent);
+  --cara-plum-deep: #22243B;
+  --cara-lilac: var(--cara-accent-soft);
+  --cara-paper: var(--cara-bg);
+  --cara-muted: #626273;
+  --cara-line: #D4D4DF;
+  --cara-gold: var(--cara-detail);
+}
