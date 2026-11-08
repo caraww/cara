@@ -64,7 +64,9 @@
   }
 
   async function loadDesigns() {
-    const designs = await api("/api/account/designs");
+    let designs;
+    try { designs = await api("/api/account/designs"); }
+    catch (error) { message("designMessage", error.message); return; }
     const list = $("designList"); list.replaceChildren();
     if (!designs.length) { list.innerHTML = '<p class="account-empty">هنوز طرحی ذخیره نکردی.</p>'; return; }
     designs.forEach((item) => {
@@ -86,7 +88,9 @@
 
   const orderLabels = { pending:"در انتظار پرداخت", paid:"پرداخت‌شده", review:"در حال بررسی", failed:"ناموفق", new:"ثبت‌شده", weaving:"در حال بافت", shipped:"ارسال‌شده" };
   async function loadOrders() {
-    const orders = await api("/api/account/orders");
+    let orders;
+    try { orders = await api("/api/account/orders"); }
+    catch (error) { message("ordersMessage", error.message); return; }
     const list = $("orderList"); list.replaceChildren();
     if (!orders.length) { message("ordersMessage", "هنوز سفارشی با این حساب ثبت نشده."); return; }
     message("ordersMessage", "");
