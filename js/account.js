@@ -36,7 +36,6 @@
       script.dataset.size = "large";
       script.dataset.radius = "12";
       script.dataset.onauth = "onTelegramAuth(user)";
-      script.dataset.requestAccess = "write";
       $("telegramLogin").append(script);
       message("loginMessage", "ورود امن با تلگرام");
     } catch (error) { message("loginMessage", error.message); }
@@ -50,7 +49,7 @@
     const ctx = canvas.getContext("2d");
     rows.forEach((row, y) => row.forEach((color, x) => {
       if (!color) return;
-      ctx.fillStyle = window.CARA?.palette?.find((p) => p.code === color)?.hex || "#8b72a4";
+      ctx.fillStyle = window.CARA?.palette?.find((p) => p[0] === color)?.[2] || "#8b72a4";
       ctx.fillRect(x * cell, y * cell, cell - 1, cell - 1);
     }));
   }
