@@ -6,12 +6,12 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 
-test("homepage hero renders all four bracelets with the original rotating 3D Delica engine and swipe controls", () => {
+test("homepage hero renders the three selected bracelets with the original rotating 3D Delica engine and swipe controls", () => {
   const html = read("index.html");
   const script = read("js/hero-lineup.js");
   const css = read("css/hero-lineup.css");
   assert.match(html, /id="caraBraceletLineup"/);
-  for (const id of ["thousand-eyes", "waterfall", "duck", "peacock"]) assert.match(html, new RegExp('data-bracelet="' + id + '"'));
+  for (const id of ["thousand-eyes", "waterfall", "duck"]) assert.match(html, new RegExp('data-bracelet="' + id + '"'));
   assert.match(html, /hero-lineup\.js\?v=4/);
   assert.match(script, /const palettes=\{/);
   assert.match(script, /const models=\{/);
