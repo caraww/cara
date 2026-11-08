@@ -16,7 +16,7 @@ test("offline page uses external cached CSS/JS and stays noindex", () => {
 
 test("service worker precaches offline styles, retry script, and local font weights", () => {
   const sw = fs.readFileSync(path.join(root, "sw.js"), "utf8");
-  assert.match(sw, /const CACHE_NAME = "cara-pwa-v5"/);
+  assert.match(sw, /const CACHE_NAME = "cara-pwa-v6"/);
   for (const asset of [
     "/offline.html",
     "/css/fonts.css",
