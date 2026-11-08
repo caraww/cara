@@ -22,16 +22,44 @@ const mix=(h,k)=>{const n=[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));return"rgb
 /* منجوق برجسته: شیب نور، هایلایت، لبه‌ی تیره */
 function roundedRect(ctx,x,y,w,h,r){r=Math.min(r,w/2,h/2);ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
 function sprite(hex,dark){
+  /* Miyuki Delica: short precision-cut glass cylinder, with a visible bore,
+     polished bevels and narrow studio reflections (not a flat rounded square). */
   const c=document.createElement("canvas");c.width=c.height=48;const x=c.getContext("2d");
-  const k=dark?-.5:0,gr=x.createLinearGradient(0,0,0,48);
-  gr.addColorStop(0,mix(hex,.3+k));gr.addColorStop(.45,mix(hex,k));gr.addColorStop(1,mix(hex,-.4+k));
-  roundedRect(x,2,2,44,44,15);x.fillStyle=gr;x.fill();
-  x.save();x.clip();
-  const sp=x.createRadialGradient(17,13,1,17,13,22);sp.addColorStop(0,"rgba(255,255,255,"+(dark?.25:.7)+")");sp.addColorStop(1,"rgba(255,255,255,0)");
-  x.fillStyle=sp;x.fillRect(0,0,48,48);
-  x.fillStyle="rgba(0,0,0,.28)";x.fillRect(0,36,48,12);
+  const k=dark?-.38:0;
+  const body=x.createLinearGradient(3,0,45,0);
+  body.addColorStop(0,mix(hex,-.48+k));
+  body.addColorStop(.16,mix(hex,-.12+k));
+  body.addColorStop(.38,mix(hex,.22+k));
+  body.addColorStop(.57,mix(hex,.02+k));
+  body.addColorStop(.84,mix(hex,-.16+k));
+  body.addColorStop(1,mix(hex,-.52+k));
+  x.save();
+  x.shadowColor="rgba(0,0,0,"+(dark?.34:.24)+")";
+  x.shadowBlur=dark?3:4;x.shadowOffsetY=2;
+  roundedRect(x,3,5,42,40,11);x.fillStyle=body;x.fill();
   x.restore();
-  roundedRect(x,2,2,44,44,15);x.strokeStyle="rgba(0,0,0,.45)";x.lineWidth=2.5;x.stroke();
+  x.save();roundedRect(x,3,5,42,40,11);x.clip();
+  const face=x.createLinearGradient(0,5,0,45);
+  face.addColorStop(0,"rgba(255,255,255,"+(dark?.32:.52)+")");
+  face.addColorStop(.16,"rgba(255,255,255,"+(dark?.08:.16)+")");
+  face.addColorStop(.58,"rgba(255,255,255,0)");
+  face.addColorStop(1,"rgba(0,0,0,.34)");
+  x.fillStyle=face;x.fillRect(0,0,48,48);
+  const glint=x.createLinearGradient(7,0,18,0);
+  glint.addColorStop(0,"rgba(255,255,255,0)");
+  glint.addColorStop(.48,"rgba(255,255,255,"+(dark?.22:.62)+")");
+  glint.addColorStop(1,"rgba(255,255,255,0)");
+  x.fillStyle=glint;x.fillRect(6,5,14,39);
+  /* The tiny central channel is characteristic of a drilled glass bead. */
+  x.beginPath();x.ellipse(24,25,4.1,6.2,0,0,TAU);
+  x.fillStyle="rgba(0,0,0,"+(dark?.66:.42)+")";x.fill();
+  x.beginPath();x.ellipse(22.8,22.8,1.45,2.4,-.2,0,TAU);
+  x.fillStyle="rgba(255,255,255,"+(dark?.18:.52)+")";x.fill();
+  x.restore();
+  roundedRect(x,3,5,42,40,11);
+  x.strokeStyle="rgba(255,255,255,"+(dark?.13:.28)+")";x.lineWidth=1;x.stroke();
+  x.beginPath();x.moveTo(8,8);x.quadraticCurveTo(24,3,40,8);
+  x.strokeStyle="rgba(255,255,255,"+(dark?.18:.48)+")";x.lineWidth=1.2;x.stroke();
   return c;
 }
 const SP=HEX.map(h=>[sprite(h,true),sprite(h,false)]);
