@@ -61,7 +61,7 @@ a, button { -webkit-tap-highlight-color: transparent; }
 .top nav a:not(.btn):not(.cta) { opacity:1; color:inherit; }
 .top nav a:hover { opacity:1; color:var(--cara-gold); }
 .top nav a[href*="account.html"] {
-  order:1;
+  order:0;
   min-height:38px;
   padding:0 15px;
   border:1px solid currentColor;
@@ -69,6 +69,7 @@ a, button { -webkit-tap-highlight-color: transparent; }
   font-weight:700;
 }
 .top.solid nav a[href*="account.html"] { color:var(--cara-plum); border-color:rgba(75,43,99,.24); }
+.top nav a:not([href*="account.html"]):not([href*="builder.html"]) { order:10; }
 .top nav a[href*="builder.html"] {
   order:20;
   position:relative;
@@ -178,12 +179,13 @@ button:disabled { cursor:not-allowed; }
     font-weight:600;
   }
   .top.has-mobile-menu nav a[href*="account.html"] {
-    order:1;
+    order:0;
     justify-content:center;
     margin-top:3px !important;
     border:1px solid rgba(75,43,99,.20);
     color:var(--cara-plum) !important;
   }
+  .top.has-mobile-menu nav a:not([href*="account.html"]):not([href*="builder.html"]) { order:10; }
   .top.has-mobile-menu nav a[href*="builder.html"] {
     order:20;
     justify-content:center;
