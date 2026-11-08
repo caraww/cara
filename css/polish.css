@@ -213,9 +213,6 @@ button:disabled { cursor:not-allowed; }
   .mobile-nav-spacer { height:0; }
   .account-wrap { padding-top:94px; }
 }
-@media (max-width:520px) {
-  header.top.has-mobile-menu nav { width:min(238px,calc(100vw - 24px)) !important; }
-}
 @media (prefers-reduced-motion:reduce) {
   *,*::before,*::after { scroll-behavior:auto !important; transition:none !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; }
 }
