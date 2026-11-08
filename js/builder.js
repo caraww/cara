@@ -414,6 +414,11 @@ try {
     };
     const initialToolbarItems = toolbarItems();
     if (initialToolbarItems.length) syncToolbarTabs(initialToolbarItems.find((el) => el.tabIndex === 0) || initialToolbarItems[0]);
+    new MutationObserver(() => {
+      const items = toolbarItems();
+      const active = items.includes(document.activeElement) ? document.activeElement : items.find((el) => el.tabIndex === 0) || items[0];
+      if (active) syncToolbarTabs(active);
+    }).observe(toolbar, { childList: true, subtree: true });
     toolbar.addEventListener("focusin", (event) => {
       if (event.target.matches('button, a[href]')) syncToolbarTabs(event.target);
     });
