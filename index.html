@@ -93,6 +93,7 @@
     <title>کارا (cara) — دستبند منجوقی دست‌باف | طراحی و سفارش آنلاین</title>
     <link rel="stylesheet" href="css/decor.css" />
     <link rel="stylesheet" href="css/hero.css?v=8" />
+    <link rel="stylesheet" href="css/hero-carousel.css?v=1" />
     <style>
       /* ===== فوتر صفحه‌ی اصلی: تاریک، ستون‌بندی منظم، نخ مهره‌ای بالاش ===== */
       .foot {
@@ -294,14 +295,23 @@
               ><a class="btn ghost" href="upload.html">ساخت الگو از عکس</a>
             </div>
           </div>
-          <div class="prod" aria-label="پیش‌نمایش دستبند دست‌باف cara">
-            <canvas
-              id="braceletCanvas"
-              width="560"
-              height="560"
-              role="img"
-              aria-label="دستبند منجوقی چشم، سفید و سرخابی روی مشکی"
-            ></canvas>
+          <div class="prod" aria-label="پیش‌نمایش دستبندهای دست‌باف cara">
+            <section class="hero-showcase" id="heroShowcase" role="region" aria-roledescription="نمایش دستبندها" aria-label="سه نمونه دستبند از گالری" tabindex="0">
+              <div class="hero-showcase__viewport">
+                <div class="hero-showcase__slides" id="heroShowcaseSlides"></div>
+                <button class="hero-showcase__arrow hero-showcase__arrow--prev" type="button" aria-label="دستبند قبلی">‹</button>
+                <button class="hero-showcase__arrow hero-showcase__arrow--next" type="button" aria-label="دستبند بعدی">›</button>
+              </div>
+              <div class="hero-showcase__footer">
+                <div class="hero-showcase__caption" aria-live="polite">
+                  <span class="hero-showcase__eyebrow">از گالری cara</span>
+                  <strong id="heroShowcaseTitle">دستبندهای دست‌باف</strong>
+                  <span id="heroShowcaseCount">۱ از ۳</span>
+                </div>
+                <div class="hero-showcase__dots" id="heroShowcaseDots" aria-label="انتخاب دستبند"></div>
+              </div>
+              <p class="hero-showcase__hint">برای دیدن طرح بعدی، بکش <span aria-hidden="true">← →</span></p>
+            </section>
           </div>
         </section>
       </div>
@@ -595,6 +605,7 @@
       })();
     </script>
     <script src="js/hero-bracelet.js?v=6" defer></script>
+    <script src="js/hero-gallery-carousel.js?v=1" defer></script>
     <script src="js/weave.js?v=1" defer></script>
     <script src="js/decor.js?v=14" defer></script>
     <script src="/js/contact.js" defer></script>
