@@ -1,4 +1,5 @@
 import { handleGame, checkCode, codeDiscount, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
+import { handleAccountRequest, getAccountUser } from "./lib/accounts.js";
 import "./lib/works-pricing.js";
 export { GameDO } from "./game-worker.js"; /* Durable Object بازی */
 
@@ -189,6 +190,7 @@ async function createPayment(request, env) {
     return json({ error: "تعداد تلاش‌ها زیاده؛ چند دقیقه بعد دوباره امتحان کن." }, 429);
   let body;
   try { body = await request.json(); } catch { return json({ error: "درخواست معتبر نیست." }, 400); }
+  const account = await getAccountUser(request, env);
   const c = (body && body.customer) || {};
   const customer = {
     firstName: String(c.firstName || "").trim().slice(0, 60),
@@ -241,6 +243,7 @@ async function createPayment(request, env) {
     provider: "zibal",
     priceToman,
     customer,
+    ...(account ? { userId: account.id } : {}),
     ...(dc ? { discountCode: dc } : {}),
     ...extra,
   };
@@ -511,6 +514,8 @@ export default {
     const url = new URL(request.url);
     const p = url.pathname;
     try {
+      const accountResponse = await handleAccountRequest(request, env, url, rateLimit);
+      if (accountResponse) return accountResponse;
       if (p === "/api/config" && request.method === "GET") {
         const C = cfg(env);
         return json({ pricePerBead: C.price, baseFee: C.base });
