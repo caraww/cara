@@ -90,11 +90,11 @@ Do not store raw session or public tracking tokens. Store a cryptographic hash a
 
 - D1 migrations `0001_accounts.sql` and `0002_account_sessions.sql` create users, verified provider identity links, hashed sessions, saved designs, guest/account carts, cart items, hashed order-access tokens, Telegram replay protection, and minimal profile metadata.
 - A Node regression test checks the schema's core security and ownership constraints.
-- The preview D1 database has successfully applied migration `0001_accounts.sql`. Migration `0002_account_sessions.sql` is pending until the feature branch is reviewed and merged; no production D1 binding or production deployment is enabled.
+- Production D1 migrations `0001_accounts.sql` and `0002_account_sessions.sql` were applied successfully by run `42461711915`; PR #129 added the `ACCOUNTS_DB` binding and the Worker was deployed by run `42462706615`. The earlier preview-only note is historical. Migration `0003_customer_contacts_and_sms_consent.sql`, added by PR #133, has not yet been confirmed on production.
 - Existing checkout, payment settlement, and the ORDERS KV namespace remain unchanged.
 - Telegram authentication uses the official Login Widget HMAC verification, a five-minute freshness window, replay-digest storage, rate limiting, and opaque HttpOnly/Secure/SameSite session cookies. The Worker needs `TELEGRAM_BOT_USERNAME` as a variable and a bot configured for the site domain in BotFather; `TELEGRAM_BOT_TOKEN` remains a secret.
 - Account UI includes Telegram sign-in, saved-design preview/reopen/delete, and read-only history for orders created while signed in. Existing orders are not automatically linked because Telegram does not prove ownership of the checkout phone number.
-- Bale login, guest-cart merge, profile editing, account-linked legacy orders, and public order tracking remain separate follow-up work. Bale is intentionally not enabled without a documented, verifiable identity flow.
+- PR #133 adds optional phone contact details and explicit SMS marketing consent to the account profile. Phone verification and SMS sending are not implemented; only contacts with both a verified phone and explicit consent are eligible for the separate marketing export. Profile work beyond these contact fields, Bale login, guest-cart merge, account-linked legacy orders, and public order tracking remain follow-up work. Bale is intentionally not enabled without a documented, verifiable identity flow.
 
 
 ## Deployment and verification status — 2026-11-08
@@ -108,3 +108,13 @@ Do not store raw session or public tracking tokens. Store a cryptographic hash a
 - The cart tables exist in D1, but account cart APIs and guest-to-account cart merge are not implemented yet. The public `/track` page and hashed order-token issuance/lookup are also not implemented.
 - Do not change payment settlement, checkout pricing, order status transitions, or existing ORDERS KV records as part of the next account/cart phase. Implement guest cart merge as an isolated change with ownership, idempotency, size, and quantity-limit tests.
 - Before declaring the account feature complete, verify: Telegram sign-in; session persistence after reload; saving/reopening/deleting a design; and visibility of only the current user's orders. No real payment should be used for these checks.
+
+
+## Customer contact rollout — PR #133 (2026-11-08)
+
+- PR #133 merged the optional phone field, explicit SMS marketing consent and revocation timestamps, the protected `/api/admin/customers` endpoint, the private `customers.html` directory, CSV exports, and migration `0003_customer_contacts_and_sms_consent.sql`. Its test workflow completed successfully (run `42468168709`). The PR explicitly did not include a production D1 migration or Worker deployment.
+- The latest confirmed production D1 migration run is `42461711915` at commit `c79b3f6253f4f46ffbee5446ad27718caf633a82`, before PR #133. No later production migration run was found in the repository Actions history. Therefore migration `0003` must be treated as **not yet confirmed on production**.
+- The latest confirmed production Worker deployment is run `42462706615` at commit `69766f46b186122677efa9ce6f9a8d2007b0c6e2`, also before PR #133. Current `main` is `2a748ba064e597c2deb58772d0a67e0277634287`; since the deployed Worker SHA, `index.js` and `lib/accounts.mjs` changed and the new admin-customer route was added. The production Worker must therefore be treated as **behind main**; the PR #133 API changes are not confirmed live.
+- GitHub Pages is separate: the current main SHA `2a748ba064e597c2deb58772d0a67e0277634287` was successfully published by Pages run `42475749407`. This confirms the static site deployment, not the Worker API or D1 schema.
+- Safe rollout sequence: first inspect the live D1 migration state; then apply migration `0003` through the explicit production migration workflow; then, only after reviewing the external PHP relay contract and completing the documented Zibal sandbox checks, deploy the Worker from `main`. Finally smoke-test the authenticated profile and admin customer directory without exposing credentials. Do not perform a real payment for this rollout.
+- Do not infer that the account contact feature is fully live from the Pages success alone. D1 migration, Worker deployment, and Pages publication are three separate states.
