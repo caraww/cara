@@ -20,7 +20,8 @@ try {
 (() => {
   const input = document.querySelector('input[name="discountCode"]'), note = document.getElementById("dcNote");
   if (!input || !note) return;
-  if (new URLSearchParams(location.search).get("result") === "success") { try { localStorage.removeItem("cara-discount"); } catch (e) {} return; }
+  /* پاک‌کردن کد تخفیف فقط پس از تأیید وضعیت paid از Worker انجام می‌شود. */
+  if (new URLSearchParams(location.search).has("result")) return;
   try { const s = localStorage.getItem("cara-discount"); if (s && !input.value) input.value = s; } catch (e) {}
   let t, pct = 10;
   async function check() {
@@ -133,10 +134,45 @@ try {
   }
   const res = q.get("result");
   if (res) {
-    const box = $("result"); box.hidden = false;
-    box.innerHTML = res === "success" ? `<p class="ok">پرداختت انجام شد ✓ سفارشت ثبت شد. کد پیگیریت: <b dir="ltr">${(q.get("order") || "").replace(/[^0-9a-f-]/gi, "").slice(0, 8)}</b></p>`
-      : `<p class="err">${res === "canceled" ? "پرداخت لغو شد." : "پرداخت انجام نشد."} الگوت هنوز ذخیره‌ست، دوباره امتحان کن.</p>`;
-    if (res === "success") { $("formCard").hidden = true; $("sumCard").hidden = true; burst(); }
+    const box = $("result");
+    box.hidden = false;
+    if (res === "success") {
+      box.textContent = "دارم وضعیت پرداخت رو از سرور بررسی می‌کنم…";
+      (async () => {
+        const id = q.get("order") || "";
+        try {
+          const response = await fetch("/api/order-status?id=" + encodeURIComponent(id), { cache: "no-store" });
+          const data = await response.json();
+          if (!response.ok || data.status !== "paid") {
+            box.textContent = data.status === "review"
+              ? "پرداختت دریافت شده، اما نیاز به بررسی دستی داره. نتیجه رو بعد از بررسی بهت اطلاع می‌دیم."
+              : "هنوز تأیید نهایی پرداخت از سرور نرسیده. چند لحظه دیگه دوباره صفحه رو بررسی کن؛ الگوت محفوظ می‌مونه.";
+            return;
+          }
+          const code = id.replace(/[^0-9a-f-]/gi, "").slice(0, 8);
+          box.replaceChildren();
+          const paragraph = document.createElement("p");
+          paragraph.className = "ok";
+          paragraph.append(document.createTextNode("پرداختت تأیید شد ✓ سفارشت ثبت شد. کد پیگیریت: "));
+          const strong = document.createElement("b");
+          strong.dir = "ltr";
+          strong.textContent = code;
+          paragraph.append(strong);
+          box.append(paragraph);
+          $("formCard").hidden = true;
+          $("sumCard").hidden = true;
+          try {
+            localStorage.removeItem("cara-pattern");
+            localStorage.removeItem("cara-discount");
+          } catch {}
+          burst();
+        } catch {
+          box.textContent = "فعلاً نتونستم وضعیت پرداخت رو بررسی کنم. الگوت محفوظ می‌مونه؛ چند لحظه دیگه دوباره امتحان کن.";
+        }
+      })();
+    } else {
+      box.textContent = (res === "canceled" ? "پرداخت لغو شد." : "پرداخت انجام نشد.") + " الگوت هنوز ذخیره‌ست، دوباره امتحان کن.";
+    }
   }
 
   const workMode = q.get("work") && !res; /* سفارش مستقیم از گالری: checkout-work.js مدیریتش می‌کنه */
