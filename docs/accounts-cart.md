@@ -1,6 +1,6 @@
 # Accounts, guest cart, and order tracking — design
 
-**Status:** account foundation and first login/dashboard implementation are in progress on a feature branch. Telegram login verification, secure sessions, saved designs, and account-scoped order history are implemented in code; this is not yet merged or deployed.
+**Status:** the account foundation and first login/dashboard implementation have been merged into `main` through PRs #127–#129. Production D1 migration and the Cloudflare Worker deployment succeeded. The interactive Telegram login and saved-design/order flows still need an end-to-end check with a real user session. Guest-cart merge, public order tracking, profile editing, Bale login, and linking older guest orders remain follow-up work.
 
 ## Goals and constraints
 
@@ -95,3 +95,16 @@ Do not store raw session or public tracking tokens. Store a cryptographic hash a
 - Telegram authentication uses the official Login Widget HMAC verification, a five-minute freshness window, replay-digest storage, rate limiting, and opaque HttpOnly/Secure/SameSite session cookies. The Worker needs `TELEGRAM_BOT_USERNAME` as a variable and a bot configured for the site domain in BotFather; `TELEGRAM_BOT_TOKEN` remains a secret.
 - Account UI includes Telegram sign-in, saved-design preview/reopen/delete, and read-only history for orders created while signed in. Existing orders are not automatically linked because Telegram does not prove ownership of the checkout phone number.
 - Bale login, guest-cart merge, profile editing, account-linked legacy orders, and public order tracking remain separate follow-up work. Bale is intentionally not enabled without a documented, verifiable identity flow.
+
+
+## Deployment and verification status — 2026-11-08
+
+- PR #127 added the D1 account/cart schema and preview migration workflow; the preview migration completed successfully.
+- PR #128 added Telegram Login Widget verification, replay protection, secure sessions, saved-design endpoints, account UI, and read-only order history.
+- PR #129 bound the production D1 database to the `cara-payment` Worker. The production D1 migration completed successfully (GitHub Actions run `42461711915`) and the Worker deployment completed successfully (run `42462706615`).
+- The Worker is configured with the `ACCOUNTS_DB` binding and the Telegram bot username. The owner reported adding `TELEGRAM_BOT_TOKEN` as a Cloudflare Worker secret; successful interactive Telegram login has not yet been confirmed end-to-end.
+- A pre-login `GET /api/account/me` response of 401 is expected for a visitor without a session. It is not proof that the Telegram callback or session creation works.
+- The account dashboard currently supports saved-design listing, save, reopen, and delete, plus read-only orders associated with the signed-in account. Existing guest orders are not linked automatically.
+- The cart tables exist in D1, but account cart APIs and guest-to-account cart merge are not implemented yet. The public `/track` page and hashed order-token issuance/lookup are also not implemented.
+- Do not change payment settlement, checkout pricing, order status transitions, or existing ORDERS KV records as part of the next account/cart phase. Implement guest cart merge as an isolated change with ownership, idempotency, size, and quantity-limit tests.
+- Before declaring the account feature complete, verify: Telegram sign-in; session persistence after reload; saving/reopening/deleting a design; and visibility of only the current user's orders. No real payment should be used for these checks.
