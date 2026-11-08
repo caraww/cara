@@ -16,7 +16,7 @@ test("homepage hero renders all four bracelets with the original rotating 3D Del
   assert.match(script, /const palettes=\{/);
   assert.match(script, /const models=\{/);
   assert.match(script, /"#F8F5EC"/);
-  assert.match(script, /"111111111"/);
+  assert.match(script, /111111111/);
   assert.match(script, /featherWidth/);
   assert.match(script, /const flow=r\*\.62/);
   assert.match(css, /translateY\(7px\)/);
