@@ -1,5 +1,5 @@
 import { handleGame, checkCode, codeDiscount, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
-import { handleAccountRequest, getAccountUser } from "./lib/accounts.js";
+import { handleAccountRequest, getAccountUser } from "./lib/accounts.mjs";
 import "./lib/works-pricing.js";
 export { GameDO } from "./game-worker.js"; /* Durable Object بازی */
 
