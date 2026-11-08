@@ -39,7 +39,7 @@ test("build-pages generates gallery JSON-LD and bracelet pages from the same cat
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), "cara-seo-pricing-"));
   try {
     for (const dir of ["tools", "lib", "data", "js", "css"]) fs.mkdirSync(path.join(temp, dir), { recursive: true });
-    for (const file of ["tools/build-pages.js", "lib/works-pricing.js", "data/works.json", "js/palette.js", "js/beads.js"]) {
+    for (const file of ["tools/build-pages.js", "lib/works-pricing.js", "lib/generated-page-layout.js", "data/works.json", "js/palette.js", "js/beads.js"]) {
       fs.copyFileSync(path.join(root, file), path.join(temp, file));
     }
     for (const file of ["index.html", "builder.html", "upload.html", "game.html", "checkout.html", "name-bracelet.html"]) {
