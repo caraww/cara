@@ -129,3 +129,12 @@
     -webkit-text-fill-color: #fff !important;
   }
 }
+
+
+/* Builder menu order button: keep its label white on the purple button. */
+@media (max-width: 850px) {
+  .top.has-mobile-menu nav#builderNav a.btn.dark[href="checkout.html"] {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+}
