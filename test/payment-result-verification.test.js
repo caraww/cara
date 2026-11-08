@@ -1,0 +1,1 @@
+// Placeholder for the payment-result regression test; the complete version is in the feature branch.
