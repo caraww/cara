@@ -403,6 +403,37 @@ try {
     const a = document.createElement("a"); a.download = "cara-pattern.png"; a.href = c.toDataURL("image/png"); a.click();
   };
 
+  /* نوار ابزار: یک توقف Tab و پیمایش با کلیدهای جهت‌دار */
+  const toolbar = document.querySelector('.tools[role="toolbar"]');
+  if (toolbar) {
+    toolbar.setAttribute("aria-orientation", "horizontal");
+    const toolbarItems = () => [...toolbar.querySelectorAll('button:not([disabled]), a[href]')].filter((el) => !el.hidden && el.getAttribute("aria-hidden") !== "true");
+    const syncToolbarTabs = (active) => {
+      const items = toolbarItems();
+      items.forEach((el) => { el.tabIndex = el === active ? 0 : -1; });
+    };
+    const initialToolbarItems = toolbarItems();
+    if (initialToolbarItems.length) syncToolbarTabs(initialToolbarItems.find((el) => el.tabIndex === 0) || initialToolbarItems[0]);
+    toolbar.addEventListener("focusin", (event) => {
+      if (event.target.matches('button, a[href]')) syncToolbarTabs(event.target);
+    });
+    toolbar.addEventListener("keydown", (event) => {
+      const items = toolbarItems();
+      const index = items.indexOf(event.target);
+      if (index < 0 || !items.length) return;
+      const rtl = getComputedStyle(toolbar).direction === "rtl";
+      let next = index;
+      if (event.key === "Home") next = 0;
+      else if (event.key === "End") next = items.length - 1;
+      else if (event.key === "ArrowRight") next = (index + (rtl ? -1 : 1) + items.length) % items.length;
+      else if (event.key === "ArrowLeft") next = (index + (rtl ? 1 : -1) + items.length) % items.length;
+      else return;
+      event.preventDefault();
+      syncToolbarTabs(items[next]);
+      items[next].focus();
+    });
+  }
+
   /* کیبورد */
   const KEYS = { b: "brush", e: "eraser", g: "fill", i: "pick", l: "line", r: "rect", o: "ellipse", s: "select" };
   addEventListener("keydown", (e) => {
