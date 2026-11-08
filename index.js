@@ -517,6 +517,17 @@ export default {
       }
       if (p === "/api/works" && request.method === "GET") return await worksInfo(env);
       if (p === "/api/work" && request.method === "GET") return await workInfo(env, url);
+      if (p === "/api/order-status" && request.method === "GET") {
+        const id = String(url.searchParams.get("id") || "");
+        if (!/^[0-9a-f-]{36}$/i.test(id)) return json({ error: "not found" }, 404);
+        const order = await getOrder(env, id);
+        if (!order) return json({ error: "not found" }, 404);
+        return json({
+          status: String(order.status || "pending"),
+          fulfillment: String(order.fulfillment || "new"),
+          tracking: typeof order.tracking === "string" ? order.tracking : null,
+        });
+      }
       if (p === "/api/create-payment" && request.method === "POST") return await createPayment(request, env);
       if (p === "/api/payment-callback") return await paymentCallback(request, env, url, ctx);
       if (p === "/api/admin/debug") return await debug(request, env, url);
