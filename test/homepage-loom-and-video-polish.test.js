@@ -67,7 +67,8 @@ test("hero bracelet sizing does not depend on percentage height and has a safe c
   const css = read("css/hero.css");
   const js = read("js/hero-bracelet.js");
   assert.match(css, /\.hero2 \.prod canvas \{[\s\S]*?height: auto;[\s\S]*?aspect-ratio: 1 \/ 1/);
-  assert.match(js, /if\(!r\.width\)cv\.style\.width=fallback\+"px"/);\n  assert.match(js, /ro\.observe\(cv\.parentElement\)/);
+  assert.match(js, /if\(!r\.width\)cv\.style\.width=fallback\+"px"/);
+  assert.match(js, /ro\.observe\(cv\.parentElement\)/);
   assert.match(js, /function roundedRect\(/);
 });
 
@@ -101,7 +102,7 @@ test("hero bracelet easing is initialized before the first fit render", () => {
 test("hero bracelet is redrawn after the page layout finishes", () => {
   const js = read("js/hero-bracelet.js");
   assert.match(js, /requestAnimationFrame\(\(\)=>requestAnimationFrame\(\(\)=>\{fit\(\);inViewport=true;syncAnimation\(\)\}\)\)/);
-  assert.match(js, /new ResizeObserver\(fit\)\.observe\(cv\)/);
+  assert.match(js, /const ro=new ResizeObserver\(fit\);ro\.observe\(cv\)/);
 });
 
 
