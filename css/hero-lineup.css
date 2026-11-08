@@ -23,10 +23,17 @@
   touch-action:pan-y;user-select:none;-webkit-user-select:none;
 }
 .cara-bracelet-lineup__viewport {
-  position:relative;width:100%;aspect-ratio:1/0.92;
+  position:relative;width:100%;aspect-ratio:1/1;
   display:grid;place-items:center;isolation:isolate;overflow:hidden;
   border-radius:28px;
-  background:radial-gradient(ellipse at 50% 48%,rgba(234,213,176,.12),rgba(111,76,137,.08) 48%,transparent 74%);
+  background:radial-gradient(circle at 50% 50%,rgba(234,213,176,.14),rgba(111,76,137,.08) 58%,transparent 76%);
+}
+.cara-bracelet-lineup__viewport::before {
+  content:"";position:absolute;z-index:0;left:50%;top:50%;
+  width:min(84%,500px);aspect-ratio:1;border:1px solid rgba(234,213,176,.34);
+  border-radius:50%;transform:translate(-50%,-50%);
+  box-shadow:0 0 0 9px rgba(234,213,176,.025),inset 0 0 34px rgba(234,213,176,.045);
+  pointer-events:none;
 }
 .cara-bracelet-lineup__slides {
   position:absolute;inset:0;display:grid;place-items:center;perspective:1000px;
@@ -96,7 +103,7 @@
   .hero2 .hero-copy .btns .btn {flex:1 1 0;min-width:0;min-height:43px;padding:7px 8px;font-size:12px;}
   .hero2 .prod {width:100%;display:grid;margin-top:8px;}
   .cara-bracelet-lineup {width:min(100%,440px);}
-   .cara-bracelet-lineup__viewport {aspect-ratio:1/0.96;}
+   .cara-bracelet-lineup__viewport {aspect-ratio:1/1;}
   .cara-bracelet-card {padding:8px 30px 6px;}
   .cara-bracelet-lineup__arrow {width:34px;height:34px;font-size:24px;}
   .cara-bracelet-lineup__arrow--prev {right:3px;}
