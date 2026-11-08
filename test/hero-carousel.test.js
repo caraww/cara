@@ -11,6 +11,7 @@ test("homepage hero renders the three selected bracelets with the original rotat
   const script = read("js/hero-lineup.js");
   const css = read("css/hero-lineup.css");
   assert.match(html, /id="caraBraceletLineup"/);
+  assert.doesNotMatch(html, /برای دیدن طرح بعدی/);
   assert.doesNotMatch(html, /data-bracelet="peacock"|طاووس/);
   assert.doesNotMatch(script, /peacock/);
   for (const id of ["thousand-eyes", "waterfall", "duck"]) assert.match(html, new RegExp('data-bracelet="' + id + '"'));
