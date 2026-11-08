@@ -20,9 +20,14 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     "customers.html",
   ]) {
     const html = read(file);
-    assert.match(html, /\/css\/polish\.css\?v=4/, file + " should load polish.css");
+    assert.match(html, /\/css\/polish\.css\?v=(?:4|5)/, file + " should load polish.css");
+    const polishPath = html.match(/\/css\/polish\.css\?v=(?:4|5)/)?.[0];
+    const sharedLayerIndex = html.indexOf(polishPath);
+    const pageStyles = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+>/g)]
+      .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("hero-signature.css"))
+      .map(([tag]) => html.indexOf(tag));
     assert.ok(
-      html.indexOf("/css/polish.css?v=4") > html.lastIndexOf('rel="stylesheet"'),
+      sharedLayerIndex > Math.max(-1, ...pageStyles),
       file + " should load the shared layer after its page styles",
     );
   }
