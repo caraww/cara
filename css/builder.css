@@ -139,12 +139,17 @@
 }
 
 /* سازنده: زیر پیش‌نمایش مچ، هم‌اندازه‌ی دکمه‌های نوار ابزار (۴۶ پیکسل، فونت ۱۶) */
-.summary .dl-weave {
+.summary .dl-weave,
+.summary .dl-weave:visited,
+.summary .dl-weave:hover,
+.summary .dl-weave:active {
   width: 100% !important;
   min-height: 46px;
   padding: 0 22px;
   font-size: 16px;
   margin: 12px 0 18px !important;
+  color: #221a2c !important;
+  -webkit-text-fill-color: #221a2c;
 }
 
 /* ======================================================================
