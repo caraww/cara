@@ -33,8 +33,18 @@
     },
   },
 
-  // بدون id: Wrangler موقع دیپلوی خودش KV رو می‌سازه و وصل می‌کنه (سفارش‌ها این‌جا ذخیره می‌شن)
+  // سفارش‌ها و داده‌های بازی همچنان در KV موجود ذخیره می‌شوند.
   "kv_namespaces": [{ "binding": "ORDERS" }],
+
+  // دیتابیس Production حساب‌های کاربری؛ migrationها قبلاً با موفقیت اعمال شده‌اند.
+  "d1_databases": [
+    {
+      "binding": "ACCOUNTS_DB",
+      "database_name": "cara-accounts-production",
+      "database_id": "5121003c-2f0c-4016-a551-11743945dd08",
+      "migrations_dir": "migrations",
+    },
+  ],
 
   // محافظ بازی: هر توکن مرحله فقط یک بار قابل استفاده‌ست (جلوی امتحان رایگان همه‌ی خونه‌ها)
   "durable_objects": {
