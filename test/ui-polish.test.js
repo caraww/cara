@@ -41,3 +41,10 @@ test("navigation places account first and the designer CTA at the opposite edge"
   assert.match(css, /a:not\(\[href\*="account\.html"\]\):not\(\[href\*="builder\.html"\]\)\s*\{\s*order:10;/);
   assert.match(css, /a\[href\*="builder\.html"\]\s*\{\s*order:20;/);
 });
+
+
+test("shared header rules do not target admin order-card .top elements", () => {
+  const css = read("css/polish.css");
+  assert.match(css, /header\\.top\\s*\\{/);
+  assert.doesNotMatch(css, /(^|[},\\s])\\.top\\s*\\{/m);
+});
