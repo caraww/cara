@@ -10,7 +10,10 @@
   border-radius: 12px;
   background: #fff;
   color: #1d1527;
-  font: 700 15px/1.5 inherit;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
   text-decoration: none;
   box-shadow: 0 4px 18px rgb(0 0 0 / 18%);
   transform: translateY(calc(-100% - 24px));
