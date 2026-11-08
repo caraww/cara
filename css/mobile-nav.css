@@ -1,73 +1,77 @@
-/* Shared accessible mobile navigation; desktop header remains unchanged. */
+/* Shared compact glass mobile navigation; desktop header remains unchanged. */
 .menu-toggle { display: none; }
 @media (max-width: 850px) {
-  .top.has-mobile-menu { position: fixed; }
   .top.has-mobile-menu .menu-toggle {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 42px;
-    height: 42px;
+    width: 38px;
+    height: 38px;
     padding: 0;
     border: 1px solid currentColor;
-    border-radius: 12px;
+    border-radius: 11px;
     background: transparent;
     color: inherit;
     font: inherit;
-    font-size: 24px;
+    font-size: 22px;
     line-height: 1;
     cursor: pointer;
   }
+
   .top.has-mobile-menu nav,
   .top.has-mobile-menu nav[aria-label] {
     display: none;
     position: absolute;
-    inset: 100% auto auto 12px;
-    inset-inline-start: 12px;
-    inset-inline-end: auto;
-    width: min(276px, calc(100vw - 40px));
+    inset: 100% 12px auto auto;
+    width: min(196px, calc(100vw - 32px));
     box-sizing: border-box;
     flex-direction: column;
     align-items: stretch;
-    gap: 2px;
-    max-height: min(62vh, 440px);
+    gap: 1px;
+    max-height: min(44vh, 320px);
     overflow-y: auto;
-    padding: 9px;
-    border: 1px solid rgba(27, 18, 38, .10);
-    border-radius: 15px;
-    background: #fffdfb;
+    padding: 6px;
+    border: 1px solid rgba(255, 255, 255, .28);
+    border-radius: 13px;
+    background: rgba(255, 253, 251, .48);
     color: #1b1226;
-    box-shadow: 0 10px 26px rgba(27, 18, 38, .14);
-    font-size: 15px;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+    box-shadow: 0 8px 22px rgba(27, 18, 38, .12);
+    -webkit-backdrop-filter: blur(16px) saturate(135%);
+    backdrop-filter: blur(16px) saturate(135%);
   }
+
   .top.has-mobile-menu.menu-open nav {
     display: flex;
   }
+
   .top.has-mobile-menu nav a,
   .top.has-mobile-menu nav a:not(.cta),
   .top.has-mobile-menu nav a:not(.btn) {
     display: flex;
     align-items: center;
-    min-height: 41px;
-    padding: 7px 11px;
-    border-radius: 9px;
+    min-height: 34px;
+    padding: 5px 9px;
+    border-radius: 8px;
     color: #1b1226;
+    font-size: 13px;
+    line-height: 1.5;
   }
+
   .top.has-mobile-menu nav a:hover,
   .top.has-mobile-menu nav a:active {
-    background: rgba(27, 18, 38, .045);
+    background: rgba(255, 255, 255, .30);
   }
+
   .top.has-mobile-menu nav a.btn,
   .top.has-mobile-menu nav a.cta {
     justify-content: center;
-    margin-top: 3px;
+    margin-top: 2px;
   }
+
   .top.has-mobile-menu nav a:focus-visible,
   .top.has-mobile-menu .menu-toggle:focus-visible {
-    outline: 3px solid #b8975a;
-    outline-offset: 3px;
+    outline: 2px solid #b8975a;
+    outline-offset: 2px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
