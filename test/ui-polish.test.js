@@ -22,7 +22,7 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     const html = read(file);
     assert.match(html, /\/css\/polish\.css\?v=2/, file + " should load polish.css");
     assert.ok(
-      html.indexOf("/css/polish.css?v=2") > html.lastIndexOf('rel="stylesheet"'),
+      html.indexOf("/css/polish.css?v=3") > html.lastIndexOf('rel="stylesheet"'),
       file + " should load the shared layer after its page styles",
     );
   }
