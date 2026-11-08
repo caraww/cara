@@ -67,10 +67,10 @@ export class GameDO extends DurableObject {
 const stub = (env, name) => env.GAME.get(env.GAME.idFromName(name));
 const ipOf = (request) => request.headers.get("CF-Connecting-IP") || "unknown";
 
-/* محدودیت تعداد درخواست؛ اگه binding نباشه همیشه true (محدودیتی اعمال نمی‌شه) */
+/* محدودیت درخواست باید fail-closed باشد؛ خرابی یا نبودن Durable Object نباید مسیر محافظت‌شده را باز کند. */
 export async function rateLimit(env, key, max, windowMs) {
-  if (!env.GAME) return true;
-  try { return await stub(env, "rl:" + key).hit(max, windowMs); } catch { return true; }
+  if (!env.GAME) return false;
+  try { return await stub(env, "rl:" + key).hit(max, windowMs); } catch { return false; }
 }
 
 const enc = new TextEncoder();
