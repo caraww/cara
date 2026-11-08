@@ -1,0 +1,26 @@
+.account-wrap{max-width:1040px;padding-top:112px}
+.account-heading{margin-bottom:28px}
+.account-eyebrow{display:block;margin:0 0 7px;color:#8a6aa6;font-size:11px;font-weight:800;letter-spacing:2px;direction:ltr;text-align:right}
+.account-card{background:#fff;border:1px solid rgba(27,18,38,.09);border-radius:24px;padding:clamp(20px,4vw,34px);box-shadow:0 14px 45px rgba(42,24,59,.045)}
+.account-login{max-width:520px;margin:38px auto;text-align:center}
+.account-mark{width:58px;height:58px;margin:0 auto 14px;border-radius:20px;display:grid;place-items:center;background:#f0e7f8;color:#5b1f9a;font-size:28px;font-weight:900;direction:ltr}
+.account-login h2,.account-welcome h2{margin:0 0 8px;font-size:25px}
+.account-login>p{color:var(--muted);font-size:14px}
+.telegram-login{display:flex;justify-content:center;min-height:48px;margin:24px auto 12px}
+.account-note{color:var(--muted);font-size:13px;margin:8px 0}
+.account-welcome{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.account-section{margin-top:42px}
+.account-section-head{display:flex;justify-content:space-between;align-items:end;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.account-section-head h2{margin:0;font-size:25px}
+.account-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.account-design,.account-order{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}
+.account-design canvas{display:block;width:100%;height:auto;max-height:220px;object-fit:contain;background:#eee9f3;border-radius:12px;margin-bottom:10px}
+.account-design h3{font-size:15px;margin:6px 0}
+.account-design button{margin-top:10px}
+.account-orders{display:grid;gap:10px}
+.account-order{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.account-order strong{display:block}
+.account-order small{color:var(--muted)}
+.account-empty{padding:24px;text-align:center;color:var(--muted);background:rgba(255,255,255,.55);border:1px dashed #cfc4db;border-radius:18px}
+.account-status{display:inline-flex;padding:5px 10px;border-radius:999px;background:#f0eaf5;color:#563477;font-size:12px}
+@media(max-width:640px){.account-wrap{padding-top:96px}.account-section-head h2{font-size:21px}.account-order{align-items:flex-start}}
