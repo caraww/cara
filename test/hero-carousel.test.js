@@ -6,19 +6,19 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 
-test("homepage hero lets users swipe between four photo-guided 3D Delica bracelets", () => {
+test("homepage hero renders all four bracelets with the original rotating 3D Delica engine and swipe controls", () => {
   const html = read("index.html");
   const script = read("js/hero-lineup.js");
   const css = read("css/hero-lineup.css");
   assert.match(html, /id="caraBraceletLineup"/);
-  assert.match(html, /data-bracelet="thousand-eyes"/);
-  assert.match(html, /data-bracelet="waterfall"/);
-  assert.match(html, /data-bracelet="duck"/);
-  assert.match(html, /data-bracelet="peacock"/);
-  assert.match(html, /hero-lineup\.js\?v=1/);
-  assert.doesNotMatch(html, /hero-gallery-carousel\.js/);
-  assert.match(script, /const models = \{/);
-  assert.match(script, /Delica thread opening/);
+  for (const id of ["thousand-eyes", "waterfall", "duck", "peacock"]) assert.match(html, new RegExp('data-bracelet="' + id + '"'));
+  assert.match(html, /hero-lineup\.js\?v=2/);
+  assert.match(script, /const palettes=\{/);
+  assert.match(script, /const models=\{/);
+  assert.match(script, /function sprite\(/);
+  assert.match(script, /Miyuki Delica thread opening/);
+  assert.match(script, /const rot=.*t\*\.00011/s);
+  assert.match(script, /Math\.sin\(theta\)/);
   assert.match(script, /requestAnimationFrame/);
   assert.match(script, /IntersectionObserver/);
   assert.match(script, /prefers-reduced-motion/);
