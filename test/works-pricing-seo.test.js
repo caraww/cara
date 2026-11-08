@@ -56,6 +56,16 @@ test("build-pages generates gallery JSON-LD and bracelet pages from the same cat
     assert.match(colorPage, /name="twitter:description"/);
     assert.match(colorPage, /name="twitter:image" content="https:\/\/caraw\.ir\/img\/beads\/DB0010\.jpg"/);
 
+    const braceletPage = fs.readFileSync(path.join(temp, "bracelet", "آلبوم.html"), "utf8");
+    for (const page of [colorPage, braceletPage]) {
+      assert.match(page, /<a class="skip-link" href="#main-content">رفتن به محتوای اصلی<\/a>/);
+      assert.match(page, /<header class="top solid">/);
+      assert.match(page, /href="\/builder\.html">طراحی دستی<\/a>/);
+      assert.match(page, /href="\/checkout\.html">سفارش<\/a>/);
+      assert.match(page, /<script src="\/js\/contact\.js" defer><\/script>/);
+      assert.match(page, /<main class="pg" id="main-content" tabindex="-1">/);
+    }
+
     const gallery = fs.readFileSync(path.join(temp, "gallery.html"), "utf8");
     const match = gallery.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
     assert.ok(match, "gallery must contain generated JSON-LD");
