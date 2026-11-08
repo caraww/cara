@@ -115,3 +115,34 @@
     transition:none;transform:none;
   }
 }
+
+/* Keep each rendered bracelet geometrically centered in the circular frame.
+   The caption is overlaid at the bottom so it cannot pull the canvas upward
+   inside the card's former two-row grid. */
+.hero2 .cara-bracelet-card {
+  display:block;
+  padding:0;
+}
+.hero2 .cara-bracelet-card .cara-bracelet-card__art {
+  position:absolute;
+  inset:auto;
+  top:50%;
+  left:50%;
+  display:block;
+  width:min(100%,560px,76vh);
+  height:auto;
+  aspect-ratio:1/1;
+  max-width:none;
+  max-height:none;
+  margin:0;
+  transform:translate(-50%,-50%);
+  align-self:auto;
+}
+.hero2 .cara-bracelet-card figcaption {
+  position:absolute;
+  z-index:2;
+  inset-inline:0;
+  bottom:clamp(10px,2.5%,20px);
+  padding:0;
+  pointer-events:none;
+}
