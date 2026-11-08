@@ -71,18 +71,10 @@
 .cara-bracelet-lineup__arrow--prev {right:10px;}
 .cara-bracelet-lineup__arrow--next {left:10px;}
 .cara-bracelet-lineup__controls {
-  width:min(88%,440px);display:flex;align-items:center;justify-content:space-between;
-  gap:14px;padding:4px 6px;
+  width:100%;display:flex;align-items:center;justify-content:center;
+  gap:0;padding:8px 6px;text-align:center;
 }
-.cara-bracelet-lineup__title {color:#f7e7bd;font-size:16px;font-weight:900;}
 .cara-bracelet-lineup__count {color:rgba(226,214,238,.62);font-size:12px;white-space:nowrap;}
-.cara-bracelet-lineup__dots {display:flex;align-items:center;gap:7px;flex:none;}
-.cara-bracelet-lineup__dot {
-  width:7px;height:7px;padding:0;border:0;border-radius:99px;
-  background:rgba(234,213,176,.35);cursor:pointer;
-  transition:width .25s,background .25s;
-}
-.cara-bracelet-lineup__dot.is-active {width:23px;background:#ead5a5;}
 .cara-bracelet-lineup__hint,.cara-bracelet-lineup__note {
   margin:2px 0 0;color:rgba(226,214,238,.55);font-size:11px;letter-spacing:.02em;
 }
@@ -109,7 +101,6 @@
   .cara-bracelet-lineup__arrow--prev {right:3px;}
   .cara-bracelet-lineup__arrow--next {left:3px;}
   .cara-bracelet-lineup__controls {width:96%;}
-  .cara-bracelet-lineup__title {font-size:14px;}
   .cara-bracelet-lineup__note {font-size:10px;}
 }
 @media (max-width:360px) {
