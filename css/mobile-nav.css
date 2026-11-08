@@ -1,0 +1,64 @@
+/* Shared accessible mobile navigation; desktop header remains unchanged. */
+.menu-toggle { display: none; }
+@media (max-width: 850px) {
+  .top.has-mobile-menu { position: fixed; }
+  .top.has-mobile-menu .menu-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid currentColor;
+    border-radius: 12px;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 25px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .top.has-mobile-menu nav,
+  .top.has-mobile-menu nav[aria-label] {
+    display: none;
+    position: absolute;
+    inset: 100% 12px auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    max-height: min(70vh, 520px);
+    overflow-y: auto;
+    padding: 12px;
+    border: 1px solid rgba(27, 18, 38, .12);
+    border-radius: 16px;
+    background: #fff;
+    color: #1b1226;
+    box-shadow: 0 14px 34px rgba(27, 18, 38, .18);
+    font-size: 16px;
+  }
+  .top.has-mobile-menu.menu-open nav {
+    display: flex;
+  }
+  .top.has-mobile-menu nav a,
+  .top.has-mobile-menu nav a:not(.cta),
+  .top.has-mobile-menu nav a:not(.btn) {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 8px 12px;
+    color: #1b1226;
+  }
+  .top.has-mobile-menu nav a.btn,
+  .top.has-mobile-menu nav a.cta {
+    justify-content: center;
+    margin-top: 4px;
+  }
+  .top.has-mobile-menu nav a:focus-visible,
+  .top.has-mobile-menu .menu-toggle:focus-visible {
+    outline: 3px solid #b8975a;
+    outline-offset: 3px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .top.has-mobile-menu nav { scroll-behavior: auto; }
+}
