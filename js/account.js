@@ -10,11 +10,7 @@
     const response = await fetch(path, { credentials: "same-origin", cache: "no-store", ...options,
       headers: { ...(options.body ? { "Content-Type": "application/json" } : {}), ...(options.headers || {}) } });
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) {
-      const error = new Error(data.error || "درخواست انجام نشد.");
-      error.status = response.status;
-      throw error;
-    }
+    if (!response.ok) { const error = new Error(data.error || "درخواست انجام نشد."); error.status = response.status; throw error; }
     return data;
   }
 
@@ -58,8 +54,19 @@
     }));
   }
 
+  async function loadProfile() {
+    try {
+      const profile = await api("/api/account/profile");
+      $("profilePhone").value = profile.phone || "";
+      $("marketingSmsConsent").checked = !!profile.marketingSmsConsent;
+      message("profileMessage", profile.phoneVerified ? "شماره موبایل تأیید شده است." : (profile.phone ? "شماره ذخیره شده؛ هنوز تأیید پیامکی نشده است." : ""));
+    } catch (error) { message("profileMessage", error.message); }
+  }
+
   async function loadDesigns() {
-    const designs = await api("/api/account/designs");
+    let designs;
+    try { designs = await api("/api/account/designs"); }
+    catch (error) { message("designMessage", error.message); return; }
     const list = $("designList"); list.replaceChildren();
     if (!designs.length) { list.innerHTML = '<p class="account-empty">هنوز طرحی ذخیره نکردی.</p>'; return; }
     designs.forEach((item) => {
@@ -88,7 +95,9 @@
 
   const orderLabels = { pending:"در انتظار پرداخت", paid:"پرداخت‌شده", review:"در حال بررسی", failed:"ناموفق", new:"ثبت‌شده", weaving:"در حال بافت", shipped:"ارسال‌شده" };
   async function loadOrders() {
-    const orders = await api("/api/account/orders");
+    let orders;
+    try { orders = await api("/api/account/orders"); }
+    catch (error) { message("ordersMessage", error.message); return; }
     const list = $("orderList"); list.replaceChildren();
     if (!orders.length) { message("ordersMessage", "هنوز سفارشی با این حساب ثبت نشده."); return; }
     message("ordersMessage", "");
@@ -121,16 +130,29 @@
     $("welcomeHandle").textContent = user.username ? "@" + user.username : "حساب تلگرام تأییدشده";
 
     /* شکست بارگذاری یک بخش نباید کاربر واردشده را از داشبورد بیرون بیندازد. */
-    const results = await Promise.allSettled([loadDesigns(), loadOrders()]);
-    if (results[0].status === "rejected") {
-      $("designList").replaceChildren();
-      message("designMessage", results[0].reason?.message || "دریافت طرح‌ها ممکن نشد؛ صفحه را دوباره بارگذاری کن.");
-    }
-    if (results[1].status === "rejected") {
-      $("orderList").replaceChildren();
-      message("ordersMessage", results[1].reason?.message || "دریافت سفارش‌ها ممکن نشد؛ صفحه را دوباره بارگذاری کن.");
-    }
+    await Promise.allSettled([loadProfile(), loadDesigns(), loadOrders()]);
   }
+
+  $("profileForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = $("saveProfile");
+    button.disabled = true;
+    message("profileMessage", "در حال ذخیره…");
+    try {
+      const profile = await api("/api/account/profile", {
+        method: "PUT",
+        body: JSON.stringify({
+          phone: $("profilePhone").value.trim(),
+          marketingSmsConsent: $("marketingSmsConsent").checked,
+        }),
+      });
+      $("profilePhone").value = profile.phone || "";
+      message("profileMessage", profile.marketingSmsConsent
+        ? "اطلاعات ذخیره شد. برای استفاده تبلیغاتی، شماره هنوز باید تأیید پیامکی شود."
+        : "اطلاعات ذخیره شد. رضایت پیامک تبلیغاتی فعال نیست.");
+    } catch (error) { message("profileMessage", error.message); }
+    finally { button.disabled = false; }
+  });
 
   $("logoutButton").addEventListener("click", async () => {
     try { await api("/api/account/logout", { method: "POST", body: "{}" }); location.reload(); }
