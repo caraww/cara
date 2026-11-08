@@ -1,3 +1,5 @@
+@import url("/css/tokens.css");
+
 /* cara visual system — shared layer, loaded after each page's own styles. */
 :root {
   --cara-ink: #21182b;
@@ -437,3 +439,45 @@ body { background-color:var(--cara-paper); color:var(--cara-ink); }
     font-size: 13px;
   }
 }
+
+/* ===== Gallery visual system: applied after the page-specific styles ===== */
+body { background: var(--cara-bg); color: var(--cara-text); }
+header.top.solid { background: rgba(255,255,255,.94); color: var(--cara-text); border-bottom-color: var(--cara-line); }
+header.top nav a[href*="account.html"] { color: var(--cara-accent); border-color: rgba(52,59,100,.24); }
+header.top nav a[href*="builder.html"], header.top nav a.cta[href*="builder.html"], .btn.dark, .btn.accent, .btn.plum {
+  background: var(--cara-accent); border-color: var(--cara-accent); color: #fff; box-shadow: 0 6px 16px rgba(52,59,100,.16);
+}
+header.top nav a[href*="builder.html"]:hover, .btn.dark:hover, .btn.accent:hover, .btn.plum:hover { background: #292F54; border-color: #292F54; color: #fff; }
+:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible { outline: 3px solid var(--cara-accent); outline-offset: 3px; }
+input:focus-visible, select:focus-visible, textarea:focus-visible { box-shadow: 0 0 0 3px rgba(52,59,100,.13); }
+.panel, .account-card, .account-design, .account-order, .path, .sp-card, .wk-card, .gallery-card, .pg-img, .pg-grid > div, .wv-card, .wv-done {
+  background-color: var(--cara-surface); border-color: var(--cara-line); box-shadow: var(--cara-shadow-soft);
+}
+.path.tint { background: var(--cara-accent-soft); }
+.tool[aria-pressed="true"], .chipbar > [aria-pressed="true"], .chipbar > .on, .chipbar > .active, .chipbar > .sel, .chipbar > [aria-selected="true"] {
+  background: var(--cara-accent); border-color: var(--cara-accent); color: #fff; box-shadow: 0 5px 14px rgba(52,59,100,.16);
+}
+.tool:hover, .chipbar > *:hover { border-color: var(--cara-accent); color: var(--cara-accent); }
+.gal-tools #q:focus, .gal-tools #q:focus-visible { border-color: var(--cara-accent); box-shadow: 0 0 0 3px rgba(52,59,100,.13); }
+.wk-grid > *, .mini-gal > a { background: var(--cara-surface); border-color: var(--cara-line); box-shadow: var(--cara-shadow-soft); }
+.wk-grid > *:hover, .mini-gal > a:hover { border-color: var(--cara-detail); box-shadow: var(--cara-shadow-card); }
+.wk-fav { color: var(--cara-detail); } .wk-fav[aria-pressed="true"] { color: var(--cara-accent); }
+.wk-lb { background: var(--cara-surface); color: var(--cara-text); } .wk-lb::backdrop { background: rgba(25,27,48,.78); }
+.sec h2::after { background: linear-gradient(90deg, var(--cara-detail), rgba(155,143,193,.12)); }
+.steps li::before { background: var(--cara-accent-soft); border-color: rgba(155,143,193,.55); color: var(--cara-accent); }
+.hero.hero2 {
+  background: radial-gradient(ellipse 32rem 38rem at 74% 48%, rgba(155,143,193,.20), transparent 72%), radial-gradient(ellipse 26rem 30rem at 12% 94%, rgba(155,143,193,.10), transparent 74%), linear-gradient(118deg, #17192E 0%, #252944 52%, #191B31 100%);
+}
+.hero2 .hero-copy::before { color: #D9D5EB; border-color: rgba(217,213,235,.30); background: rgba(217,213,235,.07); }
+.hero2 .hero-copy h1 .gilt { background: linear-gradient(105deg, #B8AED9 4%, #F4F2FA 43%, #A79BCB 70%, #E7E2F4 95%); -webkit-background-clip: text; background-clip: text; }
+.hero2 .prod::before { background: radial-gradient(circle at 42% 38%, rgba(255,255,255,.13), transparent 54%), radial-gradient(circle, rgba(75,82,133,.46) 0 54%, rgba(155,143,193,.18) 54.3% 54.8%, transparent 55.2%); border-color: rgba(155,143,193,.28); }
+.hero2 .prod::after { border-color: rgba(155,143,193,.25); }
+.hero2 .fc { background: rgba(24,26,48,.82); border-color: rgba(155,143,193,.42); } .hero2 .fc b { color: #E4DFF2; } .hero2 .hint { color: #D9D5EB; }
+.wv-stage { background: radial-gradient(ellipse at 50% 0%, #343B64, #22243B 72%); border-color: rgba(155,143,193,.40); box-shadow: var(--cara-shadow-card); }
+.wv-bar i { background: linear-gradient(90deg, #9B8FC1, #D8D2EA); } .wv-meter { color: #F1EFF8; }
+.foot { background: #22243B; color: #E2E1EB; border-color: rgba(255,255,255,.12); }
+@media (max-width:850px) {
+  header.top.has-mobile-menu nav, header.top.has-mobile-menu nav[aria-label] { background: rgba(255,255,255,.98); border-color: var(--cara-line); }
+  header.top.has-mobile-menu nav a[href*="builder.html"] { background: var(--cara-accent); border-color: var(--cara-accent); color: #fff !important; }
+}
+@media (prefers-reduced-motion:reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; } }
