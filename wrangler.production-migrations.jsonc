@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cara-accounts-production-migrations",
+  "d1_databases": [
+    {
+      "binding": "ACCOUNTS_DB",
+      "database_name": "cara-accounts-production",
+      "database_id": "5121003c-2f0c-4016-a551-11743945dd08",
+      "migrations_dir": "migrations",
+    },
+  ],
+}

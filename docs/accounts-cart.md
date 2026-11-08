@@ -1,6 +1,6 @@
 # Accounts, guest cart, and order tracking — design
 
-**Status:** design document only. No account provider, database, login, cart, order migration, SMS provider, or public tracking endpoint is implemented by this document.
+**Status:** account foundation and first login/dashboard implementation are in progress on a feature branch. Telegram login verification, secure sessions, saved designs, and account-scoped order history are implemented in code; this is not yet merged or deployed.
 
 ## Goals and constraints
 
@@ -88,8 +88,10 @@ Do not store raw session or public tracking tokens. Store a cryptographic hash a
 
 ## Implementation status — account foundation
 
-- The first D1 migration is staged at `migrations/0001_accounts.sql` on a feature branch. It creates users, verified provider identity links, hashed sessions, saved designs, guest/account carts, cart items, and hashed order-access tokens.
+- D1 migrations `0001_accounts.sql` and `0002_account_sessions.sql` create users, verified provider identity links, hashed sessions, saved designs, guest/account carts, cart items, hashed order-access tokens, Telegram replay protection, and minimal profile metadata.
 - A Node regression test checks the schema's core security and ownership constraints.
-- This migration has **not** been applied to a Cloudflare D1 database. No D1 database binding, production route, login UI, provider callback, or session endpoint is enabled yet.
+- The preview D1 database has successfully applied migration `0001_accounts.sql`. Migration `0002_account_sessions.sql` is pending until the feature branch is reviewed and merged; no production D1 binding or production deployment is enabled.
 - Existing checkout, payment settlement, and the ORDERS KV namespace remain unchanged.
-- Next implementation step: provision a separate preview D1 database, attach it only to a preview Worker, apply this migration, and exercise the schema before implementing provider verification and secure cookie sessions.
+- Telegram authentication uses the official Login Widget HMAC verification, a five-minute freshness window, replay-digest storage, rate limiting, and opaque HttpOnly/Secure/SameSite session cookies. The Worker needs `TELEGRAM_BOT_USERNAME` as a variable and a bot configured for the site domain in BotFather; `TELEGRAM_BOT_TOKEN` remains a secret.
+- Account UI includes Telegram sign-in, saved-design preview/reopen/delete, and read-only history for orders created while signed in. Existing orders are not automatically linked because Telegram does not prove ownership of the checkout phone number.
+- Bale login, guest-cart merge, profile editing, account-linked legacy orders, and public order tracking remain separate follow-up work. Bale is intentionally not enabled without a documented, verifiable identity flow.
