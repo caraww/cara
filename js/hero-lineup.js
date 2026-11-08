@@ -100,14 +100,7 @@
   sh.addColorStop(0,"rgba(0,0,0,.85)");sh.addColorStop(1,"rgba(0,0,0,0)");shg.fillStyle=sh;shg.fillRect(0,0,48,48);
 
   let active=0,frame=0,visible=false,mx=0,my=0,w=0,h=0,dpr=1,startX=0,startY=0,pointerId=null;
-  const title=root.querySelector(".cara-bracelet-lineup__title");
   const count=root.querySelector(".cara-bracelet-lineup__count");
-  const dotsRoot=root.querySelector(".cara-bracelet-lineup__dots");
-  const dots=entries.map((entry,i)=>{
-    const b=document.createElement("button");b.type="button";b.className="cara-bracelet-lineup__dot";
-    b.setAttribute("aria-label","نمایش دستبند "+entry.title);b.addEventListener("click",()=>show(i));
-    dotsRoot.append(b);return b;
-  });
   function fit(entry){
     const c=entry.canvas,rect=c.getBoundingClientRect(),box=rect.width||Math.min(innerWidth<=820?innerWidth*.82:620,innerHeight*.78);
     const size=Math.max(1,box);dpr=Math.min(devicePixelRatio||1,2);
@@ -156,8 +149,6 @@
   function show(next){
     active=(next+entries.length)%entries.length;
     entries.forEach((entry,i)=>{const on=i===active;entry.card.classList.toggle("is-active",on);entry.card.setAttribute("aria-hidden",on?"false":"true");});
-    dots.forEach((dot,i)=>{const on=i===active;dot.classList.toggle("is-active",on);dot.setAttribute("aria-current",on?"true":"false");});
-    if(title)title.textContent=entries[active].title;
     if(count)count.textContent=(active+1).toLocaleString("fa-IR")+" از "+entries.length.toLocaleString("fa-IR");
     render(entries[active],performance.now());
   }
