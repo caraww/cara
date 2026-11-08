@@ -731,13 +731,29 @@ try {
 
   /* ================= نوار تب‌ها: هر بار فقط یه پنل باز می‌شه ================= */
   const tabs = [...document.querySelectorAll(".sp-tab")];
+  let activePanel = tabs.find((t) => t.getAttribute("aria-expanded") === "true")?.dataset.panel || "";
   function openPanel(id) {
-    tabs.forEach((t) => { const on = t.dataset.panel === id; t.setAttribute("aria-expanded", on); $(t.dataset.panel).hidden = !on; });
+    const previous = activePanel;
+    if (previous && previous !== id) {
+      const panel = $(previous);
+      const trigger = tabs.find((t) => t.dataset.panel === previous);
+      if (panel && trigger && panel.contains(document.activeElement)) trigger.focus();
+    }
+    tabs.forEach((t) => { const on = t.dataset.panel === id; t.setAttribute("aria-expanded", String(on)); $(t.dataset.panel).hidden = !on; });
+    activePanel = id;
     if (id === "textCard") update();
     if (id) $(id).scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
   tabs.forEach((t) => (t.onclick = () => openPanel(t.getAttribute("aria-expanded") === "true" ? "" : t.dataset.panel)));
   document.querySelectorAll("[data-close]").forEach((x) => (x.onclick = () => openPanel("")));
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape" || !activePanel) return;
+    const panel = $(activePanel);
+    if (panel && !panel.hidden) {
+      e.preventDefault();
+      openPanel("");
+    }
+  });
 
   /* ================= نوار سفارش پایین صفحه (موبایل) ================= */
   const mbTotal = $("mbTotal"), mbNext = $("mbNext"), realTotal = $("total");
@@ -780,6 +796,8 @@ try {
   btn.type = "button";
   btn.className = "mb-color";
   btn.setAttribute("aria-expanded", "false");
+  aside.id = aside.id || "mobilePalettePanel";
+  btn.setAttribute("aria-controls", aside.id);
   btn.innerHTML = '<i></i><span>رنگ‌ها</span>';
   bar.insertBefore(btn, bar.firstChild);
   var scrim = document.createElement("div");
@@ -810,6 +828,7 @@ try {
     aside.classList.toggle("mb-pinned", o && pinned);
     scrim.classList.toggle("on", o && !pinned);
     btn.setAttribute("aria-expanded", o ? "true" : "false");
+    if (!o && aside.contains(document.activeElement)) btn.focus();
   }
   pin.addEventListener("click", function () {
     pinned = !pinned;
