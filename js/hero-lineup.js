@@ -1,4 +1,4 @@
-/* Four photo-guided bracelet patterns rendered with the original Thousand Eyes 3D Delica engine. */
+/* Three bracelet patterns rendered with the original 3D Delica engine. */
 (() => {
   const root=document.getElementById("caraBraceletLineup");
   if(!root)return;
@@ -12,9 +12,7 @@
   const palettes={
     "thousand-eyes":["#171717","#F0EDF2","#791D27"],
     waterfall:["#DF2A1B","#251A82","#F1E00A"],
-    duck:["#F8F5EC","#F2C52F","#E99A28","#26242A","#F7E7C4"],
-    peacock:["#f0eee5","#15545b","#299ba0","#74c5c1","#c9c7bc","#17364c"]
-  };
+    duck:["#F8F5EC","#F2C52F","#E99A28","#26242A","#F7E7C4"]  };
   const models={
     "thousand-eyes":(r,j)=>{
       const dr=r-9,dj=j-CC;let c=0,e=0;
@@ -55,14 +53,7 @@
       const mark=rows[j]?.[x]||".";
       return mark==="1"?1:mark==="2"?2:mark==="3"?3:mark==="4"?2:0;
     },
-    peacock:(r,j)=>{
-      const x=r%30,dx=Math.min(x,30-x),dy=Math.abs(j-6);
-      if(dx<=1&&dy<=1)return 5;
-      if(dx<=2&&dy<=2)return 1;
-      if(dx<=3&&dy<=3)return 2;
-      if(dx<=5&&dy<=4)return 3;
-      return (j===0||j===12)?4:(r%6===0?1:0);
-    }
+
   };
   const sprites=new Map();
   const clamp=x=>Math.max(0,Math.min(1,x)),ease=x=>1-Math.pow(1-x,3);

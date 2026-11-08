@@ -6,23 +6,23 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 
-test("homepage hero renders all four bracelets with the original rotating 3D Delica engine and swipe controls", () => {
+test("homepage hero renders the three selected bracelets with the original rotating 3D Delica engine and swipe controls", () => {
   const html = read("index.html");
   const script = read("js/hero-lineup.js");
   const css = read("css/hero-lineup.css");
   assert.match(html, /id="caraBraceletLineup"/);
-  for (const id of ["thousand-eyes", "waterfall", "duck", "peacock"]) assert.match(html, new RegExp('data-bracelet="' + id + '"'));
-  assert.match(html, /hero-lineup\.js\?v=4/);
+  assert.doesNotMatch(html, /برای دیدن طرح بعدی/);
+  const lineupStart = html.indexOf('class="cara-bracelet-lineup"');
+  const lineup = html.slice(lineupStart, html.indexOf("</section>", lineupStart));
+  assert.doesNotMatch(lineup, /data-bracelet="peacock"|طاووس/);
+  assert.doesNotMatch(script, /peacock/);
+  for (const id of ["thousand-eyes", "waterfall", "duck"]) assert.match(html, new RegExp('data-bracelet="' + id + '"'));
+  assert.match(html, /hero-lineup\.js\?v=5/);
   assert.match(script, /const palettes=\{/);
   assert.match(script, /const models=\{/);
   assert.match(script, /"#DF2A1B"/);
   assert.match(script, /"#251A82"/);
   assert.match(script, /"#F1E00A"/);
-  assert.match(script, /111111111/);
-  assert.match(script, /dy=Math.abs\(j-6\)/);
-  assert.match(script, /dx<=5&&dy<=4/);
-  assert.match(script, /const flow=r\*\.72/);
-  assert.match(script, /R=174\*s,Ry=118\*s/);
   assert.match(css, /translateY\(7px\)/);
   assert.match(css, /aspect-ratio:1\/1/);
   assert.match(css, /cara-bracelet-lineup__viewport::before/);
