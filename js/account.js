@@ -54,6 +54,15 @@
     }));
   }
 
+  async function loadProfile() {
+    try {
+      const profile = await api("/api/account/profile");
+      $("profilePhone").value = profile.phone || "";
+      $("marketingSmsConsent").checked = !!profile.marketingSmsConsent;
+      message("profileMessage", profile.phoneVerified ? "شماره موبایل تأیید شده است." : (profile.phone ? "شماره ذخیره شده؛ هنوز تأیید پیامکی نشده است." : ""));
+    } catch (error) { message("profileMessage", error.message); }
+  }
+
   async function loadDesigns() {
     const designs = await api("/api/account/designs");
     const list = $("designList"); list.replaceChildren();
@@ -98,12 +107,33 @@
       loginPanel.hidden = true; dashboard.hidden = false;
       $("welcomeName").textContent = "سلام " + (user.displayName || "دوست cara") + "!";
       $("welcomeHandle").textContent = user.username ? "@" + user.username : "حساب تلگرام تأییدشده";
-      await Promise.all([loadDesigns(), loadOrders()]);
+      await Promise.allSettled([loadProfile(), loadDesigns(), loadOrders()]);
     } catch {
       loginPanel.hidden = false; dashboard.hidden = true;
       await installTelegramLogin();
     }
   }
+
+  $("profileForm").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = $("saveProfile");
+    button.disabled = true;
+    message("profileMessage", "در حال ذخیره…");
+    try {
+      const profile = await api("/api/account/profile", {
+        method: "PUT",
+        body: JSON.stringify({
+          phone: $("profilePhone").value.trim(),
+          marketingSmsConsent: $("marketingSmsConsent").checked,
+        }),
+      });
+      $("profilePhone").value = profile.phone || "";
+      message("profileMessage", profile.marketingSmsConsent
+        ? "اطلاعات ذخیره شد. برای استفاده تبلیغاتی، شماره هنوز باید تأیید پیامکی شود."
+        : "اطلاعات ذخیره شد. رضایت پیامک تبلیغاتی فعال نیست.");
+    } catch (error) { message("profileMessage", error.message); }
+    finally { button.disabled = false; }
+  });
 
   $("logoutButton").addEventListener("click", async () => {
     try { await api("/api/account/logout", { method: "POST", body: "{}" }); location.reload(); }
