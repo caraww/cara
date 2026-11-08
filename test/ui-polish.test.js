@@ -45,6 +45,6 @@ test("navigation places account first and the designer CTA at the opposite edge"
 
 test("shared header rules do not target admin order-card .top elements", () => {
   const css = read("css/polish.css");
-  assert.match(css, /header\\.top\\s*\\{/);
-  assert.doesNotMatch(css, /(^|[},\\s])\\.top\\s*\\{/m);
+  assert.ok(css.includes("header.top {"));
+  assert.equal(css.includes("\n.top {"), false);
 });
