@@ -22,16 +22,10 @@ test("homepage hero uses a minimal signature art direction", () => {
 });
 
 
-test("hero bracelet uses classic glossy beads with individual shimmer and mobile nav is physically left anchored", () => {
-  const bracelet = read("js/hero-bracelet.js");
+test("mobile navigation remains physically left anchored alongside the new gallery hero", () => {
+  const html = read("index.html");
   const polish = read("css/polish.css");
-  assert.ok(bracelet.includes("c.width=c.height=48"));
-  assert.ok(bracelet.includes("x.ellipse(24,14,19,8"));
-  assert.ok(bracelet.includes("x.ellipse(24,9.5,3.3,1.8"));
-  assert.ok(bracelet.includes("مرکز سطح کاملاً بسته می‌ماند"));
-  assert.ok(bracelet.includes("const shimmer=RM?0:.08+.24"));
-  assert.ok(bracelet.includes("Math.sin(t*.0017-i*.41-j*.83)"));
-  assert.ok(bracelet.includes("Math.min(devicePixelRatio||1,2)"));
+  assert.doesNotMatch(html, /js\/hero-bracelet\.js/);
   assert.ok(polish.includes("left:14px !important"));
   assert.ok(polish.includes("right:auto !important"));
   assert.ok(polish.includes("inset-inline-start:auto !important"));
