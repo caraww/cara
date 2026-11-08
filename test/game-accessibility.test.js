@@ -17,3 +17,13 @@ test("Worker rate limiting fails closed when Durable Object is missing or unavai
   assert.match(source, /export async function rateLimit\(env, key, max, windowMs\) \{\s*if \(!env\.GAME\) return false;\s*try \{ return await stub\(env, "rl:" \+ key\)\.hit\(max, windowMs\); \} catch \{ return false; \}\s*\}/);
   assert.doesNotMatch(source, /export async function rateLimit[\s\S]{0,260}catch \{ return true; \}/);
 });
+
+
+test("game page loads its styles from an external stylesheet", () => {
+  const html = fs.readFileSync(path.join(__dirname, "..", "game.html"), "utf8");
+  assert.match(html, /<link rel="stylesheet" href="\/css\/game\.css"/);
+  assert.doesNotMatch(html, /<style[\s>]/i);
+  const css = fs.readFileSync(path.join(__dirname, "..", "css", "game.css"), "utf8");
+  assert.match(css, /\.gm\s*\{/);
+  assert.match(css, /\.gbtn\s*\{/);
+});
