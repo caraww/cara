@@ -63,13 +63,15 @@
       const canvas = document.createElement("canvas"); renderPattern(canvas, item.design);
       const title = document.createElement("h3"); title.textContent = item.title || "طرح بدون عنوان";
       const date = document.createElement("p"); date.className = "account-note"; date.textContent = new Date(item.updatedAt * 1000).toLocaleDateString("fa-IR");
+      const open = document.createElement("button"); open.className = "btn sm accent"; open.type = "button"; open.textContent = "باز کردن در استودیو";
+      open.addEventListener("click", () => { localStorage.setItem("cara-pattern", JSON.stringify(item.design)); location.href = "/builder.html"; });
       const remove = document.createElement("button"); remove.className = "btn sm"; remove.type = "button"; remove.textContent = "حذف طرح";
       remove.addEventListener("click", async () => {
         if (!confirm("این طرح از حساب کاربری حذف شود؟")) return;
         try { await api("/api/account/designs/" + encodeURIComponent(item.id), { method: "DELETE" }); await loadDesigns(); }
         catch (error) { message("designMessage", error.message); }
       });
-      card.append(canvas, title, date, remove); list.append(card);
+      card.append(canvas, title, date, open, remove); list.append(card);
     });
   }
 
@@ -84,7 +86,7 @@
       const info = document.createElement("div");
       info.innerHTML = '<strong>سفارش ' + esc(order.code) + '</strong><small>' + esc(new Date(order.createdAt).toLocaleDateString("fa-IR")) + ' · ' + fa(order.priceToman) + ' تومان</small>';
       const status = document.createElement("span"); status.className = "account-status";
-      status.textContent = orderLabels[order.fulfillment] || orderLabels[order.status] || "در حال بررسی";
+      status.textContent = order.status === "paid" ? (orderLabels[order.fulfillment] || "ثبت‌شده") : (orderLabels[order.status] || "در حال بررسی");
       card.append(info, status); list.append(card);
     });
   }
