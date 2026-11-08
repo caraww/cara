@@ -15,7 +15,7 @@ test("all standalone pages expose a keyboard skip link and focusable main landma
 });
 
 test("generated work and color pages include the same skip navigation", () => {
-  const generator = fs.readFileSync(path.join(__dirname, "..", "tools", "build-pages.js"), "utf8");
+  const generator = fs.readFileSync(path.join(__dirname, "..", "lib", "generated-page-layout.js"), "utf8");
   assert.match(generator, /class="skip-link" href="#main-content"/);
   assert.match(generator, /<main class="pg" id="main-content" tabindex="-1">/);
   assert.match(generator, /css\/accessibility\.css/);
