@@ -100,3 +100,24 @@
 @media (prefers-reduced-motion: reduce) {
   .top.has-mobile-menu nav { scroll-behavior: auto; }
 }
+
+
+/* Page-specific studio rules have stronger selectors than the generic menu.
+   Match their scope so the collapsed state wins on every mobile layout. */
+@media (max-width: 850px) {
+  body:has(.wrap) .top.has-mobile-menu nav,
+  body:has(.builder) .top.has-mobile-menu nav#builderNav,
+  body:has(.gal-tools) .top.has-mobile-menu nav,
+  body:has(.gm) .top.has-mobile-menu nav,
+  body:has(.ws-page) .top.has-mobile-menu nav {
+    display: none !important;
+  }
+
+  body:has(.wrap) .top.has-mobile-menu.menu-open nav,
+  body:has(.builder) .top.has-mobile-menu.menu-open nav#builderNav,
+  body:has(.gal-tools) .top.has-mobile-menu.menu-open nav,
+  body:has(.gm) .top.has-mobile-menu.menu-open nav,
+  body:has(.ws-page) .top.has-mobile-menu.menu-open nav {
+    display: flex !important;
+  }
+}
