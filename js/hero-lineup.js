@@ -11,9 +11,9 @@
   const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const palettes={
     "thousand-eyes":["#171717","#F0EDF2","#791D27"],
-    waterfall:["#17203f","#e8c52a","#ee7c22","#c93635","#f4e9d7"],
-    duck:["#5e9eae","#e9e3d4","#f4cf26","#e88b24","#19171b"],
-    peacock:["#f0eee5","#15545b","#299ba0","#74c5c1","#c9c7bc","#17364c"]
+    waterfall:["#102D50","#159EAE","#55C8B5","#F1C84A","#EF8150","#D94E70","#F5EFE3"],
+    duck:["#F8F5EC","#F2C52F","#E99A28","#26242A","#F7E7C4"],
+    peacock:["#12334C","#087F82","#20A9A4","#65C9B2","#D9B64D","#F1E8D4"]
   };
   const models={
     "thousand-eyes":(r,j)=>{
@@ -29,26 +29,44 @@
       return (!e&&Math.abs(dj)>3)?-1:c+e;
     },
     waterfall:(r,j)=>{
-      const wave=Math.floor((r+Math.sin(r*.31)*2.3+Math.sin(j*.72)*1.2)/3.6);
-      const seq=[1,2,3,0,3,2,1,4,2,3];
-      return (j===0||j===12)?(wave%2?3:2):seq[(wave%seq.length+seq.length)%seq.length];
+      const flow=r*.62+j*1.9+Math.sin(r*.19)*3.2+Math.sin(j*.8+r*.08)*1.4;
+      const band=Math.floor(flow/3.1);
+      const seq=[0,1,2,1,3,4,5,4,2,1,6,2,3,5];
+      return seq[(band%seq.length+seq.length)%seq.length];
     },
     duck:(r,j)=>{
-      const xx=r%15;
-      const motif=["...............","......22.......",".....2222..3...","....22222233...","....2222222....",".....222222....","..............."][Math.min(j,6)];
-      const mark=motif[xx];
-      if(mark==="2")return 2;
-      if(mark==="3")return 3;
-      if((xx===6||xx===7)&&j===2)return 4;
-      return 0;
+      const x=r%30;
+      if(x>=15)return 0;
+      const rows=[
+        "...............",
+        "......111......",
+        ".....11111.....",
+        "....1111111....",
+        "...111111111...",
+        "...111111131...",
+        "...1111111144..",
+        "...111111111...",
+        "....1111111....",
+        ".....11111.....",
+        "......111......",
+        "...............",
+        "..............."
+      ];
+      const mark=rows[j]?.[x]||".";
+      return mark==="1"?1:mark==="2"?2:mark==="3"?3:mark==="4"?2:0;
     },
     peacock:(r,j)=>{
-      const x=r%30,dx=Math.min(x,30-x),dy=Math.abs(j-6);
-      if(dx<=1&&dy<=1)return 5;
-      if(dx<=2&&dy<=2)return 1;
-      if(dx<=3&&dy<=3)return 2;
-      if(dx<=5&&dy<=4)return 3;
-      return (j===0||j===12)?4:(r%6===0?1:0);
+      const x=r%30,dx=Math.min(x,30-x),dy=j;
+      const featherWidth=1+dy*.47;
+      if(dy<=11&&dx<=featherWidth){
+        if(dy<=1&&dx===0)return 5;
+        if(dy<=3&&dx<=1)return 0;
+        if(dy<=4&&dx<=2)return 3;
+        if(dy<=6&&dx<=3)return 1;
+        if(dy<=8&&dx<=4)return 2;
+        return 4;
+      }
+      return (j===12&&r%5===0)?5:0;
     }
   };
   const sprites=new Map();
@@ -116,7 +134,7 @@
     const {ctx,w:width,h:height}=fit(entry);w=width;h=height;
     const id=entry.card.dataset.bracelet,palette=palettes[id]||palettes["thousand-eyes"],pattern=models[id]||models["thousand-eyes"];
     ctx.clearRect(0,0,w,h);
-    const s=w/560,cx=w/2,cy=h/2+14*s,R=215*s,Ry=(80+my*45)*s,bs=TAU*R/N;
+    const s=w/560,cx=w/2,cy=h/2,R=215*s,Ry=(80+my*45)*s,bs=TAU*R/N;
     const rot=Math.PI/2-9.5/N*TAU+(reduced?0:t*.00011+Math.sin(t/2800)*.12+mx*.7),lightAngle=reduced?0:t*.0012;
     ctx.fillStyle="rgba(0,0,0,.35)";ctx.filter="blur("+(10*s)+"px)";
     ctx.beginPath();ctx.ellipse(cx,cy+Ry+bs*8,R*.9,22*s,0,0,TAU);ctx.fill();ctx.filter="none";
