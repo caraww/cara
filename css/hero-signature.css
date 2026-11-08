@@ -27,18 +27,19 @@
   margin: 0;
 }
 .hero2 .hero-copy::before {
-  content: "دست‌ساز، با امضای تو";
+  content: "دست‌ساز با امضای تو";
   display: inline-flex;
   align-items: center;
   margin: 0 0 clamp(18px, 3vh, 30px);
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: none;
-  color: #c9c4dc;
-  font-size: 12px;
+  padding: 7px 15px;
+  border: 1px solid rgba(207,174,108,.42);
+  border-radius: 999px;
+  background: rgba(207,174,108,.09);
+  color: #f3e2b4;
+  font-family: "Vazirmatn", Tahoma, system-ui, sans-serif;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: .16em;
+  letter-spacing: .02em;
 }
 .hero2 .hero-copy h1 {
   max-width: 10.5em;
@@ -155,8 +156,9 @@
   .hero2 .hero-copy { width: 100%; max-width: 560px; }
   .hero2 .hero-copy::before {
     margin-bottom: 13px;
-    font-size: 10px;
-    letter-spacing: .13em;
+    padding: 6px 11px;
+    font-size: 11px;
+    letter-spacing: .02em;
   }
   .hero2 .hero-copy h1 {
     max-width: 12em;
