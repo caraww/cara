@@ -121,3 +121,11 @@
     display: flex !important;
   }
 }
+
+/* Keep the order CTA readable on the light mobile menu surface. */
+@media (max-width: 850px) {
+  .top.has-mobile-menu nav a.cta[href="checkout.html"] {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+}
