@@ -29,7 +29,7 @@ test("homepage hero renders the three selected bracelets with the original rotat
   assert.match(css, /transform:translate\(-50%,-50%\)/);
   assert.match(css, /\.hero2 \.cara-bracelet-card figcaption/);
   assert.match(css, /aspect-ratio:1\/1/);
-  assert.match(css, /cara-bracelet-lineup__viewport::before/);
+  assert.match(css, /cara-bracelet-lineup__viewport::before/);\n  assert.match(css, /\\.hero2 \\.prod::before,[\\s\\S]*?content:none !important/);\n  assert.match(css, /top:50% !important/);\n  assert.match(css, /left:50% !important/);\n  assert.match(css, /inset:0;\\n  width:100%;\\n  height:100%/);
   assert.match(script, /function sprite\(/);
   assert.match(script, /Miyuki Delica thread opening/);
   assert.match(script, /const rot=.*t\*\.00011/s);
