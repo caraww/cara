@@ -20,7 +20,7 @@ try {
 
   /* برچسب‌ها فقط وقتی هست که توی info.json نوشته باشی */
   const tags = [...new Set(W.flatMap((w) => w.tags || []))];
-  $("tagbar").innerHTML = tags.length ? ["همه", ...tags].map((t) => `<button class="tool" data-tag="${esc(t)}" aria-pressed="${t === "همه"}">${esc(t)}</button>`).join("") : "";
+  $("tagbar").innerHTML = tags.length ? ["همه", ...tags].map((t) => `<button type="button" class="tool" data-tag="${esc(t)}" aria-pressed="${t === "همه"}">${esc(t)}</button>`).join("") : "";
   $("tagbar").hidden = !tags.length; $("tagSec").hidden = !tags.length;
   if (W.length < 6) $("q").hidden = true;
   if (!W.length) $("wkTools").hidden = true;
@@ -105,7 +105,7 @@ try {
     $("lbTitle").textContent = w.title; $("lbNote").textContent = w.note; $("lbNote").hidden = !w.note;
     $("lbTags").innerHTML = (w.tags || []).map((t) => `<span>${esc(t)}</span>`).join("");
     const imgs = w.images && w.images.length > 1 ? w.images : [];
-    $("lbThumbs").innerHTML = imgs.map((s, k) => `<button type="button" class="${k ? "" : "on"}" data-src="${esc(s)}" aria-label="عکس ${fa(k + 1)}"><img src="${esc(s)}" alt=""></button>`).join("");
+    $("lbThumbs").innerHTML = imgs.map((s, k) => `<button type="button" class="${k ? "" : "on"}" data-src="${esc(s)}" aria-label="عکس ${fa(k + 1)}" aria-pressed="${k === 0}"><img src="${esc(s)}" alt=""></button>`).join("");
     $("lbThumbs").hidden = !imgs.length;
     $("lbNum").textContent = `${fa(cur + 1)} از ${fa(list.length)}`;
     $("lbFav").setAttribute("aria-pressed", favs.has(w.id));
@@ -123,7 +123,7 @@ try {
   }
   $("lbThumbs").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-src]"); if (!b) return;
-    $("lbThumbs").querySelectorAll("button").forEach((x) => x.classList.toggle("on", x === b));
+    $("lbThumbs").querySelectorAll("button").forEach((x) => { const active = x === b; x.classList.toggle("on", active); x.setAttribute("aria-pressed", String(active)); });
     const im = $("lbImg");
     im.classList.remove("in");
     delete im.dataset.thumbTried;
