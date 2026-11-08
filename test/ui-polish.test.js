@@ -20,9 +20,9 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     "customers.html",
   ]) {
     const html = read(file);
-    assert.match(html, /\/css\/polish\.css\?v=2/, file + " should load polish.css");
+    assert.match(html, /\/css\/polish\.css\?v=3/, file + " should load polish.css");
     assert.ok(
-      html.indexOf("/css/polish.css?v=2") > html.lastIndexOf('rel="stylesheet"'),
+      html.indexOf("/css/polish.css?v=3") > html.lastIndexOf('rel="stylesheet"'),
       file + " should load the shared layer after its page styles",
     );
   }
@@ -30,7 +30,7 @@ test("shared cara visual system is loaded after page styles on primary pages", (
 
 test("generated bracelet and color pages share the same navigation and visual system", () => {
   const layout = read("lib/generated-page-layout.js");
-  assert.match(layout, /\/css\/polish\.css\?v=2/);
+  assert.match(layout, /\/css\/polish\.css\?v=3/);
   assert.match(layout, /href="\/account\.html">حساب کاربری/);
   assert.match(layout, /href="\/builder\.html">طراحی دستبند/);
 });
@@ -47,4 +47,11 @@ test("shared header rules do not target admin order-card .top elements", () => {
   const css = read("css/polish.css");
   assert.ok(css.includes("header.top {"));
   assert.equal(css.includes("\n.top {"), false);
+});
+
+
+test("Gallery mobile menu stays compact and mostly opaque", () => {
+  const css = read("css/polish.css");
+  assert.match(css, /width:min\(196px,calc\(100vw - 24px\)\) !important;/);
+  assert.match(css, /background:rgba\(250,248,251,\.97\)/);
 });
