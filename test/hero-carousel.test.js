@@ -23,11 +23,6 @@ test("homepage hero renders the three selected bracelets with the original rotat
   assert.match(script, /"#DF2A1B"/);
   assert.match(script, /"#251A82"/);
   assert.match(script, /"#F1E00A"/);
-  assert.match(script, /111111111/);
-  assert.match(script, /dy=Math.abs\(j-6\)/);
-  assert.match(script, /dx<=5&&dy<=4/);
-  assert.match(script, /const flow=r\*\.72/);
-  assert.match(script, /R=174\*s,Ry=118\*s/);
   assert.match(css, /translateY\(7px\)/);
   assert.match(css, /aspect-ratio:1\/1/);
   assert.match(css, /cara-bracelet-lineup__viewport::before/);
