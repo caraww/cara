@@ -20,7 +20,7 @@ test("checkout validation errors and payment status are announced to assistive t
   assert.match(match[1], /\baria-atomic="true"/);
   assert.match(match[1], /\bhidden\b/, "error stays hidden until checkout.js reveals it");
 
-  const discountStatus = html.match(/<p class="muted" id="dcNote"([^>]*)><\\/p>/);
+  const discountStatus = html.match(/<p class="muted" id="dcNote"([^>]*)><\/p>/);
   assert.ok(discountStatus, "discount feedback region must remain present");
   assert.match(discountStatus[1], /\\brole="status"/);
   assert.match(discountStatus[1], /\\baria-live="polite"/);
