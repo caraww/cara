@@ -538,3 +538,15 @@
   }
   .ws-sticky .preview canvas { max-height: calc(40svh - 60px); }
 }
+
+
+/* Upload page mobile navigation: keep the purple order button label white. */
+@media (max-width: 850px) {
+  body:has(.ws-page) header.top nav a.btn.dark[href="checkout.html"],
+  body:has(.ws-page) header.top nav a.btn.dark[href="checkout.html"]:visited,
+  body:has(.ws-page) header.top nav a.btn.dark[href="checkout.html"]:hover,
+  body:has(.ws-page) header.top nav a.btn.dark[href="checkout.html"]:active {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+}
