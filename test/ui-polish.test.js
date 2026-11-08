@@ -53,5 +53,6 @@ test("shared header rules do not target admin order-card .top elements", () => {
 test("Gallery mobile menu stays compact and mostly opaque", () => {
   const css = read("css/polish.css");
   assert.match(css, /width:min\(196px,calc\(100vw - 24px\)\) !important;/);
+  assert.doesNotMatch(css, /width:min\(238px,calc\(100vw - 24px\)\) !important;/, "narrow phones must not override the 196px menu cap");
   assert.match(css, /background:rgba\(250,248,251,\.97\)/);
 });
