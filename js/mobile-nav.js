@@ -33,6 +33,11 @@
   nav.addEventListener("click", (event) => {
     if (event.target.closest("a")) close();
   });
+
+  // A disclosure menu should not remain visually expanded after keyboard focus leaves it.
+  header.addEventListener("focusout", (event) => {
+    if (!header.contains(event.relatedTarget)) close();
+  });
   document.addEventListener("pointerdown", (event) => {
     if (!header.contains(event.target)) close();
   });

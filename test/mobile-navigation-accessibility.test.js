@@ -2,6 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
+const vm = require("node:vm");
 const root = path.join(__dirname, "..");
 
 test("shared mobile navigation is left-anchored, accessible, and overlays without blank page space", () => {
@@ -37,4 +38,71 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   const template = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
   assert.match(template, /mobile-nav\.css/);
   assert.match(template, /mobile-nav\.js/);
+});
+
+
+test("mobile navigation closes when keyboard focus leaves the header", () => {
+  const source = fs.readFileSync(path.join(root, "js/mobile-nav.js"), "utf8");
+  const headerHandlers = {};
+  const navHandlers = {};
+  const documentHandlers = {};
+  const windowHandlers = {};
+  const attributes = {};
+  const classes = new Set();
+  const insideHeader = new Set();
+  let toggleFocusCount = 0;
+  const firstLink = { focus() {} };
+  const nav = {
+    id: "",
+    hasAttribute: () => false,
+    setAttribute() {},
+    querySelector: () => firstLink,
+    addEventListener: (name, handler) => { navHandlers[name] = handler; },
+    before() {},
+  };
+  const toggle = {
+    setAttribute: (name, value) => { attributes[name] = value; },
+    addEventListener: (name, handler) => { toggleHandlers[name] = handler; },
+    focus: () => { toggleFocusCount += 1; },
+  };
+  const toggleHandlers = {};
+  const header = {
+    classList: {
+      contains: (name) => classes.has(name),
+      add: (name) => classes.add(name),
+      remove: (name) => classes.delete(name),
+      toggle: (name, force) => force ? classes.add(name) : classes.delete(name),
+    },
+    querySelector: (selector) => selector === "nav" ? nav : null,
+    addEventListener: (name, handler) => { headerHandlers[name] = handler; },
+    contains: (target) => insideHeader.has(target),
+  };
+  insideHeader.add(toggle);
+  insideHeader.add(firstLink);
+  const document = {
+    querySelector: () => header,
+    createElement: () => toggle,
+    addEventListener: (name, handler) => { documentHandlers[name] = handler; },
+  };
+  const window = {
+    innerWidth: 390,
+    addEventListener: (name, handler) => { windowHandlers[name] = handler; },
+  };
+  vm.runInNewContext(source, { document, window });
+
+  toggleHandlers.click();
+  assert.equal(classes.has("menu-open"), true);
+  assert.equal(attributes["aria-expanded"], "true");
+
+  headerHandlers.focusout({ relatedTarget: firstLink });
+  assert.equal(classes.has("menu-open"), true, "focus moving within the header must keep the menu open");
+
+  headerHandlers.focusout({ relatedTarget: {} });
+  assert.equal(classes.has("menu-open"), false, "focus leaving the header must close the menu");
+  assert.equal(attributes["aria-expanded"], "false");
+
+  toggleHandlers.click();
+  documentHandlers.keydown({ key: "Escape" });
+  assert.equal(classes.has("menu-open"), false);
+  assert.ok(toggleFocusCount > 0, "Escape should restore focus to the menu toggle");
 });
