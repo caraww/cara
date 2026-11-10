@@ -9,7 +9,7 @@ const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 test("homepage hero uses a minimal signature art direction", () => {
   const html = read("index.html");
   const css = read("css/hero-signature.css");
-  assert.match(html, /hero-signature\\.css\\?v=3/);
+  assert.ok(html.includes("hero-signature.css?v=3"));
   assert.match(html, /id="caraBraceletLineup"/);
   assert.doesNotMatch(html, /class="fc fc[1-4]/);
   assert.doesNotMatch(html, /class="blob b[12]"/);
