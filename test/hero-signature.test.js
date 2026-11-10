@@ -9,7 +9,7 @@ const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 test("homepage hero uses a minimal signature art direction", () => {
   const html = read("index.html");
   const css = read("css/hero-signature.css");
-  assert.ok(html.includes("hero-signature.css?v=3"));
+  assert.ok(html.includes("hero-signature.css?v=4"));
   assert.match(html, /id="caraBraceletLineup"/);
   assert.doesNotMatch(html, /class="fc fc[1-4]/);
   assert.doesNotMatch(html, /class="blob b[12]"/);
@@ -37,7 +37,7 @@ test("legacy hero canvas stays hidden while mobile navigation remains left ancho
 test("homepage hero keeps bracelet and copy side by side on desktop and compact on mobile", () => {
   const html = read("index.html");
   const css = read("css/hero-signature.css");
-  assert.ok(html.includes("hero-signature.css?v=3"));
+  assert.ok(html.includes("hero-signature.css?v=4"));
   assert.ok(css.includes("grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr)"));
   assert.ok(css.includes("text-align: right;"));
   assert.ok(css.includes("padding: 76px 18px 20px;"));
@@ -46,10 +46,11 @@ test("homepage hero keeps bracelet and copy side by side on desktop and compact 
 });
 
 
-test("mobile bracelet lineup uses a compact stage and reduced hero spacing", () => {
-  const css = read("css/hero-lineup.css");
-  assert.match(css, /\.hero\.hero2\s*\{[^}]*padding:58px 16px 12px !important;/s);
-  assert.match(css, /\.hero2 \.cara-bracelet-lineup\s*\{[^}]*width:min\(100%,320px\) !important;/s);
-  assert.match(css, /\.hero2 \.cara-bracelet-lineup__viewport\s*\{[^}]*width:min\(78vw,300px,38svh\) !important;/s);
-  assert.match(css, /\.hero2 \.cara-bracelet-lineup__controls\s*\{[^}]*padding:4px 6px;/s);
+test("mobile bracelet lineup final sizing overrides lineup CSS and uses a fresh stylesheet URL", () => {
+  const html = read("index.html");
+  const css = read("css/hero-signature.css");
+  assert.ok(html.includes("/css/hero-signature.css?v=4"));
+  assert.ok(html.indexOf("css/hero-lineup.css?v=4") < html.indexOf("/css/hero-signature.css?v=4"));
+  assert.match(css, /\.hero2 \.cara-bracelet-lineup\s*\{[^}]*width:min\(100%,360px\) !important;/s);
+  assert.match(css, /\.hero2 \.cara-bracelet-lineup__viewport\s*\{[^}]*width:min\(88vw,340px,44svh\) !important;/s);
 });
