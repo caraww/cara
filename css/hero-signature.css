@@ -210,3 +210,12 @@
   .hero2 .cara-bracelet-lineup__viewport { width:min(78vw,300px); margin-inline:auto; }
   .hero2 .cara-bracelet-card .cara-bracelet-card__art { width:min(100%,300px,44vh) !important; }
 }
+
+/* Final mobile stage sizing — this file loads after hero-lineup.css. */
+@media (max-width:820px) {
+  .hero2 .cara-bracelet-lineup { width:min(100%,360px) !important; }
+  .hero2 .cara-bracelet-lineup__viewport {
+    width:min(88vw,340px,44svh) !important;
+    margin-inline:auto;
+  }
+}
