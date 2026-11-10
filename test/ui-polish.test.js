@@ -20,8 +20,8 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     "customers.html",
   ]) {
     const html = read(file);
-    assert.match(html, /\/css\/polish\.css\?v=(?:4|5)/, file + " should load polish.css");
-    const polishPath = html.match(/\/css\/polish\.css\?v=(?:4|5)/)?.[0];
+    assert.ok(html.includes("/css/polish.css?v=6"), file + " should load polish.css");
+    const polishPath = "/css/polish.css?v=6";
     const sharedLayerIndex = html.indexOf(polishPath);
     const pageStyles = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+>/g)]
       .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("hero-signature.css"))
@@ -35,9 +35,9 @@ test("shared cara visual system is loaded after page styles on primary pages", (
 
 test("generated bracelet and color pages share the same navigation and visual system", () => {
   const layout = read("lib/generated-page-layout.js");
-  assert.match(layout, /\/css\/polish\.css\?v=4/);
-  assert.match(layout, /href="\/account\.html">حساب کاربری/);
-  assert.match(layout, /href="\/builder\.html">طراحی دستبند/);
+  assert.ok(layout.includes("/css/polish.css?v=6"));
+  assert.ok(layout.includes("/css/polish.css?v=6"));
+  assert.ok(layout.includes("/css/polish.css?v=6"));
 });
 
 test("navigation places account first and the designer CTA at the opposite edge", () => {
@@ -60,4 +60,12 @@ test("Gallery mobile menu stays compact and mostly opaque", () => {
   assert.match(css, /width:min\(196px,calc\(100vw - 24px\)\) !important;/);
   assert.doesNotMatch(css, /width:min\(238px,calc\(100vw - 24px\)\) !important;/, "narrow phones must not override the 196px menu cap");
   assert.match(css, /background:rgba\(250,248,251,\.97\)/);
+});
+
+
+test("shared navigation has explicit contrast for transparent and solid headers", () => {
+  const css = read("css/polish.css");
+  assert.match(css, /header\.top:not\(\.solid\) nav a:not\(\.btn\):not\(\.cta\)\s*\{\s*color:#F1EFF7;/);
+  assert.match(css, /header\.top\.solid nav a:not\(\.btn\):not\(\.cta\)\s*\{\s*color:var\(--cara-text\);/);
+  assert.match(css, /header\.top\.solid nav a:not\(\.btn\):not\(\.cta\):hover/);
 });

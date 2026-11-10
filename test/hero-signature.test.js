@@ -9,7 +9,7 @@ const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 test("homepage hero uses a minimal signature art direction", () => {
   const html = read("index.html");
   const css = read("css/hero-signature.css");
-  assert.match(html, /hero-signature\.css\?v=2/);
+  assert.ok(html.includes("hero-signature.css?v=3"));
   assert.match(html, /id="caraBraceletLineup"/);
   assert.doesNotMatch(html, /class="fc fc[1-4]/);
   assert.doesNotMatch(html, /class="blob b[12]"/);
@@ -31,4 +31,16 @@ test("legacy hero canvas stays hidden while mobile navigation remains left ancho
   assert.ok(polish.includes("inset-inline-start:auto !important"));
   assert.ok(polish.includes("left:12px !important") && polish.includes("right:auto !important"));
   assert.ok(polish.includes("top:calc(env(safe-area-inset-top, 0px) + 74px)"));
+});
+
+
+test("homepage hero keeps bracelet and copy side by side on desktop and compact on mobile", () => {
+  const html = read("index.html");
+  const css = read("css/hero-signature.css");
+  assert.ok(html.includes("hero-signature.css?v=3"));
+  assert.ok(css.includes("grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr)"));
+  assert.ok(css.includes("text-align: right;"));
+  assert.ok(css.includes("padding: 76px 18px 20px;"));
+  assert.ok(css.includes("width:min(78vw,300px)"));
+  assert.ok(css.includes("width:min(100%,300px,44vh) !important"));
 });

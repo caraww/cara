@@ -750,3 +750,31 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
     direction:rtl !important;
   }
 }
+
+
+/* Shared navigation contrast: transparent headers sit on the dark homepage hero;
+   solid headers use the same ink/accent palette on every light page. */
+header.top:not(.solid) nav a:not(.btn):not(.cta) {
+  color:#F1EFF7;
+}
+header.top:not(.solid) nav a[href*="account.html"] {
+  color:#F1EFF7;
+  border-color:rgba(241,239,247,.42);
+}
+header.top:not(.solid) nav a:not(.btn):not(.cta):hover,
+header.top:not(.solid) nav a[aria-current="page"] {
+  color:#EAD5A5;
+  background:rgba(255,255,255,.09);
+}
+header.top.solid nav a:not(.btn):not(.cta) {
+  color:var(--cara-text);
+}
+header.top.solid nav a:not(.btn):not(.cta):hover,
+header.top.solid nav a[aria-current="page"] {
+  color:var(--cara-accent);
+  background:var(--cara-accent-soft);
+}
+header.top.solid nav a[href*="account.html"] {
+  color:var(--cara-accent);
+  border-color:rgba(52,59,100,.24);
+}
