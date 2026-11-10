@@ -192,3 +192,30 @@
     width:min(100%,440px,58vh) !important;
   }
 }
+
+
+/* Mobile hero: compact the real swipe stage after legacy lineup sizing rules. */
+@media (max-width:820px) {
+  .hero.hero2 {
+    min-height:0;
+    padding:58px 16px 12px !important;
+  }
+  .hero2 .hero-copy {
+    margin:0 auto 4px;
+  }
+  .hero2 .prod {
+    margin-top:0;
+  }
+  .hero2 .cara-bracelet-lineup {
+    width:min(100%,320px) !important;
+    margin-inline:auto;
+  }
+  .hero2 .cara-bracelet-lineup__viewport {
+    width:min(78vw,300px,38svh) !important;
+    margin-inline:auto;
+    aspect-ratio:1 / 1;
+  }
+  .hero2 .cara-bracelet-lineup__controls {
+    padding:4px 6px;
+  }
+}
