@@ -44,3 +44,12 @@ test("homepage hero keeps bracelet and copy side by side on desktop and compact 
   assert.ok(css.includes("width:min(78vw,300px)"));
   assert.ok(css.includes("width:min(100%,300px,44vh) !important"));
 });
+
+
+test("mobile bracelet lineup uses a compact stage and reduced hero spacing", () => {
+  const css = read("css/hero-lineup.css");
+  assert.match(css, /\.hero\.hero2\s*\{[^}]*padding:58px 16px 12px !important;/s);
+  assert.match(css, /\.hero2 \.cara-bracelet-lineup\s*\{[^}]*width:min\(100%,320px\) !important;/s);
+  assert.match(css, /\.hero2 \.cara-bracelet-lineup__viewport\s*\{[^}]*width:min\(78vw,300px,38svh\) !important;/s);
+  assert.match(css, /\.hero2 \.cara-bracelet-lineup__controls\s*\{[^}]*padding:4px 6px;/s);
+});
