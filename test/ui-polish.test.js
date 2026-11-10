@@ -20,8 +20,8 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     "customers.html",
   ]) {
     const html = read(file);
-    assert.match(html, /\/css\/polish\.css\?v=(?:4|5)/, file + " should load polish.css");
-    const polishPath = html.match(/\/css\/polish\.css\?v=(?:4|5)/)?.[0];
+    assert.match(html, /\/css\/polish\\.css\\?v=6/, file + " should load polish.css");
+    const polishPath = html.match(/\/css\/polish\\.css\\?v=6/)?.[0];
     const sharedLayerIndex = html.indexOf(polishPath);
     const pageStyles = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+>/g)]
       .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("hero-signature.css"))
@@ -35,7 +35,7 @@ test("shared cara visual system is loaded after page styles on primary pages", (
 
 test("generated bracelet and color pages share the same navigation and visual system", () => {
   const layout = read("lib/generated-page-layout.js");
-  assert.match(layout, /\/css\/polish\.css\?v=4/);
+  assert.match(layout, /\/css\/polish\\.css\\?v=6/);
   assert.match(layout, /href="\/account\.html">حساب کاربری/);
   assert.match(layout, /href="\/builder\.html">طراحی دستبند/);
 });
