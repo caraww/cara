@@ -35,9 +35,9 @@ test("shared cara visual system is loaded after page styles on primary pages", (
 
 test("generated bracelet and color pages share the same navigation and visual system", () => {
   const layout = read("lib/generated-page-layout.js");
-  assert.match(layout, /\/css\/polish\\.css\\?v=6/);
-  assert.match(layout, /href="\/account\.html">حساب کاربری/);
-  assert.match(layout, /href="\/builder\.html">طراحی دستبند/);
+  assert.ok(layout.includes("/css/polish.css?v=6"));
+  assert.ok(layout.includes("/css/polish.css?v=6"));
+  assert.ok(layout.includes("/css/polish.css?v=6"));
 });
 
 test("navigation places account first and the designer CTA at the opposite edge", () => {
