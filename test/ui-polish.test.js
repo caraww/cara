@@ -61,3 +61,11 @@ test("Gallery mobile menu stays compact and mostly opaque", () => {
   assert.doesNotMatch(css, /width:min\(238px,calc\(100vw - 24px\)\) !important;/, "narrow phones must not override the 196px menu cap");
   assert.match(css, /background:rgba\(250,248,251,\.97\)/);
 });
+
+
+test("shared navigation has explicit contrast for transparent and solid headers", () => {
+  const css = read("css/polish.css");
+  assert.match(css, /header\.top:not\(\.solid\) nav a:not\(\.btn\):not\(\.cta\)\s*\{\s*color:#F1EFF7;/);
+  assert.match(css, /header\.top\.solid nav a:not\(\.btn\):not\(\.cta\)\s*\{\s*color:var\(--cara-text\);/);
+  assert.match(css, /header\.top\.solid nav a:not\(\.btn\):not\(\.cta\):hover/);
+});
