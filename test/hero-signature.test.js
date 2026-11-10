@@ -36,11 +36,11 @@ test("legacy hero canvas stays hidden while mobile navigation remains left ancho
 
 test("homepage hero keeps bracelet and copy side by side on desktop and compact on mobile", () => {
   const html = read("index.html");
-  const css = read("css/hero-lineup.css");
-  assert.match(html, /hero-lineup\.css\?v=5/);
-  assert.match(css, /grid-template-columns:minmax\(0,1fr\) minmax\(0,1fr\)/);
+  const css = read("css/hero-signature.css");
+  assert.match(html, /hero-signature\\.css\\?v=3/);
+  assert.match(css, /grid-template-columns:minmax\\(0,\\.94fr\\) minmax\\(0,1\\.06fr\\)/);
   assert.match(css, /\.hero2 \.hero-copy \{[^}]*text-align:right/s);
-  assert.match(css, /@media \(max-width:820px\)[\s\S]*?padding:76px 18px 20px/);
-  assert.match(css, /width:min\(78vw,300px\)/);
-  assert.match(css, /width:min\(100%,300px,44vh\) !important/);
+  assert.match(css, /@media \(max-width:820px\)[\s\S]*?padding: 76px 18px 20px/);
+  assert.match(css, /width:min\\(78vw,300px\\)/);
+  assert.match(css, /width:min\\(100%,300px,44vh\\) !important/);
 });
