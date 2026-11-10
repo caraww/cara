@@ -1,26 +1,24 @@
 /* Swipeable four-design Miyuki Delica hero showcase. */
 .hero.hero2 {
-  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-  grid-template-rows:minmax(0,1fr);
-  align-items:center;
-  gap:clamp(28px,4vw,64px);
-  min-height:min(820px,100svh);
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:auto minmax(0,1fr);
+  gap:0;
   padding:104px max(24px,5vw) 34px;
 }
 .hero2 .hero-copy {
-  justify-self:end;width:min(100%,560px);max-width:560px;
-  text-align:right;padding:0;margin:0;
+  justify-self:center;width:min(100%,920px);max-width:920px;
+  text-align:center;padding:0;
 }
-.hero2 .hero-copy::before {margin-inline-start:0;margin-inline-end:auto;}
-.hero2 .hero-copy h1 {max-width:12em;margin:0;font-size:clamp(38px,4.2vw,60px);}
-.hero2 .hero-copy p {max-width:34em;margin:18px 0 26px;font-size:clamp(15px,1.2vw,18px);}
-.hero2 .hero-copy .btns {justify-content:flex-start;}
+.hero2 .hero-copy::before {margin-inline:auto;}
+.hero2 .hero-copy h1 {max-width:18em;margin-inline:auto;font-size:clamp(34px,4.2vw,56px);}
+.hero2 .hero-copy p {max-width:44em;margin:14px auto 20px;font-size:clamp(14px,1.2vw,17px);}
+.hero2 .hero-copy .btns {justify-content:center;}
 .hero2 .prod {
-  width:min(100%,620px);height:auto;min-height:0;min-width:0;justify-self:center;
+  width:min(100%,760px);height:auto;min-height:0;justify-self:center;
   align-self:center;margin:0 auto;padding:0;display:grid;place-items:center;
 }
 .cara-bracelet-lineup {
-  position:relative;z-index:2;width:min(100%,620px);
+  position:relative;z-index:2;width:min(100%,680px);
   display:grid;justify-items:center;gap:3px;outline:none;
   touch-action:pan-y;user-select:none;-webkit-user-select:none;
 }
@@ -89,16 +87,16 @@
   .hero2 .prod::after {width:min(40vw,540px);}
 }
 @media (max-width:820px) {
-  .hero.hero2 {display:block;height:auto;min-height:0;padding:76px 18px 20px;}
-  .hero2 .hero-copy {text-align:center;margin:0 auto 8px;}
+  .hero.hero2 {display:block;height:auto;min-height:0;padding:90px 18px 28px;}
+  .hero2 .hero-copy {text-align:center;margin:0 auto 14px;}
   .hero2 .hero-copy::before {margin-bottom:12px;font-size:10px;}
   .hero2 .hero-copy h1 {font-size:clamp(28px,7.2vw,38px);line-height:1.38;}
   .hero2 .hero-copy p {font-size:13.5px;line-height:1.8;margin:10px auto 15px;}
   .hero2 .hero-copy .btns {justify-content:center;flex-wrap:nowrap;gap:8px;}
   .hero2 .hero-copy .btns .btn {flex:1 1 0;min-width:0;min-height:43px;padding:7px 8px;font-size:12px;}
-  .hero2 .prod {width:100%;display:grid;margin-top:0;}
-  .cara-bracelet-lineup {width:min(100%,320px);}
-  .cara-bracelet-lineup__viewport {width:min(78vw,300px);aspect-ratio:1/1;margin-inline:auto;}
+  .hero2 .prod {width:100%;display:grid;margin-top:8px;}
+  .cara-bracelet-lineup {width:min(100%,440px);}
+   .cara-bracelet-lineup__viewport {aspect-ratio:1/1;}
   .cara-bracelet-card {padding:8px 30px 6px;}
   .cara-bracelet-lineup__arrow {width:34px;height:34px;font-size:24px;}
   .cara-bracelet-lineup__arrow--prev {right:3px;}
@@ -191,6 +189,6 @@
 }
 @media (max-width:820px) {
   .hero2 .cara-bracelet-card .cara-bracelet-card__art {
-    width:min(100%,300px,44vh) !important;
+    width:min(100%,440px,58vh) !important;
   }
 }
