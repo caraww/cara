@@ -12,14 +12,14 @@
     const loadNavScript = () => {
       if (hasNavScript || document.querySelector('script[data-cara-mobile-nav]')) return;
       const script = document.createElement("script");
-      script.src = "/js/mobile-nav.js?v=20261108";
+      script.src = "/js/mobile-nav.js?v=20261111-release";
       script.dataset.caraMobileNav = "true";
       document.body.append(script);
     };
     if (!hasNavCss) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
-      link.href = "/css/mobile-nav.css?v=20261108";
+      link.href = "/css/mobile-nav.css?v=20261111-release";
       link.onload = loadNavScript;
       link.onerror = loadNavScript;
       document.head.append(link);

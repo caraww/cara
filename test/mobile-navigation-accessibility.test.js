@@ -26,18 +26,18 @@ test("shared mobile navigation is left-anchored, accessible, and overlays withou
 });
 
 test("all primary and generated pages receive the shared mobile menu", () => {
-  const pages = ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html"];
+  const pages = ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html", "account.html"];
   for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), "utf8");
-    assert.match(html, /mobile-nav\.css/, page + " loads mobile nav CSS");
-    assert.match(html, /mobile-nav\.js/, page + " loads mobile nav JS");
+    assert.ok(html.includes("/css/mobile-nav.css?v=20261111-release"), page + " loads the current mobile nav CSS cache key");
+    assert.ok(html.includes("/js/mobile-nav.js?v=20261111-release"), page + " loads the current mobile nav JS cache key");
   }
   const contact = fs.readFileSync(path.join(root, "js/contact.js"), "utf8");
-  assert.match(contact, /mobile-nav\.css/);
-  assert.match(contact, /mobile-nav\.js/);
+  assert.ok(contact.includes("/css/mobile-nav.css?v=20261111-release"));
+  assert.ok(contact.includes("/js/mobile-nav.js?v=20261111-release"));
   const template = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
-  assert.match(template, /mobile-nav\.css/);
-  assert.match(template, /mobile-nav\.js/);
+  assert.ok(template.includes("/css/mobile-nav.css?v=20261111-release"));
+  assert.ok(template.includes("/js/mobile-nav.js?v=20261111-release"));
 });
 
 
