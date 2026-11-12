@@ -20,8 +20,8 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     "customers.html",
   ]) {
     const html = read(file);
-    assert.ok(html.includes("/css/polish.css?v=6"), file + " should load polish.css");
-    const polishPath = "/css/polish.css?v=6";
+    assert.ok(html.includes("/css/polish.css?v=7"), file + " should load polish.css");
+    const polishPath = "/css/polish.css?v=7";
     const sharedLayerIndex = html.indexOf(polishPath);
     const pageStyles = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+>/g)]
       .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("hero-signature.css"))
@@ -35,9 +35,11 @@ test("shared cara visual system is loaded after page styles on primary pages", (
 
 test("generated bracelet and color pages share the same navigation and visual system", () => {
   const layout = read("lib/generated-page-layout.js");
-  assert.ok(layout.includes("/css/polish.css?v=6"));
-  assert.ok(layout.includes("/css/polish.css?v=6"));
-  assert.ok(layout.includes("/css/polish.css?v=6"));
+  assert.ok(layout.includes("/css/accessibility.css"));
+  assert.ok(layout.includes("/css/mobile-nav.css?v=20261111-release"));
+  assert.ok(layout.includes("/css/polish.css?v=7"));
+  assert.ok(layout.includes("/js/contact.js?v=20261112-release"));
+  assert.ok(layout.includes("/js/mobile-nav.js?v=20261111-release"));
 });
 
 test("navigation places account first and the designer CTA at the opposite edge", () => {
@@ -55,11 +57,14 @@ test("shared header rules do not target admin order-card .top elements", () => {
 });
 
 
-test("Gallery mobile menu stays compact and mostly opaque", () => {
+test("Gallery mobile menu stays compact and fully opaque", () => {
   const css = read("css/polish.css");
   assert.match(css, /width:min\(196px,calc\(100vw - 24px\)\) !important;/);
   assert.doesNotMatch(css, /width:min\(238px,calc\(100vw - 24px\)\) !important;/, "narrow phones must not override the 196px menu cap");
-  assert.match(css, /background:rgba\(250,248,251,\.97\)/);
+  const finalMenu = css.slice(css.lastIndexOf("/* Final mobile menu surface:"));
+  assert.match(finalMenu, /background:#fffdfb !important;/);
+  assert.match(finalMenu, /backdrop-filter:none !important;/);
+  assert.match(finalMenu, /max-height:min\(44vh,320px\) !important;/);
 });
 
 
