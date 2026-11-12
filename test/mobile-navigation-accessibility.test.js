@@ -23,6 +23,13 @@ test("shared mobile navigation is left-anchored, accessible, and overlays withou
   assert.ok(css.includes("background: rgba(255,255,255,.985)"));
   assert.match(polish, /left:14px !important/);
   assert.match(polish, /inset-inline-start:auto !important/);
+  const finalMenu = polish.slice(polish.lastIndexOf("/* Final mobile menu surface:"));
+  assert.ok(finalMenu.includes("max-height:min(44vh,320px) !important;"));
+  assert.ok(finalMenu.includes("gap:2px !important;"));
+  assert.ok(finalMenu.includes("padding:7px !important;"));
+  assert.ok(finalMenu.includes("background:#fffdfb !important;"));
+  assert.ok(finalMenu.includes("backdrop-filter:none !important;"));
+  assert.ok(finalMenu.includes("min-height:40px !important;"));
 });
 
 test("all primary and generated pages receive the shared mobile menu", () => {
@@ -31,15 +38,43 @@ test("all primary and generated pages receive the shared mobile menu", () => {
     const html = fs.readFileSync(path.join(root, page), "utf8");
     assert.ok(html.includes("/css/mobile-nav.css?v=20261111-release"), page + " loads the current mobile nav CSS cache key");
     assert.ok(html.includes("/js/mobile-nav.js?v=20261111-release"), page + " loads the current mobile nav JS cache key");
+    const mobileNavCss = html.indexOf("/css/mobile-nav.css?v=20261111-release");
+    const polishCss = html.indexOf("/css/polish.css?v=7");
+    assert.ok(polishCss > mobileNavCss, page + " loads the final polish override after mobile-nav.css");
   }
   const contact = fs.readFileSync(path.join(root, "js/contact.js"), "utf8");
   assert.ok(contact.includes("/css/mobile-nav.css?v=20261111-release"));
   assert.ok(contact.includes("/js/mobile-nav.js?v=20261111-release"));
+  assert.ok(contact.includes("/css/polish.css?v=7"));
+  assert.match(contact, /link\.onload = loadPolish/);
+  assert.match(contact, /link\.onerror = loadPolish/);
+  assert.match(contact, /polish\.onload = loadNavScript/);
+  assert.match(contact, /polish\.onerror = loadNavScript/);
   const template = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
   assert.ok(template.includes("/css/mobile-nav.css?v=20261111-release"));
   assert.ok(template.includes("/js/mobile-nav.js?v=20261111-release"));
+  assert.ok(template.includes("/js/contact.js?v=20261112-release"));
+  const templateMobileCss = template.indexOf("/css/mobile-nav.css?v=20261111-release");
+  const templatePolishCss = template.indexOf("/css/polish.css?v=7");
+  assert.ok(templatePolishCss > templateMobileCss, "generated pages load the final polish override after mobile-nav.css");
 });
 
+
+test("all generated bracelet and color pages load current shared navigation assets", () => {
+  for (const folder of ["bracelet", "colors"]) {
+    const names = fs.readdirSync(path.join(root, folder)).filter((name) => name.endsWith(".html"));
+    assert.ok(names.length > 0, folder + " generated pages must exist");
+    for (const name of names) {
+      const page = path.join(folder, name);
+      const html = fs.readFileSync(path.join(root, page), "utf8");
+      const navCss = html.indexOf("/css/mobile-nav.css?v=20261111-release");
+      const polishCss = html.indexOf("/css/polish.css?v=7");
+      assert.ok(navCss >= 0 && polishCss > navCss, page + " loads final polish after mobile navigation CSS");
+      assert.ok(html.includes("/js/contact.js?v=20261112-release"), page + " uses the fresh contact fallback URL");
+      assert.ok(html.includes("/js/mobile-nav.js?v=20261111-release"), page + " loads the shared menu behavior");
+    }
+  }
+});
 
 test("mobile navigation closes when keyboard focus leaves the header", () => {
   const source = fs.readFileSync(path.join(root, "js/mobile-nav.js"), "utf8");
