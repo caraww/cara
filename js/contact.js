@@ -9,6 +9,8 @@
       .some((link) => link.href.includes("/css/mobile-nav.css"));
     const hasNavScript = [...document.scripts]
       .some((script) => script.src.includes("/js/mobile-nav.js"));
+    const hasFinalPolishCss = [...document.querySelectorAll('link[rel="stylesheet"]')]
+      .some((link) => link.href.includes("/css/polish.css?v=7"));
     const loadNavScript = () => {
       if (hasNavScript || document.querySelector('script[data-cara-mobile-nav]')) return;
       const script = document.createElement("script");
@@ -16,15 +18,28 @@
       script.dataset.caraMobileNav = "true";
       document.body.append(script);
     };
+    const loadPolish = () => {
+      if (hasFinalPolishCss || document.querySelector('link[data-cara-polish]')) {
+        loadNavScript();
+        return;
+      }
+      const polish = document.createElement("link");
+      polish.rel = "stylesheet";
+      polish.href = "/css/polish.css?v=7";
+      polish.dataset.caraPolish = "true";
+      polish.onload = loadNavScript;
+      polish.onerror = loadNavScript;
+      document.head.append(polish);
+    };
     if (!hasNavCss) {
       const link = document.createElement("link");
       link.rel = "stylesheet";
       link.href = "/css/mobile-nav.css?v=20261111-release";
-      link.onload = loadNavScript;
-      link.onerror = loadNavScript;
+      link.onload = loadPolish;
+      link.onerror = loadPolish;
       document.head.append(link);
     } else {
-      loadNavScript();
+      loadPolish();
     }
   }
 
