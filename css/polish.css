@@ -778,3 +778,27 @@ header.top.solid nav a[href*="account.html"] {
   color:var(--cara-accent);
   border-color:rgba(52,59,100,.24);
 }
+
+
+/* Final mobile menu surface: compact, fully opaque, and authoritative after legacy polish. */
+@media (max-width:850px) {
+  header.top.has-mobile-menu nav,
+  header.top.has-mobile-menu nav[aria-label] {
+    max-height:min(44vh,320px) !important;
+    gap:2px !important;
+    padding:7px !important;
+    border:1px solid rgba(27,18,38,.10) !important;
+    border-radius:14px !important;
+    background:#fffdfb !important;
+    box-shadow:0 10px 26px rgba(27,18,38,.14) !important;
+    -webkit-backdrop-filter:none !important;
+    backdrop-filter:none !important;
+  }
+  header.top.has-mobile-menu nav a:not(.cta):not(.btn),
+  header.top.has-mobile-menu nav a:not(.cta):not(.btn):not([href*="builder.html"]) {
+    min-height:40px !important;
+    padding:7px 10px !important;
+    font-size:14px !important;
+    border-radius:10px;
+  }
+}
