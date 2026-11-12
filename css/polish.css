@@ -794,7 +794,6 @@ header.top.solid nav a[href*="account.html"] {
     -webkit-backdrop-filter:none !important;
     backdrop-filter:none !important;
   }
-  header.top.has-mobile-menu nav a:not(.cta):not(.btn),
   header.top.has-mobile-menu nav a:not(.cta):not(.btn):not([href*="builder.html"]) {
     min-height:40px !important;
     padding:7px 10px !important;
