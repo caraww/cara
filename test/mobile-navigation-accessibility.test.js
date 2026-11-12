@@ -38,6 +38,9 @@ test("all primary and generated pages receive the shared mobile menu", () => {
     const html = fs.readFileSync(path.join(root, page), "utf8");
     assert.ok(html.includes("/css/mobile-nav.css?v=20261111-release"), page + " loads the current mobile nav CSS cache key");
     assert.ok(html.includes("/js/mobile-nav.js?v=20261111-release"), page + " loads the current mobile nav JS cache key");
+    const mobileNavCss = html.indexOf("/css/mobile-nav.css?v=20261111-release");
+    const polishCss = html.indexOf("/css/polish.css?v=7");
+    assert.ok(polishCss > mobileNavCss, page + " loads the final polish override after mobile-nav.css");
   }
   const contact = fs.readFileSync(path.join(root, "js/contact.js"), "utf8");
   assert.ok(contact.includes("/css/mobile-nav.css?v=20261111-release"));
@@ -45,6 +48,9 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   const template = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
   assert.ok(template.includes("/css/mobile-nav.css?v=20261111-release"));
   assert.ok(template.includes("/js/mobile-nav.js?v=20261111-release"));
+  const templateMobileCss = template.indexOf("/css/mobile-nav.css?v=20261111-release");
+  const templatePolishCss = template.indexOf("/css/polish.css?v=7");
+  assert.ok(templatePolishCss > templateMobileCss, "generated pages load the final polish override after mobile-nav.css");
 });
 
 
