@@ -53,6 +53,7 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   const template = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
   assert.ok(template.includes("/css/mobile-nav.css?v=20261111-release"));
   assert.ok(template.includes("/js/mobile-nav.js?v=20261111-release"));
+  assert.ok(template.includes("/js/contact.js?v=20261112-release"));
   const templateMobileCss = template.indexOf("/css/mobile-nav.css?v=20261111-release");
   const templatePolishCss = template.indexOf("/css/polish.css?v=7");
   assert.ok(templatePolishCss > templateMobileCss, "generated pages load the final polish override after mobile-nav.css");
