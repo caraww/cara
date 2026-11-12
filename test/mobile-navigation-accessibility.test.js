@@ -23,6 +23,13 @@ test("shared mobile navigation is left-anchored, accessible, and overlays withou
   assert.ok(css.includes("background: rgba(255,255,255,.985)"));
   assert.match(polish, /left:14px !important/);
   assert.match(polish, /inset-inline-start:auto !important/);
+  const finalMenu = polish.slice(polish.lastIndexOf("/* Final mobile menu surface:"));
+  assert.ok(finalMenu.includes("max-height:min(44vh,320px) !important;"));
+  assert.ok(finalMenu.includes("gap:2px !important;"));
+  assert.ok(finalMenu.includes("padding:7px !important;"));
+  assert.ok(finalMenu.includes("background:#fffdfb !important;"));
+  assert.ok(finalMenu.includes("backdrop-filter:none !important;"));
+  assert.ok(finalMenu.includes("min-height:40px !important;"));
 });
 
 test("all primary and generated pages receive the shared mobile menu", () => {
