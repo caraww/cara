@@ -60,6 +60,22 @@ test("all primary and generated pages receive the shared mobile menu", () => {
 });
 
 
+test("all generated bracelet and color pages load current shared navigation assets", () => {
+  for (const folder of ["bracelet", "colors"]) {
+    const names = fs.readdirSync(path.join(root, folder)).filter((name) => name.endsWith(".html"));
+    assert.ok(names.length > 0, folder + " generated pages must exist");
+    for (const name of names) {
+      const page = path.join(folder, name);
+      const html = fs.readFileSync(path.join(root, page), "utf8");
+      const navCss = html.indexOf("/css/mobile-nav.css?v=20261111-release");
+      const polishCss = html.indexOf("/css/polish.css?v=7");
+      assert.ok(navCss >= 0 && polishCss > navCss, page + " loads final polish after mobile navigation CSS");
+      assert.ok(html.includes("/js/contact.js?v=20261112-release"), page + " uses the fresh contact fallback URL");
+      assert.ok(html.includes("/js/mobile-nav.js?v=20261111-release"), page + " loads the shared menu behavior");
+    }
+  }
+});
+
 test("mobile navigation closes when keyboard focus leaves the header", () => {
   const source = fs.readFileSync(path.join(root, "js/mobile-nav.js"), "utf8");
   const headerHandlers = {};
