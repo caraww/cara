@@ -66,6 +66,39 @@ html body header.top nav {
   font-size: 17px;
   font-weight: 600;
 }
+
+/* سبد خرید فقط هنگام رفتن روی «حساب کاربری» باز شود؛ در حالت عادی مزاحم ناوبری نیست. */
+@media (min-width: 851px) {
+  html body header.top nav { position: relative; }
+  html body header.top nav a[href*="cart.html"]:not(.btn):not(.cta) {
+    position: absolute !important;
+    inset-inline-end: 0;
+    inset-block-start: 100%;
+    z-index: 5;
+    display: inline-flex !important;
+    min-width: 112px;
+    justify-content: center;
+    padding: 10px 16px !important;
+    border: 1px solid rgba(207,174,108,.42) !important;
+    border-radius: 14px !important;
+    background: linear-gradient(145deg,#292b48,#1b1d34) !important;
+    box-shadow: 0 12px 28px rgba(12,10,25,.28) !important;
+    opacity: 0 !important;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-5px);
+    transition: opacity .18s ease, transform .18s ease, visibility .18s;
+  }
+  html body header.top nav:has(a[href*="account.html"]:hover) a[href*="cart.html"],
+  html body header.top nav:has(a[href*="account.html"]:focus-visible) a[href*="cart.html"],
+  html body header.top nav:has(a[href*="cart.html"]:hover) a[href*="cart.html"],
+  html body header.top nav:has(a[href*="cart.html"]:focus-visible) a[href*="cart.html"] {
+    opacity: 1 !important;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+}
 html body header.top nav a:not(.btn):not(.cta) {
   position: relative;
   display: inline-flex;

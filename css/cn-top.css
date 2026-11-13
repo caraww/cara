@@ -99,6 +99,38 @@ html.cn-lock {
   gap: 2px;
   margin-inline-start: 28px;
 }
+
+/* سبد خرید در هدر اصلی فقط با hover/focus روی حساب کاربری باز می‌شود. */
+@media (min-width: 900px) {
+  .cn-nav { position: relative; }
+  .cn-nav a[href*="cart.html"] {
+    position: absolute;
+    inset-inline-end: 0;
+    top: 100%;
+    z-index: 8;
+    min-height: 42px;
+    padding: 0 18px;
+    border: 1px solid rgba(207,174,108,.45);
+    border-radius: 14px;
+    background: linear-gradient(145deg,#292b48,#1b1d34);
+    box-shadow: 0 12px 28px rgba(12,10,25,.28);
+    color: #f3eef9;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(-5px);
+    transition: opacity .18s ease, transform .18s ease, visibility .18s;
+  }
+  .cn-nav:has(a[href*="account.html"]:hover) a[href*="cart.html"],
+  .cn-nav:has(a[href*="account.html"]:focus-visible) a[href*="cart.html"],
+  .cn-nav:has(a[href*="cart.html"]:hover) a[href*="cart.html"],
+  .cn-nav:has(a[href*="cart.html"]:focus-visible) a[href*="cart.html"] {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+}
 .cn-nav a {
   position: relative;
   display: inline-flex;
