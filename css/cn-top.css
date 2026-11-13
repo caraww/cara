@@ -355,12 +355,12 @@ html.cn-lock {
   text-wrap: balance;
 }
 /* زیر «منجوق‌به‌منجوق» یه ردیف منجوق کشیده شده */
+/* متن طلایی بدون نقطه‌چین زیرین؛ تاکید فقط با رنگ */
 .cn-hero .cn-gilt {
   display: inline;
-  padding-bottom: 6px;
+  padding-bottom: 0;
   color: var(--cn-gold-soft);
-  background: radial-gradient(circle, var(--cn-gold) 0 2px, transparent 2.6px)
-    0 100% / 10px 8px repeat-x;
+  background: none;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }

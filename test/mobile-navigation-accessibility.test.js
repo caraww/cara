@@ -37,7 +37,7 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), "utf8");
     if (page === "index.html") {
-      assert.ok(html.includes("/css/cn-top.css?v=1"), "index.html loads the current cn-header and cn-hero stylesheet");
+      assert.ok(html.includes("/css/cn-top.css?v=2"), "index.html loads the current cn-header and cn-hero stylesheet");
       assert.ok(html.includes("/js/cn-header.js?v=1"), "index.html loads the current cn-header behavior");
       assert.match(html, /class="cn-header"/);
       assert.match(html, /class="cn-toggle"/);
