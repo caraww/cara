@@ -206,9 +206,11 @@ try {
   function lightbox() {
     let id = "";
     try { id = decodeURIComponent(location.hash.slice(1)); } catch {}
-    const p = prices[id], o = $("lbOrder");
+    const p = prices[id], o = $("lbOrder"), add = $("lbAddCart");
     $("lbPrice").textContent = p ? fa(p) + " تومان" : "";
     o.href = id ? "checkout.html?work=" + encodeURIComponent(id) : "checkout.html";
+    add.href = id ? "/cart.html?add=work&id=" + encodeURIComponent(id) : "/cart.html";
+    add.style.display = loaded && !p ? "none" : "";
     /* وقتی قیمت‌ها اومدن و این کار قیمت نداره، دکمه‌ی سفارش مستقیم معنی نداره (سرور هم ردش می‌کنه) */
     o.style.display = loaded && !p ? "none" : "";
   }

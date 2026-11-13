@@ -1,5 +1,6 @@
 import { handleGame, checkCode, codeDiscount, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
 import { handleAccountRequest, getAccountUser } from "./lib/accounts.mjs";
+import { handleCartRequest, loadCartForRequest, clearPurchasedCartItems } from "./lib/cart.mjs";
 import "./lib/works-pricing.js";
 export { GameDO } from "./game-worker.js"; /* Durable Object بازی */
 
@@ -169,6 +170,16 @@ async function pricedWorks(env) {
   return { list, prices: priceMap(list) };
 }
 
+function cartWorkResolver(env) {
+  let catalogPromise;
+  return async (id) => {
+    catalogPromise ||= pricedWorks(env);
+    const { list, prices } = await catalogPromise;
+    const work = list.find((item) => String(item.id) === String(id));
+    return work ? { ...work, price: prices[String(work.id)] } : null;
+  };
+}
+
 /* قیمت همه‌ی کارها برای نمایش توی گالری (فقط نمایشه؛ مبلغ پرداخت همیشه دوباره سمت سرور حساب می‌شه) */
 async function worksInfo(env) {
   const { list, prices } = await pricedWorks(env);
@@ -211,6 +222,28 @@ async function createPayment(request, env) {
     if (work.noOrder || !prices[String(work.id)]) return json({ error: "این نمونه قابل سفارش مستقیم نیست؛ از «عکس به الگو» یا «طراحی دستی» سفارش بده." }, 400);
     priceToman = prices[String(work.id)];
     extra = { kind: "work", work: { id: String(work.id), title: work.title || "", src: work.src } };
+  } else if (body.cart === true) {
+    const cart = await loadCartForRequest(request, env, {
+      cleanPattern, getWork: cartWorkResolver(env),
+      pricePerBead: C.price, baseFee: C.base,
+    });
+    if (!cart.cartId || !cart.items.length) return json({ error: "سبد خریدت خالیه." }, 400);
+    if (cart.items.some((item) => !item.available || !Number.isSafeInteger(item.unitPrice) || item.unitPrice <= 0))
+      return json({ error: "یکی از کالاهای سبد دیگه قابل سفارش نیست؛ سبد رو بررسی و به‌روزرسانی کن." }, 400);
+    priceToman = cart.items.reduce((sum, item) => sum + item.lineTotal, 0);
+    extra = {
+      kind: "cart",
+      items: cart.items.map((item) => ({
+        type: item.type, title: item.title, quantity: item.quantity, unitPrice: item.unitPrice,
+        ...(item.workId ? { workId: item.workId } : {}),
+        ...(item.image ? { src: item.image } : {}),
+        ...(item.design ? { design: item.design } : {}),
+      })),
+      cartSnapshot: {
+        cartId: cart.cartId,
+        items: cart.items.map((item) => ({ id: item.id, updatedAt: item.updatedAt })),
+      },
+    };
   } else {
     if (!C.price) return json({ error: "قیمت هنوز تنظیم نشده، بعداً امتحان کن." }, 503);
     const pattern = cleanPattern(body.pattern);
@@ -269,7 +302,13 @@ async function settle(C, env, order, markFailed, ctx, pre) {
   const later = (p) => (ctx ? ctx.waitUntil(p) : p); /* اعلان نباید مشتری رو معطل کنه */
   const v = pre || (await zibal(C, "verify", { trackId: Number(order.trackId) })); /* pre = نتیجه‌ی تأییدی که callback.php روی هاست ایرانی گرفته و امضا کرده */
   const fresh = await getOrder(env, order.id);
-  if (fresh && fresh.status === "paid") return fresh; /* کال‌بک هم‌زمان قبلاً تأییدش کرده */
+  if (fresh && fresh.status === "paid") {
+    if (fresh.cartSnapshot) {
+      try { await clearPurchasedCartItems(env, fresh.cartSnapshot); }
+      catch (error) { console.error("paid order cart cleanup retry failed", fresh.id, String(error).slice(0, 160)); }
+    }
+    return fresh; /* کال‌بک هم‌زمان قبلاً تأییدش کرده */
+  }
   order.verify = v;
   const paid = v && (v.result === 100 || v.result === 201); /* ۲۰۱ = قبلاً تأیید شده */
   const rial = order.priceToman * 10;
@@ -288,6 +327,10 @@ async function settle(C, env, order, markFailed, ctx, pre) {
     order.cardNumber = v.cardNumber || null;
     await saveOrder(env, order);
     if (order.discountCode) await useCode(env, order.discountCode, order.id);
+    if (order.cartSnapshot) {
+      try { await clearPurchasedCartItems(env, order.cartSnapshot); }
+      catch (error) { console.error("paid order cart cleanup failed", order.id, String(error).slice(0, 160)); }
+    }
     await later(notifyPaid(C, env, order));
     return order;
   }
@@ -376,6 +419,7 @@ function row(o) {
     createdAt: o.createdAt, paidAt: o.paidAt || null, sandbox: !!o.sandbox, priceToman: o.priceToman,
     name: `${o.customer.firstName} ${o.customer.lastName}`, phone: o.customer.phone, address: o.customer.address,
     kind: o.kind || "pattern", work: o.work || null,
+    items: Array.isArray(o.items) ? o.items.map((item) => ({ title: item.title || "", quantity: item.quantity || 1, type: item.type || "" })) : [],
     size: pt ? `${pt.width}x${pt.height}` : "", beads: pt ? pt.total : 0, colors: pt ? pt.counts : null,
     tracking: o.tracking || "", note: o.note || "",
     trackId: o.trackId || null, refNumber: o.refNumber || null, cardNumber: o.cardNumber || null, error: o.error || null,
@@ -404,7 +448,7 @@ async function telegram(env, text) {
 }
 function orderText(C, o) {
   const c = o.customer || {}, pt = o.pattern;
-  const what = o.kind === "work" ? `دستبند گالری: ${tgEsc(o.work && (o.work.title || o.work.id))}` : pt ? `الگوی دلخواه ${pt.width}×${pt.height} · ${pt.total} منجوق` : "";
+  const what = o.kind === "cart" ? (o.items || []).map((item) => `• ${tgEsc(item.title)} × ${item.quantity} — ${Number(item.unitPrice * item.quantity).toLocaleString("fa-IR")} تومان`).join("\n") : o.kind === "work" ? `دستبند گالری: ${tgEsc(o.work && (o.work.title || o.work.id))}` : pt ? `الگوی دلخواه ${pt.width}×${pt.height} · ${pt.total} منجوق` : "";
   return [
     `${o.sandbox ? "🧪 سفارش آزمایشی" : "🛍 سفارش جدید (پرداخت شد)"} #${o.id.slice(0, 8)}`,
     `💰 ${Number(o.priceToman).toLocaleString("fa-IR")} تومان`,
@@ -541,6 +585,11 @@ export default {
     const url = new URL(request.url);
     const p = url.pathname;
     try {
+      const cartResponse = await handleCartRequest(request, env, url, {
+        rateLimit, cleanPattern, getWork: cartWorkResolver(env),
+        pricePerBead: cfg(env).price, baseFee: cfg(env).base,
+      });
+      if (cartResponse) return cartResponse;
       const accountResponse = await handleAccountRequest(request, env, url, rateLimit, cleanPattern);
       if (accountResponse) return accountResponse;
       if (p === "/api/config" && request.method === "GET") {

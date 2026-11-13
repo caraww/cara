@@ -118,3 +118,17 @@ Do not store raw session or public tracking tokens. Store a cryptographic hash a
 - GitHub Pages is separate: the current main SHA `2a748ba064e597c2deb58772d0a67e0277634287` was successfully published by Pages run `42475749407`. This confirms the static site deployment, not the Worker API or D1 schema.
 - Safe rollout sequence: first inspect the live D1 migration state; then apply migration `0003` through the explicit production migration workflow; then, only after reviewing the external PHP relay contract and completing the documented Zibal sandbox checks, deploy the Worker from `main`. Finally smoke-test the authenticated profile and admin customer directory without exposing credentials. Do not perform a real payment for this rollout.
 - Do not infer that the account contact feature is fully live from the Pages success alone. D1 migration, Worker deployment, and Pages publication are three separate states.
+
+
+## Shopping cart implementation — 2026-11-13 (branch under review)
+
+- Added `lib/cart.mjs` with a server-owned guest cart identified by a random 256-bit `__Host-cara_guest` cookie (HttpOnly, Secure, SameSite=Lax). Signed-in users use their D1 account cart; visitors do not need to sign in to add items or check out.
+- Added `GET /api/cart`, `POST /api/cart/items`, `PATCH /api/cart/items/:id`, `DELETE /api/cart/items/:id`, and authenticated `POST /api/cart/merge`. Mutations require same-origin requests and are rate-limited. Item ownership is always resolved from the session or guest cookie, never from a client-supplied cart ID.
+- Cart lines support orderable gallery works and validated custom bead patterns. Quantities are bounded (1–20), carts are capped at 30 distinct lines, and duplicate lines merge idempotently by a stable item key.
+- The new `cart.html` lets customers add, remove, and change quantities. Gallery lightbox and bracelet builder now expose add-to-cart actions. The cart link is added to the primary and generated-page navigation.
+- Verified Telegram sign-in triggers guest-to-account merge. A failed merge leaves the guest cart intact; the guest cookie is cleared only after a successful merge.
+- `checkout.html?cart=1` submits only the cart intent and customer details. The Worker reloads the current cart, revalidates designs and catalog works, recomputes all prices, applies the existing server-validated discount, and creates one order with item snapshots. Browser-supplied totals are never trusted.
+- Purchased cart rows are removed only after the payment is server-confirmed as paid. Cleanup is conditional on the original item version so cart edits made while the customer is at the gateway are preserved. A later paid callback retries cleanup safely.
+- Admin order cards, details, and CSV exports now display multi-item orders. Existing single-work and custom-pattern checkout paths remain available.
+- This branch uses the existing D1 cart tables from migration `0001_accounts.sql`; no production schema change is intended. Do not deploy the Worker or claim the feature is live until the PR tests pass, the PR is reviewed/merged, and the Worker deployment is separately confirmed.
+- Remaining release checks: run all tests/build, inspect generated navigation output, test guest add/update/remove and guest checkout in preview without a real payment, test Telegram login + guest merge + account cart persistence, test cart edits during a pending payment, and verify admin order details. Do not perform a real payment for acceptance testing.

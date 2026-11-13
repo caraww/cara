@@ -59,13 +59,14 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   assert.match(contact, /link\.onerror = loadPolish/);
   assert.match(contact, /polish\.onload = loadNavScript/);
   assert.match(contact, /polish\.onerror = loadNavScript/);
+  assert.match(contact, /link\.href\.includes\("\/css\/site-nav\.css"\)/);
   const template = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
-  assert.ok(template.includes("/css/mobile-nav.css?v=20261111-release"));
+  assert.ok(template.includes("/css/site-nav.css?v=20261113"));
   assert.ok(template.includes("/js/mobile-nav.js?v=20261111-release"));
   assert.ok(template.includes("/js/contact.js?v=20261112-release"));
-  const templateMobileCss = template.indexOf("/css/mobile-nav.css?v=20261111-release");
-  const templatePolishCss = template.indexOf("/css/polish.css?v=7");
-  assert.ok(templatePolishCss > templateMobileCss, "generated pages load the final polish override after mobile-nav.css");
+  const templateBraceletCss = template.indexOf("/css/bracelet-pages.css?v=1");
+  const templateSiteNavCss = template.indexOf("/css/site-nav.css?v=20261113");
+  assert.ok(templateSiteNavCss > templateBraceletCss, "generated pages load the shared navigation as the final visual layer");
 });
 
 
@@ -76,9 +77,9 @@ test("all generated bracelet and color pages load current shared navigation asse
     for (const name of names) {
       const page = path.join(folder, name);
       const html = fs.readFileSync(path.join(root, page), "utf8");
-      const navCss = html.indexOf("/css/mobile-nav.css?v=20261111-release");
-      const polishCss = html.indexOf("/css/polish.css?v=7");
-      assert.ok(navCss >= 0 && polishCss > navCss, page + " loads final polish after mobile navigation CSS");
+      const braceletCss = html.indexOf("/css/bracelet-pages.css?v=1");
+      const navCss = html.indexOf("/css/site-nav.css?v=20261113");
+      assert.ok(braceletCss >= 0 && navCss > braceletCss, page + " loads shared navigation after the bracelet page styles");
       assert.ok(html.includes("/js/contact.js?v=20261112-release"), page + " uses the fresh contact fallback URL");
       assert.ok(html.includes("/js/mobile-nav.js?v=20261111-release"), page + " loads the shared menu behavior");
     }

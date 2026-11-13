@@ -124,6 +124,8 @@
     }
 
     user = data.user;
+    /* اگر مهمان قبل از ورود چیزی به سبد اضافه کرده، فقط پس از ورود تأییدشده ادغامش کن. */
+    try { await api("/api/cart/merge", { method: "POST", body: "{}" }); } catch (error) { console.warn("cart merge deferred", error); }
     loginPanel.hidden = true;
     dashboard.hidden = false;
     $("welcomeName").textContent = "سلام " + (user.displayName || "دوست cara") + "!";

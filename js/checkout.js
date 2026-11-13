@@ -175,9 +175,35 @@ try {
     }
   }
 
+  const cartMode = q.get("cart") === "1" && !res;
   const workMode = q.get("work") && !res; /* سفارش مستقیم از گالری: checkout-work.js مدیریتش می‌کنه */
-  let total = 0;
-  if (workMode) {
+  let total = 0, cartReady = false, cartData = null;
+  if (cartMode) {
+    $("pay").disabled = true;
+    $("sum").textContent = "در حال دریافت سبد خرید…";
+    fetch("/api/cart", { credentials: "same-origin", cache: "no-store" }).then(async (response) => {
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || "سبد خرید در دسترس نیست.");
+      cartData = data;
+      if (!data.items?.length) throw new Error("سبد خریدت خالیه؛ برگرد و اول یه دستبند انتخاب کن.");
+      if (data.items.some((item) => !item.available)) throw new Error("یکی از کالاهای سبد قابل سفارش نیست؛ اول سبد رو اصلاح کن.");
+      const wrap = document.createElement("div");
+      const list = document.createElement("ul"); list.className = "checkout-cart-lines";
+      data.items.forEach((item) => {
+        const line = document.createElement("li");
+        const name = document.createElement("span"); name.textContent = item.title + " × " + C.faNum(item.quantity);
+        const price = document.createElement("strong"); price.textContent = C.faNum(item.lineTotal) + " تومان";
+        line.append(name, price); list.append(line);
+      });
+      const totalLine = document.createElement("p"); totalLine.className = "checkout-cart-total";
+      totalLine.textContent = "جمع کل: " + C.faNum(data.totalToman) + " تومان";
+      wrap.append(list, totalLine); $("sum").replaceChildren(wrap);
+      cartReady = true; $("pay").disabled = false;
+    }).catch((error) => {
+      $("sum").textContent = error.message;
+      $("pay").disabled = true;
+    });
+  } else if (workMode) {
     /* خلاصه‌ی سفارش رو checkout-work.js پر می‌کنه */
   } else if (p) {
     total = p.data.flat().filter(Boolean).length;
@@ -197,13 +223,16 @@ try {
     if (workMode) return;
     const f = e.currentTarget, fd = Object.fromEntries(new FormData(f));
     fd.phone = phoneFix(fd.phone);
-    if (!p || !total) return showErr("اول یه الگو بساز و چندتا منجوق بچین.");
+    if (cartMode && (!cartReady || !cartData?.items?.length)) return showErr("سبد خرید هنوز آماده نیست؛ دوباره بررسیش کن.");
+    if (!cartMode && (!p || !total)) return showErr("اول یه الگو بساز و چندتا منجوق بچین.");
     if (!fd.firstName.trim() || !fd.lastName.trim() || !fd.address.trim()) return showErr("اسم، فامیلی و آدرس رو کامل بنویس.");
     if (!/^09\d{9}$/.test(fd.phone)) return showErr("شماره موبایل باید شبیه 09123456789 باشه.");
     const btn = $("pay"); btn.disabled = true; btn.textContent = "دارم می‌برمت به درگاه…";
     try {
       const r = await fetch("/api/create-payment", { method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ customer: fd, discountCode: String(fd.discountCode || "").trim(), pattern: { width: p.width, height: p.height, data: p.data } }) });
+        body: JSON.stringify(cartMode
+          ? { cart: true, customer: fd, discountCode: String(fd.discountCode || "").trim() }
+          : { customer: fd, discountCode: String(fd.discountCode || "").trim(), pattern: { width: p.width, height: p.height, data: p.data } }) });
       const j = await r.json().catch(() => ({}));
       if (r.ok && j.paymentUrl) return (location.href = j.paymentUrl);
       showErr(j.error || "وصل شدن به درگاه نشد، یه کم بعد دوباره امتحان کن.");

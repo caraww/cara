@@ -54,6 +54,7 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
 .kv{display:grid;grid-template-columns:auto 1fr;gap:2px 14px;font-size:15px}.kv dt{color:var(--muted)}.kv dd{margin:0;direction:ltr;text-align:right;unicode-bidi:embed}
 #toast{position:fixed;inset-inline:0;bottom:22px;margin:auto;width:max-content;max-width:90vw;background:var(--ink);color:#fff;padding:6px 22px;border-radius:999px;opacity:0;transform:translateY(12px);transition:.3s;pointer-events:none;z-index:9}
 #toast.on{opacity:1;transform:none}
+.cart-order-list{display:grid;gap:10px}.cart-order-line{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 0;border-bottom:1px solid var(--line)}.cart-order-line img{width:70px;height:70px;object-fit:contain;border-radius:10px;background:var(--tint)}.cart-order-line .cv{max-width:220px}
 </style>
   <link rel="stylesheet" href="/css/accessibility.css">
   <link rel="stylesheet" href="/css/polish.css?v=7">
@@ -132,7 +133,7 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
 
   function view() {
     const q = $("#q").value.trim().toLowerCase(), f = $("#ful").value;
-    return rows.filter((r) => (!q || [r.name, r.phone, r.code, r.tracking, r.work && r.work.title].join(" ").toLowerCase().includes(q)) && (!f || (r.status === "paid" && r.fulfillment === f)));
+    return rows.filter((r) => (!q || [r.name, r.phone, r.code, r.tracking, r.work && r.work.title, ...(r.items || []).map((item) => item.title)].join(" ").toLowerCase().includes(q)) && (!f || (r.status === "paid" && r.fulfillment === f)));
   }
   function render() {
     const list = view();
@@ -145,9 +146,11 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
 
   function card(r) {
     const [sl, sc] = STATUS[r.status] || [r.status, ""];
-    const what = r.kind === "work"
-      ? `<div class="what">${r.work && r.work.src ? `<img src="/${esc(r.work.src)}" alt="">` : ""}<span>دستبند گالری: <b>${esc((r.work && r.work.title) || (r.work && r.work.id) || "")}</b></span></div>`
-      : `<div class="what"><span>الگوی دلخواه · ${esc(r.size.replace("x", " × "))} · <b>${fa(r.beads)}</b> منجوق</span></div>`;
+    const what = r.kind === "cart"
+      ? `<div class="what"><span>سبد خرید · <b>${(r.items || []).map((item) => `${esc(item.title)} × ${fa(item.quantity)}`).join("، ")}</b></span></div>`
+      : r.kind === "work"
+        ? `<div class="what">${r.work && r.work.src ? `<img src="/${esc(r.work.src)}" alt="">` : ""}<span>دستبند گالری: <b>${esc((r.work && r.work.title) || (r.work && r.work.id) || "")}</b></span></div>`
+        : `<div class="what"><span>الگوی دلخواه · ${esc(r.size.replace("x", " × "))} · <b>${fa(r.beads)}</b> منجوق</span></div>`;
     const canRecheck = r.status !== "paid" && r.trackId;
     return `<article class="o" data-id="${esc(r.id)}">
       <div class="top"><span class="code">#${esc(r.code)}</span><span class="badge ${sc}">${esc(sl)}</span>${r.sandbox ? '<span class="badge test">آزمایشی</span>' : ""}<span class="muted">${esc(when(r.paidAt || r.createdAt))}</span><span class="price">${fa(r.priceToman)} تومان</span></div>
@@ -205,6 +208,9 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
       const c = o.customer || {};
       let h = `<div><b>آدرس تحویل</b> <button class="btn cp" style="min-height:32px;padding:0 12px">کپی آدرس</button><div class="addr">${esc(c.firstName)} ${esc(c.lastName)} · ${esc(c.phone)}\n${esc(c.address)}</div></div>`;
       if (o.kind === "work" && o.work) h += `<div><b>سفارش:</b> ${esc(o.work.title || o.work.id)}<br>${o.work.src ? `<img class="big" src="/${esc(o.work.src)}" alt="">` : ""}</div>`;
+      if (o.kind === "cart" && Array.isArray(o.items)) {
+        h += `<div class="cart-order-list"><b>اقلام سفارش</b>${o.items.map((item, i) => `<div class="cart-order-line"><span>${esc(item.title)} × ${fa(item.quantity)} · ${fa(item.unitPrice * item.quantity)} تومان</span>${item.src ? `<img src="/${esc(item.src)}" alt="">` : ""}${item.design ? `<div class="cv"><canvas class="cart-pc" data-item="${i}"></canvas></div>` : ""}</div>`).join("")}</div>`;
+      }
       if (o.pattern) {
         const p = o.pattern, cols = Object.entries(p.counts || {}).sort((a, b) => b[1] - a[1]);
         h += `<div class="pat"><div class="cv"><canvas class="pc"></canvas></div><div class="cols"><b>رنگ‌ها (${fa(cols.length)})</b>${cols.map(([id, n]) => { const pc = CARA.byCode(id) || { hex: "#ccc", name: id, code: id }; return `<div><i style="background:${pc.hex}"></i><small>${esc(pc.code)} · ${esc(pc.name)}</small><b>${fa(n)}</b></div>`; }).join("")}<button class="btn dl" style="margin-top:8px">دانلود چارت (PNG)</button></div></div>`;
@@ -216,6 +222,9 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
         const p = o.pattern; drawPat($(".pc", box), p, Math.max(6, Math.min(14, Math.floor(320 / p.width))));
         $(".dl", box).onclick = () => chartPNG(p, art.dataset.id.slice(0, 8));
       }
+      if (o.kind === "cart" && Array.isArray(o.items)) o.items.forEach((item, i) => {
+        if (item.design) { const canvas = $(`.cart-pc[data-item="${i}"]`, box); if (canvas) drawPat(canvas, item.design, Math.max(6, Math.min(14, Math.floor(320 / item.design.width)))); }
+      });
       $(".cp", box).onclick = () => { const t = `${c.firstName} ${c.lastName}\n${c.phone}\n${c.address}`; (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(() => toast("آدرس کپی شد"), () => toast("کپی نشد؛ دستی انتخاب کن")); };
     } catch (e) { box.innerHTML = `<span class="err">${esc(e.message)}</span>`; }
   }
@@ -307,7 +316,7 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
     };
     const head = ["کد", "تاریخ", "وضعیت پرداخت", "وضعیت ارسال", "اسم", "موبایل", "آدرس", "مبلغ (تومان)", "سفارش", "کد رهگیری پست", "مرجع بانکی", "یادداشت"];
     const lines = list.map((r) => [r.code, when(r.paidAt || r.createdAt), (STATUS[r.status] || [r.status])[0], r.status === "paid" ? FUL[r.fulfillment] || "" : "", r.name, r.phone, r.address, r.priceToman,
-      r.kind === "work" ? "گالری: " + ((r.work && (r.work.title || r.work.id)) || "") : `الگو ${r.size} (${r.beads} منجوق)`, r.tracking, r.refNumber, r.note].map(cell).join(","));
+      r.kind === "cart" ? "سبد: " + (r.items || []).map((item) => `${item.title} × ${item.quantity}`).join("؛ ") : r.kind === "work" ? "گالری: " + ((r.work && (r.work.title || r.work.id)) || "") : `الگو ${r.size} (${r.beads} منجوق)`, r.tracking, r.refNumber, r.note].map(cell).join(","));
     const blob = new Blob(["\ufeff" + [head.map(cell).join(","), ...lines].join("\r\n")], { type: "text/csv;charset=utf-8" });
     const el = document.createElement("a"); el.href = URL.createObjectURL(blob);
     el.download = `cara-orders-${new Date().toISOString().slice(0, 10)}.csv`; el.click(); setTimeout(() => URL.revokeObjectURL(el.href), 5000);
@@ -322,3 +331,4 @@ input[type=password],input[type=search],select{height:42px;padding:0 14px;border
 </script>
 </body>
 </html>
+
