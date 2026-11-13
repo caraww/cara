@@ -38,6 +38,12 @@ const digits = (s) =>
   String(s)
     .replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d))
     .replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
+const normalizeIranMobile = (value) => {
+  let phone = digits(String(value || "")).replace(/[\\s\\u200b-\\u200f\\u202a-\\u202e\\u2066-\\u2069\\ufeff().-]/g, "");
+  phone = phone.replace(/^(?:\\+98|0098|98)0?(?=9\\d{9}$)/, "0");
+  if (/^9\\d{9}$/.test(phone)) phone = "0" + phone;
+  return /^09\\d{9}$/.test(phone) ? phone : "";
+};
 /* کد کپی‌شده از صفحه‌ی راست‌به‌چپ ممکنه رقم فارسی یا کاراکتر نامرئی داشته باشه؛ اینجا درستش می‌کنیم */
 const clean = (s) => digits(String(s || "")).replace(/[\s\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g, "");
 
@@ -206,7 +212,7 @@ async function createPayment(request, env) {
   const customer = {
     firstName: String(c.firstName || "").trim().slice(0, 60),
     lastName: String(c.lastName || "").trim().slice(0, 60),
-    phone: digits(c.phone || "").trim(),
+    phone: normalizeIranMobile(c.phone),
     address: String(c.address || "").trim().slice(0, 500),
   };
   if (!customer.firstName || !customer.lastName || !customer.address)
