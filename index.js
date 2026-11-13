@@ -1,5 +1,6 @@
 import { handleGame, checkCode, codeDiscount, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
 import { handleAccountRequest, getAccountUser } from "./lib/accounts.mjs";
+import { handleCartRequest } from "./lib/cart.mjs";
 import "./lib/works-pricing.js";
 export { GameDO } from "./game-worker.js"; /* Durable Object بازی */
 
@@ -167,6 +168,12 @@ async function pricedWorks(env) {
   const list = await loadWorks(cfg(env));
   if (String(env.TEST_MODE) === "1") list.push({ ...TEST_WORK });
   return { list, prices: priceMap(list) };
+}
+
+async function cartWork(env, id) {
+  const { list, prices } = await pricedWorks(env);
+  const work = list.find((item) => String(item.id) === String(id));
+  return work ? { ...work, price: prices[String(work.id)] } : null;
 }
 
 /* قیمت همه‌ی کارها برای نمایش توی گالری (فقط نمایشه؛ مبلغ پرداخت همیشه دوباره سمت سرور حساب می‌شه) */
@@ -541,6 +548,11 @@ export default {
     const url = new URL(request.url);
     const p = url.pathname;
     try {
+      const cartResponse = await handleCartRequest(request, env, url, {
+        rateLimit, cleanPattern, getWork: (id) => cartWork(env, id),
+        pricePerBead: cfg(env).price, baseFee: cfg(env).base,
+      });
+      if (cartResponse) return cartResponse;
       const accountResponse = await handleAccountRequest(request, env, url, rateLimit, cleanPattern);
       if (accountResponse) return accountResponse;
       if (p === "/api/config" && request.method === "GET") {
