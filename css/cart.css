@@ -12,3 +12,4 @@
 .cart-item[aria-disabled=true]{opacity:.7}.cart-unavailable{color:#a34f58!important}
 @media(max-width:760px){.cart-wrap{padding-top:94px}.cart-layout{grid-template-columns:1fr}.cart-summary{position:static;order:-1}.cart-item{grid-template-columns:76px minmax(0,1fr);gap:12px;padding:12px}.cart-item img,.cart-art{width:76px;height:76px}.cart-item .cart-item-end{grid-column:2}.cart-item h2{font-size:15px}}
 @media(prefers-reduced-motion:no-preference){.cart-item{animation:cart-in .35s ease both}@keyframes cart-in{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}}
+.checkout-cart-lines{list-style:none;padding:0;margin:0;display:grid;gap:10px}.checkout-cart-lines li{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:10px 0;border-bottom:1px solid #eee8f1;font-size:14px}.checkout-cart-lines strong{white-space:nowrap}.checkout-cart-total{font-weight:900;text-align:left;margin:14px 0 0}
