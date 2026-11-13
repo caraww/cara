@@ -2,8 +2,9 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 
-const root = path.join(import.meta.dirname || path.dirname(new URL(import.meta.url).pathname), "..");
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const cart = fs.readFileSync(path.join(root, "lib/cart.mjs"), "utf8");
 const worker = fs.readFileSync(path.join(root, "index.js"), "utf8");
 const page = fs.readFileSync(path.join(root, "cart.html"), "utf8");
