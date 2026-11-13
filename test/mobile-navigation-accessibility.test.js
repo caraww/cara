@@ -36,11 +36,18 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   const pages = ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html", "account.html"];
   for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), "utf8");
-    assert.ok(html.includes("/css/mobile-nav.css?v=20261111-release"), page + " loads the current mobile nav CSS cache key");
-    assert.ok(html.includes("/js/mobile-nav.js?v=20261111-release"), page + " loads the current mobile nav JS cache key");
-    const mobileNavCss = html.indexOf("/css/mobile-nav.css?v=20261111-release");
-    const polishCss = html.indexOf("/css/polish.css?v=7");
-    assert.ok(polishCss > mobileNavCss, page + " loads the final polish override after mobile-nav.css");
+    if (page === "index.html") {
+      assert.ok(html.includes("/css/cn-top.css?v=1"), "index.html loads the current cn-header and cn-hero stylesheet");
+      assert.ok(html.includes("/js/cn-header.js?v=1"), "index.html loads the current cn-header behavior");
+      assert.match(html, /class="cn-header"/);
+      assert.match(html, /class="cn-toggle"/);
+    } else {
+      assert.ok(html.includes("/css/mobile-nav.css?v=20261111-release"), page + " loads the current mobile nav CSS cache key");
+      assert.ok(html.includes("/js/mobile-nav.js?v=20261111-release"), page + " loads the current mobile nav JS cache key");
+      const mobileNavCss = html.indexOf("/css/mobile-nav.css?v=20261111-release");
+      const polishCss = html.indexOf("/css/polish.css?v=7");
+      assert.ok(polishCss > mobileNavCss, page + " loads the final polish override after mobile-nav.css");
+    }
   }
   const contact = fs.readFileSync(path.join(root, "js/contact.js"), "utf8");
   assert.ok(contact.includes("/css/mobile-nav.css?v=20261111-release"));
