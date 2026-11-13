@@ -298,7 +298,13 @@ async function settle(C, env, order, markFailed, ctx, pre) {
   const later = (p) => (ctx ? ctx.waitUntil(p) : p); /* اعلان نباید مشتری رو معطل کنه */
   const v = pre || (await zibal(C, "verify", { trackId: Number(order.trackId) })); /* pre = نتیجه‌ی تأییدی که callback.php روی هاست ایرانی گرفته و امضا کرده */
   const fresh = await getOrder(env, order.id);
-  if (fresh && fresh.status === "paid") return fresh; /* کال‌بک هم‌زمان قبلاً تأییدش کرده */
+  if (fresh && fresh.status === "paid") {
+    if (fresh.cartSnapshot) {
+      try { await clearPurchasedCartItems(env, fresh.cartSnapshot); }
+      catch (error) { console.error("paid order cart cleanup retry failed", fresh.id, String(error).slice(0, 160)); }
+    }
+    return fresh; /* کال‌بک هم‌زمان قبلاً تأییدش کرده */
+  }
   order.verify = v;
   const paid = v && (v.result === 100 || v.result === 201); /* ۲۰۱ = قبلاً تأیید شده */
   const rial = order.priceToman * 10;
