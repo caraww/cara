@@ -42,7 +42,6 @@ test("hero bracelet stays horizontal instead of tilting with scroll", () => {
   assert.match(heroCss, /\.cn-hero \.cara-bracelet-card__art/);
   assert.doesNotMatch(wow, /\.prod canvas/);
 });
-});
 
 test("weaving heading and frame follow the homepage heading and card rhythm", () => {
   const css = read("css/weaving.css");
@@ -62,7 +61,6 @@ test("hero bracelet canvas has visible square dimensions on desktop and mobile",
   assert.match(css, /aspect-ratio: 1 \/ 1/);
   assert.match(css, /\.cn-hero \.cara-bracelet-lineup__viewport/);
 });
-});
 
 
 test("hero bracelet sizing does not depend on percentage height and has a safe canvas fallback", () => {
@@ -72,7 +70,6 @@ test("hero bracelet sizing does not depend on percentage height and has a safe c
   assert.match(js, /function fit\(entry\)/);
   assert.match(js, /getBoundingClientRect\(\)/);
   assert.match(js, /devicePixelRatio/);
-});
 });
 
 test("homepage feature frames share the same outer section width", () => {
