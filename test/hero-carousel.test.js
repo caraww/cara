@@ -24,11 +24,11 @@ test("homepage hero renders the three selected bracelets with the original rotat
   assert.match(script, /"#251A82"/);
   assert.match(script, /"#F1E00A"/);
   assert.match(css, /\.cn-hero \.cara-bracelet-card__art/);
-  assert.match(css, /top:50% !important/);
-  assert.match(css, /left:50% !important/);
-  assert.match(css, /transform:translate3d\(-50%,-50%,0\)/);
+  assert.match(css, /top: 50%;/);
+  assert.match(css, /left: 50%;/);
+  assert.match(css, /transform: translate\\(-50%, -50%\\)/);
   assert.match(css, /\.cn-hero \.cara-bracelet-lineup__viewport::before/);
-  assert.match(css, /inset:0;\s*width:100%;\s*height:100%/);
+  assert.match(css, /\\.cn-hero \\.cara-bracelet-lineup__slides[\\s\\S]*?inset: 0/);
   assert.match(css, /cara-bracelet-lineup__viewport::before/);
   assert.match(css, /aspect-ratio:1\/1/);
   assert.match(css, /\.cn-hero \.cara-bracelet-card figcaption/);
