@@ -70,10 +70,10 @@ html body header.top nav {
 /* سبد خرید فقط هنگام رفتن روی «حساب کاربری» باز شود؛ در حالت عادی مزاحم ناوبری نیست. */
 @media (min-width: 851px) {
   html body header.top nav { position: relative; }
-  html body header.top nav a[href*="cart.html"] {
+  html body header.top nav a[href*="cart.html"]:not(.btn):not(.cta) {
     position: absolute !important;
     inset-inline-end: 0;
-    inset-block-start: calc(100% + 12px);
+    inset-block-start: 100%;
     z-index: 5;
     display: inline-flex !important;
     min-width: 112px;
