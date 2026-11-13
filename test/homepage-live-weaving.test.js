@@ -8,7 +8,7 @@ const read = (path) => fs.readFileSync(path, "utf8");
 test("homepage contains one interactive live-weaving section and all controls", () => {
   const html = read("index.html");
   assert.equal((html.match(/id="loom"/g) || []).length, 1);
-  assert.equal((html.match(/id="braceletCanvas"/g) || []).length, 1, "signature hero bracelet canvas must remain");
+  assert.equal((html.match(/class="cara-bracelet-card__art"/g) || []).length, 3, "the current hero must keep all three bracelet canvases");
   for (const id of ["wvCanvas", "wvCount", "wvFill", "wvName", "wvFg", "wvBg", "wvAcross", "wvSpeed", "wvWarn", "wvPlay", "wvAgain", "wvDone", "wvOrder", "wvEdit"]) {
     assert.match(html, new RegExp('id="' + id + '"'));
   }
