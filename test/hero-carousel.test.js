@@ -28,9 +28,9 @@ test("homepage hero renders the three selected bracelets with the original rotat
   assert.match(css, /left: 50%;/);
   assert.match(css, /transform: translate\(-50%, -50%\)/);
   assert.match(css, /\.cn-hero \.cara-bracelet-lineup__viewport::before/);
-  assert.match(css, /\\.cn-hero \\.cara-bracelet-lineup__slides[\\s\\S]*?inset: 0/);
+  assert.match(css, /\.cn-hero \.cara-bracelet-lineup__slides[\s\S]*?inset: 0/);
   assert.match(css, /cara-bracelet-lineup__viewport::before/);
-  assert.match(css, /aspect-ratio:1\/1/);
+  assert.match(css, /aspect-ratio: 1 \/ 1/);
   assert.match(css, /\.cn-hero \.cara-bracelet-card figcaption/);
   assert.match(script, /function sprite\(/);
   assert.match(script, /Miyuki Delica thread opening/);
@@ -49,7 +49,7 @@ test("homepage hero renders the three selected bracelets with the original rotat
   assert.match(script, /pointerdown/);
   assert.match(script, /pointerup/);
   assert.match(script, /function show\(next\)/);
-  assert.match(css, /cara-bracelet-lineup__slides/);
+  assert.match(css, /\.cn-hero \.cara-bracelet-lineup__slides[\s\S]*?inset: 0/);
   assert.match(css, /\.cara-bracelet-card\.is-active/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
 });
