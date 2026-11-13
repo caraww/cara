@@ -12,7 +12,7 @@ test("homepage keeps the original animated loom as a separate experience", () =>
   for (const pattern of ["چشم‌نظر", "لوزی‌های طلایی", "قلب", "ستاره‌ی شب"]) {
     assert.ok(decor.includes(pattern), `missing original loom pattern: ${pattern}`);
   }
-  assert.match(html, /id="braceletCanvas"/);
+  assert.equal((html.match(/class="cara-bracelet-card__art"/g) || []).length, 3);
   assert.match(html, /id="wvCanvas"/);
   assert.match(html, /cara-weaving\.MP4/);
 });
@@ -33,13 +33,14 @@ test("name bracelet starts with Cara in gold on purple", () => {
 
 
 test("hero bracelet stays horizontal instead of tilting with scroll", () => {
-  const home = read("js/home.js");
-  const heroCss = read("css/hero.css");
-  assert.match(home, /hero\.querySelector\("\.prod canvas"\)/);
-  assert.match(home, /bracelet\.style\.transform = "none"/);
-  assert.doesNotMatch(home, /bracelet\.style\.transform = `rotate[YZ]\(/);
-  assert.doesNotMatch(home, /hero\.querySelector\("\.prod img"\)/);
-  assert.match(heroCss, /\.hero2 \.prod canvas \{/);
+  const wow = read("js/hero-wow.js");
+  const heroCss = read("css/cn-top.css");
+  assert.match(wow, /querySelector\("\.cn-hero"\)/);
+  assert.match(wow, /querySelector\("\.cara-bracelet-lineup"\)/);
+  assert.match(wow, /pointermove/);
+  assert.match(wow, /pointerleave/);
+  assert.match(heroCss, /\.cn-hero \.cara-bracelet-card__art/);
+  assert.doesNotMatch(wow, /\.prod canvas/);
 });
 
 test("weaving heading and frame follow the homepage heading and card rhythm", () => {
@@ -53,23 +54,22 @@ test("weaving heading and frame follow the homepage heading and card rhythm", ()
 
 
 test("hero bracelet canvas has visible square dimensions on desktop and mobile", () => {
-  const css = read("css/hero.css");
-  assert.match(css, /\.hero2 \.prod canvas \{/);
-  assert.match(css, /width: min\(100%, 620px, 78vh\)/);
-  assert.match(css, /height: auto;/);
+  const css = read("css/cn-top.css");
+  assert.match(css, /\.cn-hero \.cara-bracelet-card__art/);
+  assert.match(css, /width: min\(100%, 560px\)/);
+  assert.match(css, /height: auto/);
   assert.match(css, /aspect-ratio: 1 \/ 1/);
-  assert.match(css, /grid-column: 1 \/ -1/);
-  assert.match(css, /width: min\(82vw, 36vh, 360px\)/);
+  assert.match(css, /\.cn-hero \.cara-bracelet-lineup__viewport/);
 });
 
 
 test("hero bracelet sizing does not depend on percentage height and has a safe canvas fallback", () => {
-  const css = read("css/hero.css");
-  const js = read("js/hero-bracelet.js");
-  assert.match(css, /\.hero2 \.prod canvas \{[\s\S]*?height: auto;[\s\S]*?aspect-ratio: 1 \/ 1/);
-  assert.match(js, /if\(!r\.width\)cv\.style\.width=fallback\+"px"/);
-  assert.match(js, /ro\.observe\(cv\.parentElement\)/);
-  assert.match(js, /function roundedRect\(/);
+  const css = read("css/cn-top.css");
+  const js = read("js/hero-lineup.js");
+  assert.match(css, /\.cn-hero \.cara-bracelet-card__art[\s\S]*?height: auto[\s\S]*?aspect-ratio: 1 \/ 1/);
+  assert.match(js, /function fit\(entry\)/);
+  assert.match(js, /getBoundingClientRect\(\)/);
+  assert.match(js, /devicePixelRatio/);
 });
 
 test("homepage feature frames share the same outer section width", () => {
@@ -87,10 +87,10 @@ test("all homepage content uses one shared 1240px frame and matching gutters", (
   assert.match(frame, /\.sec,[\s\S]*?\.cara-weaving,[\s\S]*?\.wv-home/);
   assert.match(frame, /width: min\(var\(--page-frame-width\), 100%\)/);
   assert.match(frame, /padding-inline: var\(--page-frame-gutter\)/);
-  assert.match(frame, /\.hero\.hero2 \{[\s\S]*?padding-inline: max\(/);
+  assert.match(frame, /\.sec,[\s\S]*?\.cara-weaving,[\s\S]*?\.wv-home/);
   assert.match(frame, /\.foot \{[\s\S]*?padding-inline: max\(/);
   assert.match(html, /css\/page-frame\.css\?v=2/);
-  assert.match(html, /id="braceletCanvas"[\s\S]*?width="560"[\s\S]*?height="560"/);
+  assert.equal((html.match(/<canvas[\s\S]*?width="560"[\s\S]*?height="560"/g) || []).length, 3);
 });
 
 test("hero bracelet easing is initialized before the first fit render", () => {

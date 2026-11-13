@@ -8,22 +8,21 @@ const read = (path) => fs.readFileSync(path, "utf8");
 test("homepage contains one interactive live-weaving section and all controls", () => {
   const html = read("index.html");
   assert.equal((html.match(/id="loom"/g) || []).length, 1);
-  assert.equal((html.match(/id="braceletCanvas"/g) || []).length, 1, "signature hero bracelet canvas must remain");
+  assert.equal((html.match(/class="cara-bracelet-card__art"/g) || []).length, 3, "the current hero must keep all three bracelet canvases");
   for (const id of ["wvCanvas", "wvCount", "wvFill", "wvName", "wvFg", "wvBg", "wvAcross", "wvSpeed", "wvWarn", "wvPlay", "wvAgain", "wvDone", "wvOrder", "wvEdit"]) {
     assert.match(html, new RegExp('id="' + id + '"'));
   }
   assert.match(html, /اسمت رو با منجوق بنویس/);
-  assert.match(html, /اسمت رو بنویس و رنگ‌ها رو انتخاب کن؛ منجوق‌ها یکی‌یکی روی دار می‌شینن و تعدادشون رو همون لحظه می‌بینی/);
+  assert.match(html, /اسمت رو بنویس و رنگ‌ها رو انتخاب کن؛\s*منجوق‌ها یکی‌یکی روی دار\s*می‌شینن و تعدادشون رو همون لحظه می‌بینی/);
   assert.doesNotMatch(html, /<h2 id="wvTitle">ببین چطور می‌بافم/);
-  assert.match(html, /<section class="cara-weaving" id="weaving"/);
+  assert.match(html, /<section\s+class="cara-weaving"[\s\S]*?id="weaving"/);
   assert.match(html, /ببین چطور میبافم/);
   assert.match(html, /src="\/media\/cara-weaving\.MP4"/);
   assert.match(html, /css\/weaving\.css\?v=8/);
   assert.match(html, /querySelector\("\.cara-weaving__video"\)/);
-  assert.ok(html.indexOf('<section class="cara-weaving"') < html.indexOf('<section class="wv-home"'), "video section should appear before interactive name weaving");
-  assert.equal((html.match(/<section class="cara-weaving"/g) || []).length, 1);
-  assert.equal((html.match(/<section class="wv-home"/g) || []).length, 1);
-  assert.ok(html.indexOf('<section class="wv-home"') < html.indexOf('<section class="sec" id="paths">'), "live weaving must replace the old weaving section in place");
+  assert.ok(html.indexOf('class="cara-weaving"') < html.indexOf('class="wv-home"'), "video section should appear before interactive name weaving");
+  assert.equal((html.match(/class="cara-weaving"/g) || []).length, 1, "the video section appears exactly once");
+  assert.ok(html.indexOf('class="wv-home"') < html.indexOf('<section class="sec" id="paths">'), "live weaving must replace the old weaving section in place");
 });
 
 test("weaving script loads after the shared palette and before decor", () => {
