@@ -23,17 +23,26 @@ test("shared mobile navigation is left-anchored, accessible, and overlays withou
   assert.ok(css.includes("background: rgba(255,255,255,.985)"));
   assert.match(polish, /left:14px !important/);
   assert.match(polish, /inset-inline-start:auto !important/);
-  const finalMenu = polish.slice(polish.lastIndexOf("/* Final mobile menu surface:"));
-  assert.ok(finalMenu.includes("max-height:min(44vh,320px) !important;"));
-  assert.ok(finalMenu.includes("gap:2px !important;"));
-  assert.ok(finalMenu.includes("padding:7px !important;"));
-  assert.ok(finalMenu.includes("background:#fffdfb !important;"));
-  assert.ok(finalMenu.includes("backdrop-filter:none !important;"));
-  assert.ok(finalMenu.includes("min-height:40px !important;"));
+  const finalMenu = polish.slice(polish.lastIndexOf("/* Shared full-width plum mobile navigation."));
+  assert.ok(finalMenu.includes("width:100% !important;"));
+  assert.ok(finalMenu.includes("height:64px !important;"));
+  assert.ok(finalMenu.includes("background:linear-gradient(118deg,#17192e 0%,#252944 52%,#191b31 100%) !important;"));
+  assert.ok(finalMenu.includes("width:100vw !important;"));
+  assert.ok(finalMenu.includes("left:0 !important;"));
+  assert.ok(finalMenu.includes("right:0 !important;"));
+  assert.ok(finalMenu.includes("background:#191b31 !important;"));
+  assert.ok(finalMenu.includes("min-height:54px !important;"));
+  assert.ok(finalMenu.includes("filter:brightness(0) invert(1);"));
+  const serviceWorker = fs.readFileSync(path.join(root, "sw.js"), "utf8");
+  assert.match(serviceWorker, /url\.pathname === "\/css\/polish\.css"/);
+  assert.match(serviceWorker, /new Request\(request, \{ cache: "reload" \}\)/);
 });
 
 test("all primary and generated pages receive the shared mobile menu", () => {
-  const pages = ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html", "account.html"];
+  const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  assert.ok(home.includes('class="cn-header"'), "homepage uses its dedicated cn-header navigation");
+  assert.ok(home.includes('href="/css/cn-top.css?v=1"'), "homepage loads the canonical header stylesheet");
+  const pages = ["builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html", "account.html"];
   for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), "utf8");
     assert.ok(html.includes("/css/mobile-nav.css?v=20261111-release"), page + " loads the current mobile nav CSS cache key");
