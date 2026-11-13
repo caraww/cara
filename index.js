@@ -232,6 +232,7 @@ async function createPayment(request, env) {
       items: cart.items.map((item) => ({
         type: item.type, title: item.title, quantity: item.quantity, unitPrice: item.unitPrice,
         ...(item.workId ? { workId: item.workId } : {}),
+        ...(item.image ? { src: item.image } : {}),
         ...(item.design ? { design: item.design } : {}),
       })),
       cartSnapshot: {
@@ -408,6 +409,7 @@ function row(o) {
     createdAt: o.createdAt, paidAt: o.paidAt || null, sandbox: !!o.sandbox, priceToman: o.priceToman,
     name: `${o.customer.firstName} ${o.customer.lastName}`, phone: o.customer.phone, address: o.customer.address,
     kind: o.kind || "pattern", work: o.work || null,
+    items: Array.isArray(o.items) ? o.items.map((item) => ({ title: item.title || "", quantity: item.quantity || 1, type: item.type || "" })) : [],
     size: pt ? `${pt.width}x${pt.height}` : "", beads: pt ? pt.total : 0, colors: pt ? pt.counts : null,
     tracking: o.tracking || "", note: o.note || "",
     trackId: o.trackId || null, refNumber: o.refNumber || null, cardNumber: o.cardNumber || null, error: o.error || null,
