@@ -48,7 +48,7 @@ test("writes verified font files and rewrites Google Fonts links only after all 
 test("primary Persian font is preloaded on all main customer pages", () => {
   for (const page of ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html"]) {
     const html = fs.readFileSync(path.join(__dirname, "..", page), "utf8");
-    assert.match(html, /<link rel="preload" href="\/fonts\/vazirmatn-arabic-400\.woff2" as="font" type="font\/woff2" crossorigin\s*\/?\s*>/, page);
+    assert.match(html, /<link\s+rel="preload"\s+href="\/fonts\/vazirmatn-arabic-400\.woff2"\s+as="font"\s+type="font\/woff2"\s+crossorigin\s*\/?\s*>/, page);
     assert.match(html, /href="\/?css\/fonts\.css"/, page + " local font stylesheet");
   }
 });
