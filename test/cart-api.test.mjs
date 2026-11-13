@@ -41,7 +41,7 @@ test("GET /api/cart creates an anonymous server cart and sets a protected guest 
   assert.match(cookie, /HttpOnly/);
   assert.match(cookie, /Secure/);
   assert.match(cookie, /SameSite=Lax/);
-  assert.match(cookie, /Path=//);
+  assert.ok(cookie.includes("Path=/"));
 });
 
 test("cart mutations reject missing or foreign Origin headers", async () => {
