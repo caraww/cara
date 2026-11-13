@@ -1,0 +1,154 @@
+/* hero-wow.css — فقط index.html. بعد از hero-signature.css و قبل از site-nav.css لود بشه.
+   ایده: دستبند وسط یه «گردنبند منجوقی» طلایی می‌چرخه، پشتش شفق بنفش آروم حرکت می‌کنه،
+   و «منجوق‌به‌منجوق» مثل نخ طلا برق می‌زنه. فقط transform/opacity انیمیت می‌شه (سبک روی موبایل). */
+
+/* ---------- پس‌زمینه: شفق بنفش + ذرات طلایی ---------- */
+html body .hero.hero2 {
+  background:
+    radial-gradient(ellipse 60rem 40rem at 78% 40%, rgba(111, 76, 137, 0.35), transparent 70%),
+    linear-gradient(118deg, #17192e 0%, #22243b 58%, #191b31 100%);
+}
+html body .hero.hero2::before {
+  content: "";
+  position: absolute;
+  inset: -35%;
+  z-index: -1;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg at 50% 50%,
+    rgba(139, 92, 176, 0.75),
+    rgba(20, 21, 42, 0) 22%,
+    rgba(207, 174, 108, 0.38) 42%,
+    rgba(20, 21, 42, 0) 58%,
+    rgba(155, 143, 193, 0.6) 78%,
+    rgba(139, 92, 176, 0.75)
+  );
+  filter: blur(56px);
+  animation: cara-aurora 48s linear infinite;
+}
+html body .hero.hero2::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, #e9cf94 0 2px, transparent 2.6px),
+    radial-gradient(circle, #cfae6c 0 3px, transparent 3.6px),
+    radial-gradient(circle, #f6e3b0 0 1.6px, transparent 2.2px),
+    radial-gradient(circle, #9b8fc1 0 2.4px, transparent 3px),
+    radial-gradient(circle, #e9cf94 0 1.8px, transparent 2.4px);
+  background-size: 310px 290px, 430px 380px, 240px 260px, 360px 330px, 520px 460px;
+  background-position: 12% 20%, 70% 70%, 40% 90%, 88% 14%, 30% 50%;
+  opacity: 0.9;
+  animation: cara-drift 22s ease-in-out infinite alternate;
+}
+
+/* ---------- گردنبند منجوقی دور دستبند ---------- */
+html body .hero2 .cara-bracelet-lineup__viewport {
+  background: radial-gradient(circle at 50% 50%, rgba(207, 174, 108, 0.2), rgba(111, 76, 137, 0.14) 52%, transparent 74%);
+}
+html body .hero2 .cara-bracelet-lineup__viewport::before {
+  z-index: -1;
+  width: min(91%, 540px);
+  border: 10px dotted #f0d9a0;
+  box-shadow: none;
+  filter: drop-shadow(0 0 14px rgba(240, 217, 160, 0.75));
+  animation: cara-orbit-a 80s linear infinite, cara-ring-in 1.4s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s backwards;
+}
+html body .hero2 .cara-bracelet-lineup__viewport::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 50%;
+  top: 50%;
+  width: 99%;
+  aspect-ratio: 1;
+  border: 5px dotted #b9aee0;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  animation: cara-orbit-b 120s linear infinite, cara-ring-in 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s backwards;
+}
+
+/* ورود: دستبند از تاری بیرون میاد (فقط اولِ لود) */
+html body .hero2 .cara-bracelet-lineup {
+  animation: cara-stage-in 1.3s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s backwards;
+}
+/* تیلت ملایم با ماوس (جاوااسکریپت --rx و --ry رو می‌ذاره) */
+html body .hero2 .prod {
+  transform: perspective(1000px) rotateX(var(--ry, 0deg)) rotateY(var(--rx, 0deg));
+  transition: transform 0.25s ease-out;
+}
+
+/* ---------- تیتر: نقطه‌چین‌های زیر «منجوق‌به‌منجوق» حذف می‌شن ----------
+   هر چیزی که decor.css/decor.js زیر یا کنار تیتر اضافه کنه (pseudo یا عنصر) پنهان می‌شه */
+html body .hero2 .hero-copy h1::before,
+html body .hero2 .hero-copy h1::after,
+html body .hero2 .hero-copy h1 .gilt::before,
+html body .hero2 .hero-copy h1 .gilt::after {
+  content: none !important;
+  display: none !important;
+  background: none !important;
+}
+html body .hero2 .hero-copy h1 > :not(.gilt),
+html body .hero2 .hero-copy > :not(h1):not(p):not(.btns) {
+  display: none !important;
+}
+html body .hero2 .hero-copy h1,
+html body .hero2 .hero-copy h1 .gilt {
+  text-decoration: none !important;
+  border-bottom: 0 !important;
+}
+html body .hero2 .hero-copy .btns .btn.light {
+  box-shadow: 0 10px 34px rgba(207, 174, 108, 0.35);
+}
+
+/* ---------- موبایل: زیر هدر ۶۴ پیکسلی ---------- */
+@media (max-width: 820px) {
+  html body .hero.hero2 {
+    padding: calc(var(--nav-h, 64px) + 24px) 16px 18px !important;
+  }
+  html body .hero.hero2::before { filter: blur(40px); }
+  html body .hero2 .cara-bracelet-lineup__viewport::before { border-width: 7px; }
+  html body .hero2 .cara-bracelet-lineup__viewport::after { border-width: 4px; }
+  html body .hero2 .hero-copy h1 { font-size: clamp(33px, 9vw, 44px); }
+}
+@media (min-width: 821px) {
+  html body .hero.hero2 { padding-top: calc(var(--nav-h, 76px) + 40px); }
+}
+
+/* وقتی هیرو دیده نمی‌شه، انیمیشن‌ها می‌ایستن */
+.hero.hero2.is-off::before,
+.hero.hero2.is-off::after,
+.hero.hero2.is-off .cara-bracelet-lineup__viewport::before,
+.hero.hero2.is-off .cara-bracelet-lineup__viewport::after { animation-play-state: paused !important; }
+
+@keyframes cara-aurora { to { transform: rotate(360deg); } }
+@keyframes cara-drift { from { transform: translateY(0); } to { transform: translateY(-26px); } }
+@keyframes cara-orbit-a {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+@keyframes cara-orbit-b {
+  from { transform: translate(-50%, -50%) rotate(360deg); }
+  to { transform: translate(-50%, -50%) rotate(0deg); }
+}
+@keyframes cara-ring-in { from { opacity: 0; scale: 0.7; } to { opacity: 1; scale: 1; } }
+@keyframes cara-stage-in {
+  from { opacity: 0; transform: translateY(28px) scale(0.86); filter: blur(12px); }
+  to { opacity: 1; transform: none; filter: blur(0); }
+}
+@keyframes cara-shimmer {
+  0%, 100% { background-position: 100% 0; }
+  50% { background-position: 0 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body .hero.hero2::before,
+  html body .hero.hero2::after,
+  html body .hero2 .cara-bracelet-lineup__viewport::before,
+  html body .hero2 .cara-bracelet-lineup__viewport::after,
+  html body .hero2 .cara-bracelet-lineup,
+  html body .hero2 .prod { transform: none; transition: none; }
+}

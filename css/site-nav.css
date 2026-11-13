@@ -1,0 +1,304 @@
+/* site-nav.css — تنها جای تعریف هدر و ناوبری، برای همه‌ی صفحه‌ها.
+   باید آخرین فایل CSS توی <head> باشه (بعد از home/studio/polish/hero-*).
+   جایگزین mobile-nav.css شده؛ mobile-nav.js بدون تغییر کار می‌کنه.
+   رنگ هدر فقط از همین دو متغیر میاد. */
+:root {
+  --nav-bg-top: #22243b; /* همون رنگ هیرو: hero-signature.css */
+  --nav-bg-bot: #17192e;
+  --nav-ink: #f3eef9;
+  --nav-gold: #cfae6c;
+  --nav-h: 76px;
+}
+
+/* ---------- هدر: بنفش، تمام‌عرض، ثابت ---------- */
+html body header.top {
+  position: fixed !important;
+  inset: 0 0 auto 0 !important;
+  z-index: 60 !important;
+  width: 100% !important;
+  height: var(--nav-h) !important;
+  min-height: 0 !important;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  padding: 0 max(18px, 4vw) !important;
+  margin: 0 !important;
+  background: linear-gradient(118deg, #17192e 0%, #22243b 58%, #191b31 100%) !important;
+  color: var(--nav-ink) !important;
+  border-bottom: 1px solid rgba(207, 174, 108, 0.26) !important;
+  box-shadow: 0 10px 30px rgba(20, 12, 32, 0.28) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  isolation: isolate;
+}
+html body header.top.solid {
+  background: linear-gradient(118deg, #17192e 0%, #22243b 58%, #191b31 100%) !important;
+  color: var(--nav-ink) !important;
+}
+
+/* لوگو: همیشه نسخه‌ی روشن (روی بنفش) */
+html body header.top .logo {
+  display: flex !important;
+  align-items: center;
+  flex: none;
+  width: auto !important;
+  color: var(--nav-ink);
+}
+html body header.top .logo img {
+  height: 42px !important;
+  width: auto !important;
+  display: block;
+}
+html body header.top .logo img.l-dark { display: none !important; }
+html body header.top .logo img.l-light { display: block !important; }
+html body header.top .logo img:not(.l-light):not(.l-dark) {
+  filter: brightness(0) invert(1);
+}
+
+/* ---------- ناوبری دسکتاپ ---------- */
+html body header.top nav {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2vw, 30px);
+  font-size: 17px;
+  font-weight: 600;
+}
+html body header.top nav a:not(.btn):not(.cta) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 0;
+  color: var(--nav-ink) !important;
+  -webkit-text-fill-color: var(--nav-ink) !important;
+  opacity: 0.82 !important;
+  padding: 6px 0 !important;
+  margin: 0;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.2s, color 0.2s;
+}
+html body header.top nav a:not(.btn):not(.cta):hover,
+html body header.top nav a[aria-current="page"]:not(.btn):not(.cta) {
+  opacity: 1 !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+  background: transparent !important;
+}
+html body header.top nav a:not(.btn):not(.cta)::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -3px;
+  margin: auto;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nav-gold);
+  transform: scale(0);
+  transition: transform 0.25s;
+}
+html body header.top nav a:not(.btn):not(.cta):hover::after,
+html body header.top nav a[aria-current="page"]::after {
+  transform: scale(1);
+}
+html body header.top nav a.cta,
+html body header.top nav a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 22px;
+  border: 1px solid var(--nav-gold) !important;
+  border-radius: 999px;
+  background: var(--nav-gold) !important;
+  color: #1d1527 !important;
+  -webkit-text-fill-color: #1d1527 !important;
+  font-size: 15px;
+  font-weight: 800;
+  opacity: 1 !important;
+  box-shadow: none;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+/* وقتی هم «طراحی دستبند» (cta) هست و هم «سفارش» (btn): فقط یکی پر، یکی خط‌دار */
+html body header.top nav:has(a.cta) a.btn {
+  background: transparent !important;
+  color: var(--nav-gold) !important;
+  -webkit-text-fill-color: var(--nav-gold) !important;
+}
+html body header.top nav a.cta:hover,
+html body header.top nav a.btn:hover {
+  background: #e3c78c !important;
+  border-color: #e3c78c !important;
+  color: #1d1527 !important;
+  -webkit-text-fill-color: #1d1527 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(207, 174, 108, 0.3);
+}
+html body header.top a:focus-visible,
+html body header.top button:focus-visible {
+  outline: 3px solid var(--nav-gold);
+  outline-offset: 3px;
+}
+
+/* دکمه‌ی منو فقط روی موبایل */
+html body header.top .menu-toggle { display: none; }
+
+/* ---------- موبایل: نوار بنفش + منوی تمام‌عرض ---------- */
+@media (max-width: 850px) {
+  :root { --nav-h: 64px; }
+
+  html body header.top {
+    padding: 0 16px !important;
+  }
+  html body header.top .logo img { height: 36px !important; }
+
+  /* دکمه‌ی همبرگری */
+  html body header.top.has-mobile-menu .menu-toggle {
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 1px solid rgba(207, 174, 108, 0.5);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.08);
+    color: #f3e2b4;
+    cursor: pointer;
+    transform: none;
+    box-shadow: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  html body header.top.has-mobile-menu .menu-toggle:hover,
+  html body header.top.has-mobile-menu.menu-open .menu-toggle {
+    background: rgba(207, 174, 108, 0.18);
+    border-color: var(--nav-gold);
+  }
+  html body header.top .menu-toggle span { display: none; }
+  html body header.top .menu-toggle::before,
+  html body header.top .menu-toggle::after {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.25s ease;
+  }
+  html body header.top .menu-toggle::before { transform: translateY(-4px); }
+  html body header.top .menu-toggle::after { transform: translateY(4px); }
+  html body header.top .menu-toggle[aria-expanded="true"]::before { transform: rotate(45deg); }
+  html body header.top .menu-toggle[aria-expanded="true"]::after { transform: rotate(-45deg); }
+
+  /* پنل منو: زیر نوار، کل عرض صفحه، همون بنفش */
+  html body header.top.has-mobile-menu nav,
+  html body header.top.has-mobile-menu nav[aria-label] {
+    display: none !important;
+    position: absolute !important;
+    top: 100% !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    max-height: calc(100svh - var(--nav-h)) !important;
+    box-sizing: border-box;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 8px 18px 22px !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(207, 174, 108, 0.3) !important;
+    border-radius: 0 0 26px 26px !important;
+    background: linear-gradient(180deg, var(--nav-bg-bot), #191b31) !important;
+    box-shadow: 0 28px 60px rgba(14, 9, 22, 0.55) !important;
+    font-size: 18px;
+  }
+  html body header.top.has-mobile-menu.menu-open nav,
+  html body header.top.has-mobile-menu.menu-open nav[aria-label] {
+    display: flex !important;
+    animation: cara-menu-in 0.22s ease-out both;
+  }
+  html body header.top.has-mobile-menu nav a:not(.btn):not(.cta) {
+    display: flex !important;
+    position: static !important;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    min-height: 54px;
+    padding: 12px 4px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.09) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: var(--nav-ink) !important;
+    opacity: 1 !important;
+    font-size: 18px !important;
+    font-weight: 600;
+    line-height: 1.5;
+    opacity: 1;
+  }
+  html body header.top.has-mobile-menu nav a:not(.btn):not(.cta)::after { display: none; }
+  html body header.top.has-mobile-menu nav a:not(.btn):not(.cta):hover,
+  html body header.top.has-mobile-menu nav a[aria-current="page"]:not(.btn):not(.cta) {
+    color: #f3e2b4 !important;
+    -webkit-text-fill-color: #f3e2b4 !important;
+  }
+  html body header.top.has-mobile-menu nav a.cta,
+  html body header.top.has-mobile-menu nav a.btn {
+    display: flex !important;
+    position: static !important;
+    width: 100%;
+    min-height: 52px;
+    margin: 16px 0 0 !important;
+    padding: 0 20px !important;
+    border-radius: 999px;
+    background: var(--nav-gold) !important;
+    border-color: var(--nav-gold) !important;
+    color: #1d1527 !important;
+    -webkit-text-fill-color: #1d1527 !important;
+    font-size: 17px !important;
+    font-weight: 800;
+    box-shadow: none;
+  }
+  /* توی منوی موبایل، دکمه‌ی خط‌دار هم مثل بقیه پر و طلایی باشه */
+  html body header.top.has-mobile-menu nav:has(a.cta) a.btn {
+    background: var(--nav-gold) !important;
+    color: #1d1527 !important;
+    -webkit-text-fill-color: #1d1527 !important;
+  }
+  .mobile-nav-spacer { display: none !important; height: 0 !important; }
+
+  /* محتوای صفحه‌های استودیو زیر هدر ثابتِ جدید */
+  body:has(.wrap) main.wrap,
+  body:has(.wrap) .wrap {
+    padding-top: calc(var(--nav-h) + 20px) !important;
+  }
+}
+@media (min-width: 851px) {
+  html body header.top .menu-toggle { display: none !important; }
+}
+
+@keyframes cara-menu-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html body header.top.has-mobile-menu.menu-open nav { animation: none !important; }
+  html body header.top .menu-toggle::before,
+  html body header.top .menu-toggle::after { transition: none; }
+}
