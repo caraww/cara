@@ -2,11 +2,11 @@
    سفارش‌دهنده‌ها اغلب قبل از پرداخت می‌خوان با یه آدم حرف بزنن؛ این دکمه راهش رو کوتاه می‌کنه. */
 (() => {
   // Older generated color and bracelet pages rely on this shared script.
-  // Load the same mobile navigation assets there without duplicating newer pages.
+  // Recognize both the legacy mobile-nav stylesheet and the canonical site-nav stylesheet.
   const header = document.querySelector(".top");
   if (header) {
     const hasNavCss = [...document.querySelectorAll('link[rel="stylesheet"]')]
-      .some((link) => link.href.includes("/css/mobile-nav.css"));
+      .some((link) => link.href.includes("/css/mobile-nav.css") || link.href.includes("/css/site-nav.css"));
     const hasNavScript = [...document.scripts]
       .some((script) => script.src.includes("/js/mobile-nav.js"));
     const hasFinalPolishCss = [...document.querySelectorAll('link[rel="stylesheet"]')]
