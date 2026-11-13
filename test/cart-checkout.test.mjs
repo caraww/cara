@@ -91,3 +91,12 @@ test("existing single-item and guest checkout paths remain available", () => {
   assert.match(checkout, /q\.get\("work"\)/);
   assert.match(checkout, /pattern: \{ width: p\.width, height: p\.height, data: p\.data \}/);
 });
+
+test("cart page styles load before the shared visual layer", () => {
+  for (const file of ["cart.html", "checkout.html"]) {
+    const html = fs.readFileSync(path.join(root, file), "utf8");
+    const cartStyle = html.indexOf("/css/cart.css?v=1");
+    const polishStyle = html.indexOf("/css/polish.css?v=7");
+    assert.ok(cartStyle >= 0 && polishStyle > cartStyle, file + " should load cart styles before polish.css");
+  }
+});
