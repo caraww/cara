@@ -1,6 +1,6 @@
 import { handleGame, checkCode, codeDiscount, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
 import { handleAccountRequest, getAccountUser } from "./lib/accounts.mjs";
-import { handleCartRequest } from "./lib/cart.mjs";
+import { handleCartRequest, loadCartForRequest, clearPurchasedCartItems } from "./lib/cart.mjs";
 import "./lib/works-pricing.js";
 export { GameDO } from "./game-worker.js"; /* Durable Object بازی */
 
@@ -218,6 +218,27 @@ async function createPayment(request, env) {
     if (work.noOrder || !prices[String(work.id)]) return json({ error: "این نمونه قابل سفارش مستقیم نیست؛ از «عکس به الگو» یا «طراحی دستی» سفارش بده." }, 400);
     priceToman = prices[String(work.id)];
     extra = { kind: "work", work: { id: String(work.id), title: work.title || "", src: work.src } };
+  } else if (body.cart === true) {
+    const cart = await loadCartForRequest(request, env, {
+      cleanPattern, getWork: (id) => cartWork(env, id),
+      pricePerBead: C.price, baseFee: C.base,
+    });
+    if (!cart.cartId || !cart.items.length) return json({ error: "سبد خریدت خالیه." }, 400);
+    if (cart.items.some((item) => !item.available || !Number.isSafeInteger(item.unitPrice) || item.unitPrice <= 0))
+      return json({ error: "یکی از کالاهای سبد دیگه قابل سفارش نیست؛ سبد رو بررسی و به‌روزرسانی کن." }, 400);
+    priceToman = cart.items.reduce((sum, item) => sum + item.lineTotal, 0);
+    extra = {
+      kind: "cart",
+      items: cart.items.map((item) => ({
+        type: item.type, title: item.title, quantity: item.quantity, unitPrice: item.unitPrice,
+        ...(item.workId ? { workId: item.workId } : {}),
+        ...(item.design ? { design: item.design } : {}),
+      })),
+      cartSnapshot: {
+        cartId: cart.cartId,
+        items: cart.items.map((item) => ({ id: item.id, updatedAt: item.updatedAt })),
+      },
+    };
   } else {
     if (!C.price) return json({ error: "قیمت هنوز تنظیم نشده، بعداً امتحان کن." }, 503);
     const pattern = cleanPattern(body.pattern);
@@ -295,6 +316,10 @@ async function settle(C, env, order, markFailed, ctx, pre) {
     order.cardNumber = v.cardNumber || null;
     await saveOrder(env, order);
     if (order.discountCode) await useCode(env, order.discountCode, order.id);
+    if (order.cartSnapshot) {
+      try { await clearPurchasedCartItems(env, order.cartSnapshot); }
+      catch (error) { console.error("paid order cart cleanup failed", order.id, String(error).slice(0, 160)); }
+    }
     await later(notifyPaid(C, env, order));
     return order;
   }
@@ -411,7 +436,7 @@ async function telegram(env, text) {
 }
 function orderText(C, o) {
   const c = o.customer || {}, pt = o.pattern;
-  const what = o.kind === "work" ? `دستبند گالری: ${tgEsc(o.work && (o.work.title || o.work.id))}` : pt ? `الگوی دلخواه ${pt.width}×${pt.height} · ${pt.total} منجوق` : "";
+  const what = o.kind === "cart" ? (o.items || []).map((item) => `• ${tgEsc(item.title)} × ${item.quantity} — ${Number(item.unitPrice * item.quantity).toLocaleString("fa-IR")} تومان`).join("\n") : o.kind === "work" ? `دستبند گالری: ${tgEsc(o.work && (o.work.title || o.work.id))}` : pt ? `الگوی دلخواه ${pt.width}×${pt.height} · ${pt.total} منجوق` : "";
   return [
     `${o.sandbox ? "🧪 سفارش آزمایشی" : "🛍 سفارش جدید (پرداخت شد)"} #${o.id.slice(0, 8)}`,
     `💰 ${Number(o.priceToman).toLocaleString("fa-IR")} تومان`,
