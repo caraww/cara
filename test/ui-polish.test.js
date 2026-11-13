@@ -80,7 +80,7 @@ test("shared navigation has explicit contrast for transparent and solid headers"
 test("desktop cart link is a hover/focus disclosure from the account navigation item", () => {
   const css = read("css/site-nav.css");
   const homeCss = read("css/cn-top.css");
-  assert.match(homeCss, /\.cn-nav:has\(a\[href\*="account\\.html"\]:hover\) a\[href\*="cart\\.html"\]/);
+  assert.match(homeCss, /\.cn-nav:has\(a\[href\*="account\.html"\]:hover\) a\[href\*="cart\.html"\]/);
   assert.match(homeCss, /@media \(min-width: 900px\)/);
   assert.match(css, /nav:has\(a\[href\*="account\.html"\]:hover\) a\[href\*="cart\.html"\]/);
   assert.match(css, /nav:has\(a\[href\*="account\.html"\]:focus-visible\) a\[href\*="cart\.html"\]/);
