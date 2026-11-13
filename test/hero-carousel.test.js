@@ -9,7 +9,7 @@ const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 test("homepage hero renders the three selected bracelets with the original rotating 3D Delica engine and swipe controls", () => {
   const html = read("index.html");
   const script = read("js/hero-lineup.js");
-  const css = read("css/hero-lineup.css");
+  const css = read("css/cn-top.css");
   assert.match(html, /id="caraBraceletLineup"/);
   assert.doesNotMatch(html, /برای دیدن طرح بعدی/);
   const lineupStart = html.indexOf('class="cara-bracelet-lineup"');
@@ -41,10 +41,10 @@ test("homepage hero renders the three selected bracelets with the original rotat
   assert.match(script, /prefers-reduced-motion/);
   assert.match(html, /cara-bracelet-lineup__arrow--prev/);
   assert.match(html, /cara-bracelet-lineup__arrow--next/);
-  assert.match(html, /aria-label="دستبند قبلی">‹/);
-  assert.match(html, /aria-label="دستبند بعدی">›/);
+  assert.match(html, /aria-label="دستبند قبلی"[\\s\\S]*?>\\s*‹\\s*</);
+  assert.match(html, /aria-label="دستبند بعدی"[\\s\\S]*?>\\s*›\\s*</);
   assert.doesNotMatch(html, /cara-bracelet-lineup__title|cara-bracelet-lineup__dots/);
-  assert.match(css, /justify-content:center/);
+  assert.match(css, /justify-content: center/);
   assert.doesNotMatch(script, /cara-bracelet-lineup__dots|cara-bracelet-lineup__title/);
   assert.match(script, /pointerdown/);
   assert.match(script, /pointerup/);
