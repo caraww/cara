@@ -26,7 +26,7 @@ test("homepage hero renders the three selected bracelets with the original rotat
   assert.match(css, /\.cn-hero \.cara-bracelet-card__art/);
   assert.match(css, /top: 50%;/);
   assert.match(css, /left: 50%;/);
-  assert.match(css, /transform: translate\\(-50%, -50%\\)/);
+  assert.match(css, /transform: translate\(-50%, -50%\)/);
   assert.match(css, /\.cn-hero \.cara-bracelet-lineup__viewport::before/);
   assert.match(css, /\\.cn-hero \\.cara-bracelet-lineup__slides[\\s\\S]*?inset: 0/);
   assert.match(css, /cara-bracelet-lineup__viewport::before/);
