@@ -11,6 +11,7 @@ const page = fs.readFileSync(path.join(root, "cart.html"), "utf8");
 const client = fs.readFileSync(path.join(root, "js/cart.js"), "utf8");
 const checkout = fs.readFileSync(path.join(root, "js/checkout.js"), "utf8");
 const schema = fs.readFileSync(path.join(root, "migrations/0001_accounts.sql"), "utf8");
+const admin = fs.readFileSync(path.join(root, "admin.html"), "utf8");
 
 test("cart schema has one owner per cart and bounded item quantities", () => {
   assert.match(schema, /CREATE TABLE IF NOT EXISTS carts/);
@@ -75,4 +76,18 @@ test("checkout submits a cart without trusting browser-supplied totals", () => {
   assert.match(checkout, /const cartMode = q\.get\("cart"\) === "1"/);
   assert.match(checkout, /cart: true, customer: fd/);
   assert.match(checkout, /data\.items\.some\(\(item\) => !item\.available\)/);
+});
+
+test("cart orders remain visible in admin details and exports", () => {
+  assert.match(worker, /items: Array\.isArray\(o\.items\)/);
+  assert.match(admin, /o\.kind === "cart"/);
+  assert.match(admin, /r\.kind === "cart"/);
+  assert.match(admin, /item\.design/);
+});
+
+test("existing single-item and guest checkout paths remain available", () => {
+  assert.match(worker, /body\.workId != null/);
+  assert.match(worker, /cleanPattern\(body\.pattern\)/);
+  assert.match(checkout, /q\.get\("work"\)/);
+  assert.match(checkout, /pattern: \{ width: p\.width, height: p\.height, data: p\.data \}/);
 });
