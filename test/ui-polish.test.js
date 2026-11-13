@@ -24,7 +24,7 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     const polishPath = "/css/polish.css?v=7";
     const sharedLayerIndex = html.indexOf(polishPath);
     const pageStyles = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+>/g)]
-      .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("hero-signature.css"))
+      .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("hero-signature.css") && !tag.includes("cn-top.css"))
       .map(([tag]) => html.indexOf(tag));
     assert.ok(
       sharedLayerIndex > Math.max(-1, ...pageStyles),
@@ -61,10 +61,11 @@ test("Gallery mobile menu stays compact and fully opaque", () => {
   const css = read("css/polish.css");
   assert.match(css, /width:min\(196px,calc\(100vw - 24px\)\) !important;/);
   assert.doesNotMatch(css, /width:min\(238px,calc\(100vw - 24px\)\) !important;/, "narrow phones must not override the 196px menu cap");
-  const finalMenu = css.slice(css.lastIndexOf("/* Final mobile menu surface:"));
-  assert.match(finalMenu, /background:#fffdfb !important;/);
-  assert.match(finalMenu, /backdrop-filter:none !important;/);
-  assert.match(finalMenu, /max-height:min\(44vh,320px\) !important;/);
+  const finalMenu = css.slice(css.lastIndexOf("/* Shared full-width plum mobile navigation."));
+  assert.match(finalMenu, /width:100vw !important;/);
+  assert.match(finalMenu, /left:0 !important;[\s\S]*right:0 !important;/);
+  assert.match(finalMenu, /background:#191b31 !important;/);
+  assert.match(finalMenu, /max-height:calc\(100svh - 64px - env\(safe-area-inset-top,0px\)\) !important;/);
 });
 
 
