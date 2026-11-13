@@ -53,6 +53,22 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Keep the shared navigation theme current even when an older stylesheet URL
+  // is already stored by the cache-first PWA strategy.
+  if (url.pathname === "/css/polish.css") {
+    event.respondWith((async () => {
+      const cache = await caches.open(CACHE_NAME);
+      try {
+        const response = await fetch(new Request(request, { cache: "reload" }));
+        if (response && response.ok) await cache.put(request, response.clone());
+        return response;
+      } catch {
+        return (await cache.match(request)) || Response.error();
+      }
+    })());
+    return;
+  }
+
   if (["style", "script", "image", "font"].includes(request.destination)) {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE_NAME);
