@@ -6,6 +6,19 @@
   let busy = false;
   $("checkoutButton").addEventListener("click", (event) => { if ($("checkoutButton").getAttribute("aria-disabled") === "true") event.preventDefault(); });
 
+  function drawDesign(canvas, design) {
+    const rows = design?.data;
+    if (!Array.isArray(rows) || !rows.length || !Array.isArray(rows[0])) return;
+    const width = rows[0].length, height = rows.length, cell = Math.max(4, Math.min(9, 88 / width));
+    canvas.width = Math.ceil(width * cell); canvas.height = Math.ceil(height * cell);
+    const ctx = canvas.getContext("2d");
+    rows.forEach((row, y) => row.forEach((color, x) => {
+      if (!color) return;
+      ctx.fillStyle = window.CARA?.palette?.find((p) => p[0] === color)?.[2] || "#8b72a4";
+      ctx.fillRect(x * cell, y * cell, Math.max(1, cell - 1), Math.max(1, cell - 1));
+    }));
+  }
+
   async function api(path, options = {}) {
     const response = await fetch(path, {
       credentials: "same-origin", cache: "no-store", ...options,
@@ -33,8 +46,11 @@
       if (item.image) {
         const image = document.createElement("img"); image.src = item.image.startsWith("/") ? item.image : "/" + item.image;
         image.alt = item.title; image.loading = "lazy"; card.append(image);
+      } else if (item.type === "design" && item.design) {
+        const art = document.createElement("canvas"); art.className = "cart-art"; art.setAttribute("aria-label", "پیش‌نمایش طرح دستبند");
+        drawDesign(art, item.design); card.append(art);
       } else {
-        const art = document.createElement("div"); art.className = "cart-art"; art.textContent = item.type === "design" ? "✳" : "c."; card.append(art);
+        const art = document.createElement("div"); art.className = "cart-art"; art.textContent = "c."; card.append(art);
       }
       const info = document.createElement("div");
       const title = document.createElement("h2"); title.textContent = item.title;
