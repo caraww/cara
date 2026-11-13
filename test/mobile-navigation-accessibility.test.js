@@ -39,7 +39,10 @@ test("shared mobile navigation is left-anchored, accessible, and overlays withou
 });
 
 test("all primary and generated pages receive the shared mobile menu", () => {
-  const pages = ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html", "account.html"];
+  const home = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  assert.ok(home.includes('class="cn-header"'), "homepage uses its dedicated cn-header navigation");
+  assert.ok(home.includes('href="/css/cn-top.css?v=1"'), "homepage loads the canonical header stylesheet");
+  const pages = ["builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html", "account.html"];
   for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), "utf8");
     assert.ok(html.includes("/css/mobile-nav.css?v=20261111-release"), page + " loads the current mobile nav CSS cache key");
