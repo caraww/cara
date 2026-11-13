@@ -1,0 +1,686 @@
+/* ==========================================================
+   cn-top.css — هدر و هیروی صفحه‌ی اصلی cara (فقط index.html)
+
+   جای این فایل‌ها توی index.html می‌شینه:
+     hero.css, hero-carousel.css, hero-signature.css, hero-lineup.css, mobile-nav.css
+   همه‌ی کلاس‌ها با cn- شروع می‌شن؛ پس polish.css / home.css / decor.css
+   (که فقط header.top و .hero.hero2 رو می‌شناسن) دیگه بهشون دست نمی‌زنن.
+   رنگ‌ها همون پالت فعلی سایت: سرمه‌ای #17192e / #22243b، ایندیگو #343b64،
+   یاسی #9b8fc1، طلایی #cfae6c.
+   ========================================================== */
+
+:root {
+  --cn-ink: #17192e;
+  --cn-navy: #22243b;
+  --cn-indigo: #343b64;
+  --cn-lilac: #9b8fc1;
+  --cn-lilac-soft: #d9d5eb;
+  --cn-gold: #cfae6c;
+  --cn-gold-soft: #ead5a5;
+  --cn-text: #f1eff7;
+  --cn-muted: rgba(235, 233, 243, 0.76);
+  --cn-header-h: 64px;
+}
+@media (min-width: 900px) {
+  :root {
+    --cn-header-h: 76px;
+  }
+}
+
+/* هدر چسبنده روی عنوان بخش‌ها نیفته */
+html {
+  scroll-padding-top: calc(var(--cn-header-h) + 12px);
+}
+html.cn-lock {
+  overflow: hidden;
+}
+
+/* ================= هدر ================= */
+.cn-header {
+  position: sticky;
+  top: 0;
+  /* زیر نخ اسکرول (.thread با z-index 40) و بالای محتوا */
+  z-index: 35;
+  margin: 0;
+  padding-top: env(safe-area-inset-top, 0px);
+  background: rgba(23, 25, 46, 0.88);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  backdrop-filter: blur(16px) saturate(1.3);
+  border-bottom: 1px solid rgba(155, 143, 193, 0.22);
+  color: var(--cn-text);
+  font-family: inherit;
+  /* جابه‌جایی نرم هدر بین صفحه‌ها (همون اسمی که decor.css برای .top گذاشته) */
+  view-transition-name: dl2-top;
+  transition:
+    background 0.25s,
+    box-shadow 0.25s;
+}
+.cn-header.is-scrolled {
+  background: rgba(23, 25, 46, 0.97);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+}
+.cn-header *,
+.cn-header *::before,
+.cn-header *::after {
+  box-sizing: border-box;
+}
+
+.cn-bar {
+  width: min(1320px, 100%);
+  height: var(--cn-header-h);
+  margin-inline: auto;
+  padding-inline: max(14px, 4vw);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cn-logo {
+  flex: none;
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+}
+.cn-logo img {
+  display: block;
+  height: 34px;
+  width: auto;
+}
+@media (min-width: 900px) {
+  .cn-logo img {
+    height: 40px;
+  }
+}
+
+/* لینک‌ها */
+.cn-nav {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-inline-start: 28px;
+}
+.cn-nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: var(--cn-muted);
+  font-size: 15.5px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    color 0.2s,
+    background 0.2s;
+}
+.cn-nav a:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.07);
+}
+.cn-nav a.is-active {
+  color: var(--cn-gold-soft);
+}
+
+/* سمت چپ: دکمه‌ی اصلی + همبرگری */
+.cn-end {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 0 18px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #e6c987, #cfae6c);
+  color: #1d1a2e;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  transition:
+    transform 0.18s,
+    filter 0.2s;
+}
+.cn-cta:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+}
+
+.cn-toggle {
+  display: none;
+  position: relative;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--cn-text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.cn-toggle span {
+  position: absolute;
+  left: 11px;
+  right: 11px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition:
+    transform 0.25s,
+    opacity 0.2s,
+    top 0.25s;
+}
+.cn-toggle span:nth-child(1) {
+  top: 15px;
+}
+.cn-toggle span:nth-child(2) {
+  top: 21px;
+}
+.cn-toggle span:nth-child(3) {
+  top: 27px;
+}
+.cn-header.is-open .cn-toggle span:nth-child(1) {
+  top: 21px;
+  transform: rotate(45deg);
+}
+.cn-header.is-open .cn-toggle span:nth-child(2) {
+  opacity: 0;
+}
+.cn-header.is-open .cn-toggle span:nth-child(3) {
+  top: 21px;
+  transform: rotate(-45deg);
+}
+
+.cn-header a:focus-visible,
+.cn-toggle:focus-visible {
+  outline: 2px solid var(--cn-gold-soft);
+  outline-offset: 2px;
+}
+
+/* دسکتاپ: لینک فعال با یه منجوق کوچیک زیرش */
+@media (min-width: 900px) {
+  .cn-nav a.is-active::after {
+    content: "";
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    border-radius: 50%;
+    background: var(--cn-gold);
+  }
+}
+
+/* موبایل: منوی کشویی زیر هدر، ردیف‌های بزرگ برای لمس */
+@media (max-width: 899.98px) {
+  .cn-toggle {
+    display: inline-block;
+  }
+  .cn-nav {
+    position: absolute;
+    top: 100%;
+    inset-inline: 0;
+    margin: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 6px max(14px, 4vw) calc(18px + env(safe-area-inset-bottom, 0px));
+    background: #191b31;
+    border-bottom: 1px solid rgba(155, 143, 193, 0.3);
+    max-height: calc(100vh - var(--cn-header-h));
+    max-height: calc(
+      100svh - var(--cn-header-h) - env(safe-area-inset-top, 0px)
+    );
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition:
+      opacity 0.22s,
+      transform 0.22s,
+      visibility 0s 0.22s;
+  }
+  .cn-header.is-open .cn-nav {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition:
+      opacity 0.22s,
+      transform 0.22s;
+  }
+  .cn-nav a {
+    justify-content: space-between;
+    min-height: 54px;
+    padding: 0 4px;
+    border-radius: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    color: #e6e3f1;
+    font-size: 17px;
+  }
+  .cn-nav a:last-child {
+    border-bottom: 0;
+  }
+  .cn-nav a:hover {
+    background: transparent;
+  }
+  .cn-nav a::after {
+    content: "";
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-left: 2px solid var(--cn-lilac);
+    border-bottom: 2px solid var(--cn-lilac);
+    transform: rotate(45deg);
+    opacity: 0.85;
+  }
+}
+@media (max-width: 359px) {
+  .cn-logo img {
+    height: 30px;
+  }
+  .cn-cta {
+    padding: 0 12px;
+    font-size: 14px;
+  }
+}
+
+/* ================= هیرو ================= */
+.cn-hero {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  color: var(--cn-text);
+  font-family: inherit;
+  background:
+    radial-gradient(
+      ellipse 36rem 40rem at 26% 50%,
+      rgba(155, 143, 193, 0.2),
+      transparent 72%
+    ),
+    linear-gradient(118deg, var(--cn-ink) 0%, #252944 52%, #191b31 100%);
+}
+.cn-hero *,
+.cn-hero *::before,
+.cn-hero *::after {
+  box-sizing: border-box;
+}
+
+/* نخ منجوقی پایین هیرو؛ همون نقش فوتر و نخ اسکرول */
+.cn-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 14px;
+  z-index: 2;
+  background: radial-gradient(circle, #b8975a 0 3.2px, transparent 3.8px) 0 50% /
+    17px 14px repeat-x;
+  pointer-events: none;
+}
+
+.cn-hero__inner {
+  flex: 1 1 auto;
+  width: min(1320px, 100%);
+  margin-inline: auto;
+  padding: 26px max(18px, 5vw) 52px;
+  display: grid;
+  gap: 24px;
+  align-items: center;
+}
+.cn-hero__copy,
+.cn-hero__visual {
+  min-width: 0;
+}
+
+.cn-hero .cn-hero__title {
+  margin: 0;
+  color: #f7f6fb;
+  font-size: clamp(30px, 8.6vw, 58px);
+  font-weight: 900;
+  line-height: 1.45;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+/* زیر «منجوق‌به‌منجوق» یه ردیف منجوق کشیده شده */
+.cn-hero .cn-gilt {
+  display: inline;
+  padding-bottom: 6px;
+  color: var(--cn-gold-soft);
+  background: radial-gradient(circle, var(--cn-gold) 0 2px, transparent 2.6px)
+    0 100% / 10px 8px repeat-x;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.cn-hero .cn-hero__lead {
+  margin: 14px 0 0;
+  max-width: 34em;
+  color: var(--cn-muted);
+  font-size: clamp(15px, 4.1vw, 18px);
+  line-height: 1.9;
+}
+
+.cn-hero__actions {
+  display: grid;
+  gap: 10px;
+  margin-top: 22px;
+}
+@media (min-width: 520px) {
+  .cn-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 28px;
+  }
+}
+.cn-hero .cn-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 28px;
+  border: 1.5px solid transparent;
+  border-radius: 999px;
+  font-family: inherit;
+  font-size: 16.5px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  transition:
+    transform 0.18s,
+    background 0.2s,
+    border-color 0.2s;
+}
+.cn-hero .cn-btn--gold {
+  background: linear-gradient(180deg, #e6c987, #cfae6c);
+  color: #1d1a2e;
+  box-shadow: 0 10px 24px rgba(207, 174, 108, 0.2);
+}
+.cn-hero .cn-btn--gold:hover {
+  transform: translateY(-2px);
+}
+.cn-hero .cn-btn--ghost {
+  background: transparent;
+  border-color: rgba(217, 213, 235, 0.38);
+  color: #f1eff7;
+}
+.cn-hero .cn-btn--ghost:hover {
+  background: rgba(217, 213, 235, 0.08);
+  border-color: rgba(234, 213, 165, 0.7);
+  color: var(--cn-gold-soft);
+}
+.cn-hero a:focus-visible {
+  outline: 2px solid var(--cn-gold-soft);
+  outline-offset: 3px;
+}
+
+.cn-hero__facts {
+  display: none;
+  flex-wrap: wrap;
+  gap: 6px 20px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+  color: var(--cn-muted);
+  font-size: 14.5px;
+}
+.cn-hero__facts li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cn-hero__facts li::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--cn-gold);
+}
+@media (min-width: 700px) {
+  .cn-hero__facts {
+    display: flex;
+  }
+}
+
+/* ---------- ویترین سه دستبند (js/hero-lineup.js همین کلاس‌ها رو می‌خونه) ---------- */
+.cn-hero__visual {
+  width: 100%;
+  max-width: 560px;
+  margin-inline: auto;
+}
+.cn-hero .cara-bracelet-lineup {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  gap: 3px;
+  outline: none;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.cn-hero .cara-bracelet-lineup__viewport {
+  position: relative;
+  width: min(100%, 86vw, 40svh);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 28px;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(155, 143, 193, 0.18),
+    rgba(111, 76, 137, 0.08) 58%,
+    transparent 76%
+  );
+}
+/* دایره‌ی قاب دستبند */
+.cn-hero .cara-bracelet-lineup__viewport::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  width: min(84%, 500px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(234, 213, 165, 0.34);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow:
+    0 0 0 9px rgba(234, 213, 165, 0.025),
+    inset 0 0 34px rgba(234, 213, 165, 0.045);
+  pointer-events: none;
+}
+.cn-hero .cara-bracelet-lineup__slides {
+  position: absolute;
+  inset: 0;
+  perspective: 1000px;
+}
+.cn-hero .cara-bracelet-card {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(34px) scale(0.94) rotateY(-8deg);
+  transition:
+    opacity 0.45s ease,
+    transform 0.6s cubic-bezier(0.2, 0.75, 0.2, 1),
+    visibility 0.45s;
+}
+.cn-hero .cara-bracelet-card.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: none;
+  z-index: 1;
+}
+/* بوم دقیقاً وسط قاب */
+.cn-hero .cara-bracelet-card__art {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: min(100%, 560px);
+  height: auto;
+  aspect-ratio: 1 / 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  filter: drop-shadow(0 26px 28px rgba(0, 0, 0, 0.38))
+    drop-shadow(0 5px 14px rgba(207, 174, 108, 0.1));
+}
+.cn-hero .cara-bracelet-card figcaption {
+  position: absolute;
+  z-index: 2;
+  inset-inline: 0;
+  bottom: clamp(10px, 2.5%, 20px);
+  color: #f4ecd9;
+  text-align: center;
+  font-size: clamp(15px, 1.4vw, 18px);
+  font-weight: 900;
+  pointer-events: none;
+}
+.cn-hero .cara-bracelet-lineup__arrow {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0 0 4px;
+  border: 1px solid rgba(234, 213, 165, 0.42);
+  border-radius: 50%;
+  background: rgba(23, 25, 46, 0.78);
+  color: #f7e7bd;
+  font: inherit;
+  font-size: 26px;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    scale 0.2s;
+}
+.cn-hero .cara-bracelet-lineup__arrow:hover {
+  background: rgba(207, 174, 108, 0.2);
+  border-color: var(--cn-gold-soft);
+  scale: 1.08;
+}
+.cn-hero .cara-bracelet-lineup__arrow--prev {
+  right: 6px;
+}
+.cn-hero .cara-bracelet-lineup__arrow--next {
+  left: 6px;
+}
+.cn-hero .cara-bracelet-lineup__controls {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+}
+.cn-hero .cara-bracelet-lineup__count {
+  color: rgba(226, 222, 238, 0.66);
+  font-size: 12.5px;
+  white-space: nowrap;
+}
+.cn-hero .cara-bracelet-lineup__arrow:focus-visible,
+.cn-hero .cara-bracelet-lineup:focus-visible {
+  outline: 2px solid #fff0c6;
+  outline-offset: 4px;
+}
+
+/* ---------- دسکتاپ ---------- */
+@media (min-width: 900px) {
+  .cn-hero {
+    min-height: min(740px, calc(100vh - var(--cn-header-h)));
+    min-height: min(740px, calc(100svh - var(--cn-header-h)));
+  }
+  .cn-hero__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    padding-block: 56px 88px;
+  }
+  .cn-hero .cn-hero__title {
+    font-size: clamp(44px, 4.6vw, 64px);
+  }
+  .cn-hero .cn-hero__lead {
+    margin-top: 22px;
+    font-size: clamp(16px, 1.3vw, 19px);
+    line-height: 2;
+  }
+  .cn-hero .cara-bracelet-lineup__viewport {
+    width: min(100%, 76svh);
+  }
+  .cn-hero .cara-bracelet-lineup__arrow {
+    width: 42px;
+    height: 42px;
+  }
+}
+
+/* ---------- موبایل کوچک (مثل iPhone mini) ---------- */
+@media (max-width: 360px) {
+  .cn-hero__inner {
+    padding-inline: 16px;
+  }
+  .cn-hero .cn-btn {
+    min-height: 48px;
+    font-size: 15.5px;
+  }
+}
+
+/* یه حرکت ورود برای متن هیرو، همین و بس */
+@media (prefers-reduced-motion: no-preference) {
+  .cn-hero__copy > * {
+    animation: cn-rise 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  .cn-hero__copy > :nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  .cn-hero__copy > :nth-child(3) {
+    animation-delay: 0.16s;
+  }
+  .cn-hero__copy > :nth-child(4) {
+    animation-delay: 0.24s;
+  }
+}
+@keyframes cn-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cn-header *,
+  .cn-hero *,
+  .cn-hero .cara-bracelet-card {
+    transition: none !important;
+    animation: none !important;
+  }
+}
