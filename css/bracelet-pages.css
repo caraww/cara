@@ -1,0 +1,134 @@
+/* Dedicated visual layer for the bracelet detail pages linked at the end of the gallery. */
+html body {
+  background: #f7f3f8;
+  color: #282238;
+  font-family: "Vazirmatn", "Vazir", system-ui, sans-serif;
+}
+html body .pg {
+  box-sizing: border-box;
+  width: min(100%, 1040px);
+  margin-inline: auto;
+  padding: calc(var(--nav-h, 76px) + 28px) clamp(16px, 3vw, 30px) 56px;
+  line-height: 1.9;
+}
+html body .pg .crumb {
+  color: #766d81;
+  font-size: 13px;
+  margin: 0 0 14px;
+}
+html body .pg .crumb a {
+  color: #6d527f;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+html body .pg h1 {
+  color: #282238;
+  font-size: clamp(27px, 4vw, 42px);
+  line-height: 1.45;
+  margin: 0 0 22px;
+  font-weight: 900;
+}
+html body .pg-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.08fr) minmax(280px, .92fr);
+  gap: clamp(20px, 4vw, 42px);
+  align-items: start;
+}
+html body .pg-img,
+html body .pg-grid > div:not(.pg-img) {
+  min-width: 0;
+}
+html body .pg-img img {
+  width: 100%;
+  max-height: 620px;
+  object-fit: contain;
+  border-radius: 22px;
+  background: #eee8f2;
+  box-shadow: 0 16px 44px rgba(43, 30, 58, .09);
+}
+html body .pg-grid > div:not(.pg-img) {
+  padding: clamp(16px, 2.5vw, 26px);
+  border: 1px solid #e9e0ec;
+  border-radius: 22px;
+  background: rgba(255,255,255,.86);
+  box-shadow: 0 12px 34px rgba(43, 30, 58, .06);
+}
+html body .pg p {
+  color: #5e5667;
+  font-size: 15px;
+  line-height: 2;
+}
+html body .pg .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+html body .pg .tags span {
+  border-radius: 999px;
+  padding: 3px 12px;
+  color: #694c7c;
+  background: #f1eaf4;
+  font-size: 12px;
+}
+html body .pg .pg-price {
+  color: #372644;
+  font-size: clamp(23px, 3vw, 30px);
+  font-weight: 900;
+  margin: 16px 0;
+}
+html body .pg .btns {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 18px 0;
+}
+html body .pg .btns .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0 18px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 800;
+}
+html body .pg .btns .btn.dark {
+  color: #fff;
+  background: #28243d;
+}
+html body .pg h2 {
+  color: #30263b;
+  font-size: 22px;
+  margin: 38px 0 14px;
+}
+html body .pg .rel {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
+}
+html body .pg .rel a {
+  color: #4e3b60;
+  text-decoration: none;
+  padding: 10px;
+  border: 1px solid #e9e0ec;
+  border-radius: 16px;
+  background: #fff;
+  transition: transform .2s, box-shadow .2s;
+}
+html body .pg .rel a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(43, 30, 58, .1);
+}
+html body .pg .rel img,
+html body .pg .rel i {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 11px;
+  margin-bottom: 8px;
+}
+@media (max-width: 760px) {
+  html body .pg { padding-top: calc(var(--nav-h, 76px) + 20px); }
+  html body .pg-grid { grid-template-columns: minmax(0, 1fr); }
+  html body .pg-grid > div:not(.pg-img) { padding: 17px; }
+}
