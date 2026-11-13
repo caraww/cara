@@ -48,6 +48,10 @@ test("Iranian phone numbers are normalized to E.164", () => {
   assert.equal(normalizePhone("۰۹۱۲۳۴۵۶۷۸۹"), "+989123456789");
   assert.equal(normalizePhone("+989123456789"), "+989123456789");
   assert.equal(normalizePhone("00989123456789"), "+989123456789");
+  assert.equal(normalizePhone("9123456789"), "+989123456789");
+  assert.equal(normalizePhone("+98 (0) 912-345-6789"), "+989123456789");
+  assert.equal(normalizePhone("  ۰۰۹۸ ۹۱۲ ۳۴۵ ۶۷۸۹  "), "+989123456789");
+  assert.equal(normalizePhone("٠٩١٢٣٤٥٦٧٨٩"), "+989123456789");
   assert.equal(normalizePhone("12345"), null);
   assert.equal(normalizePhone(""), null);
 });
