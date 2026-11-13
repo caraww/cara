@@ -170,10 +170,14 @@ async function pricedWorks(env) {
   return { list, prices: priceMap(list) };
 }
 
-async function cartWork(env, id) {
-  const { list, prices } = await pricedWorks(env);
-  const work = list.find((item) => String(item.id) === String(id));
-  return work ? { ...work, price: prices[String(work.id)] } : null;
+function cartWorkResolver(env) {
+  let catalogPromise;
+  return async (id) => {
+    catalogPromise ||= pricedWorks(env);
+    const { list, prices } = await catalogPromise;
+    const work = list.find((item) => String(item.id) === String(id));
+    return work ? { ...work, price: prices[String(work.id)] } : null;
+  };
 }
 
 /* قیمت همه‌ی کارها برای نمایش توی گالری (فقط نمایشه؛ مبلغ پرداخت همیشه دوباره سمت سرور حساب می‌شه) */
@@ -220,7 +224,7 @@ async function createPayment(request, env) {
     extra = { kind: "work", work: { id: String(work.id), title: work.title || "", src: work.src } };
   } else if (body.cart === true) {
     const cart = await loadCartForRequest(request, env, {
-      cleanPattern, getWork: (id) => cartWork(env, id),
+      cleanPattern, getWork: cartWorkResolver(env),
       pricePerBead: C.price, baseFee: C.base,
     });
     if (!cart.cartId || !cart.items.length) return json({ error: "سبد خریدت خالیه." }, 400);
@@ -582,7 +586,7 @@ export default {
     const p = url.pathname;
     try {
       const cartResponse = await handleCartRequest(request, env, url, {
-        rateLimit, cleanPattern, getWork: (id) => cartWork(env, id),
+        rateLimit, cleanPattern, getWork: cartWorkResolver(env),
         pricePerBead: cfg(env).price, baseFee: cfg(env).base,
       });
       if (cartResponse) return cartResponse;
