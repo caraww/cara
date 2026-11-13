@@ -13,7 +13,7 @@ test("homepage contains one interactive live-weaving section and all controls", 
     assert.match(html, new RegExp('id="' + id + '"'));
   }
   assert.match(html, /اسمت رو با منجوق بنویس/);
-  assert.match(html, /اسمت رو بنویس و رنگ‌ها رو انتخاب کن؛\\s*منجوق‌ها یکی‌یکی روی دار\\s*می‌شینن و تعدادشون رو همون لحظه می‌بینی/);
+  assert.match(html, /اسمت رو بنویس و رنگ‌ها رو انتخاب کن؛\s*منجوق‌ها یکی‌یکی روی دار\s*می‌شینن و تعدادشون رو همون لحظه می‌بینی/);
   assert.doesNotMatch(html, /<h2 id="wvTitle">ببین چطور می‌بافم/);
   assert.match(html, /<section class="cara-weaving" id="weaving"/);
   assert.match(html, /ببین چطور میبافم/);
