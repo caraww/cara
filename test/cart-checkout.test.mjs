@@ -33,6 +33,9 @@ test("cart mutations are scoped to the resolved owner and enforce quantity and i
   assert.match(cart, /SELECT id FROM carts WHERE \$\{column\} = \?/);
   assert.match(cart, /WHERE id = \? AND cart_id = \?/);
   assert.match(cart, /MAX_ITEMS = 30/);
+  assert.match(cart, /key = "work:" \+ workId/);
+  assert.match(cart, /key = "design:" \+ await sha256\(JSON\.stringify\(design\)\)/);
+  assert.match(cart, /UNIQUE \(cart_id, item_key\)/);
   assert.match(cart, /MAX_QUANTITY = 20/);
   assert.match(cart, /quantity < 1 \|\| quantity > MAX_QUANTITY/);
   assert.match(cart, /ON CONFLICT\(cart_id, item_key\) DO UPDATE SET quantity = MIN\(cart_items\.quantity \+ excluded\.quantity, 20\)/);
