@@ -4,6 +4,7 @@
   const money = (n) => fa(n) + " تومان";
   const message = (value) => { $("cartMessage").textContent = value || ""; };
   let busy = false;
+  $("checkoutButton").addEventListener("click", (event) => { if ($("checkoutButton").getAttribute("aria-disabled") === "true") event.preventDefault(); });
 
   async function api(path, options = {}) {
     const response = await fetch(path, {
@@ -79,6 +80,7 @@
     try { render(await api("/api/cart/items/" + encodeURIComponent(id), { method: "DELETE" })); message(""); }
     catch (error) { message(error.message); }
     finally { busy = false; }
+    if (!busy) load();
   }
 
   async function addFromLink() {
