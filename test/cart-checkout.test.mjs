@@ -25,7 +25,7 @@ test("guest cart uses a high-entropy HttpOnly Secure SameSite cookie", () => {
   assert.match(cart, /crypto\.getRandomValues\(new Uint8Array\(32\)\)/);
   assert.match(cart, /HttpOnly; Secure; SameSite=Lax/);
   assert.match(cart, /request\.headers\.get\("Origin"\)/);
-  assert.match(cart, /request\.method === "GET"/);
+  assert.match(cart, /method === "GET" && path === "\/api\/cart"/);
 });
 
 test("cart mutations are scoped to the resolved owner and enforce quantity and item limits", () => {
