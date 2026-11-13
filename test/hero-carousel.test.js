@@ -41,8 +41,8 @@ test("homepage hero renders the three selected bracelets with the original rotat
   assert.match(script, /prefers-reduced-motion/);
   assert.match(html, /cara-bracelet-lineup__arrow--prev/);
   assert.match(html, /cara-bracelet-lineup__arrow--next/);
-  assert.match(html, /aria-label="دستبند قبلی"[\\s\\S]*?>\\s*‹\\s*</);
-  assert.match(html, /aria-label="دستبند بعدی"[\\s\\S]*?>\\s*›\\s*</);
+  assert.match(html, /aria-label="دستبند قبلی"[\s\S]*?>\s*‹\s*</);
+  assert.match(html, /aria-label="دستبند بعدی"[\s\S]*?>\s*›\s*</);
   assert.doesNotMatch(html, /cara-bracelet-lineup__title|cara-bracelet-lineup__dots/);
   assert.match(css, /justify-content: center/);
   assert.doesNotMatch(script, /cara-bracelet-lineup__dots|cara-bracelet-lineup__title/);
