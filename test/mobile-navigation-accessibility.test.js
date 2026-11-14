@@ -48,15 +48,7 @@ test("all primary and generated pages receive the shared mobile menu", () => {
       assert.match(html, /class="sh__nav"/);
     }
   }
-  const contact = fs.readFileSync(path.join(root, "js/contact.js"), "utf8");
-  assert.ok(contact.includes("/css/mobile-nav.css?v=20261111-release"));
-  assert.ok(contact.includes("/js/mobile-nav.js?v=20261111-release"));
-  assert.ok(contact.includes("/css/polish.css?v=7"));
-  assert.match(contact, /link\.onload = loadPolish/);
-  assert.match(contact, /link\.onerror = loadPolish/);
-  assert.match(contact, /polish\.onload = loadNavScript/);
-  assert.match(contact, /polish\.onerror = loadNavScript/);
-  assert.match(contact, /link\.href\.includes\("\/css\/site-nav\.css"\)/);
+  // Primary pages now load nav-hero directly; generated pages keep their own shared-nav template checks below.
   const template = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
   assert.ok(template.includes("/css/site-nav.css?v=20261113"));
   assert.ok(template.includes("/js/mobile-nav.js?v=20261111-release"));
