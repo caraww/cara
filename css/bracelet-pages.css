@@ -132,3 +132,25 @@ html body .pg .rel i {
   html body .pg-grid { grid-template-columns: minmax(0, 1fr); }
   html body .pg-grid > div:not(.pg-img) { padding: 17px; }
 }
+
+/* دکمه‌های صفحه‌ی هر دستبند: شکل ثابت، بدون گردیِ بیش‌ازحد، با متن چندخطی سالم */
+html body .pg .btns a.btn {
+  box-sizing: border-box;
+  flex: 1 1 220px;
+  height: auto;
+  min-height: 50px;
+  padding: 10px 22px;
+  border: 1.5px solid #28243d;
+  border-radius: 16px;
+  background: transparent;
+  color: #28243d;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
+  white-space: normal;
+}
+html body .pg .btns a.btn.dark { background: #28243d; color: #fff; }
+@media (max-width: 760px) {
+  html body .pg .btns { flex-direction: column; align-items: stretch; gap: 12px; }
+  html body .pg .btns a.btn { flex: none; width: 100%; }
+}

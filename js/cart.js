@@ -3,7 +3,7 @@
   const fa = (n) => Number(n || 0).toLocaleString("fa-IR");
   const money = (n) => fa(n) + " تومان";
   const message = (value) => { $("cartMessage").textContent = value || ""; };
-  let busy = false;
+  let busy = false, addError = "";
   $("checkoutButton").addEventListener("click", (event) => { if ($("checkoutButton").getAttribute("aria-disabled") === "true") event.preventDefault(); });
 
   function drawDesign(canvas, design) {
@@ -14,7 +14,7 @@
     const ctx = canvas.getContext("2d");
     rows.forEach((row, y) => row.forEach((color, x) => {
       if (!color) return;
-      ctx.fillStyle = window.CARA?.palette?.find((p) => p[0] === color)?.[2] || "#8b72a4";
+      ctx.fillStyle = window.CARA?.palette?.find((p) => p.code === color)?.hex || "#8b72a4";
       ctx.fillRect(x * cell, y * cell, Math.max(1, cell - 1), Math.max(1, cell - 1));
     }));
   }
@@ -25,7 +25,7 @@
       headers: { ...(options.body ? { "Content-Type": "application/json" } : {}), ...(options.headers || {}) },
     });
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || "درخواست انجام نشد.");
+    if (!response.ok) throw new Error(data.error || "درخواست انجام نشد (کد " + response.status + ").");
     return data;
   }
 
@@ -79,7 +79,7 @@
   }
 
   async function load() {
-    try { const cart = await api("/api/cart"); render(cart); message(cart.items.length ? "" : "سبد خریدت خالیه."); }
+    try { const cart = await api("/api/cart"); render(cart); message(cart.items.length ? "" : (addError || "سبد خریدت خالیه.")); }
     catch (error) { message(error.message); }
   }
 
@@ -114,7 +114,7 @@
       } else throw new Error("نوع کالا معتبر نیست.");
       message("به سبد خرید اضافه شد.");
       return true;
-    } catch (error) { message(error.message); return false; }
+    } catch (error) { addError = "به سبد اضافه نشد: " + error.message; message(addError); return false; }
   }
 
   (async () => { await addFromLink(); await load(); })();

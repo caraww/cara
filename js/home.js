@@ -15,7 +15,7 @@
 try {
   (function () {
     var bar = document.getElementById("mCta"),
-      hero = document.querySelector(".cn-hero");
+      hero = document.querySelector(".hx, .cn-hero");
     if (!bar || !hero || !("IntersectionObserver" in window)) return;
     new IntersectionObserver(
       function (e) {
