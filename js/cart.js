@@ -126,7 +126,8 @@
     finally { busy = false; }
     if (updatedCart && Array.isArray(updatedCart.items)) {
       render(updatedCart);
-      message("");
+      const updatedItem = updatedCart.items.find((item) => String(item.id) === String(id));
+      message(updatedItem ? `تعداد ${updatedItem.title} به ${fa(updatedItem.quantity)} تغییر کرد.` : "سبد خرید به‌روزرسانی شد.");
     } else {
       await load();
       if (failure) message(failure.message);
@@ -143,7 +144,7 @@
     finally { busy = false; }
     if (updatedCart && Array.isArray(updatedCart.items)) {
       render(updatedCart);
-      message("");
+      message("کالا از سبد خرید حذف شد.");
     } else {
       await load();
       if (failure) message(failure.message);
