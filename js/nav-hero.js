@@ -17,7 +17,7 @@
 
   toggle.addEventListener("click", () => setOpen(!header.classList.contains("is-open")));
   nav.addEventListener("click", (e) => { if (e.target.closest("a")) setOpen(false); });
-  header.addEventListener("focusout", (e) => { if (e.relatedTarget && !header.contains(e.relatedTarget)) setOpen(false); });
+  header.addEventListener("focusout", (e) => { if (!header.contains(e.relatedTarget)) setOpen(false); });
   document.addEventListener("pointerdown", (e) => { if (!header.contains(e.target)) setOpen(false); });
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && header.classList.contains("is-open")) setOpen(false, true); });
   addEventListener("resize", () => { if (innerWidth > 850) setOpen(false); }, { passive: true });
