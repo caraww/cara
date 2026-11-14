@@ -1,48 +1,6 @@
 /* contact.js — دکمه‌ی ثابت تماس/اینستاگرام + یادآور الگوی ذخیره‌شده (همه‌ی صفحه‌ها به‌جز admin)
    سفارش‌دهنده‌ها اغلب قبل از پرداخت می‌خوان با یه آدم حرف بزنن؛ این دکمه راهش رو کوتاه می‌کنه. */
 (() => {
-  // Older generated color and bracelet pages rely on this shared script.
-  // Recognize both the legacy mobile-nav stylesheet and the canonical site-nav stylesheet.
-  const header = document.querySelector(".top");
-  if (header) {
-    const hasNavCss = [...document.querySelectorAll('link[rel="stylesheet"]')]
-      .some((link) => link.href.includes("/css/mobile-nav.css") || link.href.includes("/css/site-nav.css"));
-    const hasNavScript = [...document.scripts]
-      .some((script) => script.src.includes("/js/mobile-nav.js"));
-    const hasFinalPolishCss = [...document.querySelectorAll('link[rel="stylesheet"]')]
-      .some((link) => link.href.includes("/css/polish.css?v=7"));
-    const loadNavScript = () => {
-      if (hasNavScript || document.querySelector('script[data-cara-mobile-nav]')) return;
-      const script = document.createElement("script");
-      script.src = "/js/mobile-nav.js?v=20261111-release";
-      script.dataset.caraMobileNav = "true";
-      document.body.append(script);
-    };
-    const loadPolish = () => {
-      if (hasFinalPolishCss || document.querySelector('link[data-cara-polish]')) {
-        loadNavScript();
-        return;
-      }
-      const polish = document.createElement("link");
-      polish.rel = "stylesheet";
-      polish.href = "/css/polish.css?v=7";
-      polish.dataset.caraPolish = "true";
-      polish.onload = loadNavScript;
-      polish.onerror = loadNavScript;
-      document.head.append(polish);
-    };
-    if (!hasNavCss) {
-      const link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = "/css/mobile-nav.css?v=20261111-release";
-      link.onload = loadPolish;
-      link.onerror = loadPolish;
-      document.head.append(link);
-    } else {
-      loadPolish();
-    }
-  }
-
   if (document.getElementById("cara-contact")) return;
   const path = location.pathname, onCheckout = /checkout/.test(path);
   const stylesheet = document.createElement("link");

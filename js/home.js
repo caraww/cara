@@ -1,21 +1,16 @@
 /* home.js — فقط صفحه‌ی اصلی (index.html)
    ترتیب لود: palette.js ← works.js ← beads.js ← home.js ← decor.js
-   داخلش:  ۱) نوار ثابت پایین موبایل (m-cta)
-           ۲) رنگ‌ها/منجوق‌ها، نمونه‌ها، نخ اسکرول، ورود نرم بخش‌ها، کپی کد
-
-   نسبت به نسخه‌ی قبلی:
-   - دیگه دنبال .top نمی‌گرده (هدر جدید خودش توی cn-header.js مدیریت می‌شه)
-   - کد زمین مهره‌ی #heroCanvas و چرخش دستبند با اسکرول حذف شد؛ توی HTML فعلی
-     اون المان‌ها وجود نداشتن، و همین باعث می‌شد نخ اسکرول، ورود نرم بخش‌ها و
-     کپی کد رنگ اجرا نشن. */
+   داخلش:  ۱) نوار ثابت پایین موبایل (قبلاً inline توی index.html بود)
+           ۲) هدر، رنگ‌ها/منجوق‌ها، نمونه‌ها، هیروی مهره‌ای، نخ اسکرول، کپی کد
+           ۳) چرخش دستبند و کارت‌های ویژگی هیرو با اسکرول */
 
 /* ==================================================================
-   ۱) نوار ثابت پایین موبایل: وقتی هیرو از صفحه خارج شد ظاهر می‌شه
+   ۱) نوار ثابت پایین موبایل (قبلاً inline توی index.html)
    ================================================================== */
 try {
   (function () {
     var bar = document.getElementById("mCta"),
-      hero = document.querySelector(".hx, .cn-hero");
+      hero = document.querySelector(".hx");
     if (!bar || !hero || !("IntersectionObserver" in window)) return;
     new IntersectionObserver(
       function (e) {
@@ -34,18 +29,16 @@ try {
 }
 
 /* ==================================================================
-   ۲) صفحه‌ی اصلی
+   ۲) صفحه‌ی اصلی (قبلاً home.js)
    ================================================================== */
 try {
   (() => {
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    /* ---------- رنگ منجوق‌ها ---------- */
+    
     const chips = document.getElementById("chips");
     if (chips) {
       /* عکس واقعی منجوق‌ها: برای هر رنگ سعی می‌کنه img/beads/<کد رنگ>.jpg رو لود کنه (مثلاً DB0680.jpg).
        اگه jpg نبود png/webp رو امتحان می‌کنه؛ اگه هیچ عکسی نبود همون منجوق کشیده‌شده می‌مونه.
-       فقط اسم فایل باید دقیقاً کد رنگ باشه (حروف بزرگ). */
+       دیگه لازم نیست کدها رو دستی این‌جا بنویسی؛ فقط اسم فایل باید دقیقاً کد رنگ باشه (حروف بزرگ). */
       const EXTS = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG", "WEBP"];
       const shade = (hex, k) => {
         const t = k < 0 ? 0 : 255;
@@ -76,7 +69,7 @@ try {
           `<li data-i="${i}" tabindex="0" role="button" aria-label="کپی کد ${p.code}"><div class="bead">${bead(p, i)}</div><b>${p.code}</b><span>${p.name}</span></li>`,
         ),
       );
-      /* خطای لود عکس بابل نمی‌شه، پس توی فاز capture می‌گیریمش: پسوند بعدی یا برگشت به منجوق کشیده‌شده */
+      /* خطای لود عکس بابل نمی‌شه، پس توی فاز capture می‌گیریمش: ساختار بعدی یا برگشت به منجوق کشیده‌شده */
       chips.addEventListener(
         "error",
         (e) => {
@@ -98,7 +91,7 @@ try {
       );
     }
 
-    /* ---------- چند عکس تصادفی از کارهای خودم (js/works.js با tools/build-works.js ساخته می‌شه) ---------- */
+    /* چند عکس تصادفی از کارهای خودم (js/works.js با tools/build-works.js ساخته می‌شه) */
     const mg = document.getElementById("miniGal"),
       works = CARA.works || [];
     const esc = (t) =>
@@ -133,18 +126,224 @@ try {
       }
     }
 
-    /* ---------- نخ مهره‌ای بالای صفحه = میزان اسکرول ---------- */
-    const bar = document.getElementById("threadBar");
-    if (bar) {
-      const prog = () => {
-        const m = document.documentElement.scrollHeight - innerHeight;
-        bar.style.setProperty("--p", (m > 0 ? (scrollY / m) * 100 : 0) + "%");
-      };
-      addEventListener("scroll", prog, { passive: true });
-      prog();
+    /* هیرو: زمین مهره؛ با اسکرول، مهره‌ها از وسط به دو طرف کنار می‌روند */
+    const cv = document.getElementById("heroCanvas"),
+      g = cv.getContext("2d"),
+      hero = cv.parentElement;
+    /* افزایش وضوح بافت منجوق‌ها؛ تغییر قبلی زیر لایه‌های هیرو خیلی کم‌رنگ دیده می‌شد. */
+    cv.style.opacity = "0.82";
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    /* پالت آرام و تک‌رنگ: طیف بنفش‌های خاکستری و فقط یک مهره‌ی طلایی در مرکز هر لوزی */
+    const SET = [
+        "#E7D9F7",
+        "#C8B2E8",
+        "#A88BD0",
+        "#8869B3",
+        "#6E5196",
+        "#563C78",
+      ],
+      GOLD = "#E4BE70";
+    const R2 = 175 * 175,
+      CW = 24,
+      CH = 18,
+      BASE = 0.94,
+      BW = CW - 1.1,
+      BH = CH - 1.1;
+    let mx = -1,
+      my = -1,
+      W,
+      H,
+      cols,
+      rows,
+      ticking = false,
+      cleared = false,
+      heroVisible = true,
+      sprites = [],
+      jx,
+      jy,
+      ci;
+    const rnd = (x, y) => {
+      const s = Math.sin(x * 127.1 + y * 311.7) * 43758.5453;
+      return s - Math.floor(s);
+    };
+    /* هر مهره‌ی دلیکای استوانه‌ای یک بار رندر می‌شود: لبه‌ی تیره، بدنه‌ی شیشه‌ای،
+     برق باریک روی سطح و سایه‌ی اتصال؛ در هر فریم فقط sprite آماده کشیده می‌شود. */
+    const mix = (hex, target, amount) => {
+      const a = CARA.hexRgb(hex),
+        b = CARA.hexRgb(target);
+      return (
+        "rgb(" +
+        a.map((v, i) => Math.round(v + (b[i] - v) * amount)).join(",") +
+        ")"
+      );
+    };
+    const sprite = (hex, d) => {
+      const c = document.createElement("canvas");
+      c.width = Math.ceil(BW * d);
+      c.height = Math.ceil(BH * d);
+      const s = c.getContext("2d");
+      s.scale(d, d);
+      const x = 0.55,
+        y = 0.45,
+        w = BW - 1.1,
+        h = BH - 1.0,
+        r = Math.min(3.2, h * 0.23);
+      /* شکاف بسیار باریک بین مهره‌ها باعث می‌شود بافت، شبیه یک سطح پلاستیکی صاف نشود. */
+      s.fillStyle = "rgba(5,3,10,.58)";
+      s.beginPath();
+      s.roundRect(0.05, 0.05, BW - 0.1, BH - 0.1, r + 0.5);
+      s.fill();
+      const body = s.createLinearGradient(x, y, x + w, y + h * 0.2);
+      body.addColorStop(0, mix(hex, "#000000", 0.42));
+      body.addColorStop(0.18, mix(hex, "#ffffff", 0.13));
+      body.addColorStop(0.48, mix(hex, "#ffffff", 0.24));
+      body.addColorStop(0.72, hex);
+      body.addColorStop(1, mix(hex, "#000000", 0.38));
+      s.fillStyle = body;
+      s.beginPath();
+      s.roundRect(x, y, w, h, r);
+      s.fill();
+      /* برق نرم شیشه‌ای، نه نقطه‌ی سفید کارتونی */
+      const shine = s.createLinearGradient(0, y, 0, y + h * 0.62);
+      shine.addColorStop(0, "rgba(255,255,255,.34)");
+      shine.addColorStop(0.42, "rgba(255,255,255,.08)");
+      shine.addColorStop(1, "rgba(255,255,255,0)");
+      s.fillStyle = shine;
+      s.beginPath();
+      s.roundRect(x + 1, y + 0.45, w - 2, h * 0.55, Math.max(1, r - 0.8));
+      s.fill();
+      s.strokeStyle = "rgba(255,255,255,.18)";
+      s.lineWidth = 0.45;
+      s.beginPath();
+      s.moveTo(x + r, y + 0.55);
+      s.lineTo(x + w - r, y + 0.55);
+      s.stroke();
+      s.fillStyle = "rgba(0,0,0,.2)";
+      s.beginPath();
+      s.roundRect(x + 0.7, y + h * 0.78, w - 1.4, h * 0.14, 1);
+      s.fill();
+      return c;
+    };
+    function size() {
+      W = hero.clientWidth;
+      H = hero.clientHeight;
+      const d = Math.min(2, devicePixelRatio || 1);
+      cv.width = W * d;
+      cv.height = H * d;
+      g.setTransform(d, 0, 0, d, 0, 0);
+      cols = Math.ceil(W / CW) + 1;
+      rows = Math.ceil(H / CH) + 1;
+      sprites = [...SET, GOLD].map((h) => sprite(h, d));
+      const n = cols * rows;
+      jx = new Float32Array(n);
+      jy = new Float32Array(n);
+      ci = new Uint8Array(n);
+      for (let y = 0; y < rows; y++)
+        for (let x = 0; x < cols; x++) {
+          const i = y * cols + x,
+            dd = Math.abs((x % 14) - 7) + Math.abs((y % 14) - 7);
+          jx[i] = 0.35 + rnd(x, y) * 0.4;
+          jy[i] = (rnd(y, x) - 0.5) * 160;
+          ci[i] = dd === 0 ? 6 : Math.min(5, Math.floor(dd / 2.4));
+        }
+      cleared = false;
+      draw();
     }
+    function draw() {
+      if (!heroVisible) return;
+      const p = reduce ? 0 : Math.min(1, scrollY / (H * 0.85));
+      if (p >= 1) {
+        if (!cleared) {
+          g.clearRect(0, 0, W, H);
+          cleared = true;
+        }
+        return;
+      }
+      cleared = false;
+      g.clearRect(0, 0, W, H);
+      for (let y = 0; y < rows; y++) {
+        const q = Math.min(1, Math.max(0, p * 1.6 - (y / rows) * 0.6)),
+          e = q * q * (3 - 2 * q),
+          a = (1 - e) * BASE;
+        if (a < 0.02) continue;
+        g.globalAlpha = a;
+        /* نخ‌های افقیِ زیر بافت، فقط در فاصله‌ی باریک ردیف‌ها دیده می‌شوند. */
+        g.strokeStyle = "rgba(228,211,187,.17)";
+        g.lineWidth = 0.55;
+        g.beginPath();
+        g.moveTo(0, y * CH + CH - 0.25);
+        g.lineTo(W, y * CH + CH - 0.25);
+        g.stroke();
+        for (let x = 0; x < cols; x++) {
+          const i = y * cols + x,
+            dir = (x + 0.5) * CW < W / 2 ? -1 : 1,
+            px = x * CW + dir * e * W * jx[i] + 1;
+          if (px > W || px + BW < 0) continue;
+          const py = y * CH + e * jy[i] + 1;
+          if (mx > 0) {
+            /* هاله‌ی مهره‌ها دور نشانگر: نزدیک‌ترها طلایی می‌شوند */
+            const dx = px + BW / 2 - mx,
+              dy = py + BH / 2 - my,
+              dd = dx * dx + dy * dy;
+            if (dd < R2) {
+              const k = 1 - dd / R2;
+              g.globalAlpha = Math.min(1, a + k * 0.75);
+              g.drawImage(
+                sprites[k > 0.6 ? 6 : Math.max(0, ci[i] - 2)],
+                px,
+                py,
+                BW,
+                BH,
+              );
+              g.globalAlpha = a;
+              continue;
+            }
+          }
+          g.drawImage(sprites[ci[i]], px, py, BW, BH);
+        }
+      }
+      g.globalAlpha = 1;
+    }
+    if ("IntersectionObserver" in window) {
+      const heroObserver = new IntersectionObserver(
+        (entries) => {
+          heroVisible = entries[0].isIntersecting;
+          if (heroVisible) draw();
+        },
+        { rootMargin: "100px 0px" },
+      );
+      heroObserver.observe(hero);
+    }
+    addEventListener(
+      "scroll",
+      () => {
+        if (heroVisible && !ticking) {
+          ticking = true;
+          requestAnimationFrame(() => {
+            draw();
+            ticking = false;
+          });
+        }
+      },
+      { passive: true },
+    );
+    let rz;
+    addEventListener("resize", () => {
+      clearTimeout(rz);
+      rz = setTimeout(size, 120);
+    });
+    size();
 
-    /* ---------- ورود نرم بخش‌ها هنگام اسکرول ---------- */
+    /* نخ مهره‌ای بالای صفحه = میزان اسکرول */
+    const bar = document.getElementById("threadBar");
+    const prog = () => {
+      const m = document.documentElement.scrollHeight - innerHeight;
+      bar.style.setProperty("--p", (m > 0 ? (scrollY / m) * 100 : 0) + "%");
+    };
+    addEventListener("scroll", prog, { passive: true });
+    prog();
+
+    /* ورود نرم بخش‌ها هنگام اسکرول */
     if (!reduce && "IntersectionObserver" in window) {
       const io = new IntersectionObserver(
         (es) =>
@@ -167,37 +366,117 @@ try {
         });
     }
 
-    /* ---------- کلیک روی هر رنگ = کپی کد ---------- */
-    if (chips) {
-      const toast = document.createElement("div");
-      toast.className = "toast";
-      toast.setAttribute("role", "status");
-      document.body.appendChild(toast);
-      let tt;
-      chips.addEventListener("click", (e) => {
-        const li = e.target.closest("li");
-        if (!li) return;
-        const code = li.querySelector("b").textContent;
-        Promise.resolve(
-          navigator.clipboard && navigator.clipboard.writeText(code),
-        )
-          .catch(() => {})
-          .finally(() => {
-            toast.textContent = `کد ${code} کپی شد`;
-            toast.classList.add("on");
-            clearTimeout(tt);
-            tt = setTimeout(() => toast.classList.remove("on"), 1600);
-          });
-      });
-      /* با کیبورد هم می‌شه کد رنگ رو کپی کرد */
-      chips.addEventListener("keydown", (e) => {
-        if ((e.key === "Enter" || e.key === " ") && e.target.tagName === "LI") {
-          e.preventDefault();
-          e.target.click();
-        }
-      });
-    }
+    /* نشانگر روی هیرو */
+    let pq = false;
+    hero.addEventListener("pointermove", (e) => {
+      if (reduce || !heroVisible) return;
+      const r = hero.getBoundingClientRect();
+      mx = e.clientX - r.left;
+      my = e.clientY - r.top;
+      if (!pq) {
+        pq = true;
+        requestAnimationFrame(() => {
+          draw();
+          pq = false;
+        });
+      }
+    });
+    hero.addEventListener("pointerleave", () => {
+      mx = -1;
+      draw();
+    });
+
+    /* کلیک روی هر رنگ = کپی کد */
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.setAttribute("role", "status");
+    document.body.appendChild(toast);
+    let tt;
+    chips.addEventListener("click", (e) => {
+      const li = e.target.closest("li");
+      if (!li) return;
+      const code = li.querySelector("b").textContent;
+      Promise.resolve(
+        navigator.clipboard && navigator.clipboard.writeText(code),
+      )
+        .catch(() => {})
+        .finally(() => {
+          toast.textContent = `کد ${code} کپی شد`;
+          toast.classList.add("on");
+          clearTimeout(tt);
+          tt = setTimeout(() => toast.classList.remove("on"), 1600);
+        });
+    });
+    /* با کیبورد هم می‌شه کد رنگ رو کپی کرد */
+    chips.addEventListener("keydown", (e) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target.tagName === "LI") {
+        e.preventDefault();
+        e.target.click();
+      }
+    });
   })();
 } catch (e) {
   console.error("home:main", e);
+}
+
+/* ==================================================================
+   ۳) هیروی محصول: دستبند با اسکرول می‌چرخه و کارت‌ها پیدا می‌شن (قبلاً hero.js)
+   ================================================================== */
+try {
+  (() => {
+    const pin = document.getElementById("pin"),
+      hero = pin && pin.querySelector(".hero2");
+    if (!pin || !hero) return;
+    const bracelet = hero.querySelector(".prod canvas"),
+      cards = [...hero.querySelectorAll(".fc")],
+      hint = hero.querySelector(".hint");
+    if (!bracelet) return;
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      bracelet.style.transform = "none";
+      return;
+    }
+    let tick = false;
+    const mob = matchMedia("(max-width: 820px)");
+    function update() {
+      tick = false;
+      let p;
+      if (mob.matches) {
+        p = Math.min(
+          1,
+          Math.max(
+            0,
+            -hero.getBoundingClientRect().top / (hero.offsetHeight * 0.8) +
+              0.15,
+          ),
+        );
+      } /* موبایل: هیرو نمی‌چسبه، فقط با رد شدنش دستبند می‌چرخه */ else {
+        const m = pin.offsetHeight - innerHeight;
+        p =
+          m > 0
+            ? Math.min(
+                1,
+                Math.max(0, -pin.getBoundingClientRect().top / m / 0.8),
+              )
+            : 0;
+      } /* دسکتاپ: انیمیشن تا ۸۰٪ مسیر تموم می‌شه */
+      const e = p * p * (3 - 2 * p);
+      /* Keep the bracelet level and front-facing; the canvas animation itself still rotates. */
+      bracelet.style.transform = "none";
+      hero.style.setProperty("--p", p.toFixed(3));
+      cards.forEach((c) => c.classList.toggle("on", p >= Number(c.dataset.at)));
+      if (hint) hint.style.opacity = p > 0.05 ? 0 : 1;
+    }
+    const req = () => {
+      if (!tick) {
+        tick = true;
+        requestAnimationFrame(update);
+      }
+    };
+    addEventListener("scroll", req, { passive: true });
+    addEventListener("resize", req);
+    update();
+  })();
+} catch (e) {
+  console.error("home:hero", e);
 }

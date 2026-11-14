@@ -1,0 +1,318 @@
+/* nav-hero.css — هدر (ناوبری) + هیروی صفحه‌ی اصلی. فقط index.html.
+   کلاس‌های جدید (.sh و .hx) با هیچ استایل قدیمی برخورد نمی‌کنن، پس !important لازم نیست.
+   جایگزین این‌ها در index.html می‌شه: hero.css, hero-carousel.css, hero-lineup.css,
+   hero-signature.css, mobile-nav.css. بعد از polish.css لود کن. */
+:root {
+  --nh-h: 72px;
+  --nh-frame: 1240px;
+  --nh-gutter: clamp(16px, 3vw, 36px);
+  --nh-ink: var(--cara-text, #242431);
+  --nh-line: var(--cara-line, #d4d4df);
+  --nh-accent: var(--cara-accent, #343b64);
+  --nh-gold: #cfae6c;
+}
+
+/* ================= هدر ================= */
+.sh {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  height: var(--nh-h);
+  color: #f3f1f8;
+  transition: background .25s ease, color .25s ease, box-shadow .25s ease;
+}
+.sh.is-solid,
+.sh.is-open {
+  color: var(--nh-ink);
+  background: rgba(250, 250, 253, .95);
+  -webkit-backdrop-filter: blur(16px) saturate(1.15);
+  backdrop-filter: blur(16px) saturate(1.15);
+  box-shadow: 0 1px 0 var(--nh-line), 0 8px 28px rgba(36, 36, 49, .05);
+}
+.sh__in {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: min(var(--nh-frame), 100%);
+  height: 100%;
+  margin-inline: auto;
+  padding-inline: var(--nh-gutter);
+}
+.sh__logo { display: flex; align-items: center; flex: none; }
+.sh__logo img { display: block; height: 40px; width: auto; }
+.sh__logo .is-dark,
+.sh.is-solid .sh__logo .is-light,
+.sh.is-open .sh__logo .is-light { display: none; }
+.sh.is-solid .sh__logo .is-dark,
+.sh.is-open .sh__logo .is-dark { display: block; }
+
+.sh__nav { display: flex; align-items: center; gap: clamp(16px, 2vw, 30px); }
+.sh__nav a {
+  position: relative;
+  padding: 8px 2px;
+  color: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-decoration: none;
+  opacity: .88;
+  transition: opacity .2s ease, color .2s ease;
+}
+.sh__nav a:hover,
+.sh__nav a[aria-current="page"] { opacity: 1; }
+.sh__nav a::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 2px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--nh-gold);
+  transform: scaleX(0);
+  transition: transform .25s ease;
+}
+.sh__nav a:hover::after { transform: scaleX(1); }
+.sh__nav a.sh__cta {
+  padding: 9px 22px;
+  border-radius: 999px;
+  background: var(--nh-gold);
+  color: #202033;
+  font-weight: 800;
+  opacity: 1;
+}
+.sh__nav a.sh__cta::after { content: none; }
+.sh__nav a.sh__cta:hover { background: #dfc18a; }
+.sh.is-solid .sh__nav a.sh__cta { background: var(--nh-accent); color: #fff; }
+.sh.is-solid .sh__nav a.sh__cta:hover { background: #292f54; }
+
+.sh__toggle { display: none; }
+.sh a:focus-visible,
+.sh button:focus-visible { outline: 3px solid #9b8fc1; outline-offset: 3px; border-radius: 10px; }
+
+@media (max-width: 850px) {
+  :root { --nh-h: 64px; }
+  .sh__logo img { height: 36px; }
+  .sh__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, .28);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .08);
+    color: inherit;
+    font: inherit;
+    font-size: 21px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .sh.is-solid .sh__toggle,
+  .sh.is-open .sh__toggle { border-color: rgba(52, 59, 100, .16); background: #fff; color: var(--nh-accent); }
+  .sh__nav {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    inset-inline-end: 12px;
+    box-sizing: border-box;
+    width: min(240px, calc(100vw - 24px));
+    max-height: min(70svh, 480px);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 10px;
+    border: 1px solid var(--nh-line);
+    border-radius: 20px;
+    background: #fff;
+    color: var(--nh-ink);
+    box-shadow: 0 20px 54px rgba(27, 29, 52, .18);
+  }
+  .sh.is-open .sh__nav { display: flex; animation: nh-menu .16s ease-out both; }
+  .sh__nav a { display: flex; align-items: center; min-height: 44px; padding: 10px 13px; border-radius: 12px; opacity: 1; }
+  .sh__nav a::after { content: none; }
+  .sh__nav a:hover { background: var(--cara-accent-soft, #eeeef5); }
+  .sh__nav a.sh__cta,
+  .sh.is-solid .sh__nav a.sh__cta { justify-content: center; margin-top: 4px; background: var(--nh-accent); color: #fff; }
+}
+@keyframes nh-menu { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
+
+/* ================= هیرو ================= */
+.hx {
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
+  color: #f7f6fb;
+  background:
+    radial-gradient(ellipse 34rem 34rem at 28% 50%, rgba(155, 143, 193, .14), transparent 72%),
+    linear-gradient(118deg, #17192e 0%, #22243b 58%, #191b31 100%);
+}
+.hx__in {
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr);
+  align-items: center;
+  gap: clamp(24px, 5vw, 72px);
+  width: min(var(--nh-frame), 100%);
+  min-height: min(780px, 100svh);
+  margin-inline: auto;
+  padding: calc(var(--nh-h) + 40px) var(--nh-gutter) 64px;
+}
+.hx__copy { max-width: 590px; }
+.hx__eyebrow {
+  display: inline-block;
+  margin: 0 0 22px;
+  padding: 7px 15px;
+  border: 1px solid rgba(207, 174, 108, .42);
+  border-radius: 999px;
+  background: rgba(207, 174, 108, .09);
+  color: #f3e2b4;
+  font-size: 13px;
+  font-weight: 700;
+}
+.hx__copy h1 {
+  margin: 0;
+  max-width: 10.5em;
+  color: #f7f6fb;
+  font-size: clamp(38px, 5vw, 70px);
+  font-weight: 850;
+  line-height: 1.34;
+  letter-spacing: -.04em;
+  text-wrap: balance;
+}
+.hx__copy h1 .gilt { color: var(--nh-gold); }
+.hx__copy p.hx__lead {
+  max-width: 27em;
+  margin: 22px 0 32px;
+  color: rgba(235, 233, 243, .78);
+  font-size: clamp(15px, 1.3vw, 18px);
+  line-height: 2;
+}
+.hx__btns { display: flex; flex-wrap: wrap; gap: 12px; }
+.hx__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  padding: 0 24px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+  text-decoration: none;
+  transition: background .2s ease, border-color .2s ease, color .2s ease, transform .2s ease;
+}
+.hx__btn--gold { background: var(--nh-gold); color: #202033; box-shadow: 0 9px 28px rgba(207, 174, 108, .16); }
+.hx__btn--gold:hover { background: #dfc18a; transform: translateY(-2px); }
+.hx__btn--ghost { border-color: rgba(241, 239, 247, .28); color: #f1eff7; }
+.hx__btn--ghost:hover { border-color: rgba(207, 174, 108, .7); color: #e6c98f; }
+.hx a:focus-visible,
+.hx button:focus-visible,
+.cara-bracelet-lineup:focus-visible { outline: 2px solid #fff0c6; outline-offset: 4px; }
+
+/* اسلایدر دستبندها (کلاس‌ها همون‌هایی‌ان که hero-lineup.js می‌شناسه) */
+.cara-bracelet-lineup {
+  position: relative;
+  width: min(100%, 620px);
+  margin-inline: auto;
+  display: grid;
+  gap: 4px;
+  outline: none;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.cara-bracelet-lineup__viewport { position: relative; width: 100%; aspect-ratio: 1; isolation: isolate; }
+.cara-bracelet-lineup__viewport::before {
+  content: "";
+  position: absolute;
+  inset: 8%;
+  z-index: 0;
+  border: 1px solid rgba(207, 174, 108, .28);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(155, 143, 193, .12), transparent 68%);
+  box-shadow: 0 0 0 16px rgba(207, 174, 108, .025);
+  pointer-events: none;
+}
+.cara-bracelet-lineup__slides { position: absolute; inset: 0; perspective: 1000px; }
+.cara-bracelet-card {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateX(30px) scale(.94) rotateY(-8deg);
+  transition: opacity .45s ease, transform .6s cubic-bezier(.2, .75, .2, 1), visibility .45s;
+}
+.cara-bracelet-card.is-active { opacity: 1; visibility: visible; pointer-events: auto; transform: none; z-index: 1; }
+.cara-bracelet-card__art {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(100%, 560px);
+  height: auto;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  filter: drop-shadow(0 26px 28px rgba(0, 0, 0, .38));
+}
+.cara-bracelet-card figcaption {
+  position: absolute;
+  inset: auto 0 clamp(6px, 2%, 18px);
+  color: #f4e7c9;
+  text-align: center;
+  font-size: clamp(15px, 1.4vw, 19px);
+  font-weight: 800;
+  pointer-events: none;
+}
+.cara-bracelet-lineup__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  padding: 0 0 4px;
+  border: 1px solid rgba(234, 213, 176, .42);
+  border-radius: 50%;
+  background: rgba(25, 15, 37, .76);
+  color: #f7e7bd;
+  font: inherit;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  transform: translateY(-50%);
+  transition: background .2s ease, border-color .2s ease;
+}
+.cara-bracelet-lineup__arrow:hover { background: rgba(207, 174, 108, .2); border-color: #ead5a5; }
+.cara-bracelet-lineup__arrow--prev { right: 4px; }
+.cara-bracelet-lineup__arrow--next { left: 4px; }
+.cara-bracelet-lineup__controls { text-align: center; }
+.cara-bracelet-lineup__count { color: rgba(226, 214, 238, .62); font-size: 12px; }
+
+@media (max-width: 850px) {
+  .hx__in {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    min-height: 0;
+    padding: calc(var(--nh-h) + 20px) 18px 24px;
+  }
+  .hx__copy { margin-inline: auto; text-align: center; }
+  .hx__copy h1 { margin-inline: auto; font-size: clamp(30px, 8vw, 42px); line-height: 1.38; }
+  .hx__copy p.hx__lead { margin: 14px auto 20px; font-size: 14px; line-height: 1.85; }
+  .hx__btns { flex-wrap: nowrap; gap: 9px; }
+  .hx__btn { flex: 1 1 0; min-width: 0; min-height: 46px; padding: 8px 10px; font-size: 13px; white-space: nowrap; }
+  .cara-bracelet-lineup { width: min(88vw, 360px, 46svh); }
+  .cara-bracelet-lineup__arrow { width: 34px; height: 34px; font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sh, .sh__nav a, .sh__nav a::after, .hx__btn, .cara-bracelet-card, .cara-bracelet-lineup__arrow { transition: none; }
+  .sh.is-open .sh__nav { animation: none; }
+  .hx__btn--gold:hover { transform: none; }
+}
