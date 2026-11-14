@@ -114,3 +114,11 @@ test("cart updates preserve keyboard focus and provide item-specific control nam
   assert.match(client, /\$\("cartEmpty"\)\.querySelector\("a"\)\?\.focus\(\)/);
   assert.doesNotMatch(client, /render\(await api\(/);
 });
+
+
+test("cart quantity and removal changes are announced through the live status region", () => {
+  assert.ok(page.includes('id="cartMessage" role="status" aria-live="polite"'));
+  assert.ok(client.includes('message(updatedItem ? `تعداد ${updatedItem.title} به ${fa(updatedItem.quantity)} تغییر کرد.` : "سبد خرید به‌روزرسانی شد.");'));
+  assert.ok(client.includes('message("کالا از سبد خرید حذف شد.");'));
+  assert.ok(page.includes("/js/cart.js?v=3"));
+});
