@@ -65,7 +65,7 @@
       const ix = Math.round(x * M), iy = Math.round(y * M);
       return ix < 0 || iy < 0 || ix >= mw || iy >= mh ? 0 : data[(iy * mw + ix) * 4 + 3] > 110 ? 1 : 0;
     };
-    const step = Math.max(4.6, Math.min(7.2, sw / 175)), rowH = step * 0.8;
+    const step = Math.max(7, Math.min(12.5, sw / 100)), rowH = step * 0.8; /* منجوق درشت‌تر = تعداد کمتر */
     bw = step * 0.94; bh = rowH * 0.92;
     const snap = (v) => Math.round(v * DPR) / DPR;
     beads = []; head = 0;
