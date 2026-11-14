@@ -102,3 +102,17 @@ test("cart page styles load before the shared visual layer", () => {
     assert.ok(cartStyle >= 0 && polishStyle > cartStyle, file + " should load cart styles before polish.css");
   }
 });
+
+
+test("cart updates preserve keyboard focus and provide item-specific control names", () => {
+  assert.match(client, /const active = document\.activeElement/);
+  assert.match(client, /root\.contains\(active\)/);
+  assert.match(client, /card\.dataset\.cartItemId = String\(item\.id\)/);
+  assert.match(client, /data-cart-action/);
+  assert.match(client, /target\?\.focus\(\)/);
+  assert.match(client, /\$\("cartEmpty"\)\.querySelector\("a"\)\?\.focus\(\)/);
+  assert.match(client, /کم کردن تعداد " \+ item\.title/);
+  assert.match(client, /زیاد کردن تعداد " \+ item\.title/);
+  assert.match(client, /حذف " \+ item\.title \+ " از سبد خرید/);
+  assert.doesNotMatch(client, /render\(await api\(/);
+});
