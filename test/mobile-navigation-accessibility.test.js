@@ -37,7 +37,7 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), "utf8");
     const navCss = html.indexOf("/css/nav-hero.css?v=1");
-    const navScript = html.indexOf("/js/nav-hero.js?v=1");
+    const navScript = html.indexOf("js/nav-hero.js?v=1");
     const polishCss = html.indexOf("/css/polish.css?v=7");
     assert.ok(navCss >= 0, page + " loads the current shared header stylesheet");
     assert.ok(navScript >= 0, page + " loads the current shared header behavior");
