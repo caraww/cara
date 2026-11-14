@@ -28,10 +28,11 @@
     return STOPS[STOPS.length - 1][1];
   };
   const easeOut = (x) => 1 - Math.pow(1 - x, 3);
-  const easeIn = (x) => x * x * x;
+  const easeOutBack = (x) => 1 + 2.70158 * Math.pow(x - 1, 3) + 1.70158 * Math.pow(x - 1, 2);
+  const easeInBack = (x) => 2.70158 * x * x * x - 1.70158 * x * x;
 
-  const T_ENTER = 0.9, T_WEAVE = 3.4, T_EXIT = 0.9, TOTAL = T_ENTER + T_WEAVE + T_EXIT, WAVES = 7;
-  let RW = 0, RH = 0, sx = 0, sy = 0, sw = 0, sh = 0, bw = 6, bh = 5, beads = [], head = 0, raf = 0, t0 = 0, S = 1;
+  const T_ENTER = 0.9, T_WEAVE = 3.4, T_EXIT = 1.0, TOTAL = T_ENTER + T_WEAVE + T_EXIT, WAVES = 7;
+  let stars = [], lastHalf = -1, RW = 0, RH = 0, sx = 0, sy = 0, sw = 0, sh = 0, bw = 6, bh = 5, beads = [], head = 0, raf = 0, t0 = 0, S = 1;
 
   function layout() {
     const rr = root.getBoundingClientRect(), sr = slot.getBoundingClientRect();
@@ -102,40 +103,54 @@
     c.globalAlpha = 1;
   }
 
-  /* ---------- دست و سوزن (مختصات محلی: نوک سوزن = ۰،۰؛ دست سمت چپ و بالای نوک) ---------- */
-  const SKIN = "#e9cdb8", SHADE = "#c4a089", CUFF = "#9b8fc1", CUFF_D = "#7d71a6";
-  function thick(pts, w) {
+  /* ---------- دست کارتونی (مثل دستکش انیمیشن‌ها) با سوزن ----------
+     مختصات محلی: نوک سوزن = ۰،۰؛ محور x سمت نوک سوزنه و کل دست به‌اندازه‌ی rot چرخیده */
+  const OUT = "#2b2342", GLOVE = "#fff7ea", CUFF = "#9b8fc1", CUFF_L = "#bdb3df";
+  function blob(cx, cy, rx, ry, rot) {
+    ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, rot || 0, 0, 6.2832);
+    ctx.fillStyle = GLOVE; ctx.fill(); ctx.lineWidth = 3.2; ctx.strokeStyle = OUT; ctx.stroke();
+  }
+  function finger(x0, y0, cx, cy, x1, y1, w) {
     ctx.lineCap = "round"; ctx.lineJoin = "round";
-    [[w + 4, SHADE], [w, SKIN]].forEach(([lw, col]) => {
-      ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
-      for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+    [[w + 7, OUT], [w, GLOVE]].forEach(([lw, col]) => {
+      ctx.beginPath(); ctx.moveTo(x0, y0); ctx.quadraticCurveTo(cx, cy, x1, y1);
       ctx.lineWidth = lw; ctx.strokeStyle = col; ctx.stroke();
     });
   }
-  function poly(pts, fill, stroke) {
-    ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]);
-    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
-    ctx.closePath(); ctx.fillStyle = fill; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = stroke; ctx.stroke();
-  }
-  function drawHand(x, y, rot) {
-    ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(S, S);
-    /* نخ */
-    ctx.lineCap = "round"; ctx.strokeStyle = "rgba(232,213,161,.95)"; ctx.lineWidth = 1.6;
-    ctx.beginPath(); ctx.moveTo(-112, -29); ctx.quadraticCurveTo(-200, -40, -300, -130); ctx.quadraticCurveTo(-380, -200, -760, -250); ctx.stroke();
-    /* ساعد + سرآستین */
-    poly([[-240, -75], [-760, -243], [-760, -125], [-245, 8]], SKIN, SHADE);
-    poly([[-330, -104], [-760, -243], [-760, -125], [-335, -16]], CUFF, CUFF_D);
-    /* کف دست و انگشت‌های جمع‌شده */
-    ctx.beginPath(); ctx.ellipse(-215, -35, 48, 40, -0.2, 0, 6.2832); ctx.fillStyle = SKIN; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = SHADE; ctx.stroke();
-    thick([[-195, -22], [-160, 8]], 18); thick([[-205, -4], [-172, 24]], 18); thick([[-212, 14], [-185, 40]], 17);
+  function drawHand(x, y, rot, kx, ky) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(S * kx, S * ky);
+    ctx.lineCap = "round"; ctx.lineJoin = "round";
+    /* نخ طلایی */
+    ctx.strokeStyle = "rgba(232,213,161,.95)"; ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.moveTo(-122, 0); ctx.quadraticCurveTo(-215, -34, -330, -120); ctx.quadraticCurveTo(-420, -190, -800, -230); ctx.stroke();
+    /* آستین بنفش با راه‌راه */
+    ctx.beginPath(); ctx.moveTo(-262, -52); ctx.quadraticCurveTo(-440, -76, -800, -225); ctx.lineTo(-800, -100); ctx.quadraticCurveTo(-440, 28, -262, 36); ctx.closePath();
+    ctx.fillStyle = CUFF; ctx.fill(); ctx.lineWidth = 3.2; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-320, -28); ctx.quadraticCurveTo(-450, -26, -800, -160); ctx.lineWidth = 7; ctx.strokeStyle = CUFF_L; ctx.stroke();
+    /* لبه‌ی دستکش */
+    blob(-276, -8, 17, 50);
+    /* سه انگشت جمع‌شده */
+    blob(-166, -46, 17, 16); blob(-190, -64, 16, 15); blob(-216, -70, 14, 13);
+    /* کف دست + خط‌های پشت دستکش */
+    blob(-205, -6, 52, 46, -0.15);
+    ctx.lineWidth = 2.4; ctx.strokeStyle = OUT;
+    [[-228, -22, -214, -2], [-212, -30, -198, -10], [-244, -10, -232, 8]].forEach(([a, b, c, e]) => { ctx.beginPath(); ctx.moveTo(a, b); ctx.lineTo(c, e); ctx.stroke(); });
+    ctx.fillStyle = "rgba(255,255,255,.9)"; ctx.beginPath(); ctx.ellipse(-228, -28, 9, 5, -0.5, 0, 6.2832); ctx.fill();
     /* سوزن */
-    ctx.lineCap = "round"; ctx.strokeStyle = "#f4f1fb"; ctx.lineWidth = 3.2;
-    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-118, -30); ctx.stroke();
-    ctx.lineWidth = 1.2; ctx.beginPath(); ctx.ellipse(-112, -29, 5, 1.6, -0.25, 0, 6.2832); ctx.stroke();
+    ctx.strokeStyle = OUT; ctx.lineWidth = 6.6; ctx.beginPath(); ctx.moveTo(-122, 0); ctx.lineTo(0, 0); ctx.stroke();
+    ctx.strokeStyle = "#f4f1fb"; ctx.lineWidth = 3.2; ctx.beginPath(); ctx.moveTo(-122, 0); ctx.lineTo(0, 0); ctx.stroke();
     /* شست و اشاره‌ی گیرنده‌ی سوزن */
-    thick([[-175, -10], [-120, -2], [-80, -14]], 22);
-    thick([[-170, -70], [-110, -48], [-78, -30]], 20);
+    finger(-176, 30, -118, 44, -58, 11, 20);
+    finger(-178, -34, -114, -58, -62, -11, 19);
+    ctx.fillStyle = "rgba(255,255,255,.95)";
+    ctx.beginPath(); ctx.ellipse(-92, -37, 7, 3.2, -0.45, 0, 6.2832); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(-100, 34, 7, 3.2, 0.3, 0, 6.2832); ctx.fill();
     ctx.restore();
+  }
+  function star(x, y, r, a) {
+    ctx.save(); ctx.translate(x, y); ctx.globalAlpha = a; ctx.fillStyle = "#f3e2b4"; ctx.beginPath();
+    ctx.moveTo(0, -r); ctx.quadraticCurveTo(0, 0, r, 0); ctx.quadraticCurveTo(0, 0, 0, r);
+    ctx.quadraticCurveTo(0, 0, -r, 0); ctx.quadraticCurveTo(0, 0, 0, -r); ctx.fill(); ctx.restore();
   }
 
   function paintStatic() {
@@ -148,28 +163,42 @@
     if (!t0) t0 = now;
     const t = (now - t0) / 1000;
     if (t >= TOTAL) { paintStatic(); return; }
-    ctx.clearRect(0, 0, RW, RH);
-    ctx.drawImage(layer, 0, 0, RW, RH);
+    /* ۱) منجوق‌هایی که پوپ‌شون تموم شد یک‌بار توی لایه‌ی ثابت کشیده می‌شن */
     while (head < beads.length && beads[head].done) head++;
     for (let i = head; i < beads.length; i++) {
+      const b = beads[i];
+      if (t < b.t) break; /* لیست بر اساس زمان مرتبه */
+      if (!b.done && (t - b.t) / 0.35 >= 1) { drawBead(lctx, b, 1, 1); b.done = true; }
+    }
+    /* ۲) لایه‌ی ثابت + منجوق‌هایی که الان دارن پوپ می‌شن */
+    ctx.clearRect(0, 0, RW, RH);
+    ctx.drawImage(layer, 0, 0, RW, RH);
+    for (let i = head; i < beads.length; i++) {
       const b = beads[i], p = (t - b.t) / 0.35;
-      if (p <= 0) break; /* لیست بر اساس زمان مرتبه */
-      if (p >= 1) { drawBead(lctx, b, 1, 1); b.done = true; ctx.drawImage(layer, 0, 0, RW, RH); continue; }
-      const e = easeOut(p); drawBead(ctx, b, e, 0.7 + 0.3 * e);
+      if (p <= 0) break;
+      if (b.done) continue;
+      drawBead(ctx, b, Math.min(1, p * 3), 0.4 + 0.6 * easeOutBack(p));
     }
     /* مسیر دست */
     const u = t < T_ENTER ? 0 : t < T_ENTER + T_WEAVE ? (t - T_ENTER) / T_WEAVE : 1;
     let ox = 0, oy = 0;
-    if (t < T_ENTER) { const e = easeOut(t / T_ENTER); ox = (1 - e) * 360; oy = -(1 - e) * 300; }
-    else if (t > T_ENTER + T_WEAVE) { const e = easeIn((t - T_ENTER - T_WEAVE) / T_EXIT); ox = -e * 200; oy = -e * 380; }
+    if (t < T_ENTER) { const e = easeOutBack(t / T_ENTER); ox = (1 - e) * 360; oy = -(1 - e) * 300; }
+    else if (t > T_ENTER + T_WEAVE) { const e = easeInBack((t - T_ENTER - T_WEAVE) / T_EXIT); ox = -e * 200; oy = -e * 380; }
+    const ph = u * Math.PI * 2 * WAVES;
     const tipX = sx + sw + 20 - u * (sw + 40) + ox;
-    const tipY = sy + sh / 2 + Math.sin(u * Math.PI * 2 * WAVES) * sh * 0.34 + oy;
-    drawHand(tipX, tipY, 0.1 * Math.cos(u * Math.PI * 2 * WAVES));
+    const tipY = sy + sh / 2 + Math.sin(ph) * sh * 0.34 + oy;
+    /* هر بار که سوزن بالا یا پایین می‌رسه، جرقه‌ی کوچیک */
+    const half = Math.floor(u * WAVES * 2);
+    if (t >= T_ENTER && u < 1 && half !== lastHalf) { lastHalf = half; stars.push({ x: tipX, y: tipY, t }); }
+    drawHand(tipX, tipY, 0.25 + 0.2 * Math.cos(ph), 1 + 0.06 * Math.cos(2 * ph), 1 - 0.06 * Math.cos(2 * ph));
+    stars = stars.filter((s) => t - s.t < 0.45);
+    stars.forEach((s) => { const k = (t - s.t) / 0.45; star(s.x, s.y, 3 + 9 * easeOut(k), 1 - k); });
     raf = requestAnimationFrame(frame);
   }
 
   function init() {
     root.classList.add("hx--beads");
+    stars = []; lastHalf = -1;
     layout(); build();
     if (calm) { paintStatic(); return; }
     raf = requestAnimationFrame(frame);
