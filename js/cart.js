@@ -30,10 +30,22 @@
   }
 
   function render(cart) {
-    const root = $("cartItems"); root.replaceChildren();
+    const root = $("cartItems");
+    const active = document.activeElement;
+    const activeCard = active && root.contains(active) && typeof active.closest === "function"
+      ? active.closest(".cart-item") : null;
+    const focusState = activeCard ? {
+      itemId: activeCard.dataset.cartItemId,
+      action: active.dataset.cartAction || "",
+      index: Array.from(root.children).indexOf(activeCard),
+    } : null;
+    root.replaceChildren();
     $("cartSummary").hidden = !cart.items.length;
     $("cartEmpty").hidden = !!cart.items.length;
-    if (!cart.items.length) return;
+    if (!cart.items.length) {
+      if (focusState) $("cartEmpty").querySelector("a")?.focus();
+      return;
+    }
     $("cartCount").textContent = fa(cart.totalItems);
     $("cartTotal").textContent = money(cart.totalToman);
     $("checkoutButton").href = cart.items.every((item) => item.available) ? "/checkout.html?cart=1" : "#";
@@ -42,6 +54,7 @@
 
     cart.items.forEach((item) => {
       const card = document.createElement("article"); card.className = "cart-item";
+      card.dataset.cartItemId = String(item.id);
       card.setAttribute("aria-disabled", String(!item.available));
       if (item.image) {
         const image = document.createElement("img"); image.src = item.image.startsWith("/") ? item.image : "/" + item.image;
@@ -65,17 +78,37 @@
       card.append(info);
       const actions = document.createElement("div"); actions.className = "cart-item-end";
       const controls = document.createElement("div"); controls.className = "cart-actions";
-      const minus = document.createElement("button"); minus.type = "button"; minus.textContent = "−"; minus.setAttribute("aria-label", "کم کردن تعداد");
+      const minus = document.createElement("button"); minus.type = "button"; minus.textContent = "−";
+      minus.dataset.cartAction = "decrease";
+      minus.setAttribute("aria-label", "کم کردن تعداد " + item.title);
       minus.disabled = busy || item.quantity <= 1 || !item.available;
       minus.addEventListener("click", () => changeQuantity(item.id, item.quantity - 1));
       const qty = document.createElement("strong"); qty.textContent = fa(item.quantity);
-      const plus = document.createElement("button"); plus.type = "button"; plus.textContent = "+"; plus.setAttribute("aria-label", "زیاد کردن تعداد");
+      const plus = document.createElement("button"); plus.type = "button"; plus.textContent = "+";
+      plus.dataset.cartAction = "increase";
+      plus.setAttribute("aria-label", "زیاد کردن تعداد " + item.title);
       plus.disabled = busy || item.quantity >= 20 || !item.available;
       plus.addEventListener("click", () => changeQuantity(item.id, item.quantity + 1));
       const remove = document.createElement("button"); remove.type = "button"; remove.className = "cart-remove"; remove.textContent = "حذف";
+      remove.dataset.cartAction = "remove";
+      remove.setAttribute("aria-label", "حذف " + item.title + " از سبد خرید");
       remove.disabled = busy; remove.addEventListener("click", () => removeItem(item.id));
       controls.append(minus, qty, plus, remove); actions.append(controls); card.append(actions); root.append(card);
     });
+
+    if (focusState) {
+      const cards = Array.from(root.children);
+      const sameCard = cards.find((card) => card.dataset.cartItemId === focusState.itemId);
+      let target = sameCard && focusState.action
+        ? sameCard.querySelector('[data-cart-action="' + focusState.action + '"]')
+        : null;
+      if (target?.disabled) target = null;
+      if (!target) {
+        const fallbackCard = sameCard || cards[Math.min(Math.max(focusState.index, 0), cards.length - 1)];
+        target = fallbackCard?.querySelector("button:not(:disabled)");
+      }
+      target?.focus();
+    }
   }
 
   async function load() {
@@ -84,19 +117,37 @@
   }
 
   async function changeQuantity(id, quantity) {
-    if (busy) return; busy = true; message("دارم سبد رو به‌روزرسانی می‌کنم…");
-    try { render(await api("/api/cart/items/" + encodeURIComponent(id), { method: "PATCH", body: JSON.stringify({ quantity }) })); message(""); }
-    catch (error) { message(error.message); }
+    if (busy) return;
+    busy = true;
+    message("دارم سبد رو به‌روزرسانی می‌کنم…");
+    let updatedCart = null, failure = null;
+    try { updatedCart = await api("/api/cart/items/" + encodeURIComponent(id), { method: "PATCH", body: JSON.stringify({ quantity }) }); }
+    catch (error) { failure = error; }
     finally { busy = false; }
-    if (!busy) load();
+    if (updatedCart && Array.isArray(updatedCart.items)) {
+      render(updatedCart);
+      message("");
+    } else {
+      await load();
+      if (failure) message(failure.message);
+    }
   }
 
   async function removeItem(id) {
-    if (busy) return; busy = true; message("در حال حذف کالا…");
-    try { render(await api("/api/cart/items/" + encodeURIComponent(id), { method: "DELETE" })); message(""); }
-    catch (error) { message(error.message); }
+    if (busy) return;
+    busy = true;
+    message("در حال حذف کالا…");
+    let updatedCart = null, failure = null;
+    try { updatedCart = await api("/api/cart/items/" + encodeURIComponent(id), { method: "DELETE" }); }
+    catch (error) { failure = error; }
     finally { busy = false; }
-    if (!busy) load();
+    if (updatedCart && Array.isArray(updatedCart.items)) {
+      render(updatedCart);
+      message("");
+    } else {
+      await load();
+      if (failure) message(failure.message);
+    }
   }
 
   async function addFromLink() {
