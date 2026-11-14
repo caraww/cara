@@ -1,0 +1,181 @@
+diff --git a/account.html b/account.html
+index 121f800..9ff75ae 100644
+--- a/account.html
++++ b/account.html
+@@ -20,7 +20,7 @@
+ <div class="sh__in">
+ <a href="/" class="sh__logo" aria-label="cara، صفحه‌ی اصلی"><img class="is-dark" src="/img/cara-logo.png?v=2" alt="cara"></a>
+ <button class="sh__toggle" type="button" aria-controls="shNav" aria-expanded="false" aria-label="باز کردن منو"><span aria-hidden="true">☰</span></button>
+-<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a><a href="/account.html" aria-current="page">حساب کاربری</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
++<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a><a href="/account.html" aria-current="page">حساب کاربری</a><a href="/cart.html">سبد خرید</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
+ </div>
+ </header>
+ 
+diff --git a/builder.html b/builder.html
+index 603563e..126b8e8 100644
+--- a/builder.html
++++ b/builder.html
+@@ -323,7 +323,7 @@
+ <div class="sh__in">
+ <a href="/" class="sh__logo" aria-label="cara، صفحه‌ی اصلی"><img class="is-dark" src="/img/cara-logo.png?v=2" alt="cara"></a>
+ <button class="sh__toggle" type="button" aria-controls="shNav" aria-expanded="false" aria-label="باز کردن منو"><span aria-hidden="true">☰</span></button>
+-<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html" aria-current="page">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
++<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html" aria-current="page">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a><a href="/cart.html">سبد خرید</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
+ </div>
+ </header>    <main class="wrap" id="main-content" tabindex="-1">
+       <div class="builder">
+@@ -539,7 +539,7 @@
+                 <svg class="ic" aria-hidden="true" viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.7 10.7l6.6-4.4M8.7 13.3l6.6 4.4"/></svg>
+               </button><a class="btn accent sm" id="next" href="checkout.html"
+                 >ادامه سفارش</a
+-              >
++              ><a class="btn sm" id="addDesignToCart" href="/cart.html?add=design">افزودن به سبد</a>
+             </div>
+           </div>
+           <div class="grid-wrap" id="gridWrap">
+@@ -1039,6 +1039,7 @@
+         ></span
+       >
+       <button type="button" class="btn accent" id="mbNext">ادامه سفارش</button>
++      <a class="btn" href="/cart.html?add=design">افزودن به سبد</a>
+     </div>
+ <script src="js/palette.js?v=34"></script>
+ <script src="js/pattern-share.js?v=2"></script>
+diff --git a/cart.html b/cart.html
+index 6afaa7b..e21463e 100644
+--- a/cart.html
++++ b/cart.html
+@@ -10,22 +10,17 @@
+   <link rel="stylesheet" href="/css/studio.css?v=20261113-nav">
+   <link rel="stylesheet" href="/css/cart.css?v=1">
+   <link rel="stylesheet" href="/css/polish.css?v=7">
+-  <link rel="stylesheet" href="/css/site-nav.css?v=20261113">
++  <link rel="stylesheet" href="/css/nav-hero.css?v=1">
+   <title>سبد خرید | cara</title>
+ </head>
+ <body>
+   <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
+-  <header class="top solid">
+-  <a href="/" class="logo" aria-label="cara — صفحه‌ی اصلی"><img src="/img/cara-logo.png?v=2" alt="cara" style="height:44px;width:auto;display:block"></a>
+-  <nav aria-label="منوی اصلی">
+-    <a href="/gallery.html">گالری</a>
+-    <a href="/upload.html">عکس به الگو</a>
+-    <a href="/name-bracelet.html">اسم روی دستبند</a>
+-    <a href="/game.html">بازی</a>
+-    <a href="/cart.html" aria-current="page">سبد خرید</a>
+-    <a href="/account.html">حساب کاربری</a>
+-    <a class="cta" href="/builder.html">طراحی دستبند</a>
+-  </nav>
++  <header class="sh is-solid" data-sh="solid">
++<div class="sh__in">
++<a href="/" class="sh__logo" aria-label="cara، صفحه‌ی اصلی"><img class="is-dark" src="/img/cara-logo.png?v=2" alt="cara"></a>
++<button class="sh__toggle" type="button" aria-controls="shNav" aria-expanded="false" aria-label="باز کردن منو"><span aria-hidden="true">☰</span></button>
++<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a><a href="/cart.html" aria-current="page">سبد خرید</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
++</div>
+ </header>
+   <main class="cart-wrap" id="main-content" tabindex="-1">
+     <header class="cart-heading">
+@@ -54,7 +49,7 @@
+   </main>
+   <script src="/js/palette.js" defer></script>
+   <script src="/js/cart.js?v=2" defer></script>
+-  <script src="/js/mobile-nav.js?v=20261111-release" defer></script>
++  <script src="/js/nav-hero.js?v=1" defer></script>
+   <script src="/js/pwa.js" defer></script>
+ </body>
+ </html>
+\ No newline at end of file
+diff --git a/checkout.html b/checkout.html
+index e0230b7..9944d70 100644
+--- a/checkout.html
++++ b/checkout.html
+@@ -15,6 +15,7 @@
+     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+     <meta name="apple-mobile-web-app-title" content="cara" />
+   <link rel="stylesheet" href="/css/accessibility.css">
++  <link rel="stylesheet" href="/css/cart.css?v=1">
+   <link rel="stylesheet" href="/css/polish.css?v=7">
+ <link rel="stylesheet" href="/css/nav-hero.css?v=1">
+ </head>
+@@ -24,7 +25,7 @@
+ <div class="sh__in">
+ <a href="/" class="sh__logo" aria-label="cara، صفحه‌ی اصلی"><img class="is-dark" src="/img/cara-logo.png?v=2" alt="cara"></a>
+ <button class="sh__toggle" type="button" aria-controls="shNav" aria-expanded="false" aria-label="باز کردن منو"><span aria-hidden="true">☰</span></button>
+-<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a><a class="sh__cta" href="/checkout.html" aria-current="page">سفارش</a></nav>
++<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a><a href="/cart.html">سبد خرید</a><a class="sh__cta" href="/checkout.html" aria-current="page">سفارش</a></nav>
+ </div>
+ </header>
+     <main class="wrap" id="main-content" tabindex="-1">
+diff --git a/gallery.html b/gallery.html
+index bbbc564..a2e0e26 100644
+--- a/gallery.html
++++ b/gallery.html
+@@ -456,7 +456,7 @@
+ <div class="sh__in">
+ <a href="/" class="sh__logo" aria-label="cara، صفحه‌ی اصلی"><img class="is-dark" src="/img/cara-logo.png?v=2" alt="cara"></a>
+ <button class="sh__toggle" type="button" aria-controls="shNav" aria-expanded="false" aria-label="باز کردن منو"><span aria-hidden="true">☰</span></button>
+-<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html" aria-current="page">گالری</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
++<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html" aria-current="page">گالری</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a><a href="/cart.html">سبد خرید</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
+ </div>
+ </header>
+     <main class="wrap" id="main-content" tabindex="-1">
+@@ -515,6 +515,7 @@
+         <span id="lbPrice"></span><small class="muted" id="lbNum"></small>
+         <div class="btns">
+           <a class="btn" id="lbOrder" href="checkout.html">سفارش این دستبند</a
++          ><a class="btn" id="lbAddCart" href="/cart.html">افزودن به سبد</a
+           ><a class="btn" id="lbMake" href="upload.html">ازش الگو بساز</a>
+           <div class="btn-row">
+             <button class="btn" id="lbFav" aria-pressed="false">علاقه‌مندی</button>
+diff --git a/game.html b/game.html
+index 11bd95b..fce48c8 100644
+--- a/game.html
++++ b/game.html
+@@ -54,7 +54,7 @@
+ <div class="sh__in">
+ <a href="/" class="sh__logo" aria-label="cara، صفحه‌ی اصلی"><img class="is-dark" src="/img/cara-logo.png?v=2" alt="cara"></a>
+ <button class="sh__toggle" type="button" aria-controls="shNav" aria-expanded="false" aria-label="باز کردن منو"><span aria-hidden="true">☰</span></button>
+-<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html" aria-current="page">بازی</a><a href="/account.html">حساب کاربری</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
++<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html" aria-current="page">بازی</a><a href="/account.html">حساب کاربری</a><a href="/cart.html">سبد خرید</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
+ </div>
+ </header>
+     <main class="wrap" id="main-content" tabindex="-1">
+diff --git a/index.html b/index.html
+index 0bd1c72..a9169fd 100644
+--- a/index.html
++++ b/index.html
+@@ -263,7 +263,7 @@
+       <a href="/" class="sh__logo"><img class="is-light" src="img/cara-logo-light.png?v=2" alt="cara" /><img class="is-dark" src="img/cara-logo.png?v=2" alt="" /></a>
+       <button class="sh__toggle" type="button" aria-controls="shNav" aria-expanded="false" aria-label="باز کردن منو"><span aria-hidden="true">☰</span></button>
+       <nav class="sh__nav" id="shNav" aria-label="منوی اصلی">
+-        <a href="#paths">شروع</a><a href="gallery.html">نمونه‌ها</a><a href="#steps">مراحل</a><a href="#beads">رنگ منجوق‌ها</a><a href="game.html">بازی</a><a href="/account.html">حساب کاربری</a><a class="sh__cta" href="builder.html">طراحی دستبند</a>
++        <a href="#paths">شروع</a><a href="gallery.html">نمونه‌ها</a><a href="#steps">مراحل</a><a href="#beads">رنگ منجوق‌ها</a><a href="game.html">بازی</a><a href="/account.html">حساب کاربری</a><a href="/cart.html">سبد خرید</a><a class="sh__cta" href="builder.html">طراحی دستبند</a>
+       </nav>
+     </div>
+   </header>
+diff --git a/name-bracelet.html b/name-bracelet.html
+index 634eabf..06baa3a 100644
+--- a/name-bracelet.html
++++ b/name-bracelet.html
+@@ -34,7 +34,7 @@
+ <div class="sh__in">
+ <a href="/" class="sh__logo" aria-label="cara، صفحه‌ی اصلی"><img class="is-dark" src="/img/cara-logo.png?v=2" alt="cara"></a>
+ <button class="sh__toggle" type="button" aria-controls="shNav" aria-expanded="false" aria-label="باز کردن منو"><span aria-hidden="true">☰</span></button>
+-<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
++<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a><a href="/cart.html">سبد خرید</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
+ </div>
+ </header>
+ <main class="wrap narrow" id="main-content" tabindex="-1"><div class="nb">
+diff --git a/upload.html b/upload.html
+index 610e4b8..b339406 100644
+--- a/upload.html
++++ b/upload.html
+@@ -215,7 +215,7 @@
+ <div class="sh__in">
+ <a href="/" class="sh__logo" aria-label="cara، صفحه‌ی اصلی"><img class="is-dark" src="/img/cara-logo.png?v=2" alt="cara"></a>
+ <button class="sh__toggle" type="button" aria-controls="shNav" aria-expanded="false" aria-label="باز کردن منو"><span aria-hidden="true">☰</span></button>
+-<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html" aria-current="page">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
++<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html" aria-current="page">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a><a href="/cart.html">سبد خرید</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
+ </div>
+ </header>
+     <main class="wrap narrow ws-page" id="main-content" tabindex="-1">
