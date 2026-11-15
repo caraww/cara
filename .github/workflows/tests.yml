@@ -22,6 +22,8 @@ jobs:
         run: npm ci
       - name: Check Worker palette sync
         run: npm run check:palette
+      - name: Check committed sitemap metadata
+        run: node --test test/sitemap-freshness.test.js
       - name: Build generated site assets and pages
         run: npm run build
       - name: Run tests
