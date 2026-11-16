@@ -28,5 +28,8 @@
     "@imgly/background-removal-node": {
       "sharp": "$sharp"
     }
+  },
+  "dependencies": {
+    "@microsoft/clarity": "^1.0.2"
   }
 }
