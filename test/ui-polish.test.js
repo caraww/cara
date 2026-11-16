@@ -24,12 +24,15 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     const polishPath = "/css/polish.css?v=7";
     const sharedLayerIndex = html.indexOf(polishPath);
     const pageStyles = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+>/g)]
-      .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("hero-signature.css") && !tag.includes("cn-top.css") && !tag.includes("hero-wow.css") && !tag.includes("site-nav.css"))
+      .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("hero-signature.css") && !tag.includes("cn-top.css") && !tag.includes("hero-wow.css") && !tag.includes("site-nav.css") && !tag.includes("nav-hero.css"))
       .map(([tag]) => html.indexOf(tag));
     assert.ok(
       sharedLayerIndex > Math.max(-1, ...pageStyles),
       file + " should load the shared layer after its page styles",
     );
+    if (html.includes("/css/nav-hero.css?v=1")) {
+      assert.ok(html.indexOf("/css/nav-hero.css?v=1") > sharedLayerIndex, file + " should load the current header/hero layer after polish.css");
+    }
   }
 });
 

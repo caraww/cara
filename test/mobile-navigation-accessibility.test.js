@@ -36,30 +36,19 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   const pages = ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html", "account.html"];
   for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), "utf8");
+    const navCss = html.indexOf("/css/nav-hero.css?v=1");
+    const navScript = html.indexOf("js/nav-hero.js?v=1");
+    const polishCss = html.indexOf("/css/polish.css?v=7");
+    assert.ok(navCss >= 0, page + " loads the current shared header stylesheet");
+    assert.ok(navScript >= 0, page + " loads the current shared header behavior");
+    assert.ok(polishCss >= 0 && navCss > polishCss, page + " loads the header layer after shared polish");
     if (page === "index.html") {
-      assert.ok(html.includes("/css/cn-top.css?v=2"), "index.html loads the current cn-header and cn-hero stylesheet");
-      assert.ok(html.includes("/js/cn-header.js?v=1"), "index.html loads the current cn-header behavior");
-      assert.match(html, /class="cn-header"/);
-      assert.match(html, /class="cn-toggle"/);
-    } else {
-      const hasSharedNav = html.includes("/css/mobile-nav.css?v=20261111-release") || html.includes("/css/site-nav.css?v=20261113");
-      assert.ok(hasSharedNav, page + " loads a shared navigation stylesheet");
-      const hasSharedNavScript = html.includes("/js/mobile-nav.js?v=20261111-release") || html.includes("/js/site-nav.js") || html.includes("/js/cn-header.js");
-      assert.ok(hasSharedNavScript, page + " loads shared navigation behavior");
-      const navCss = html.includes("/css/mobile-nav.css?v=20261111-release") ? html.indexOf("/css/mobile-nav.css?v=20261111-release") : html.indexOf("/css/site-nav.css?v=20261113");
-      const polishCss = html.indexOf("/css/polish.css?v=7");
-      if (polishCss >= 0) assert.ok(polishCss > navCss || html.indexOf("/css/site-nav.css?v=20261113") > polishCss, page + " keeps navigation and polish layers ordered");
+      assert.match(html, /class="sh"/);
+      assert.match(html, /class="sh__toggle"/);
+      assert.match(html, /class="sh__nav"/);
     }
   }
-  const contact = fs.readFileSync(path.join(root, "js/contact.js"), "utf8");
-  assert.ok(contact.includes("/css/mobile-nav.css?v=20261111-release"));
-  assert.ok(contact.includes("/js/mobile-nav.js?v=20261111-release"));
-  assert.ok(contact.includes("/css/polish.css?v=7"));
-  assert.match(contact, /link\.onload = loadPolish/);
-  assert.match(contact, /link\.onerror = loadPolish/);
-  assert.match(contact, /polish\.onload = loadNavScript/);
-  assert.match(contact, /polish\.onerror = loadNavScript/);
-  assert.match(contact, /link\.href\.includes\("\/css\/site-nav\.css"\)/);
+  // Primary pages now load nav-hero directly; generated pages keep their own shared-nav template checks below.
   const template = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
   assert.ok(template.includes("/css/site-nav.css?v=20261113"));
   assert.ok(template.includes("/js/mobile-nav.js?v=20261111-release"));
@@ -150,4 +139,55 @@ test("mobile navigation closes when keyboard focus leaves the header", () => {
   documentHandlers.keydown({ key: "Escape" });
   assert.equal(classes.has("menu-open"), false);
   assert.ok(toggleFocusCount > 0, "Escape should restore focus to the menu toggle");
+});
+
+
+test("current nav-hero closes on lost keyboard focus and restores focus on Escape", () => {
+  const source = fs.readFileSync(path.join(root, "js/nav-hero.js"), "utf8");
+  const handlers = { toggle: {}, nav: {}, header: {}, document: {}, window: {} };
+  const classes = new Set();
+  const attributes = {};
+  let focusCount = 0;
+  const link = {};
+  const toggle = {
+    addEventListener: (name, fn) => { handlers.toggle[name] = fn; },
+    setAttribute: (name, value) => { attributes[name] = value; },
+    focus: () => { focusCount += 1; },
+  };
+  const nav = {
+    addEventListener: (name, fn) => { handlers.nav[name] = fn; },
+  };
+  const header = {
+    dataset: { sh: "solid" },
+    classList: {
+      toggle: (name, force) => force ? classes.add(name) : classes.delete(name),
+      contains: (name) => classes.has(name),
+    },
+    querySelector: (selector) => selector === ".sh__toggle" ? toggle : selector === ".sh__nav" ? nav : null,
+    contains: (target) => target === toggle || target === nav || target === link,
+    addEventListener: (name, fn) => { handlers.header[name] = fn; },
+  };
+  const document = {
+    querySelector: () => header,
+    addEventListener: (name, fn) => { handlers.document[name] = fn; },
+  };
+  const context = {
+    document,
+    innerWidth: 390,
+    scrollY: 0,
+    addEventListener: (name, fn) => { handlers.window[name] = fn; },
+  };
+  vm.runInNewContext(source, context);
+
+  handlers.toggle.click();
+  assert.equal(classes.has("is-open"), true);
+  handlers.header.focusout({ relatedTarget: link });
+  assert.equal(classes.has("is-open"), true, "focus inside the header keeps the menu open");
+  handlers.header.focusout({ relatedTarget: null });
+  assert.equal(classes.has("is-open"), false, "a null relatedTarget still closes the menu");
+
+  handlers.toggle.click();
+  handlers.document.keydown({ key: "Escape" });
+  assert.equal(classes.has("is-open"), false);
+  assert.ok(focusCount > 0, "Escape restores focus to the toggle");
 });

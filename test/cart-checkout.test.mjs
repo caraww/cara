@@ -70,8 +70,9 @@ test("cart page exposes accessible quantity controls and cart checkout entry", (
   assert.match(page, /checkout\.html\?cart=1/);
   assert.match(client, /method: "PATCH"/);
   assert.match(client, /method: "DELETE"/);
-  assert.match(client, /aria-label", "زیاد کردن تعداد"/);
-  assert.match(client, /aria-label", "کم کردن تعداد"/);
+  assert.match(client, /aria-label", "زیاد کردن تعداد " \+ item\.title/);
+  assert.match(client, /aria-label", "کم کردن تعداد " \+ item\.title/);
+  assert.match(client, /حذف " \+ item\.title \+ " از سبد خرید/);
 });
 
 test("checkout submits a cart without trusting browser-supplied totals", () => {
@@ -101,4 +102,23 @@ test("cart page styles load before the shared visual layer", () => {
     const polishStyle = html.indexOf("/css/polish.css?v=7");
     assert.ok(cartStyle >= 0 && polishStyle > cartStyle, file + " should load cart styles before polish.css");
   }
+});
+
+
+test("cart updates preserve keyboard focus and provide item-specific control names", () => {
+  assert.match(client, /const active = document\.activeElement/);
+  assert.match(client, /root\.contains\(active\)/);
+  assert.match(client, /card\.dataset\.cartItemId = String\(item\.id\)/);
+  assert.match(client, /data-cart-action/);
+  assert.match(client, /target\?\.focus\(\)/);
+  assert.match(client, /\$\("cartEmpty"\)\.querySelector\("a"\)\?\.focus\(\)/);
+  assert.doesNotMatch(client, /render\(await api\(/);
+});
+
+
+test("cart quantity and removal changes are announced through the live status region", () => {
+  assert.ok(page.includes('id="cartMessage" role="status" aria-live="polite"'));
+  assert.ok(client.includes('message(updatedItem ? `تعداد ${updatedItem.title} به ${fa(updatedItem.quantity)} تغییر کرد.` : "سبد خرید به‌روزرسانی شد.");'));
+  assert.ok(client.includes('message("کالا از سبد خرید حذف شد.");'));
+  assert.ok(page.includes("/js/cart.js?v=3"));
 });
