@@ -1,6 +1,7 @@
 import { handleGame, checkCode, codeDiscount, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
 import { handleAccountRequest, getAccountUser } from "./lib/accounts.mjs";
 import { handleCartRequest, loadCartForRequest, clearPurchasedCartItems } from "./lib/cart.mjs";
+import { mirrorOrder, unmirrorOrder, backfillOrders, compareOrders } from "./lib/order-store.mjs";
 import "./lib/works-pricing.js";
 export { GameDO } from "./game-worker.js"; /* Durable Object بازی */
 
@@ -94,10 +95,15 @@ async function zibal(C, endpoint, body) {
   }
 }
 
-const saveOrder = (env, o) => env.ORDERS.put("order:" + o.id, JSON.stringify(o));
+/* KV مرجع اصلیه؛ کپی D1 فقط «تلاش می‌کنه» و خطاش هیچ‌وقت پرداخت رو خراب نمی‌کنه (lib/order-store.mjs) */
+const saveOrder = async (env, o) => {
+  await env.ORDERS.put("order:" + o.id, JSON.stringify(o));
+  await mirrorOrder(env, o);
+};
 const removeOrder = async (env, o) => {
   await env.ORDERS.delete("order:" + o.id);
   if (o.trackId) await env.ORDERS.delete("pn:" + o.trackId);
+  await unmirrorOrder(env, o.id);
 };
 const getOrder = async (env, id) => {
   const t = await env.ORDERS.get("order:" + id);
@@ -512,6 +518,16 @@ async function adminCustomers(request, env) {
     marketingEligible: !!(row.phone && row.phone_verified_at && row.marketing_sms_consent),
   })));
 }
+/* همگام‌سازی KV → D1: GET = مقایسه، POST {cursor} = یک قدم کپی سفارش‌های قدیمی (تا done:true تکرار کن) */
+async function adminOrdersSync(request, env) {
+  const gate = await adminGate(request, env); if (gate) return gate;
+  if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
+  if (request.method === "GET") return json(await compareOrders(env));
+  if (request.method !== "POST") return json({ error: "method not allowed" }, 405);
+  let b = {};
+  try { b = await request.json(); } catch {}
+  return json(await backfillOrders(env, { cursor: b && b.cursor ? String(b.cursor) : undefined }));
+}
 async function admin(request, env, url, ctx) {
   const gate = await adminGate(request, env); if (gate) return gate;
   if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
@@ -619,6 +635,7 @@ export default {
       if (p === "/api/payment-callback") return await paymentCallback(request, env, url, ctx);
       if (p === "/api/admin/debug") return await debug(request, env, url);
       if (p === "/api/admin/customers") return await adminCustomers(request, env);
+      if (p === "/api/admin/orders-sync") return await adminOrdersSync(request, env);
       if (p === "/api/admin/orders") return await admin(request, env, url, ctx);
       const gameRes = await handleGame(request, env, url);
       if (gameRes) return gameRes;
