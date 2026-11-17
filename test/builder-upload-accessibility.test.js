@@ -4,13 +4,31 @@ const fs = require("node:fs");
 const path = require("node:path");
 const root = path.join(__dirname, "..");
 
+function tagWithId(html, id) {
+  const escapedId = id.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = html.match(new RegExp(`<([a-z][\\w:-]*)\\b(?=[^>]*\\bid="${escapedId}")[^>]*>`, "s"));
+  assert.ok(match, `element #${id} must remain present`);
+  return match[0];
+}
+
 test("builder save feedback is announced politely and atomically", () => {
   const html = fs.readFileSync(path.join(root, "builder.html"), "utf8");
-  assert.match(html, /id="saved" role="status" aria-live="polite" aria-atomic="true"/);
+  const saved = tagWithId(html, "saved");
+  assert.match(saved, /\\brole="status"/);
+  assert.match(saved, /\\baria-live="polite"/);
+  assert.match(saved, /\\baria-atomic="true"/);
 });
 
 test("photo conversion progress and result summaries are announced", () => {
   const html = fs.readFileSync(path.join(root, "upload.html"), "utf8");
-  assert.match(html, /id="msg" role="status" aria-live="polite" aria-atomic="true"/);
-  assert.match(html, /id="info" role="status" aria-live="polite" aria-atomic="true" hidden/);
+  const message = tagWithId(html, "msg");
+  assert.match(message, /\\brole="status"/);
+  assert.match(message, /\\baria-live="polite"/);
+  assert.match(message, /\\baria-atomic="true"/);
+
+  const info = tagWithId(html, "info");
+  assert.match(info, /\\brole="status"/);
+  assert.match(info, /\\baria-live="polite"/);
+  assert.match(info, /\\baria-atomic="true"/);
+  assert.match(info, /\\bhidden\\b/);
 });

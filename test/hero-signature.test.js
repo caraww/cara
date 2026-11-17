@@ -12,21 +12,24 @@ test("homepage uses the current hx hero, bracelet lineup, and shared header", ()
   assert.match(html, /<section class="hx"/);
   assert.match(html, /class="hx__copy"/);
   assert.match(html, /class="cara-bracelet-lineup"/);
-  assert.match(html, /nav-hero\.css\?v=1/);
-  assert.match(html, /nav-hero\.js\?v=1/);
-  assert.match(css, /\.hx__in/);
-  assert.match(css, /\.hx__copy/);
-  assert.match(css, /\.cara-bracelet-lineup__viewport/);
+  assert.match(html, /nav-hero\\.css\\?v=1/);
+  assert.match(html, /nav-hero\\.js\\?v=1/);
+  assert.match(css, /\\.hx__in/);
+  assert.match(css, /\\.hx__copy/);
+  assert.match(css, /\\.cara-bracelet-lineup__viewport/);
   assert.match(css, /prefers-reduced-motion/);
 });
 
 test("current hero exposes three named bracelet canvases and keyboard controls", () => {
   const html = read("index.html");
   const heroStart = html.indexOf('<section class="hx"');
-  const heroEnd = html.indexOf('<section class="cara-weaving"', heroStart);
+  const weavingClass = html.indexOf('class="cara-weaving"', heroStart);
+  const heroEnd = weavingClass < 0 ? -1 : html.lastIndexOf("<section", weavingClass);
   assert.ok(heroStart >= 0 && heroEnd > heroStart, "current hero section exists");
   const hero = html.slice(heroStart, heroEnd);
-  assert.equal((hero.match(/<canvas class="cara-bracelet-card__art"/g) || []).length, 3);
+  const braceletCanvases = [...hero.matchAll(/<canvas\\b[^>]*>/gs)]
+    .filter(([tag]) => /\\bclass="cara-bracelet-card__art"/.test(tag));
+  assert.equal(braceletCanvases.length, 3);
   for (const id of ["thousand-eyes", "waterfall", "duck"]) {
     assert.match(hero, new RegExp('data-bracelet="' + id + '"'));
   }
