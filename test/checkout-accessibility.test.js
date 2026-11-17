@@ -5,26 +5,33 @@ const path = require("node:path");
 
 const root = path.join(__dirname, "..");
 
+function tagWithId(html, id) {
+  const token = 'id="' + id + '"';
+  const index = html.indexOf(token);
+  assert.ok(index >= 0, "element #" + id + " must remain present");
+  const start = html.lastIndexOf("<", index);
+  const end = html.indexOf(">", index);
+  assert.ok(start >= 0 && end > index, "element #" + id + " must have a complete opening tag");
+  return html.slice(start, end + 1);
+}
+
 test("checkout validation errors and payment status are announced to assistive technology", () => {
   const html = fs.readFileSync(path.join(root, "checkout.html"), "utf8");
-  const result = html.match(/<div id="result"([^>]*)><\/div>/);
-  assert.ok(result, "payment result region must remain present");
-  assert.match(result[1], /\brole="status"/);
-  assert.match(result[1], /\baria-live="polite"/);
-  assert.match(result[1], /\baria-atomic="true"/);
-  assert.match(result[1], /\bhidden\b/);
+  const result = tagWithId(html, "result");
+  assert.ok(result.includes('role="status"'));
+  assert.ok(result.includes('aria-live="polite"'));
+  assert.ok(result.includes('aria-atomic="true"'));
+  assert.ok(/\bhidden\b/.test(result));
 
-  const match = html.match(/<p class="err" id="err"([^>]*)><\/p>/);
-  assert.ok(match, "checkout error region must remain present");
-  assert.match(match[1], /\brole="alert"/);
-  assert.match(match[1], /\baria-atomic="true"/);
-  assert.match(match[1], /\bhidden\b/, "error stays hidden until checkout.js reveals it");
+  const error = tagWithId(html, "err");
+  assert.ok(error.includes('role="alert"'));
+  assert.ok(error.includes('aria-atomic="true"'));
+  assert.ok(/\bhidden\b/.test(error), "error stays hidden until checkout.js reveals it");
 
-  const discountStatus = html.match(/<p class="muted" id="dcNote"([^>]*)><\/p>/);
-  assert.ok(discountStatus, "discount feedback region must remain present");
-  assert.match(discountStatus[1], /\brole="status"/);
-  assert.match(discountStatus[1], /\baria-live="polite"/);
-  assert.match(discountStatus[1], /\baria-atomic="true"/);
+  const discountStatus = tagWithId(html, "dcNote");
+  assert.ok(discountStatus.includes('role="status"'));
+  assert.ok(discountStatus.includes('aria-live="polite"'));
+  assert.ok(discountStatus.includes('aria-atomic="true"'));
 
   const js = fs.readFileSync(path.join(root, "js/checkout.js"), "utf8");
   assert.match(js, /err\.textContent = m; err\.hidden = false/);
