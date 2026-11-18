@@ -231,3 +231,13 @@
 }
 .wv-field input:focus-visible,.wv-field select:focus-visible,.wv-sw button:focus-visible{outline-color:#8d718f}
 @media(max-width:560px){.wv-home{padding-inline:16px}}
+
+
+/* The bead underline beneath the live-loom title uses cobalt blue, not peach. */
+.wv-heading h2::after {
+  width: 104px;
+  height: 12px;
+  margin-top: 12px;
+  border-radius: 0;
+  background: radial-gradient(circle, #0047ab 0 3.2px, transparent 3.8px) 0 50% / 17px 12px repeat-x;
+}
