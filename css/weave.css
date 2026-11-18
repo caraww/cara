@@ -164,3 +164,31 @@
   line-height: 1.5;
   letter-spacing: .16em;
 }
+
+
+/* cara × DigiPay palette: an airy beadwork studio around the live loom. */
+.wv-home{
+  box-sizing:border-box;
+  padding:clamp(28px,4vw,48px) max(22px,5vw);
+  border:1px solid rgba(8,123,156,.16);
+  border-radius:30px;
+  background:
+    radial-gradient(circle at 8% 12%,rgba(8,123,156,.09) 0 2px,transparent 2.8px) 0 0/22px 22px,
+    radial-gradient(ellipse at 92% 8%,rgba(17,169,202,.13),transparent 32%),
+    linear-gradient(135deg,#f1fbfd 0%,#f8fcfd 52%,#eef7fb 100%);
+  box-shadow:0 22px 56px rgba(18,78,97,.075);
+}
+.wv-heading h2{color:#17384a}
+.wv-heading h2::after{background:radial-gradient(circle,#087b9c 0 3.2px,transparent 3.8px) 0 50%/17px 12px repeat-x}
+.wv-heading p{color:#607684}
+.wv-stage{
+  border:1px solid rgba(255,255,255,.3);
+  background:
+    radial-gradient(circle at 12% 18%,rgba(255,255,255,.16) 0 1.4px,transparent 2px) 0 0/19px 19px,
+    radial-gradient(ellipse at 50% 0%,#087b9c 0%,#07536f 58%,#123f57 100%);
+  box-shadow:0 22px 48px rgba(18,78,97,.2),inset 0 1px 0 rgba(255,255,255,.18);
+}
+.wv-bar i{background:linear-gradient(90deg,#8ee8f4,#fff,#d9f7ff)}
+.wv-card,.wv-done{border-color:rgba(8,123,156,.18);box-shadow:0 14px 36px rgba(18,78,97,.09)}
+.wv-field input:focus-visible,.wv-field select:focus-visible,.wv-sw button:focus-visible{outline-color:#087b9c}
+@media(max-width:560px){.wv-home{padding:24px 16px;border-radius:22px}}
