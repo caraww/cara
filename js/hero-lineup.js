@@ -130,7 +130,7 @@
         const theta=i/N*TAU+rot,z=Math.sin(theta);if((z>=0?1:0)!==pass)continue;
         const depth=reduced?1:ease(clamp((t-i*14)/650));if(depth<=0)continue;
         const scale=1+.2*z,bw=bs*scale*(.3+.7*Math.abs(z))+.8,bh=bs*scale+.8;
-        const x=cx+R*Math.cos(theta),row=Array.from({length:W},(_,j)=>pattern(i%PER,j));
+        const x=cx+R*Math.cos(theta),row=Array.from({length:W},(_,j)=>pattern(id==="chain"?i:i%PER,j));
         const lit=pass?Math.pow(Math.max(0,Math.cos(theta-lightAngle)),12):0;
         ctx.globalAlpha=depth;
         for(let j=0;j<W;j++){
