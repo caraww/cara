@@ -1123,3 +1123,5 @@ button, .btn, a.btn {
   font-weight: 900;
   white-space: nowrap;
 }
+
+.cara-payment-promo__brand-mark{display:block;flex:0 0 34px;width:34px;height:34px;object-fit:cover;border-radius:9px;background:#0800f5;box-shadow:0 2px 8px rgba(8,0,245,.16)}
