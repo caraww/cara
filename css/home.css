@@ -1566,3 +1566,7 @@ button, .btn, a.btn {
 @media(max-width:720px){
   .cara-payment-promo__card{width:min(100%,250px)}
 }
+
+
+/* Narrow only the turquoise wallet graphic inside the DigiPay card. */
+.cara-payment-promo__wallet{width:78%;}
