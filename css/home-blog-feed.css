@@ -83,3 +83,6 @@
 #beads > .section-kicker {
   color: #b8975a !important;
 }
+
+/* Keep every English homepage section title the same compact size. */
+.section-kicker { font-size: 10px !important; }
