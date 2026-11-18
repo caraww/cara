@@ -89,3 +89,12 @@
 /* Override the more-specific legacy sizes on the first two homepage labels. */
 .cara-weaving__copy > .section-kicker,
 .wv-heading > .section-kicker { font-size: 10px !important; }
+
+
+/* Keep the homepage blog cards inset from the screen edge on phones. */
+@media (max-width:700px) {
+  .cara-journal__rail {
+    margin-inline: 0;
+    padding-inline: 4px;
+  }
+}
