@@ -19,6 +19,7 @@ a{color:inherit}
 .feed-heading h1 em{font-style:normal;color:#f1bca8}
 .feed-intro{max-width:430px;color:#e5e2ec;font-size:15px;margin:13px 0 0}
 .feed-note{position:absolute;left:34px;bottom:32px;display:flex;gap:20px;align-items:center;color:#ffffffa8;font-size:10px;letter-spacing:.14em}
+.feed-note span{font-size:12px}
 .feed-note b{font-weight:400;color:#f1bca8}
 .feed-section{padding:48px 0 18px}
 .section-top{display:flex;justify-content:space-between;align-items:end;margin-bottom:20px}

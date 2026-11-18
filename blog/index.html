@@ -37,8 +37,8 @@
           <h2 id="posts-title">پست‌های cara</h2>
         </div>
         <div class="rail-controls" aria-label="کنترل اسکرول پست‌ها">
-          <button type="button" class="rail-arrow" data-scroll="next" aria-label="پست‌های بعدی">←</button>
-          <button type="button" class="rail-arrow" data-scroll="prev" aria-label="پست‌های قبلی">→</button>
+          <button type="button" class="rail-arrow" data-scroll="next" aria-label="پست‌های بعدی">→</button>
+          <button type="button" class="rail-arrow" data-scroll="prev" aria-label="پست‌های قبلی">←</button>
         </div>
       </div>
 
@@ -95,7 +95,7 @@
 
       rail.parentElement.querySelectorAll('[data-scroll]').forEach(button => {
         button.addEventListener('click', () => {
-          const direction = button.dataset.scroll === 'next' ? -1 : 1;
+          const direction = button.dataset.scroll === 'next' ? 1 : -1;
           rail.scrollBy({ left: direction * Math.min(rail.clientWidth * .78, 520), behavior: 'smooth' });
         });
       });
