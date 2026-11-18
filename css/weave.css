@@ -271,3 +271,9 @@
   background: linear-gradient(90deg, #a7853f 0%, #cfae6c 38%, #f0dba9 68%, #b8975a 100%);
   box-shadow: 0 2px 5px rgba(167, 133, 63, .16);
 }
+
+/* Keep the Persian titles of these adjacent sections in the site's shared navy heading color. */
+#paths h2,
+.wv-heading h2 {
+  color: #343b64;
+}
