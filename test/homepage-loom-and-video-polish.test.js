@@ -49,7 +49,7 @@ test("weaving heading and frame follow the homepage heading and card rhythm", ()
   assert.match(css, /max-width: none/);
   assert.match(css, /border-radius: 26px/);
   assert.match(css, /width: 102px/);
-  assert.match(css, /radial-gradient\(circle, #b8975a 0 3\.2px, transparent 3\.8px\)/);
+  assert.match(css, /radial-gradient\(circle, #cfae6c 0 3\.2px, transparent 3\.8px\)/);
 });
 
 
