@@ -1053,3 +1053,16 @@ button, .btn, a.btn {
   ::view-transition-old(root),
   ::view-transition-new(root) { animation: none !important; }
 }
+
+
+/* Shared English eyebrow above every homepage section heading. */
+.section-kicker {
+  display: block;
+  margin: 0 0 8px;
+  color: #a47d75;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .16em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
