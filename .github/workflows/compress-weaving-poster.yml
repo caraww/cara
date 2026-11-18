@@ -1,0 +1,59 @@
+name: Compress weaving poster
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/compress-weaving-poster.yml"
+      - "img/cara-weaving-loom-poster.webp"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  compress:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: perf/compress-weaving-poster
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci
+      - name: Re-encode poster as optimized WebP
+        run: |
+          node <<'NODE'
+          const sharp = require('sharp');
+          const fs = require('fs');
+          const file = 'img/cara-weaving-loom-poster.webp';
+          const temp = file + '.optimized.webp';
+          (async () => {
+            const before = fs.statSync(file).size;
+            const meta = await sharp(file).metadata();
+            await sharp(file)
+              .rotate()
+              .resize({ width: 1600, height: 2400, fit: 'inside', withoutEnlargement: true })
+              .webp({ quality: 80, effort: 6, smartSubsample: true })
+              .toFile(temp);
+            const after = fs.statSync(temp).size;
+            if (after >= before) {
+              fs.unlinkSync(temp);
+              console.log('No size improvement; original retained.');
+              return;
+            }
+            fs.renameSync(temp, file);
+            console.log(JSON.stringify({ before, after, saved: before-after, width: meta.width, height: meta.height }));
+          })().catch(e => { console.error(e); process.exit(1); });
+          NODE
+      - name: Commit optimized poster
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add img/cara-weaving-loom-poster.webp
+          if git diff --cached --quiet; then
+            echo "No smaller output was produced."
+            exit 0
+          fi
+          git commit -m "Compress weaving poster WebP"
+          git push origin HEAD:perf/compress-weaving-poster
