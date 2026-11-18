@@ -68,16 +68,3 @@ body:not(:has(.blog-feed)):not(:has(.blog-article)) .hero2 .hero-copy p {
   body:not(:has(.blog-feed)):not(:has(.blog-article)) main p:not(.hero p):not(.hero2 p):not(.cara-payment-promo__copy p),
   body:not(:has(.blog-feed)):not(:has(.blog-article)) main li { font-size: 15px !important; }
 }
-
-
-/* Final heading-color pass: every semantic heading uses cara navy. */
-body h1, body h2, body h3, body h4, body h5, body h6,
-body .page-title, body .section-title, body .section-heading {
-  color: #343B64 !important;
-}
-/* Keep headings readable on the site's intentionally dark hero surfaces. */
-body .hero h1, body .hero h2, body .hero h3,
-body .hero2 .hero-copy h1, body .hero2 .hero-copy h2,
-body .feed-header h1, body .feed-header h2 {
-  color: #F6F1FA !important;
-}
