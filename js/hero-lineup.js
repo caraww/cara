@@ -7,7 +7,7 @@
   })).filter(x=>x.canvas);
   if(!entries.length)return;
 
-  const TAU=Math.PI*2,N=120,W=5,PER=30,CC=2;
+  const TAU=Math.PI*2,N=120,W=13,PER=30,CC=6;
   const reduced=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const palettes={
     "thousand-eyes":["#171717","#F0EDF2","#791D27"],
@@ -33,20 +33,22 @@
       return seq[(band%seq.length+seq.length)%seq.length];
     },
     chain:(r,j)=>{
-      /* One straight row of evenly spaced oval links, separated by short silver dashes. */
-      const x=((r%24)+24)%24,y=j-2;
+      /* Keep the bracelet's original width; show a centered five-row strip only for this chain design. */
+      if(j<4||j>8)return -1;
+      const x=((r%24)+24)%24,y=j-6;
+      if(j===4||j===8)return 0; // one black bead row above and below
       let silver=false,bright=false;
       for(const link of [{x:0,y:0},{x:12,y:0}]){
         let dx=x-link.x;
         if(dx>12)dx-=24;
         if(dx<-12)dx+=24;
-        const d=(dx/4.2)**2+(y/1.65)**2;
+        const d=(dx/4.2)**2+(y/1.35)**2;
         if(d>=.56&&d<=1.08){
           silver=true;
           if(d>.91||((Math.round(dx)+j)%5===0))bright=true;
         }
       }
-      /* Keep a visible gap around each short connector dash. */
+      /* Longer silver dashes connect the oval links. */
       const bridge=Math.abs(y)<=.45&&([6,18].some(p=>Math.abs(x-p)<=1.8));
       if(bridge)return ((Math.round(x)+j)%2===0)?3:2;
       if(!silver)return 0;
