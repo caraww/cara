@@ -53,7 +53,7 @@ a{color:inherit}
 .art-care i{width:130px;height:130px;border:18px solid #fff9;border-right-color:#a88d62;border-bottom-color:#a88d62}
 .art-care b{width:32px;height:32px;background:#a88d62;transform:translate(46px,-48px)}
 .card-bottom{position:relative;z-index:2;display:block}
-.card-kicker{font-size:9px;letter-spacing:.15em;opacity:.68;font-weight:700}
+.card-kicker{position:absolute;top:30px;z-index:2;font-size:9px;letter-spacing:.15em;opacity:.68;font-weight:700}
 .card-bottom h3{font-size:22px;line-height:1.65;margin:7px 0 13px;font-weight:700}
 .card-open{display:flex;align-items:center;justify-content:space-between;border-top:1px solid currentColor;padding-top:10px;font-size:12px;font-weight:600}
 .card-open b{font-size:18px}
