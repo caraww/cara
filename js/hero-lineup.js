@@ -33,20 +33,24 @@
       return seq[(band%seq.length+seq.length)%seq.length];
     },
     chain:(r,j)=>{
+      /* Flat woven chain motif: metallic-silver linked loops on a black Delica base. */
       const x=r%30,y=j-CC;
-      let best=0,shade=0;
-      for(const link of [{cx:7.5,a:Math.PI/4},{cx:22.5,a:-Math.PI/4}]){
-        const dx=x-link.cx,dy=y;
+      let silver=false,edge=0;
+      for(const link of [
+        {cx:7.5,cy:-0.8,a:Math.PI/5},
+        {cx:22.5,cy:0.8,a:-Math.PI/5}
+      ]){
+        const dx=x-link.cx,dy=y-link.cy;
         const u=dx*Math.cos(link.a)+dy*Math.sin(link.a);
         const v=-dx*Math.sin(link.a)+dy*Math.cos(link.a);
-        const d=(u/5.7)**2+(v/2.75)**2;
-        if(d<=1&&d>=.43){
-          best=1;
-          if(d>.88)shade=3;
-          else if(d<.58)shade=2;
+        const d=(u/5.7)**2+(v/2.55)**2;
+        if(d<=1.08&&d>=.48){
+          silver=true;
+          if(d>.91)edge=3;
+          else if(d<.61)edge=2;
         }
       }
-      return best?(shade||1):0;
+      return silver?(edge||1):0;
     },
 
   };
