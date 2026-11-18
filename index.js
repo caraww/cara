@@ -2,16 +2,18 @@ import { handleGame, checkCode, codeDiscount, reserveCode, releaseCode, useCode,
 import { handleAccountRequest, getAccountUser } from "./lib/accounts.mjs";
 import { handleCartRequest, loadCartForRequest, clearPurchasedCartItems } from "./lib/cart.mjs";
 import { mirrorOrder, unmirrorOrder, backfillOrders, compareOrders } from "./lib/order-store.mjs";
+import { digipayConfigured, digipayCreateTicket, digipayVerify } from "./lib/digipay.mjs";
 import "./lib/works-pricing.js";
 export { GameDO } from "./game-worker.js"; /* Durable Object بازی */
 
 /* API سایت cara روی Cloudflare Worker: پرداخت با زیبال (zibal.ir) + ثبت و مدیریت سفارش‌ها.
-   مسیرها: /api/config  /api/works  /api/work  /api/create-payment  /api/payment-callback  /api/admin/orders  /api/admin/debug
+   مسیرها: /api/config  /api/works  /api/work  /api/create-payment  /api/payment-callback  /api/digipay-callback  /api/admin/orders  /api/admin/debug
    تنظیمات (داشبورد Cloudflare → Worker → Settings، یا  npx wrangler secret put <اسم>):
      Variables (توی wrangler.jsonc):  PRICE_PER_BEAD   BASE_FEE   BASE_URL
      Secrets:    ZIBAL_MERCHANT  (کد merchant درگاه زیبال؛ برای تست بنویس zibal)
                  ADMIN_TOKEN     (یه رمز دلخواه برای صفحه‌ی admin.html)
                  GAME_SECRET     (راز امضای بازی؛ حداقل ۱۶ کاراکتر و جدا از ADMIN_TOKEN؛ بدونش بازی فقط حالت تمرین داره)
+                 DIGIPAY_CLIENT_ID  DIGIPAY_CLIENT_SECRET  DIGIPAY_USERNAME  DIGIPAY_PASSWORD  (کیف پول دیجی‌پی؛ اختیاری. تست: DIGIPAY_BASE=https://uat.mydigipay.info/digipay/api)
                  TELEGRAM_BOT_TOKEN  و  TELEGRAM_CHAT_ID  (اعلان سفارش جدید توی تلگرام؛ اختیاری)
      اختیاری:    CALLBACK_URL    (پیش‌فرض: BASE_URL/api/payment-callback)
                  ZIBAL_BASE + ZIBAL_RELAY_KEY  (فقط اگه زیبال آی‌پی ثابت می‌خواد؛ zibal-relay.js رو ببین)
@@ -275,8 +277,13 @@ async function createPayment(request, env) {
     priceToman = Math.round(priceToman * (1 - ((await codeDiscount(env, dc)) || DISCOUNT)));
   }
 
-  if (!C.merchant) return json({ error: "کد درگاه (ZIBAL_MERCHANT) روی Worker تنظیم نشده." }, 503);
-  if (!C.relaySecret) return json({ error: "RELAY_SECRET روی Worker تنظیم نشده." }, 503);
+  const provider = body.provider === "digipay" ? "digipay" : "zibal";
+  if (provider === "digipay") {
+    if (!digipayConfigured(env)) return json({ error: "درگاه دیجی‌پی روی Worker تنظیم نشده." }, 503);
+  } else {
+    if (!C.merchant) return json({ error: "کد درگاه (ZIBAL_MERCHANT) روی Worker تنظیم نشده." }, 503);
+    if (!C.relaySecret) return json({ error: "RELAY_SECRET روی Worker تنظیم نشده." }, 503);
+  }
   if (!(priceToman * 10 >= 10000)) return json({ error: "مبلغ کمتر از حداقل مجاز درگاه است." }, 400);
 
   const order = {
@@ -284,8 +291,8 @@ async function createPayment(request, env) {
     status: "pending",
     fulfillment: "new",
     createdAt: new Date().toISOString(),
-    sandbox: C.sandbox || !!(extra.work && extra.work.id === TEST_WORK.id),
-    provider: "zibal",
+    sandbox: (provider === "digipay" ? /uat\.|\.info/i.test(String(env.DIGIPAY_BASE || "")) : C.sandbox) || !!(extra.work && extra.work.id === TEST_WORK.id),
+    provider,
     priceToman,
     customer,
     ...(account ? { userId: account.id } : {}),
@@ -295,6 +302,22 @@ async function createPayment(request, env) {
   /* رزرو اتمیک کد قبل از ساختن سفارش؛ اگه هم‌زمان یکی دیگه گرفتتش، این سفارش ساخته نمی‌شه */
   if (dc && !(await reserveCode(env, dc, order.id))) return json({ error: "کد تخفیف نامعتبر یا قبلاً استفاده شده." }, 400);
   await saveOrder(env, order);
+
+  /* دیجی‌پی: تیکت مستقیم از Worker ساخته می‌شه و مشتری به redirectUrl می‌ره */
+  if (provider === "digipay") {
+    const t = await digipayCreateTicket(env, {
+      amountRial: priceToman * 10, phone: customer.phone, providerId: order.id, callbackUrl: `${C.site}/api/digipay-callback`,
+    });
+    if (!t.ok) {
+      order.status = "failed"; order.error = "digipay ticket: " + String(t.message || "").slice(0, 120);
+      await saveOrder(env, order);
+      if (dc) await releaseCode(env, dc, order.id);
+      return json({ error: "وصل شدن به دیجی‌پی نشد؛ دوباره امتحان کن یا با درگاه دیگه پرداخت کن." }, 502);
+    }
+    order.digipayTicket = t.ticket;
+    await saveOrder(env, order);
+    return json({ paymentUrl: t.redirectUrl });
+  }
 
   /* Worker دیگه خودش با زیبال حرف نمی‌زنه (فایروال هاست آی‌پی Cloudflare رو می‌بنده).
      یه بلیت امضاشده می‌سازیم؛ مرورگر مشتری (آی‌پی ایرانی) با اون می‌ره pay.php روی هاست و اون درخواست رو به زیبال می‌ده. */
@@ -312,7 +335,9 @@ async function createPayment(request, env) {
    markFailed=false یعنی اگه پرداخت پیدا نشد، وضعیت سفارش رو خراب نکن. */
 async function settle(C, env, order, markFailed, ctx, pre) {
   const later = (p) => (ctx ? ctx.waitUntil(p) : p); /* اعلان نباید مشتری رو معطل کنه */
-  const v = pre || (await zibal(C, "verify", { trackId: Number(order.trackId) })); /* pre = نتیجه‌ی تأییدی که callback.php روی هاست ایرانی گرفته و امضا کرده */
+  const v = pre || (order.provider === "digipay"
+    ? await digipayVerify(env, { trackingCode: order.trackId, providerId: order.id, type: order.digipayType })
+    : await zibal(C, "verify", { trackId: Number(order.trackId) })); /* pre = نتیجه‌ی تأییدی که callback.php روی هاست ایرانی گرفته و امضا کرده */
   const fresh = await getOrder(env, order.id);
   if (fresh && fresh.status === "paid") {
     if (fresh.cartSnapshot) {
@@ -394,6 +419,43 @@ async function paymentCallback(request, env, url, ctx) {
   }
 }
 
+/* برگشت مشتری از دیجی‌پی (POST یا GET): result, trackingCode, providerId (= id سفارش), type, amount.
+   هیچ چیزی از callback باور نمی‌شه؛ پرداخت فقط با verify سمت سرور قبول می‌شه. */
+async function digipayCallback(request, env, url, ctx) {
+  const C = cfg(env);
+  const back = (result, order) =>
+    Response.redirect(`${C.site}/checkout.html?result=${result}${order ? "&order=" + order.id : ""}`, 303);
+  try {
+    if (!(await rateLimit(env, "dpcb:" + (request.headers.get("CF-Connecting-IP") || "unknown"), 30, 60 * 1000))) return back("failed");
+    let body = {};
+    if (request.method === "POST") {
+      const raw = await request.text();
+      try { body = raw.trim().startsWith("{") ? JSON.parse(raw) : Object.fromEntries(new URLSearchParams(raw)); } catch {}
+    }
+    const g = (k) => String(url.searchParams.get(k) || body[k] || "");
+    const orderId = g("providerId"), trackingCode = g("trackingCode"), result = g("result").toUpperCase(), type = Number(g("type")) || 11;
+    if (!/^[0-9a-f-]{36}$/i.test(orderId)) return back("failed");
+    const order = await getOrder(env, orderId);
+    if (!order || order.provider !== "digipay") return back("failed");
+    if (order.status === "paid") return back("success", order);
+    if (result !== "SUCCESS" || !trackingCode) {
+      if (order.status === "pending") { /* شناسه‌ی سفارش UUID و فقط دست خود مشتریه */
+        order.status = "failed";
+        await saveOrder(env, order);
+        if (order.discountCode) await releaseCode(env, order.discountCode, order.id);
+      }
+      return back("failed");
+    }
+    order.trackId = trackingCode;
+    order.digipayType = type;
+    const o = await settle(C, env, order, true, ctx);
+    return back(o.status === "paid" || o.status === "review" ? "success" : "failed", o);
+  } catch (e) {
+    console.error(e);
+    return back("failed");
+  }
+}
+
 /* مقایسه‌ی رمز بدون لو دادن طول تطابق */
 function same(a, b) {
   a = String(a); b = String(b);
@@ -430,7 +492,7 @@ function row(o) {
     id: o.id, code: o.id.slice(0, 8), status: o.status, fulfillment: o.fulfillment || "new",
     createdAt: o.createdAt, paidAt: o.paidAt || null, sandbox: !!o.sandbox, priceToman: o.priceToman,
     name: `${o.customer.firstName} ${o.customer.lastName}`, phone: o.customer.phone, address: o.customer.address,
-    kind: o.kind || "pattern", work: o.work || null,
+    provider: o.provider || "zibal", kind: o.kind || "pattern", work: o.work || null,
     items: Array.isArray(o.items) ? o.items.map((item) => ({ title: item.title || "", quantity: item.quantity || 1, type: item.type || "" })) : [],
     size: pt ? `${pt.width}x${pt.height}` : "", beads: pt ? pt.total : 0, colors: pt ? pt.counts : null,
     tracking: o.tracking || "", note: o.note || "",
@@ -588,7 +650,7 @@ async function debug(request, env, url) {
   if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
   const C = cfg(env), raw = String(env.ZIBAL_MERCHANT || "");
   const out = { sandbox: C.sandbox, hasMerchant: !!C.merchant, merchant: { length: raw.length, cleanLength: C.merchant.length, masked: C.merchant.slice(0, 2) + "…" + C.merchant.slice(-2) },
-    telegram: !!(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID), api: C.api, viaRelay: !!C.relayKey, kv: !!env.ORDERS, site: C.site, pricePerBead: C.price, baseFee: C.base, callback: callbackOf(C) };
+    telegram: !!(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID), api: C.api, viaRelay: !!C.relayKey, kv: !!env.ORDERS, site: C.site, pricePerBead: C.price, baseFee: C.base, callback: callbackOf(C), digipay: digipayConfigured(env) };
   try {
     const r = await fetch(`${C.site}/js/works.js`);
     const txt = await r.text();
@@ -633,6 +695,7 @@ export default {
       }
       if (p === "/api/create-payment" && request.method === "POST") return await createPayment(request, env);
       if (p === "/api/payment-callback") return await paymentCallback(request, env, url, ctx);
+      if (p === "/api/digipay-callback") return await digipayCallback(request, env, url, ctx);
       if (p === "/api/admin/debug") return await debug(request, env, url);
       if (p === "/api/admin/customers") return await adminCustomers(request, env);
       if (p === "/api/admin/orders-sync") return await adminOrdersSync(request, env);

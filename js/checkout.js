@@ -12,6 +12,30 @@
 const digits = (s) => s.replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
 const phoneFix = (s) => { s = digits(String(s)).replace(/[\s\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff().-]/g, ""); s = s.replace(/^(?:\+98|0098|98)0?(?=9\d{9}$)/, "0"); return /^9\d{9}$/.test(s) ? "0" + s : s; }; /* فرمت‌های محلی و +98/0098 با رقم فارسی یا عربی */
 
+
+/* ==================================================================
+   انتخاب درگاه: دکمه‌ی «پرداخت با کیف پول دیجی‌پی» کنار دکمه‌ی اصلی (زیبال).
+   مقدار window.CARA_GATEWAY توی درخواست /api/create-payment به‌عنوان provider می‌ره.
+   ================================================================== */
+try {
+(() => {
+  window.CARA_GATEWAY = "zibal";
+  const pay = document.getElementById("pay");
+  if (!pay || new URLSearchParams(location.search).has("result")) return;
+  const dp = document.createElement("button");
+  dp.type = "submit"; dp.id = "payDigipay"; dp.className = pay.className;
+  dp.setAttribute("form", "form");
+  dp.style.marginInlineStart = "10px";
+  dp.textContent = "پرداخت با کیف پول دیجی‌پی";
+  pay.insertAdjacentElement("afterend", dp);
+  pay.addEventListener("click", () => { window.CARA_GATEWAY = "zibal"; });
+  dp.addEventListener("click", () => { window.CARA_GATEWAY = "digipay"; });
+  const sync = () => { dp.disabled = pay.disabled; };
+  new MutationObserver(sync).observe(pay, { attributes: true, attributeFilter: ["disabled"] });
+  sync();
+})();
+} catch (e) { console.error("checkout:gateway", e); }
+
 /* ==================================================================
    ۱) کد تخفیف (قبلاً checkout-discount.js)
    ================================================================== */
@@ -93,7 +117,7 @@ try {
     try {
       const r = await fetch("/api/create-payment", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ workId: id, customer, discountCode: String(f.discountCode || "").trim() }),
+        body: JSON.stringify({ workId: id, customer, discountCode: String(f.discountCode || "").trim(), provider: window.CARA_GATEWAY }),
       });
       const j = await r.json().catch(() => ({}));
       if (j.paymentUrl) return (location.href = j.paymentUrl);
@@ -231,8 +255,8 @@ try {
     try {
       const r = await fetch("/api/create-payment", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify(cartMode
-          ? { cart: true, customer: fd, discountCode: String(fd.discountCode || "").trim() }
-          : { customer: fd, discountCode: String(fd.discountCode || "").trim(), pattern: { width: p.width, height: p.height, data: p.data } }) });
+          ? { cart: true, customer: fd, discountCode: String(fd.discountCode || "").trim(), provider: window.CARA_GATEWAY }
+          : { customer: fd, discountCode: String(fd.discountCode || "").trim(), provider: window.CARA_GATEWAY, pattern: { width: p.width, height: p.height, data: p.data } }) });
       const j = await r.json().catch(() => ({}));
       if (r.ok && j.paymentUrl) return (location.href = j.paymentUrl);
       showErr(j.error || "وصل شدن به درگاه نشد، یه کم بعد دوباره امتحان کن.");
