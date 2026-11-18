@@ -86,3 +86,6 @@
 
 /* Keep every English homepage section title the same compact size. */
 .section-kicker { font-size: 10px !important; }
+/* Override the more-specific legacy sizes on the first two homepage labels. */
+.cara-weaving__copy > .section-kicker,
+.wv-heading > .section-kicker { font-size: 10px !important; }
