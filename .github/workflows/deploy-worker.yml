@@ -1,6 +1,16 @@
 name: Deploy Cloudflare Worker
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "index.js"
+      - "game-worker.js"
+      - "lib/**"
+      - "wrangler*.jsonc"
+      - "migrations/**"
+      - ".github/workflows/deploy-worker.yml"
   workflow_dispatch:
     inputs:
       confirm_deploy:
@@ -17,7 +27,7 @@ concurrency:
 
 jobs:
   deploy:
-    if: github.ref == 'refs/heads/main' && inputs.confirm_deploy == 'DEPLOY'
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'push' || inputs.confirm_deploy == 'DEPLOY')
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:

@@ -439,11 +439,7 @@ async function digipayCallback(request, env, url, ctx) {
     if (!order || order.provider !== "digipay") return back("failed");
     if (order.status === "paid") return back("success", order);
     if (result !== "SUCCESS" || !trackingCode) {
-      if (order.status === "pending") { /* شناسه‌ی سفارش UUID و فقط دست خود مشتریه */
-        order.status = "failed";
-        await saveOrder(env, order);
-        if (order.discountCode) await releaseCode(env, order.discountCode, order.id);
-      }
+      /* callback فقط اطلاع اولیه است؛ وضعیت سفارش و کد تخفیف را بر اساس ورودی تأییدنشده تغییر نمی‌دهیم. */
       return back("failed");
     }
     order.trackId = trackingCode;
