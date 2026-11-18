@@ -192,3 +192,42 @@
 .wv-card,.wv-done{border-color:rgba(8,123,156,.18);box-shadow:0 14px 36px rgba(18,78,97,.09)}
 .wv-field input:focus-visible,.wv-field select:focus-visible,.wv-sw button:focus-visible{outline-color:#087b9c}
 @media(max-width:560px){.wv-home{padding:24px 16px;border-radius:22px}}
+
+
+/* cara editorial palette — keep the loom itself unframed; style only the bead workspace. */
+.wv-home{
+  padding:0 max(22px,5vw);
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.wv-heading h2{color:#343b64}
+.wv-heading h2::after{
+  width:72px;
+  height:3px;
+  margin-top:14px;
+  border-radius:3px;
+  background:#edb7a4;
+}
+.wv-heading p{color:#77758a}
+.wv-stage{
+  border:1px solid rgba(141,113,143,.34);
+  background:linear-gradient(135deg,#343b64 0%,#514765 52%,#8d718f 100%);
+  box-shadow:0 20px 46px rgba(52,59,100,.17),inset 0 1px 0 rgba(255,255,255,.12);
+}
+.wv-meter{color:#f8f3ed}
+.wv-bar{background:rgba(255,255,255,.2)}
+.wv-bar i{background:linear-gradient(90deg,#edb7a4,#e8d79e)}
+.wv-card,.wv-done{
+  border-color:#e9e2dc;
+  background:#fbf8f4;
+  box-shadow:0 14px 36px rgba(52,59,100,.08);
+}
+.wv-field{color:#343b64}
+.wv-field input[type="text"],.wv-field select{
+  border-color:#e9e2dc;
+  background:#fff;
+}
+.wv-field input:focus-visible,.wv-field select:focus-visible,.wv-sw button:focus-visible{outline-color:#8d718f}
+@media(max-width:560px){.wv-home{padding-inline:16px}}

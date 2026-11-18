@@ -18,7 +18,7 @@ test("homepage contains one interactive live-weaving section and all controls", 
   assert.match(html, /<section\s+class="cara-weaving"[\s\S]*?id="weaving"/);
   assert.match(html, /ببین چطور میبافم/);
   assert.match(html, /src="\/media\/cara-weaving\.MP4"/);
-  assert.match(html, /css\/weaving\.css\?v=10/);
+  assert.match(html, /css\\/weaving\\.css\\?v=11/);
   assert.match(html, /querySelector\("\.cara-weaving__video"\)/);
   assert.ok(html.indexOf('class="cara-weaving"') < html.indexOf('class="wv-home"'), "video section should appear before interactive name weaving");
   assert.equal((html.match(/class="cara-weaving"/g) || []).length, 1, "the video section appears exactly once");
@@ -31,7 +31,7 @@ test("weaving script loads after the shared palette and before decor", () => {
   const weave = html.indexOf('src="js/weave.js?v=2"');
   const decor = html.indexOf('src="js/decor.js?v=14"');
   assert.ok(palette >= 0 && weave > palette && decor > weave);
-  assert.match(html, /href="css\/weave\.css\?v=4"/);
+  assert.match(html, /href="css\/weave\.css\?v=5"/);
 });
 
 test("decor keeps the shared loom dialog and restores the original homepage loom animation", () => {
