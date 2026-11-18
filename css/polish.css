@@ -801,3 +801,18 @@ header.top.solid nav a[href*="account.html"] {
     border-radius:10px;
   }
 }
+
+/* Use one consistent section-heading underline throughout the site. */
+.sec h2::after,
+.cara-journal__heading h2::after,
+.cara-weaving__copy h2::after,
+.wv-heading h2::after,
+.page-title::after {
+  content: "";
+  display: block;
+  width: 76px;
+  height: 8px;
+  margin-top: 13px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--cara-detail), rgba(155, 143, 193, .12));
+}
