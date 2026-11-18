@@ -1,0 +1,47 @@
+.cara-journal{width:min(1180px,calc(100% - 40px));margin:clamp(48px,7vw,88px) auto 64px;color:#343b64;direction:rtl}
+.cara-journal__heading{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:22px}
+.cara-journal__eyebrow{margin:0 0 8px;color:#a47d75;font-size:10px;font-weight:800;letter-spacing:.16em}
+.cara-journal__heading h2{margin:0;color:#343b64;font-size:clamp(24px,3vw,36px);line-height:1.5}
+.cara-journal__heading p:not(.cara-journal__eyebrow){margin:6px 0 0;color:#77758a;font-size:13px}
+.cara-journal__arrows{display:flex;gap:8px;flex:none}
+.cara-journal__arrows button{width:40px;height:40px;border:1px solid #ded6d2;border-radius:50%;background:transparent;color:#343b64;font-size:20px;cursor:pointer;transition:background .2s,color .2s}
+.cara-journal__arrows button:hover{background:#343b64;color:#fff}
+.cara-journal__rail{display:flex;gap:16px;overflow-x:auto;overflow-y:hidden;padding:5px 3px 20px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#cbb8b1 transparent;overscroll-behavior-inline:contain}
+.cara-journal__rail::-webkit-scrollbar{height:5px}
+.cara-journal__rail::-webkit-scrollbar-thumb{background:#cbb8b1;border-radius:8px}
+.cara-journal__card{position:relative;isolation:isolate;flex:0 0 clamp(230px,24vw,285px);min-height:350px;display:flex;flex-direction:column;justify-content:space-between;padding:17px;border-radius:20px;overflow:hidden;text-decoration:none;scroll-snap-align:start;border:1px solid #00000008;transition:transform .22s,box-shadow .22s,outline-color .22s}
+.cara-journal__card:hover{transform:translateY(-4px);box-shadow:0 15px 34px #30274218}
+.cara-journal__card:focus-visible{outline:3px solid #343b64;outline-offset:3px}
+.cara-journal__card.is-active{outline:3px solid #343b64;outline-offset:2px}
+.cara-journal__card--peach{background:#f0c5b5;color:#553d48}.cara-journal__card--lilac{background:#d9cbdc;color:#51415f}.cara-journal__card--sage{background:#c7d1bf;color:#405246}.cara-journal__card--butter{background:#eee0ad;color:#625331}
+.cara-journal__meta{display:flex;justify-content:space-between;position:relative;z-index:2;font-size:10px;font-weight:700}
+.cara-journal__art{position:absolute;z-index:-1;inset:42px 0 108px;display:grid;place-items:center;overflow:hidden}
+.cara-journal__art:before,.cara-journal__art:after{content:"";position:absolute;border:1px solid currentColor;border-radius:50%;opacity:.18}
+.cara-journal__art:before{width:210px;height:210px}.cara-journal__art:after{width:160px;height:160px}
+.cara-journal__art i,.cara-journal__art b{position:absolute;display:block;border-radius:50%;box-shadow:0 8px 18px #00000012}
+.cara-journal__art small{position:absolute;bottom:8px;font-size:9px;letter-spacing:.18em;opacity:.58}
+.cara-journal__art--fit i{width:128px;height:128px;border:15px dotted #fff9;transform:rotate(-22deg)}.cara-journal__art--fit b{width:30px;height:30px;background:#a95e5c;transform:translate(60px,-50px);box-shadow:0 0 0 8px #ffffff55}
+.cara-journal__art--color i{width:108px;height:108px;background:conic-gradient(#e5a28f 0 25%,#f2d58e 25% 50%,#9a87ad 50% 75%,#789c99 75%);box-shadow:0 0 0 12px #ffffff50}.cara-journal__art--color b{width:50px;height:50px;background:#f7eee5;border:8px dotted #9d6f8e}
+.cara-journal__art--bead i{width:145px;height:52px;border-radius:50%;background:radial-gradient(circle at 12px 12px,#fff 0 5px,#8d718f 6px 10px,transparent 11px) 0 0/25px 25px repeat-x;transform:rotate(-30deg)}.cara-journal__art--bead b{width:120px;height:45px;border:10px dotted #f8f5e9;transform:rotate(35deg)}
+.cara-journal__art--care i{width:120px;height:120px;border:16px solid #fff9;border-right-color:#a88d62;border-bottom-color:#a88d62}.cara-journal__art--care b{width:30px;height:30px;background:#a88d62;transform:translate(42px,-44px)}
+.cara-journal__copy{position:relative;z-index:2;display:flex;flex-direction:column;gap:5px}
+.cara-journal__copy>small{font-size:9px;letter-spacing:.14em;font-weight:800;opacity:.65}
+.cara-journal__copy strong{font-size:19px;line-height:1.65;font-weight:800}
+.cara-journal__copy>span{display:flex;justify-content:space-between;align-items:center;border-top:1px solid currentColor;padding-top:8px;margin-top:4px;font-size:11px;font-weight:700}
+.cara-journal__copy>span b{font-size:17px}
+.cara-journal__hint{text-align:center;color:#858094;font-size:11px;margin:0}
+.cara-journal__reader{margin-top:28px;padding:clamp(18px,4vw,38px);background:#fff;border:1px solid #e9e2dc;border-radius:22px;box-shadow:0 14px 40px #3027420c;scroll-margin-top:20px}
+.cara-journal__reader[hidden]{display:none}
+.cara-journal__reader-top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid #e9e2dc;margin-bottom:22px;color:#a47d75;font-size:10px;letter-spacing:.14em}
+.cara-journal__reader-top button{border:0;border-radius:24px;background:#f5efeb;color:#343b64;padding:8px 13px;cursor:pointer;font:inherit;font-size:12px;letter-spacing:0}
+.cara-journal__reader-content{max-width:760px;margin:auto;color:#383449;line-height:2.1}
+.cara-journal__reader-content h1{font-size:clamp(24px,4vw,36px);line-height:1.6;color:#343b64;margin:10px 0 18px}
+.cara-journal__reader-content h2{font-size:21px;color:#343b64;margin:30px 0 8px}
+.cara-journal__reader-content h3{font-size:17px;color:#765d7d;margin:22px 0 8px}
+.cara-journal__reader-content p{font-size:14px}
+.cara-journal__reader-content a{color:#8d647c;text-underline-offset:4px}
+.cara-journal__reader-content ul,.cara-journal__reader-content ol{padding-right:24px}
+.cara-journal__reader-content .blog-cta{padding:20px;background:#f8f0eb;border-radius:16px;margin:24px 0}
+.cara-journal__loading{text-align:center;color:#77758a;padding:24px}
+@media(max-width:700px){.cara-journal{width:calc(100% - 28px);margin:44px auto}.cara-journal__heading{align-items:center}.cara-journal__heading h2{font-size:23px}.cara-journal__heading p:not(.cara-journal__eyebrow){font-size:11px;max-width:280px}.cara-journal__arrows button{width:34px;height:34px}.cara-journal__rail{gap:12px;margin-inline:-14px;padding:5px 14px 18px}.cara-journal__card{flex-basis:76vw;min-height:390px;max-width:300px;padding:16px}.cara-journal__copy strong{font-size:20px}.cara-journal__reader{padding:17px 14px}.cara-journal__reader-content p{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.cara-journal__card,.cara-journal__arrows button{transition:none}}
