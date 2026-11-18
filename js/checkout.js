@@ -22,22 +22,41 @@ try {
   window.CARA_GATEWAY = "zibal";
   const pay = document.getElementById("pay");
   if (!pay || new URLSearchParams(location.search).has("result")) return;
+  const picker = document.createElement("section");
+  picker.className = "checkout-payment-picker";
+  picker.setAttribute("aria-label", "انتخاب روش پرداخت");
+  const intro = document.createElement("div");
+  intro.className = "checkout-payment-picker__intro";
+  const heading = document.createElement("h3");
+  heading.textContent = "روش پرداختت رو انتخاب کن";
+  const hint = document.createElement("p");
+  hint.textContent = "هر کدوم برات راحت‌تره، همون رو انتخاب کن.";
+  intro.append(heading, hint);
   const actions = document.createElement("div");
   actions.className = "checkout-payment-actions";
-  pay.parentNode.insertBefore(actions, pay);
+  picker.append(intro, actions);
+  pay.parentNode.insertBefore(picker, pay);
   actions.appendChild(pay);
-  pay.classList.add("checkout-payment-actions__primary");
+  pay.classList.add("checkout-payment-choice", "checkout-payment-choice--zibal");
+  const zibalTitle = document.createElement("span");
+  zibalTitle.className = "checkout-payment-choice__title";
+  zibalTitle.textContent = "پرداخت با زیبال";
+  const zibalHint = document.createElement("span");
+  zibalHint.className = "checkout-payment-choice__hint";
+  zibalHint.textContent = "پرداخت آنلاین با کارت بانکی";
+  pay.replaceChildren(zibalTitle, zibalHint);
   const dp = document.createElement("button");
   dp.type = "submit";
   dp.id = "payDigipay";
-  dp.className = pay.className + " checkout-pay-digipay";
+  dp.className = "checkout-payment-choice checkout-payment-choice--digipay";
   dp.setAttribute("form", "form");
-  const dpLabel = document.createElement("span");
-  dpLabel.className = "checkout-pay-digipay__wordmark";
-  dpLabel.textContent = "دیجی‌پی";
-  const dpText = document.createElement("span");
-  dpText.textContent = "پرداخت با کیف پول";
-  dp.append(dpLabel, dpText);
+  const dpTitle = document.createElement("span");
+  dpTitle.className = "checkout-payment-choice__title";
+  dpTitle.textContent = "پرداخت با دیجی‌پی";
+  const dpHint = document.createElement("span");
+  dpHint.className = "checkout-payment-choice__hint";
+  dpHint.textContent = "با کیف پول یا اعتبار دیجی‌پی";
+  dp.append(dpTitle, dpHint);
   actions.appendChild(dp);
   pay.addEventListener("click", () => { window.CARA_GATEWAY = "zibal"; });
   dp.addEventListener("click", () => { window.CARA_GATEWAY = "digipay"; });
@@ -111,7 +130,7 @@ try {
         `<div>${work.title && !NUM.test(work.title) ? `<b>${esc(work.title)}</b>` : ""}<div class="muted" style="font-size:16px">دقیقاً همین دستبند برات بافته می‌شه.</div></div></div>` +
         `<div class="stat"><span>قیمت</span><strong>${fa(work.price)} تومان</strong></div>`;
     }
-    if (pay) pay.textContent = `پرداخت ${fa(work.price)} تومان`;
+    if (pay) pay.querySelector(".checkout-payment-choice__title").textContent = `پرداخت ${fa(work.price)} تومان با زیبال`;
   }
 
   form.addEventListener("submit", async (e) => {
