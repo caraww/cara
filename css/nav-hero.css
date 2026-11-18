@@ -230,12 +230,12 @@
 .cara-bracelet-lineup__viewport::before {
   content: "";
   position: absolute;
-  inset: 8%;
+  inset: 12%;
   z-index: 0;
-  border: 1px solid rgba(207, 174, 108, .28);
+  border: 1px solid rgba(207, 174, 108, .24);
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(155, 143, 193, .12), transparent 68%);
-  box-shadow: 0 0 0 16px rgba(207, 174, 108, .025);
+  background: radial-gradient(circle, rgba(155, 143, 193, .10), transparent 68%);
+  box-shadow: 0 0 0 18px rgba(207, 174, 108, .018);
   pointer-events: none;
 }
 .cara-bracelet-lineup__slides { position: absolute; inset: 0; perspective: 1000px; }
@@ -270,29 +270,36 @@
   font-weight: 800;
   pointer-events: none;
 }
+/* Minimal chevrons sit outside the bracelet ring; no button circles. */
 .cara-bracelet-lineup__arrow {
   position: absolute;
   top: 50%;
   z-index: 3;
   display: grid;
   place-items: center;
-  width: 42px;
-  height: 42px;
-  padding: 0 0 4px;
-  border: 1px solid rgba(234, 213, 176, .42);
-  border-radius: 50%;
-  background: rgba(25, 15, 37, .76);
-  color: #f7e7bd;
-  font: inherit;
-  font-size: 28px;
+  width: 44px;
+  height: 56px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: rgba(247, 231, 189, .78);
+  font-family: Arial, sans-serif;
+  font-size: 42px;
+  font-weight: 300;
   line-height: 1;
   cursor: pointer;
   transform: translateY(-50%);
-  transition: background .2s ease, border-color .2s ease;
+  transition: color .2s ease, transform .2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
-.cara-bracelet-lineup__arrow:hover { background: rgba(207, 174, 108, .2); border-color: #ead5a5; }
-.cara-bracelet-lineup__arrow--prev { right: 4px; }
-.cara-bracelet-lineup__arrow--next { left: 4px; }
+.cara-bracelet-lineup__arrow:hover {
+  color: #f4d99e;
+}
+.cara-bracelet-lineup__arrow--prev { right: 1%; }
+.cara-bracelet-lineup__arrow--next { left: 1%; }
+.cara-bracelet-lineup__arrow--prev:hover { transform: translate(2px, -50%); }
+.cara-bracelet-lineup__arrow--next:hover { transform: translate(-2px, -50%); }
 .cara-bracelet-lineup__controls { text-align: center; }
 .cara-bracelet-lineup__count { color: rgba(226, 214, 238, .62); font-size: 12px; }
 
@@ -309,7 +316,7 @@
   .hx__btns { flex-wrap: nowrap; gap: 9px; }
   .hx__btn { flex: 1 1 0; min-width: 0; min-height: 46px; padding: 8px 10px; font-size: 13px; white-space: nowrap; }
   .cara-bracelet-lineup { width: min(88vw, 360px, 46svh); }
-  .cara-bracelet-lineup__arrow { width: 34px; height: 34px; font-size: 24px; }
+  .cara-bracelet-lineup__arrow { width: 32px; height: 44px; font-size: 34px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .sh, .sh__nav a, .sh__nav a::after, .hx__btn, .cara-bracelet-card, .cara-bracelet-lineup__arrow { transition: none; }
