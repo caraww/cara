@@ -346,6 +346,9 @@ for (const f of [
   inject(f, null);
 console.log("✓ لینک‌های داخلی و contact.js گذاشته شد");
 
+/* ---------- صفحات ثابت وبلاگ ---------- */
+urls.push("/blog/", "/blog/wrist-size.html", "/blog/color-meanings.html", "/blog/miyuki-delica.html", "/blog/bracelet-care.html");
+
 /* ---------- sitemap و robots ---------- */
 const prio = (u) =>
   u === "/"
