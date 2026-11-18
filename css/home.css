@@ -1528,10 +1528,6 @@ button, .btn, a.btn {
 .cara-payment-promo__spark{color:#bd9d68;opacity:.8;font-size:25px}
 .cara-payment-promo__spark--one{top:9%;right:8%}
 .cara-payment-promo__spark--two{bottom:10%;left:7%;font-size:34px}
-.cara-payment-promo__beads{left:7%;top:14%;display:flex;gap:6px;transform:rotate(-27deg);z-index:2}
-.cara-payment-promo__beads i{width:10px;height:10px;border-radius:50%;background:linear-gradient(145deg,#fff,#b8a0cf);box-shadow:0 2px 5px rgba(65,65,85,.15)}
-.cara-payment-promo__beads i:nth-child(3n){background:linear-gradient(145deg,#fff,#71b5b5)}
-.cara-payment-promo__beads i:nth-child(2n){background:linear-gradient(145deg,#fff,#d9bd88)}
 @media(max-width:720px){
  .cara-payment-promo{width:calc(100% - 28px);grid-template-columns:1fr;gap:20px;padding:28px 20px 26px;border-radius:25px}
  .cara-payment-promo__copy{text-align:center}
@@ -1540,7 +1536,6 @@ button, .btn, a.btn {
  .cara-payment-promo__visual{min-height:270px;gap:12px}
  .cara-payment-promo__card{width:min(100%,286px);padding:19px 20px 16px}
  .cara-payment-promo__visual:before{width:220px;height:220px}
- .cara-payment-promo__beads{left:1%;top:8%}
  .cara-payment-promo__spark--one{right:2%;top:4%}
  .cara-payment-promo__spark--two{left:2%;bottom:7%}
 }
