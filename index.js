@@ -176,8 +176,8 @@ const findWork = async (C, id) => (await loadWorks(C)).find((w) => String(w.id) 
 
 /* Pricing policy is shared with the static SEO page generator to prevent price drift. */
 const priceMap = globalThis.CARA_WORK_PRICING.priceMap;
-/* محصول آزمایشی ۵٬۰۰۰ تومانی: فقط وقتی TEST_MODE="1" باشه وجود داره و توی گالری نمایش داده نمی‌شه (فقط با لینک مستقیم قابل سفارشه) */
-const TEST_WORK = { id: "cara-test-5000", title: "تست پرداخت", src: "img/cara-favicon.png", price: 5000 };
+/* محصول آزمایشی ۱۰٬۰۰۰ تومانی: فقط وقتی TEST_MODE="1" باشه وجود داره و توی گالری نمایش داده نمی‌شه (فقط با لینک مستقیم قابل سفارشه) */
+const TEST_WORK = { id: "cara-test-digipay-10000", title: "تست پرداخت دیجی‌پی", src: "img/cara-favicon.png", price: 10000 };
 async function pricedWorks(env) {
   const list = await loadWorks(cfg(env));
   if (String(env.TEST_MODE) === "1") list.push({ ...TEST_WORK });
