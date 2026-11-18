@@ -28,7 +28,7 @@ test("name bracelet starts with Cara in gold on purple", () => {
   const html = read("index.html");
   const js = read("js/weave.js");
   assert.match(html, /value="کارا \/ cara"/);
-  assert.match(js, /let fg = "DB1832", bg = "DB2359"/);
+  assert.match(js, /let fg = "DB1832", bg = "DB0726"/);
 });
 
 
