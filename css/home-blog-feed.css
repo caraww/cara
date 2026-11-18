@@ -54,23 +54,32 @@
 
 /* Refined homepage section labels — scoped and cache-busted in index.html. */
 .cara-weaving__copy > .section-kicker {
-  color: #9586b4 !important;
+  color: #b8975a !important;
   font-size: 12px !important;
   font-weight: 800;
   letter-spacing: .17em;
   line-height: 1.6;
 }
 .wv-heading > .section-kicker {
-  color: #756486 !important;
+  color: #b8975a !important;
   font-size: 12px !important;
   font-weight: 800;
   letter-spacing: .18em;
   line-height: 1.6;
 }
 .cara-journal__heading .section-kicker {
-  color: #756486 !important;
+  color: #b8975a !important;
   font-size: 11px !important;
   font-weight: 800;
   letter-spacing: .18em;
   line-height: 1.6;
+}
+
+
+/* Bead-inspired gold for the homepage process and inspiration labels. */
+#paths > .section-kicker,
+#samples > .section-kicker,
+#steps > .section-kicker,
+#beads > .section-kicker {
+  color: #b8975a !important;
 }
