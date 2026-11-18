@@ -48,8 +48,10 @@
           if(d>.91||((Math.round(dx)+j)%5===0))bright=true;
         }
       }
+      /* Short silver dashes bridge the gap between neighboring oval links. */
+      const bridge=Math.abs(y)<=.55&&([4,12].some(p=>Math.abs(x-p)<=1.45));
+      if(bridge)return ((Math.round(x)+j)%2===0)?3:2;
       if(!silver)return 0;
-      /* Narrow crossover at each join makes the links read as one continuous chain. */
       return bright?3:((Math.round(x+j)%4===0)?2:1);
     }
 
