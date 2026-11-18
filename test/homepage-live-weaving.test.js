@@ -18,7 +18,7 @@ test("homepage contains one interactive live-weaving section and all controls", 
   assert.match(html, /<section\s+class="cara-weaving"[\s\S]*?id="weaving"/);
   assert.match(html, /ببین چطور میبافم/);
   assert.match(html, /src="\/media\/cara-weaving\.MP4"/);
-  assert.match(html, /css\/weaving\.css\?v=10/);
+  assert.match(html, /css\\/weaving\\.css\\?v=11/);
   assert.match(html, /querySelector\("\.cara-weaving__video"\)/);
   assert.ok(html.indexOf('class="cara-weaving"') < html.indexOf('class="wv-home"'), "video section should appear before interactive name weaving");
   assert.equal((html.match(/class="cara-weaving"/g) || []).length, 1, "the video section appears exactly once");
