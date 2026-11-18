@@ -157,3 +157,34 @@
   box-shadow:0 14px 34px rgba(18,78,97,.15);
 }
 .cara-weaving__video{border-radius:14px}
+
+
+/* cara blog-card palette: warm lilac, peach and ink; no dotted textures. */
+.cara-weaving__inner{
+  border:1px solid rgba(141,113,143,.22);
+  color:#343b64;
+  background:linear-gradient(118deg,#d9cbdc 0%,#eee3e9 48%,#f0c5b5 100%);
+  box-shadow:0 20px 48px rgba(52,59,100,.12);
+}
+.cara-weaving__inner::before{content:none}
+.cara-weaving__copy h2{color:#343b64}
+.cara-weaving__copy h2::after{
+  width:72px;
+  height:3px;
+  margin-top:14px;
+  border-radius:3px;
+  background:#8d718f;
+}
+.cara-weaving__eyebrow{color:#6e5876}
+.cara-weaving__copy p{color:#51415f}
+.cara-weaving__link{color:#625331}
+.cara-weaving__link:hover{color:#343b64}
+.cara-weaving__caption{color:#51415f}
+.cara-weaving__stage{
+  padding:7px;
+  border:1px solid rgba(141,113,143,.2);
+  border-radius:20px;
+  background:#fbf8f4;
+  box-shadow:0 14px 34px rgba(52,59,100,.14);
+}
+.cara-weaving__video{border-radius:14px}
