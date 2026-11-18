@@ -91,9 +91,9 @@ test("DigiPay verify sends trackingCode and providerId in body and requires a ve
     const result = await api.digipayVerify(credentials, {
       trackingCode: "track-1",
       providerId: "order-1",
-      type: 11,
+      type: 0,
     });
-    assert.equal(calls[1].url, credentials.DIGIPAY_BASE + "/purchases/verify?type=11");
+    assert.equal(calls[1].url, credentials.DIGIPAY_BASE + "/purchases/verify?type=0");
     assert.deepEqual(JSON.parse(calls[1].init.body), {
       trackingCode: "track-1",
       providerId: "order-1",
