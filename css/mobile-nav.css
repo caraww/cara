@@ -1,0 +1,149 @@
+/* Shared mobile navigation: anchored to the physical left edge in RTL layouts.
+   The menu overlays the page; it never inserts a spacer or pushes content down. */
+.menu-toggle { display: none; }
+
+@media (max-width: 850px) {
+  header.top.has-mobile-menu { position: fixed; isolation: isolate; }
+  header.top.has-mobile-menu .menu-toggle {
+    position: absolute;
+    top: 50%;
+    left: 14px;
+    right: auto;
+    inset-inline-start: auto;
+    inset-inline-end: auto;
+    transform: translateY(-50%);
+    z-index: 34;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border: 1px solid rgba(52,59,100,.16);
+    border-radius: 14px;
+    background: rgba(255,255,255,.96);
+    color: var(--cara-accent, #343B64);
+    box-shadow: 0 5px 16px rgba(36,36,49,.09);
+    font: inherit;
+    font-size: 21px;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  header.top.has-mobile-menu .menu-toggle:hover {
+    background: #fff;
+    box-shadow: 0 8px 22px rgba(36,36,49,.13);
+  }
+  header.top.has-mobile-menu .menu-toggle:focus-visible {
+    outline: 3px solid var(--cara-detail, #9B8FC1);
+    outline-offset: 3px;
+  }
+
+  header.top.has-mobile-menu nav,
+  header.top.has-mobile-menu nav[aria-label] {
+    display: none !important;
+    position: absolute !important;
+    top: calc(100% + 9px) !important;
+    left: 12px !important;
+    right: auto !important;
+    inset-inline-start: auto !important;
+    inset-inline-end: auto !important;
+    z-index: 33;
+    width: min(196px, calc(100vw - 24px)) !important;
+    max-width: calc(100vw - 24px);
+    max-height: min(68svh, 460px) !important;
+    box-sizing: border-box;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    gap: 4px !important;
+    overflow-x: hidden;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    padding: 9px !important;
+    margin: 0 !important;
+    border: 1px solid rgba(52,59,100,.12);
+    border-radius: 20px;
+    background: rgba(255,255,255,.985);
+    color: var(--cara-text, #242431);
+    box-shadow: 0 20px 54px rgba(27,29,52,.18);
+    -webkit-backdrop-filter: blur(22px) saturate(150%);
+    backdrop-filter: blur(22px) saturate(150%);
+  }
+  header.top.has-mobile-menu.menu-open nav,
+  header.top.has-mobile-menu.menu-open nav[aria-label] {
+    display: flex !important;
+    animation: cara-menu-in .16s ease-out both;
+  }
+  header.top.has-mobile-menu nav a,
+  header.top.has-mobile-menu nav a:not(.cta),
+  header.top.has-mobile-menu nav a:not(.btn) {
+    display: flex !important;
+    position: static !important;
+    flex: 0 0 auto !important;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    min-height: 44px;
+    box-sizing: border-box;
+    padding: 10px 13px !important;
+    margin: 0 !important;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--cara-text, #242431) !important;
+    font-size: 14px !important;
+    font-weight: 650;
+    line-height: 1.5;
+    text-align: right;
+    white-space: normal;
+    opacity: 1;
+    visibility: visible;
+  }
+  header.top.has-mobile-menu nav a:hover,
+  header.top.has-mobile-menu nav a:focus-visible {
+    border-color: rgba(52,59,100,.08);
+    background: var(--cara-accent-soft, #EEEEF5);
+    color: var(--cara-accent, #343B64) !important;
+  }
+  header.top.has-mobile-menu nav a[aria-current="page"] {
+    background: var(--cara-accent-soft, #EEEEF5);
+    color: var(--cara-accent, #343B64) !important;
+    font-weight: 800;
+  }
+  header.top.has-mobile-menu nav a[href*="account.html"] {
+    justify-content: flex-start;
+    margin-top: 2px !important;
+    border-color: rgba(52,59,100,.12);
+    color: var(--cara-accent, #343B64) !important;
+  }
+  header.top.has-mobile-menu nav a.btn,
+  header.top.has-mobile-menu nav a.cta,
+  header.top.has-mobile-menu nav a[href$="checkout.html"] {
+    justify-content: center;
+    min-height: 46px;
+    margin-top: 4px !important;
+    border-color: var(--cara-accent, #343B64);
+    border-radius: 13px;
+    background: var(--cara-accent, #343B64);
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    font-weight: 800;
+    box-shadow: 0 6px 15px rgba(52,59,100,.16);
+  }
+  header.top.has-mobile-menu nav a[href$="checkout.html"]:hover,
+  header.top.has-mobile-menu nav a[href$="checkout.html"]:focus-visible {
+    background: #292F54;
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+  }
+  .mobile-nav-spacer { display: none !important; height: 0 !important; }
+}
+
+@keyframes cara-menu-in {
+  from { opacity: 0; transform: translateY(-5px) scale(.985); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  header.top.has-mobile-menu.menu-open nav { animation: none; }
+}
