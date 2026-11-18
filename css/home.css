@@ -1568,7 +1568,7 @@ button, .btn, a.btn {
 }
 
 
-/* Clearly shorten only the turquoise wallet graphic from its left side. */
+/* Visibly narrow only the turquoise wallet graphic, anchored to the right. */
 .cara-payment-promo__card > .cara-payment-promo__wallet{
   width:60% !important;
   max-width:60% !important;
