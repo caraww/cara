@@ -152,7 +152,7 @@ ${
 ${(w.tags || []).length ? `<div class="tags">${w.tags.map((g) => `<span>${esc(g)}</span>`).join("")}</div>` : ""}
 ${
   orderable
-    ? `<div class="pg-price">${fa(price)} تومان</div><div class="btns"><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a><a class="btn" href="/upload.html?src=${encodeURIComponent(w.src)}">از روی این عکس الگو بساز</a></div>`
+    ? `<div class="pg-price">${fa(price)} تومان</div><div class="btns"><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a><a class="btn" href="/upload.html?src=${encodeURIComponent(w.source || w.src)}">از روی این عکس الگو بساز</a></div>`
     : `<div class="btns"><a class="btn dark" href="/upload.html">عکس خودت رو به الگو تبدیل کن</a><a class="btn" href="/builder.html">طراحی دستی</a></div>`
 }
 <p style="margin-top:16px;color:var(--muted);font-size:16px">دست‌باف با منجوق دلیکای میوکی ژاپنی. حداکثر تا یک هفته بعد از سفارش آماده و برات پست می‌شه. می‌تونی همین طرح رو توی <a href="/builder.html" style="text-decoration:underline">استودیو</a> عوض کنی یا طرح خودت رو بسازی.</p></div></div>

@@ -181,10 +181,11 @@ const works = [...groups].map(([base, items]) => {
         it.file,
       );
   });
-  const images = items.map((it) => { const d = derived.get(it.file); return d ? enc(d.view) + ver(it.file) : enc("img/works-cutouts/" + it.file) + ver(it.file); });
-  const d0 = derived.get(items[0].file), thumb = d0 ? enc(d0.thumb) + ver(items[0].file) : images[0];
+  const original = enc("img/works-cutouts/" + file) + ver(file);
+  const images = items.map((it) => { const d = derived.get(it.file); return d ? enc(d.view) + "?v=" + STAMP : enc("img/works-cutouts/" + it.file) + ver(it.file); });
+  const d0 = derived.get(items[0].file), thumb = d0 ? enc(d0.thumb) + "?v=" + STAMP : images[0];
   console.log("✓", file, `(${images.length} عکس)`, "→ عنوان:", title || "(بدون عنوان)");
-  const w = { id, src: images[0], thumb };
+  const w = { id, src: images[0], thumb, source: original };
   if (images.length > 1) w.images = images;
   const d = dims(fs.readFileSync(path.join(DIR, file)));
   if (d) {
