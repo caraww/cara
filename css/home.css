@@ -1548,8 +1548,10 @@ button, .btn, a.btn {
 @media(prefers-reduced-motion:reduce){.cara-payment-promo__link{transition:none}}
 
 
-/* Slightly shorten the turquoise wallet card without changing the promo layout. */
-.cara-payment-promo__wallet{height:78px}
-.cara-payment-promo__wallet span{top:22px}
-.cara-payment-promo__wallet i{top:35px}
-.cara-payment-promo__wallet b{bottom:14px}
+/* Shorten the complete DigiPay card while keeping its turquoise wallet artwork intact. */
+.cara-payment-promo__card{padding-top:14px;padding-bottom:12px}
+.cara-payment-promo__wallet{height:102px;margin-top:12px}
+.cara-payment-promo__wallet span{top:34px}
+.cara-payment-promo__wallet i{top:47px}
+.cara-payment-promo__wallet b{bottom:19px}
+.cara-payment-promo__card .cara-payment-promo__caption{margin-top:10px}
