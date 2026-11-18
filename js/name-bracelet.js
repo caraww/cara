@@ -19,7 +19,7 @@
     }
   }
   fgSelect.value = "DB1832";
-  bgSelect.value = "DB0010";
+  bgSelect.value = "DB0726";
 
   let cfg = null, grid = null, rows = 0, timer = 0;
 
