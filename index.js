@@ -50,6 +50,18 @@ const normalizeIranMobile = (value) => {
 /* کد کپی‌شده از صفحه‌ی راست‌به‌چپ ممکنه رقم فارسی یا کاراکتر نامرئی داشته باشه؛ اینجا درستش می‌کنیم */
 const clean = (s) => digits(String(s || "")).replace(/[\s\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]/g, "");
 
+/* سفارش‌سازی فقط از مبدأ امن خود فروشگاه پذیرفته می‌شود؛ callback درگاه مسیر جداگانه دارد. */
+function isSameSiteRequest(request, env) {
+  const origin = request.headers.get("Origin");
+  if (!origin) return false;
+  try {
+    const expected = new URL(env.BASE_URL || "https://caraw.ir");
+    const received = new URL(origin);
+    const host = expected.hostname.replace(/^www\./, "");
+    return received.origin === `https://${host}` || received.origin === `https://www.${host}`;
+  } catch { return false; }
+}
+
 function cfg(env) {
   const merchant = clean(env.ZIBAL_MERCHANT);
   return {
@@ -208,6 +220,7 @@ async function workInfo(env, url) {
 }
 
 async function createPayment(request, env) {
+  if (!isSameSiteRequest(request, env)) return json({ error: "درخواست معتبر نیست." }, 403);
   const C = cfg(env);
   if (!env.ORDERS) return json({ error: "ذخیره‌ساز سفارش (KV) به Worker وصل نشده." }, 500);
   /* جلوی انبار شدن سفارش‌های pending توسط ربات */
