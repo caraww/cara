@@ -23,3 +23,23 @@
 .checkout-payment-actions>.checkout-pay-digipay:hover{background:linear-gradient(135deg,#d8f7ff,#c5edf7);border-color:#087b9c}
 .checkout-payment-actions>.btn:disabled{opacity:.55;cursor:not-allowed}
 @media(max-width:520px){.checkout-payment-actions{grid-template-columns:1fr;gap:11px}.checkout-payment-actions>.btn{min-height:52px}}
+
+
+/* Checkout payment picker: calm, aligned choices with clear labels. */
+.checkout-payment-picker{margin-top:24px;padding-top:22px;border-top:1px solid rgba(43,28,55,.1)}
+.checkout-payment-picker__intro{margin-bottom:14px}
+.checkout-payment-picker__intro h3{margin:0;color:var(--ink,#241b2d);font-size:17px;font-weight:850}
+.checkout-payment-picker__intro p{margin:5px 0 0;color:var(--muted,#766d7e);font-size:13px}
+.checkout-payment-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch}
+.checkout-payment-choice{width:100%!important;min-width:0;min-height:86px;margin:0!important;padding:16px 18px!important;border-radius:16px!important;display:flex!important;flex-direction:column;align-items:flex-start!important;justify-content:center!important;gap:6px!important;text-align:right;white-space:normal!important;line-height:1.5!important;box-shadow:none!important;transition:transform .18s ease,border-color .18s ease,background .18s ease!important}
+.checkout-payment-choice:hover{transform:translateY(-2px)!important}
+.checkout-payment-choice__title{font-size:15px;font-weight:900;line-height:1.5}
+.checkout-payment-choice__hint{font-size:12px;font-weight:500;opacity:.78;line-height:1.6}
+.checkout-payment-choice--zibal{background:#382847!important;border:1px solid #382847!important;color:#fff!important}
+.checkout-payment-choice--zibal:hover{background:#49345d!important;border-color:#49345d!important}
+.checkout-payment-choice--digipay{background:#e8f8fb!important;border:1px solid #9bd9e5!important;color:#07566c!important}
+.checkout-payment-choice--digipay:hover{background:#d8f3f8!important;border-color:#38a9bf!important}
+.checkout-payment-choice:focus-visible{outline:3px solid #c69b55!important;outline-offset:3px}
+.checkout-payment-choice:disabled{opacity:.5!important;cursor:wait}
+@media(max-width:560px){.checkout-payment-picker{margin-top:20px;padding-top:18px}.checkout-payment-actions{grid-template-columns:1fr;gap:10px}.checkout-payment-choice{min-height:76px;padding:13px 16px!important}}
+@media(prefers-reduced-motion:reduce){.checkout-payment-choice{transition:none!important}}
