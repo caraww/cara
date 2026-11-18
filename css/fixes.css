@@ -1,0 +1,126 @@
+/* fixes.css — اصلاحات کوچیک UI/UX. باید آخرین فایل CSS توی <head> باشه. */
+
+/* ۱) حروف فارسی چسبیده‌اند؛ letter-spacing منفی اتصال حروف رو خراب می‌کنه */
+h1,
+h2,
+h3,
+.page-title {
+  letter-spacing: 0 !important;
+}
+
+/* ۲) فلش‌های اسلایدر هیرو: دکمه ۳۴ پیکسلی روی موبایل برای انگشت کوچیکه.
+      ظاهر همون می‌مونه، فقط ناحیه‌ی لمس بزرگ‌تر می‌شه (حدود ۴۶ پیکسل). */
+.cara-bracelet-lineup__arrow::after {
+  content: "";
+  position: absolute;
+  inset: -6px;
+}
+
+/* ۳) صفحه‌ی عکس به الگو: فاصله‌ی پیش‌نمایش چسبنده با ارتفاع واقعی هدر
+      (هدر روی موبایل ۶۴ پیکسله، نه ۷۲) هماهنگ بشه */
+.ws-page {
+  --hdr: var(--nh-h, 72px);
+}
+
+/* ۴) متن‌های ریز (۱۱ تا ۱۳ پیکسل) برای فارسی سخت خونده می‌شن */
+.muted,
+.statusbar,
+.cara-bracelet-lineup__count,
+.cara-weaving__caption {
+  font-size: 14px;
+}
+.color-row {
+  font-size: 13.5px;
+}
+
+/* ۵) ویدیوی بافت روی دسکتاپ خیلی کوچیکه (۲۲۰ پیکسل) و کنترل‌هاش فشرده می‌شن */
+@media (min-width: 761px) {
+  .cara-weaving__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 280px);
+  }
+  .cara-weaving__media {
+    max-width: 280px;
+  }
+}
+
+/* ۶) letter-spacing برای متن فارسی: چند جای دیگه که عنوان نیستن */
+.wrap::after,
+.wk-grid figcaption b,
+.pg h1,
+.pp h1 {
+  letter-spacing: 0 !important;
+}
+
+/* ۷) دکمه‌های + و − و حذف توی سبد خرید (۳۲ پیکسل) برای انگشت کوچیکه */
+.cart-actions button {
+  min-width: 40px;
+  height: 40px;
+}
+
+/* ۸) دکمه‌های شناور تماس/اینستاگرام روی موبایل، گوشه‌ی بوم طراحی و عکس‌به‌الگو رو می‌پوشونن */
+@media (max-width: 820px) {
+  body:has(.builder) #cara-contact,
+  body:has(.ws-page) #cara-contact {
+    display: none;
+  }
+}
+
+/* ۹) سبد خرید روی موبایل: اول لیست کالاها، بعدش خلاصه و دکمه‌ی پرداخت */
+@media (max-width: 760px) {
+  .cart-summary {
+    order: 0;
+  }
+}
+
+/* ۱۰) یکدست کردن رنگ صفحه‌های دستبند/رنگ/سبد/حساب با پالت اصلی (tokens.css) */
+html body:has(.pg) {
+  background: var(--cara-bg, #e9e9ed);
+  color: var(--cara-text, #242431);
+}
+.pg {
+  --pg-night: #22243b;
+}
+.pg-grid:has(.pg-sw) > div:first-child {
+  background:
+    radial-gradient(circle at 50% 42%, rgba(155, 143, 193, 0.28), transparent 62%),
+    linear-gradient(160deg, #2a2d4d, #17192e);
+}
+html body .pg h1,
+html body .pg h2 {
+  color: var(--cara-text, #242431);
+}
+html body .pg p,
+html body .pg .crumb {
+  color: var(--cara-muted, #626273);
+}
+html body .pg .crumb a {
+  color: var(--cara-accent, #343b64);
+}
+html body .pg .pg-price {
+  color: var(--cara-text, #242431);
+}
+html body .pg .tags span {
+  background: var(--cara-accent-soft, #eeeef5);
+  color: var(--cara-accent, #343b64);
+}
+html body .pg .btns a.btn {
+  border-color: var(--cara-accent, #343b64);
+  color: var(--cara-accent, #343b64);
+}
+html body .pg .btns a.btn.dark {
+  background: var(--cara-accent, #343b64);
+  border-color: var(--cara-accent, #343b64);
+  color: #fff;
+}
+.cart-checkout,
+.cart-empty a {
+  background: var(--cara-accent, #343b64);
+}
+.account-mark,
+.account-status {
+  background: var(--cara-accent-soft, #eeeef5);
+  color: var(--cara-accent, #343b64);
+}
+.account-consent input {
+  accent-color: var(--cara-accent, #343b64);
+}
