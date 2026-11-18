@@ -151,3 +151,16 @@
   .wv-actions .btn { flex: 1 1 auto; }
 }
 @media (prefers-reduced-motion: reduce) { .wv-bar i { transition: none; } }
+
+/* Keep every English section label consistent and understated. */
+.section-kicker {
+  color: #b8975a !important;
+}
+.wv-heading > .section-kicker {
+  display: block;
+  margin: 0 0 10px;
+  font-size: 11px !important;
+  font-weight: 800;
+  line-height: 1.5;
+  letter-spacing: .16em;
+}
