@@ -13,9 +13,13 @@ test("homepage logo images declare intrinsic dimensions to prevent layout shift"
   ];
 
   for (const logo of logos) {
-    const tag = html.match(new RegExp(`<img\\b(?=[^>]*src="[^"]*${logo.src}")[^>]*>`, "s"));
-    assert.ok(tag, `homepage should include ${logo.src}`);
-    assert.match(tag[0], new RegExp(`\\bwidth="${logo.width}"`));
-    assert.match(tag[0], new RegExp(`\\bheight="${logo.height}"`));
+    const srcIndex = html.indexOf(logo.src);
+    assert.notEqual(srcIndex, -1, `homepage should include ${logo.src}`);
+    const tagStart = html.lastIndexOf("<img", srcIndex);
+    const tagEnd = html.indexOf(">", srcIndex);
+    assert.ok(tagStart !== -1 && tagEnd !== -1, `could not locate img tag for ${logo.src}`);
+    const tag = html.slice(tagStart, tagEnd + 1);
+    assert.match(tag, new RegExp(`\\bwidth="${logo.width}"`));
+    assert.match(tag, new RegExp(`\\bheight="${logo.height}"`));
   }
 });
