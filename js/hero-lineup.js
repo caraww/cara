@@ -33,23 +33,21 @@
       return seq[(band%seq.length+seq.length)%seq.length];
     },
     chain:(r,j)=>{
-      /* Same flat woven chain motif, with longer, evenly spaced interlocking links. */
+      /* One straight row of evenly spaced oval links, separated by short silver dashes. */
       const x=((r%24)+24)%24,y=j-6;
       let silver=false,bright=false;
-      for(const link of [
-        {x:0,y:-1.25},{x:8,y:1.25},{x:16,y:-1.25}
-      ]){
+      for(const link of [{x:0,y:0},{x:12,y:0}]){
         let dx=x-link.x;
         if(dx>12)dx-=24;
         if(dx<-12)dx+=24;
-        const d=(dx/5.35)**2+((y-link.y)/2.65)**2;
+        const d=(dx/4.2)**2+(y/2.65)**2;
         if(d>=.56&&d<=1.08){
           silver=true;
           if(d>.91||((Math.round(dx)+j)%5===0))bright=true;
         }
       }
-      /* Short silver dashes bridge the gap between neighboring oval links. */
-      const bridge=Math.abs(y)<=.55&&([4,12].some(p=>Math.abs(x-p)<=1.45));
+      /* Keep a visible gap around each short connector dash. */
+      const bridge=Math.abs(y)<=.45&&([6,18].some(p=>Math.abs(x-p)<=.8));
       if(bridge)return ((Math.round(x)+j)%2===0)?3:2;
       if(!silver)return 0;
       return bright?3:((Math.round(x+j)%4===0)?2:1);
