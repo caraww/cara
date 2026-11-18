@@ -31,3 +31,10 @@ test("discount is validated and applied by the Worker after the authoritative ba
   assert.ok(basePrice >= 0 && validateCode > basePrice);
   assert.ok(applyDiscount > validateCode && createOrder > applyDiscount);
 });
+
+
+test("payment creation rejects missing, foreign, and insecure Origin headers", () => {
+  assert.match(worker, /function isSameSiteRequest\\(request, env\\)/);
+  assert.match(createPayment, /if \\(!isSameSiteRequest\\(request, env\\)\\) return json\\(\\{ error: "درخواست معتبر نیست\\." \\}, 403\\)/);
+  assert.ok(createPayment.indexOf("isSameSiteRequest") < createPayment.indexOf("rateLimit"));
+});
