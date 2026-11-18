@@ -334,7 +334,7 @@ inject(
 );
 inject(
   "index.html",
-  `${css}<details class="seo-links"><summary>همه‌ی دستبندها و رنگ‌ها</summary><nav aria-label="لینک‌های مفید"><h2>دستبندها</h2>${wl}<h2>رنگ منجوق‌ها (<a href="/colors/">همه</a>)</h2>${cl}<h2>بیشتر</h2><a href="/name-bracelet.html">دستبند منجوقی اسم</a><a href="/upload.html">تبدیل عکس به الگوی منجوق‌کاری</a><a href="/game.html">بازی و کد تخفیف</a></nav></details>`,
+  `${css}<details class="seo-links"><summary>همه‌ی دستبندها و رنگ‌ها</summary><nav aria-label="لینک‌های مفید"><h2>دستبندها</h2>${wl}<h2>رنگ منجوق‌ها(<a href="/colors/">همه</a>)</h2>${cl}<h2>بیشتر</h2><a href="/name-bracelet.html">دستبند منجوقی اسم</a><a href="/upload.html">تبدیل عکس به الگوی منجوق‌کاری</a><a href="/game.html">بازی و کد تخفیف</a></nav></details>`,
 );
 for (const f of [
   "builder.html",
