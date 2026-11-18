@@ -33,24 +33,28 @@
       return seq[(band%seq.length+seq.length)%seq.length];
     },
     chain:(r,j)=>{
-      /* Flat woven chain motif: metallic-silver linked loops on a black Delica base. */
-      const x=r%30,y=j-CC;
-      let silver=false,edge=0;
-      for(const link of [
-        {cx:7.5,cy:-0.8,a:Math.PI/5},
-        {cx:22.5,cy:0.8,a:-Math.PI/5}
-      ]){
-        const dx=x-link.cx,dy=y-link.cy;
-        const u=dx*Math.cos(link.a)+dy*Math.sin(link.a);
-        const v=-dx*Math.sin(link.a)+dy*Math.cos(link.a);
-        const d=(u/5.7)**2+(v/2.55)**2;
-        if(d<=1.08&&d>=.48){
-          silver=true;
-          if(d>.91)edge=3;
-          else if(d<.61)edge=2;
-        }
-      }
-      return silver?(edge||1):0;
+      /* Pixel-woven interlocking chain: stepped silver links on a flat black Delica field. */
+      const x=((r%24)+24)%24,y=j;
+      const rows=[
+        "000000000000000000000000",
+        "001110000001110000001110",
+        "010001000010001000010001",
+        "100000100100000100100000",
+        "100000011000000110000001",
+        "010000100100001001000010",
+        "001001000010010000100100",
+        "000110000001100000011000",
+        "000000000000000000000000",
+        "000000000000000000000000",
+        "000000000000000000000000",
+        "000000000000000000000000",
+        "000000000000000000000000"
+      ];
+      const row=rows[Math.max(0,Math.min(rows.length-1,y))];
+      const bead=Number(row[x]);
+      if(!bead)return 0;
+      /* Slight alternating metallic shades keep the links readable without raised relief. */
+      return ((x+y)%5===0)?2:1;
     },
 
   };
