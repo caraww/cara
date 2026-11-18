@@ -1094,3 +1094,32 @@ button, .btn, a.btn {
 .cara-payment-promo__beads i:nth-child(2n){background:linear-gradient(145deg,#fff,#2d8194)}
 @media(max-width:700px){.cara-payment-promo{grid-template-columns:1fr;gap:14px;text-align:center;border-radius:22px}.cara-payment-promo__copy>p:not(.section-kicker){margin-inline:auto}.cara-payment-promo__link{margin-top:18px}.cara-payment-promo__visual{min-height:220px}.cara-payment-promo__caption{right:4%;bottom:0}}
 @media(prefers-reduced-motion:reduce){.cara-payment-promo__link{transition:none}}
+
+
+/* DigiPay wordmark and Persian wallet caption: clear RTL order and white brand text */
+.cara-payment-promo__brand {
+  width: max-content;
+  max-width: 100%;
+  padding: 7px 11px;
+  border-radius: 12px;
+  background: #07566c;
+  color: #fff;
+  direction: rtl;
+}
+.cara-payment-promo__brand strong {
+  color: #fff;
+  white-space: nowrap;
+}
+.cara-payment-promo__caption {
+  direction: rtl;
+  flex-direction: row;
+  background: #07566c;
+  color: #fff;
+  white-space: nowrap;
+}
+.cara-payment-promo__caption b {
+  color: #fff;
+  font: inherit;
+  font-weight: 900;
+  white-space: nowrap;
+}
