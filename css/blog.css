@@ -81,6 +81,8 @@ a{color:inherit}
 .feed-footer{border-top:1px solid var(--line);padding:22px 0 5px;display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:12px}
 .feed-footer a{color:var(--ink);text-decoration:none;font-weight:700}
 @media(max-width:700px){
+ .brand-mark{height:28px;max-width:112px}
+ .brand-mark img{width:auto;height:28px;max-width:112px;object-fit:contain}
  .blog-feed{padding:12px 14px 22px}
  .feed-header{min-height:330px;padding:22px 22px 30px;border-radius:22px}
  .feed-heading{margin:34px 0 20px}
