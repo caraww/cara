@@ -50,3 +50,27 @@
 .cara-journal__heading h2 {
   color: var(--ink, #242431) !important;
 }
+
+
+/* Refined homepage section labels — scoped and cache-busted in index.html. */
+.cara-weaving__copy > .section-kicker {
+  color: #9586b4 !important;
+  font-size: 12px !important;
+  font-weight: 800;
+  letter-spacing: .17em;
+  line-height: 1.6;
+}
+.wv-heading > .section-kicker {
+  color: #756486 !important;
+  font-size: 12px !important;
+  font-weight: 800;
+  letter-spacing: .18em;
+  line-height: 1.6;
+}
+.cara-journal__heading .section-kicker {
+  color: #756486 !important;
+  font-size: 11px !important;
+  font-weight: 800;
+  letter-spacing: .18em;
+  line-height: 1.6;
+}
