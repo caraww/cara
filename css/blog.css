@@ -11,7 +11,7 @@ a{color:inherit}
 .feed-header:before{width:390px;height:390px;left:-100px;top:-180px}
 .feed-header:after{width:260px;height:260px;left:30px;top:-120px}
 .brand-mark{position:relative;z-index:1;align-self:flex-start;color:#fff;text-decoration:none;font-size:28px;font-weight:700;letter-spacing:-2px}
-.brand-mark span{font-size:10px;vertical-align:top;margin-right:3px}
+.brand-mark img{display:block;width:auto;height:40px;max-width:160px;object-fit:contain}
 .feed-heading{position:relative;z-index:1;max-width:620px;margin:28px 0 8px}
 .eyebrow{font-size:12px;letter-spacing:.08em;color:#b98f83;margin:0 0 9px}
 .feed-heading .eyebrow{color:#f0c2b0}
