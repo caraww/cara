@@ -12,7 +12,7 @@
   const palettes={
     "thousand-eyes":["#171717","#F0EDF2","#791D27"],
     waterfall:["#DF2A1B","#251A82","#F1E00A"],
-    duck:["#F8F5EC","#F2C52F","#E99A28","#26242A","#F7E7C4"]  };
+    chain:["#17191E","#BFC4CC","#7B838F","#F0F2F4"]  };
   const models={
     "thousand-eyes":(r,j)=>{
       const dr=r-9,dj=j-CC;let c=0,e=0;
@@ -32,26 +32,21 @@
       const seq=[0,1,2,1,0,2,1,0,2,1];
       return seq[(band%seq.length+seq.length)%seq.length];
     },
-    duck:(r,j)=>{
-      const x=r%30;
-      if(x>=15)return 0;
-      const rows=[
-        "...............",
-        "......111......",
-        ".....11111.....",
-        "....1111111....",
-        "...111111111...",
-        "...111111131...",
-        "...1111111144..",
-        "...111111111...",
-        "....1111111....",
-        ".....11111.....",
-        "......111......",
-        "...............",
-        "..............."
-      ];
-      const mark=rows[j]?.[x]||".";
-      return mark==="1"?1:mark==="2"?2:mark==="3"?3:mark==="4"?2:0;
+    chain:(r,j)=>{
+      const x=r%30,y=j-CC;
+      let best=0,shade=0;
+      for(const link of [{cx:7.5,a:Math.PI/4},{cx:22.5,a:-Math.PI/4}]){
+        const dx=x-link.cx,dy=y;
+        const u=dx*Math.cos(link.a)+dy*Math.sin(link.a);
+        const v=-dx*Math.sin(link.a)+dy*Math.cos(link.a);
+        const d=(u/5.7)**2+(v/2.75)**2;
+        if(d<=1&&d>=.43){
+          best=1;
+          if(d>.88)shade=3;
+          else if(d<.58)shade=2;
+        }
+      }
+      return best?(shade||1):0;
     },
 
   };
