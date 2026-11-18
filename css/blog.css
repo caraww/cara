@@ -43,7 +43,7 @@ a{color:inherit}
 .card-art:before{width:230px;height:230px}
 .card-art:after{width:180px;height:180px}
 .card-art i,.card-art b{position:absolute;display:block;border-radius:50%;box-shadow:0 8px 18px #00000012}
-.card-art small{position:absolute;bottom:13px;font-size:9px;letter-spacing:.2em;opacity:.58}
+.card-art small{position:absolute;top:12px;bottom:auto;font-size:9px;letter-spacing:.2em;opacity:.58}
 .art-measure i{width:145px;height:145px;border:17px dotted #fff9;background:transparent;transform:rotate(-22deg)}
 .art-measure b{width:34px;height:34px;background:#a95e5c;transform:translate(68px,-56px);box-shadow:0 0 0 8px #ffffff55}
 .art-colors i{width:115px;height:115px;background:conic-gradient(#e5a28f 0 25%,#f2d58e 25% 50%,#9a87ad 50% 75%,#789c99 75%);box-shadow:0 0 0 13px #ffffff50}
