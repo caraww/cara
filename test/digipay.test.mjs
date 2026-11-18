@@ -18,21 +18,23 @@ function response(body, status = 200) {
 
 test("DigiPay requests a token with Basic auth and multipart form fields", async () => {
   const originalFetch = globalThis.fetch;
-  let request;
+  const calls = [];
   globalThis.fetch = async (url, init) => {
-    request = { url: String(url), init };
-    return response({ access_token: "test-token", expires_in: 3600 });
+    calls.push({ url: String(url), init });
+    return calls.length === 1
+      ? response({ access_token: "test-token", expires_in: 3600 })
+      : response({ result: { status: 1 } }, 400);
   };
   try {
     const api = await import("../lib/digipay.mjs?auth-contract");
     assert.equal(api.digipayConfigured(credentials), true);
     await api.digipayVerify(credentials, { trackingCode: "track-1", providerId: "order-1", type: 11 });
-    assert.equal(request.url, credentials.DIGIPAY_BASE + "/oauth/token");
-    assert.match(request.init.headers.Authorization, /^Basic /);
-    assert.ok(request.init.body instanceof FormData);
-    assert.equal(request.init.body.get("username"), credentials.DIGIPAY_USERNAME);
-    assert.equal(request.init.body.get("password"), credentials.DIGIPAY_PASSWORD);
-    assert.equal(request.init.body.get("grant_type"), "password");
+    assert.equal(calls[0].url, credentials.DIGIPAY_BASE + "/oauth/token");
+    assert.match(calls[0].init.headers.Authorization, /^Basic /);
+    assert.ok(calls[0].init.body instanceof FormData);
+    assert.equal(calls[0].init.body.get("username"), credentials.DIGIPAY_USERNAME);
+    assert.equal(calls[0].init.body.get("password"), credentials.DIGIPAY_PASSWORD);
+    assert.equal(calls[0].init.body.get("grant_type"), "password");
   } finally {
     globalThis.fetch = originalFetch;
   }
