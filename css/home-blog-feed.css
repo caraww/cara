@@ -19,13 +19,13 @@
 .cara-journal__art:before,.cara-journal__art:after{content:"";position:absolute;border:1px solid currentColor;border-radius:50%;opacity:.18}
 .cara-journal__art:before{width:210px;height:210px}.cara-journal__art:after{width:160px;height:160px}
 .cara-journal__art i,.cara-journal__art b{position:absolute;display:block;border-radius:50%;box-shadow:0 8px 18px #00000012}
-.cara-journal__art small{position:absolute;bottom:8px;font-size:9px;letter-spacing:.18em;opacity:.58}
+.cara-journal__art small{position:absolute;top:8px;right:17px;bottom:auto;transform:translateY(-10px);font-size:9px;letter-spacing:.18em;opacity:.58}
 .cara-journal__art--fit i{width:128px;height:128px;border:15px dotted #fff9;transform:rotate(-22deg)}.cara-journal__art--fit b{width:30px;height:30px;background:#a95e5c;transform:translate(60px,-50px);box-shadow:0 0 0 8px #ffffff55}
 .cara-journal__art--color i{width:108px;height:108px;background:conic-gradient(#e5a28f 0 25%,#f2d58e 25% 50%,#9a87ad 50% 75%,#789c99 75%);box-shadow:0 0 0 12px #ffffff50}.cara-journal__art--color b{width:50px;height:50px;background:#f7eee5;border:8px dotted #9d6f8e}
 .cara-journal__art--bead i{width:145px;height:52px;border-radius:50%;background:radial-gradient(circle at 12px 12px,#fff 0 5px,#8d718f 6px 10px,transparent 11px) 0 0/25px 25px repeat-x;transform:rotate(-30deg)}.cara-journal__art--bead b{width:120px;height:45px;border:10px dotted #f8f5e9;transform:rotate(35deg)}
 .cara-journal__art--care i{width:120px;height:120px;border:16px solid #fff9;border-right-color:#a88d62;border-bottom-color:#a88d62}.cara-journal__art--care b{width:30px;height:30px;background:#a88d62;transform:translate(42px,-44px)}
-.cara-journal__copy{position:relative;z-index:2;display:flex;flex-direction:column;gap:5px}
-.cara-journal__copy>small{font-size:9px;letter-spacing:.14em;font-weight:800;opacity:.65}
+.cara-journal__copy{position:relative;z-index:2;display:flex;flex-direction:column;gap:2px}
+.cara-journal__copy>small{font-size:9px;letter-spacing:.14em;font-weight:800;opacity:.65;margin-bottom:-3px}
 .cara-journal__copy strong{font-size:19px;line-height:1.65;font-weight:800}
 .cara-journal__copy>span{display:flex;justify-content:space-between;align-items:center;border-top:1px solid currentColor;padding-top:8px;margin-top:4px;font-size:11px;font-weight:700}
 .cara-journal__copy>span b{font-size:17px}
