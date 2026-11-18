@@ -1546,36 +1546,3 @@ button, .btn, a.btn {
 }
 @media(max-width:370px){.cara-payment-promo{padding-inline:15px}.cara-payment-promo__card{padding-inline:16px}}
 @media(prefers-reduced-motion:reduce){.cara-payment-promo__link{transition:none}}
-
-
-/* DigiPay campaign-inspired treatment: bold electric blue, clean contrast, confident type. */
-.cara-payment-promo{
-  border:1px solid #dce7ff;
-  background:radial-gradient(circle at 6% 100%,rgba(71,133,255,.10),transparent 32%),linear-gradient(118deg,#fbfcff 0%,#f0f5ff 58%,#f4f2ff 100%);
-  box-shadow:0 20px 58px rgba(35,73,160,.09);
-}
-.cara-payment-promo:before{width:430px;height:430px;right:-245px;top:-285px;background:linear-gradient(145deg,rgba(8,0,245,.09),rgba(37,139,255,.035))}
-.cara-payment-promo__copy .section-kicker{color:#315be8;letter-spacing:.16em;font-weight:900}
-.cara-payment-promo__copy h2{color:#17254c;font-weight:900;letter-spacing:-.7px}
-.cara-payment-promo__copy>p:not(.section-kicker){color:#65718c}
-.cara-payment-promo__link{border:1px solid #0800f5;border-radius:12px;background:#0800f5;color:#fff;box-shadow:0 9px 22px rgba(8,0,245,.19)}
-.cara-payment-promo__link:hover{background:#263fff;box-shadow:0 13px 27px rgba(8,0,245,.23)}
-.cara-payment-promo__visual{min-height:310px}
-.cara-payment-promo__visual:before{width:300px;height:246px;border:0;border-radius:38px;background:linear-gradient(135deg,#0800f5 0%,#315cff 58%,#25b9e8 100%);box-shadow:0 20px 42px rgba(8,0,245,.20),inset 0 1px 0 rgba(255,255,255,.3);transform:rotate(8deg)}
-.cara-payment-promo__card{width:min(100%,300px);padding:21px 23px 19px;border:1px solid rgba(255,255,255,.96);border-radius:22px;background:linear-gradient(145deg,#fff 0%,#f5f8ff 100%);box-shadow:0 20px 45px rgba(22,38,93,.22);transform:rotate(-2deg)}
-.cara-payment-promo__brand{color:#18295b;font-weight:900}
-.cara-payment-promo__brand strong{color:#18295b}
-.cara-payment-promo__wallet{height:104px;margin-top:17px;border-radius:15px;background:linear-gradient(120deg,#0800f5 0%,#315cff 57%,#1c9dd8 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.32)}
-.cara-payment-promo__wallet:before{width:200px;height:200px;right:-36px;top:-115px;border-color:rgba(255,255,255,.3);box-shadow:0 0 0 18px rgba(255,255,255,.07),0 0 0 38px rgba(255,255,255,.045)}
-.cara-payment-promo__card .cara-payment-promo__caption{color:#53617f;font-weight:700}
-.cara-payment-promo__tagline{border:0;border-radius:8px;padding:9px 15px;background:#0800f5;color:#fff;box-shadow:0 9px 22px rgba(8,0,245,.19);letter-spacing:2.4px}
-.cara-payment-promo__spark{color:#3e68f5;opacity:.9}
-.cara-payment-promo__beads{opacity:.78}
-.cara-payment-promo__beads i:nth-child(2n){background:linear-gradient(145deg,#fff,#8e9cff)}
-.cara-payment-promo__beads i:nth-child(3n){background:linear-gradient(145deg,#fff,#6bc8ed)}
-@media(max-width:720px){
- .cara-payment-promo{background:linear-gradient(150deg,#fbfcff 0%,#eff4ff 100%)}
- .cara-payment-promo__visual{min-height:286px}
- .cara-payment-promo__visual:before{width:235px;height:220px;border-radius:30px}
- .cara-payment-promo__card{width:min(100%,286px)}
-}
