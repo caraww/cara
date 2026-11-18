@@ -433,7 +433,8 @@ async function digipayCallback(request, env, url, ctx) {
       try { body = raw.trim().startsWith("{") ? JSON.parse(raw) : Object.fromEntries(new URLSearchParams(raw)); } catch {}
     }
     const g = (k) => String(url.searchParams.get(k) || body[k] || "");
-    const orderId = g("providerId"), trackingCode = g("trackingCode"), result = g("result").toUpperCase(), type = Number(g("type")) || 11;
+    const orderId = g("providerId"), trackingCode = g("trackingCode"), result = g("result").toUpperCase();
+    const parsedType = Number(g("type")), type = Number.isInteger(parsedType) && parsedType >= 0 ? parsedType : 11;
     if (!/^[0-9a-f-]{36}$/i.test(orderId)) return back("failed");
     const order = await getOrder(env, orderId);
     if (!order || order.provider !== "digipay") return back("failed");
