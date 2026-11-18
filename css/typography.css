@@ -1,0 +1,70 @@
+/* cara typography system — shared hierarchy across all non-blog pages. */
+body:not(:has(.blog-feed)):not(:has(.blog-article)) {
+  font-family: "Vazirmatn", Tahoma, system-ui, sans-serif !important;
+  font-size: 16px !important;
+  line-height: 1.85 !important;
+}
+body:not(:has(.blog-feed)):not(:has(.blog-article)) h1,
+body:not(:has(.blog-feed)):not(:has(.blog-article)) .page-title {
+  font-family: "Vazirmatn", Tahoma, system-ui, sans-serif !important;
+  font-size: clamp(30px, 3.2vw, 42px) !important;
+  font-weight: 850 !important;
+  line-height: 1.38 !important;
+  letter-spacing: -.45px !important;
+  color: #343B64 !important;
+}
+body:not(:has(.blog-feed)):not(:has(.blog-article)) h2 {
+  font-family: "Vazirmatn", Tahoma, system-ui, sans-serif !important;
+  font-size: clamp(23px, 2.25vw, 30px) !important;
+  font-weight: 800 !important;
+  line-height: 1.5 !important;
+  letter-spacing: -.3px !important;
+  color: #343B64 !important;
+}
+body:not(:has(.blog-feed)):not(:has(.blog-article)) h3 {
+  font-family: "Vazirmatn", Tahoma, system-ui, sans-serif !important;
+  font-size: clamp(18px, 1.55vw, 22px) !important;
+  font-weight: 750 !important;
+  line-height: 1.55 !important;
+  color: #4A4963 !important;
+}
+body:not(:has(.blog-feed)):not(:has(.blog-article)) h4 {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  line-height: 1.6 !important;
+  color: #4A4963 !important;
+}
+body:not(:has(.blog-feed)):not(:has(.blog-article)) main p:not(.hero p):not(.hero2 p):not(.cara-payment-promo__copy p),
+body:not(:has(.blog-feed)):not(:has(.blog-article)) main li {
+  font-size: 16px !important;
+  line-height: 1.9 !important;
+  color: #555568 !important;
+}
+body:not(:has(.blog-feed)):not(:has(.blog-article)) main .sub,
+body:not(:has(.blog-feed)):not(:has(.blog-article)) main .lead {
+  font-size: 15px !important;
+  line-height: 1.9 !important;
+  color: #747487 !important;
+}
+body:not(:has(.blog-feed)):not(:has(.blog-article)) .hero h1 {
+  font-size: clamp(34px, 4.8vw, 62px) !important;
+  color: #F6F1FA !important;
+}
+body:not(:has(.blog-feed)):not(:has(.blog-article)) .hero2 .hero-copy h1 {
+  font-size: clamp(30px, 4vw, 44px) !important;
+  color: #F6F1FA !important;
+}
+body:not(:has(.blog-feed)):not(:has(.blog-article)) .hero p,
+body:not(:has(.blog-feed)):not(:has(.blog-article)) .hero2 .hero-copy p {
+  color: #D9D5E8 !important;
+  font-size: 16px !important;
+}
+@media (max-width: 640px) {
+  body:not(:has(.blog-feed)):not(:has(.blog-article)) { font-size: 15px !important; }
+  body:not(:has(.blog-feed)):not(:has(.blog-article)) h1,
+  body:not(:has(.blog-feed)):not(:has(.blog-article)) .page-title { font-size: clamp(28px, 7.5vw, 34px) !important; }
+  body:not(:has(.blog-feed)):not(:has(.blog-article)) h2 { font-size: clamp(21px, 5.8vw, 25px) !important; }
+  body:not(:has(.blog-feed)):not(:has(.blog-article)) h3 { font-size: 18px !important; }
+  body:not(:has(.blog-feed)):not(:has(.blog-article)) main p:not(.hero p):not(.hero2 p):not(.cara-payment-promo__copy p),
+  body:not(:has(.blog-feed)):not(:has(.blog-article)) main li { font-size: 15px !important; }
+}
