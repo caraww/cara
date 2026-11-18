@@ -431,15 +431,15 @@ h3 {
   transform: none;
 }
 
-/* Match the journal heading underline to the gold bead lines used across the homepage. */
+/* Match the underline used under “از کجا شروع کنیم؟” exactly. */
 .cara-journal__heading h2::after {
   content: "";
   display: block;
-  width: 104px;
-  height: 12px;
-  margin-top: 12px;
-  background: radial-gradient(circle, var(--gold) 0 3.2px, transparent 3.8px) 0
-    50%/17px 12px repeat-x;
+  width: 76px;
+  height: 8px;
+  margin-top: 13px;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--cara-detail), rgba(155,143,193,.12));
 }
 
 .sec h2::after {
