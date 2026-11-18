@@ -321,7 +321,7 @@ function inject(file, block) {
     );
   fs.writeFileSync(f, crlf ? h.replace(/\n/g, "\r\n") : h);
 }
-const css = `<style>.seo-links{max-width:1000px;margin:40px auto;padding:0 18px;font-size:15px;line-height:2}.seo-links h2{font-size:18px;margin:18px 0 6px}.seo-links a{display:inline-block;margin:0 0 0 14px;text-decoration:underline;text-decoration-color:#b8975a;text-underline-offset:4px}.seo-links summary{cursor:pointer;font-weight:700;font-size:17px;padding:10px 0}</style>`;
+const css = `<style>.seo-links{max-width:1000px;margin:40px auto;padding:0 18px;font-size:15px;line-height:2}.seo-links h2{font-size:18px;margin:18px 0 6px}.seo-links a{display:inline-block;margin:0 0 0 14px;text-decoration:underline;text-decoration-color:#b8975a;text-underline-offset:4px}.seo-links h2 a{margin:0}.seo-links summary{cursor:pointer;font-weight:700;font-size:17px;padding:10px 0}</style>`;
 const wl = list
   .map((w) => `<a href="${urlOf(w)}">دستبند منجوقی ${esc(titleOf(w))}</a>`)
   .join("");
@@ -334,7 +334,7 @@ inject(
 );
 inject(
   "index.html",
-  `${css}<details class="seo-links"><summary>همه‌ی دستبندها و رنگ‌ها</summary><nav aria-label="لینک‌های مفید"><h2>دستبندها</h2>${wl}<h2>رنگ منجوق‌ها(<a href="/colors/">همه</a>)</h2>${cl}<h2>بیشتر</h2><a href="/name-bracelet.html">دستبند منجوقی اسم</a><a href="/upload.html">تبدیل عکس به الگوی منجوق‌کاری</a><a href="/game.html">بازی و کد تخفیف</a></nav></details>`,
+  `${css}<details class="seo-links"><summary>همه‌ی دستبندها و رنگ‌ها</summary><nav aria-label="لینک‌های مفید"><h2>دستبندها</h2>${wl}<h2>رنگ منجوق‌ها (<a href="/colors/">همه</a>)</h2>${cl}<h2>بیشتر</h2><a href="/name-bracelet.html">دستبند منجوقی اسم</a><a href="/upload.html">تبدیل عکس به الگوی منجوق‌کاری</a><a href="/game.html">بازی و کد تخفیف</a></nav></details>`,
 );
 for (const f of [
   "builder.html",
