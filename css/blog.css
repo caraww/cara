@@ -126,3 +126,14 @@ a{color:inherit}
   .reader-content .blog-article h3 { font-size:18px; }
   .reader-content .blog-article p { font-size:15px; }
 }
+
+/* Blog headings follow the same cara navy heading color. */
+.blog-article h1, .blog-article h2, .blog-article h3,
+.blog-article h4, .blog-article h5, .blog-article h6,
+.reader-content .blog-article h1, .reader-content .blog-article h2,
+.reader-content .blog-article h3, .reader-content .blog-article h4,
+.reader-content .blog-article h5, .reader-content .blog-article h6 {
+  color: #343B64 !important;
+}
+/* The editorial cover remains light-on-navy for contrast. */
+.feed-header .feed-heading h1 { color: #F6F1FA !important; }
