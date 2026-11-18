@@ -12,7 +12,7 @@ test("homepage uses the current hx hero, bracelet lineup, and shared header", ()
   assert.match(html, /<section class="hx"/);
   assert.match(html, /class="hx__copy"/);
   assert.match(html, /class="cara-bracelet-lineup"/);
-  assert.match(html, /nav-hero\.css\?v=1/);
+  assert.match(html, /nav-hero\.css\?v=2/);
   assert.match(html, /nav-hero\.js\?v=1/);
   assert.match(css, /\.hx__in/);
   assert.match(css, /\.hx__copy/);
