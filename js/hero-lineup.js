@@ -33,23 +33,23 @@
       return seq[(band%seq.length+seq.length)%seq.length];
     },
     chain:(r,j)=>{
-      /* Keep the bracelet's original width; show a centered five-row strip only for this chain design. */
-      if(j<4||j>8)return -1;
+      /* Slightly wider chain strip; other bracelet widths stay untouched. */
+      if(j<3||j>9)return -1;
       const x=((r%24)+24)%24,y=j-6;
-      if(j===4||j===8)return 0; // one black bead row above and below
+      if(j===3||j===9)return 0; // one black bead row above and below
       let silver=false,bright=false;
       for(const link of [{x:0,y:0},{x:12,y:0}]){
         let dx=x-link.x;
         if(dx>12)dx-=24;
         if(dx<-12)dx+=24;
-        const d=(dx/4.2)**2+(y/1.35)**2;
+        const d=(dx/4.2)**2+(y/1.9)**2;
         if(d>=.56&&d<=1.08){
           silver=true;
           if(d>.91||((Math.round(dx)+j)%5===0))bright=true;
         }
       }
       /* Longer silver dashes connect the oval links. */
-      const bridge=Math.abs(y)<=.45&&([6,18].some(p=>Math.abs(x-p)<=1.8));
+      const bridge=Math.abs(y)<=.45&&([6,18].some(p=>Math.abs(x-p)<=2.8));
       if(bridge)return ((Math.round(x)+j)%2===0)?3:2;
       if(!silver)return 0;
       return bright?3:((Math.round(x+j)%4===0)?2:1);
