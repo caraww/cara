@@ -31,7 +31,7 @@ test("weaving script loads after the shared palette and before decor", () => {
   const weave = html.indexOf('src="js/weave.js?v=2"');
   const decor = html.indexOf('src="js/decor.js?v=14"');
   assert.ok(palette >= 0 && weave > palette && decor > weave);
-  assert.match(html, /href="css\/weave\.css\?v=4"/);
+  assert.match(html, /href="css\/weave\.css\?v=5"/);
 });
 
 test("decor keeps the shared loom dialog and restores the original homepage loom animation", () => {
