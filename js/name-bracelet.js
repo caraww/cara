@@ -29,12 +29,12 @@
     const big = document.createElement("canvas");
     const context = big.getContext("2d", { willReadFrequently: true });
     if (!context) return null;
-    context.font = \`900 \${fontSize}px Vazirmatn, Tahoma, sans-serif\`;
+    context.font = `900 ${fontSize}px Vazirmatn, Tahoma, sans-serif`;
     const measured = Math.ceil(context.measureText(name).width) + 60;
     if (!measured || measured > 6000) return null;
     big.width = measured;
     big.height = fontSize * 2;
-    context.font = \`900 \${fontSize}px Vazirmatn, Tahoma, sans-serif\`;
+    context.font = `900 ${fontSize}px Vazirmatn, Tahoma, sans-serif`;
     context.textBaseline = "alphabetic";
     context.fillStyle = "#000";
     context.fillText(name, 30, fontSize * 1.4);
