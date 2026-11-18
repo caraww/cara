@@ -102,3 +102,11 @@ a{color:inherit}
  .feed-footer{flex-direction:column}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.post-card,.rail-arrow{transition:none}}
+
+
+/* Preserve a visible gutter beside the blog cards on narrow screens. */
+@media (max-width:700px) {
+  .post-rail {
+    padding-inline: 4px;
+  }
+}
