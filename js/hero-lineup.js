@@ -33,29 +33,25 @@
       return seq[(band%seq.length+seq.length)%seq.length];
     },
     chain:(r,j)=>{
-      /* Pixel-woven interlocking chain: stepped silver links on a flat black Delica field. */
-      const x=((r%24)+24)%24,y=j;
-      const rows=[
-        "000000000000000000000000",
-        "001110000001110000001110",
-        "010001000010001000010001",
-        "100000100100000100100000",
-        "100000011000000110000001",
-        "010000100100001001000010",
-        "001001000010010000100100",
-        "000110000001100000011000",
-        "000000000000000000000000",
-        "000000000000000000000000",
-        "000000000000000000000000",
-        "000000000000000000000000",
-        "000000000000000000000000"
-      ];
-      const row=rows[Math.max(0,Math.min(rows.length-1,y))];
-      const bead=Number(row[x]);
-      if(!bead)return 0;
-      /* Slight alternating metallic shades keep the links readable without raised relief. */
-      return ((x+y)%5===0)?2:1;
-    },
+      /* Same flat woven chain motif, with longer, evenly spaced interlocking links. */
+      const x=((r%24)+24)%24,y=j-6;
+      let silver=false,bright=false;
+      for(const link of [
+        {x:0,y:-1.25},{x:8,y:1.25},{x:16,y:-1.25}
+      ]){
+        let dx=x-link.x;
+        if(dx>12)dx-=24;
+        if(dx<-12)dx+=24;
+        const d=(dx/5.35)**2+((y-link.y)/2.65)**2;
+        if(d>=.56&&d<=1.08){
+          silver=true;
+          if(d>.91||((Math.round(dx)+j)%5===0))bright=true;
+        }
+      }
+      if(!silver)return 0;
+      /* Narrow crossover at each join makes the links read as one continuous chain. */
+      return bright?3:((Math.round(x+j)%4===0)?2:1);
+    }
 
   };
   const sprites=new Map();
