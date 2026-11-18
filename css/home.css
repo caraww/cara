@@ -1546,3 +1546,10 @@ button, .btn, a.btn {
 }
 @media(max-width:370px){.cara-payment-promo{padding-inline:15px}.cara-payment-promo__card{padding-inline:16px}}
 @media(prefers-reduced-motion:reduce){.cara-payment-promo__link{transition:none}}
+
+
+/* Slightly shorten the turquoise wallet card without changing the promo layout. */
+.cara-payment-promo__wallet{height:78px}
+.cara-payment-promo__wallet span{top:22px}
+.cara-payment-promo__wallet i{top:35px}
+.cara-payment-promo__wallet b{bottom:14px}
