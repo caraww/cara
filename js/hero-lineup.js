@@ -33,33 +33,29 @@
       return seq[(band%seq.length+seq.length)%seq.length];
     },
     chain:(r,j)=>{
-      /* Flat, loom-woven chain links: interlocking beveled loops in metallic Delica beads. */
+      /* Pixel-woven interlocking chain: stepped silver links on a flat black Delica field. */
       const x=((r%24)+24)%24,y=j;
-      const inside=(px,py,poly)=>{
-        let hit=false;
-        for(let a=0,b=poly.length-1;a<poly.length;b=a++){
-          const [ax,ay]=poly[a],[bx,by]=poly[b];
-          if(((ay>py)!==(by>py))&&(px<(bx-ax)*(py-ay)/(by-ay)+ax))hit=!hit;
-        }
-        return hit;
-      };
-      let silver=false,highlight=false;
-      for(const link of [
-        {cx:0,cy:3.5},{cx:8,cy:9.5},{cx:16,cy:3.5}
-      ]){
-        const dx=x-link.cx,dy=y-link.cy;
-        const outer=[[-4,-1.7],[-2.7,-3.1],[2.7,-3.1],[4,-1.7],[4,1.7],[2.7,3.1],[-2.7,3.1],[-4,1.7]].map(([a,b])=>[a+link.cx,b+link.cy]);
-        const inner=[[-2.7,-1.1],[-1.9,-1.9],[1.9,-1.9],[2.7,-1.1],[2.7,1.1],[1.9,1.9],[-1.9,1.9],[-2.7,1.1]].map(([a,b])=>[a+link.cx,b+link.cy]);
-        if(inside(x,y,outer)&&!inside(x,y,inner)){
-          silver=true;
-          if((dx+dy+24)%4===0)highlight=true;
-        }
-      }
-      /* Tiny silver crossover beads make adjacent links read as one continuous chain. */
-      const connector=(Math.abs(y-6.5)<=.6)&&([3,4,11,12,19,20].includes(x));
-      if(!silver&&!connector)return 0;
-      return highlight?3:((x+y)%4===0?2:1);
-    }
+      const rows=[
+        "000000000000000000000000",
+        "001110000001110000001110",
+        "010001000010001000010001",
+        "100000100100000100100000",
+        "100000011000000110000001",
+        "010000100100001001000010",
+        "001001000010010000100100",
+        "000110000001100000011000",
+        "000000000000000000000000",
+        "000000000000000000000000",
+        "000000000000000000000000",
+        "000000000000000000000000",
+        "000000000000000000000000"
+      ];
+      const row=rows[Math.max(0,Math.min(rows.length-1,y))];
+      const bead=Number(row[x]);
+      if(!bead)return 0;
+      /* Slight alternating metallic shades keep the links readable without raised relief. */
+      return ((x+y)%5===0)?2:1;
+    },
 
   };
   const sprites=new Map();
@@ -130,7 +126,7 @@
         const theta=i/N*TAU+rot,z=Math.sin(theta);if((z>=0?1:0)!==pass)continue;
         const depth=reduced?1:ease(clamp((t-i*14)/650));if(depth<=0)continue;
         const scale=1+.2*z,bw=bs*scale*(.3+.7*Math.abs(z))+.8,bh=bs*scale+.8;
-        const x=cx+R*Math.cos(theta),row=Array.from({length:W},(_,j)=>pattern(id==="chain"?i:i%PER,j));
+        const x=cx+R*Math.cos(theta),row=Array.from({length:W},(_,j)=>pattern(i%PER,j));
         const lit=pass?Math.pow(Math.max(0,Math.cos(theta-lightAngle)),12):0;
         ctx.globalAlpha=depth;
         for(let j=0;j<W;j++){
