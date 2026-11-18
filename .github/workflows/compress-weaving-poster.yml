@@ -1,11 +1,6 @@
 name: Compress weaving poster
 on:
-  push:
-    branches:
-      - perf/compress-weaving-poster
-    paths:
-      - ".github/workflows/compress-weaving-poster.yml"
-      - "img/cara-weaving-loom-poster.webp"
+  workflow_dispatch:
 permissions:
   contents: write
 jobs:
