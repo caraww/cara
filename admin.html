@@ -382,10 +382,12 @@
       </section>
 
       <section id="app" hidden>
+        <div id="ordersPanel">
         <h1>سفارش‌ها</h1>
         <div class="sum" id="sum"></div>
         <div class="bar">
           <a class="btn" href="/customers.html">مشتریان و شماره‌ها</a>
+          <button class="btn" id="openChallenges" type="button">مدیریت چالش‌ها</button>
           <input
             id="q"
             type="search"
@@ -438,6 +440,11 @@
           </div>
         </details>
         <p class="muted" id="empty" hidden>هنوز سفارشی نیست.</p>
+        </div>
+        <section id="challengePanel" hidden style="margin-top:18px">
+          <div class="bar"><button class="btn" id="backToOrders" type="button">بازگشت به سفارش‌ها</button></div>
+          <iframe id="challengeFrame" src="/challenge-admin.html" title="مدیریت چالش‌ها" style="display:block;width:100%;height: min(82vh, 1100px);min-height:760px;border:1px solid var(--line);border-radius:16px;background:var(--bg)"></iframe>
+        </section>
       </section>
     </main>
     <div id="toast" role="status"></div>
@@ -1019,6 +1026,16 @@
           load();
         });
         $("#reload").onclick = load;
+        $("#openChallenges").onclick = () => {
+          $("#ordersPanel").hidden = true;
+          $("#challengePanel").hidden = false;
+          $("#challengePanel").scrollIntoView({ behavior: "smooth", block: "start" });
+        };
+        $("#backToOrders").onclick = () => {
+          $("#challengePanel").hidden = true;
+          $("#ordersPanel").hidden = false;
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        };
         $("#all").onchange = load;
         $("#q").addEventListener("input", render);
         $("#out").onclick = () => {
