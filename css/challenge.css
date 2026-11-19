@@ -40,3 +40,18 @@
 .chl-how li { counter-increment: s; position: relative; padding-inline-start: 42px; line-height: 2; }
 .chl-how li::before { content: counter(s, persian); position: absolute; inset-inline-start: 0; top: 4px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--cara-accent-soft, #eeeef5); color: var(--cara-accent, #343b64); font-weight: 900; line-height: 1; }
 @media (max-width: 560px) { .chl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .chl-card { padding: 10px; } .chl-card canvas { height: 190px; } .chl-actions .chl-btn { flex: 1 1 100%; } }
+
+
+/* Match the subtle bead-dot page background used across Cara pages. */
+body:has(.chl)::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 5px 4px, rgba(91,31,154,.06) 0 65%, transparent 72%) 0 0/20px 16px,
+    radial-gradient(ellipse 5px 4px, rgba(184,151,90,.09) 0 65%, transparent 72%) 10px 8px/20px 16px;
+  -webkit-mask-image: linear-gradient(#000, transparent 65%);
+  mask-image: linear-gradient(#000, transparent 65%);
+}
