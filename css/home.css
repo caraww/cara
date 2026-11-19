@@ -1576,7 +1576,7 @@ button, .btn, a.btn {
 /* DigiPay homepage banner: keep the title in the same style as other sections. */
 .cara-payment-promo.cara-payment-promo--banner{
   display:block;
-  width:min(1120px,calc(100% - 44px));
+  width:min(1920px,calc(100% - 44px));
   margin:clamp(56px,8vw,104px) auto 0;
   padding:0;
   overflow:visible;
@@ -1598,9 +1598,10 @@ button, .btn, a.btn {
 .cara-payment-promo--banner .cara-payment-promo__banner{
   display:block;
   width:100%;
+  max-width:100%;
   height:auto;
-  aspect-ratio:16/9;
-  object-fit:contain;
+  aspect-ratio:auto;
+  object-fit:initial;
   border-radius:clamp(14px,2vw,24px);
 }
 @media(max-width:720px){
