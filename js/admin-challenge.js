@@ -28,7 +28,7 @@
   }
 
   // فقط رنگ‌هایی که در موجودی فعلی منجوق‌ها ثبت شده‌اند؛ کد و ظاهر از پالت خود استودیو می‌آید.
-  const OWNED_BEAD_CODES = new Set(["DB0010", "DB0310", "DB0721", "DB0724", "DB0726", "DB1832"]);
+  const OWNED_BEAD_CODES = new Set(["FGB0370", "DB0010", "DB0654", "DB0757", "DB2103", "DB0310", "DB0732", "DB0726", "DB0727", "DB0157", "DB1498", "DB0725", "DB0321", "DB0721", "DB2359", "DB0756", "DB1133", "DB0724", "DB0774", "DB1134", "DB2109", "DB0351", "DB0200", "DB2264", "DB0785", "DB0628", "DB0766", "DB1832", "DB1582"]);
 
   function buildChips() {
     const box = $("fColors"); box.replaceChildren();
