@@ -6,7 +6,7 @@
   const palette = () => (window.CARA && window.CARA.palette) || [];
   const hexOf = (c) => (palette().find((p) => p[0] === c) || [])[2] || "#8b72a4";
   const fmt = (s) => new Date(s * 1000).toLocaleString("fa-IR", { dateStyle: "medium", timeStyle: "short" });
-  let token = sessionStorage.getItem("cara-admin") || "", currentId = "", entries = [];
+  let token = sessionStorage.getItem("cara-admin") || "", currentId = "", entries = [], editingId = "";
 
   async function api(path, options = {}) {
     const res = await fetch(path, { cache: "no-store", ...options, headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" } });
@@ -52,7 +52,15 @@
       const info = el("div"); info.append(el("strong", "", c.title), el("div", "muted", c.theme || ""), el("div", "muted", fmt(c.startsAt) + " تا " + fmt(c.endsAt) + " · " + fa(c.entries) + " طرح (" + fa(c.pending) + " در انتظار تأیید)"));
       const acts = el("div", "bar"); acts.append(el("span", "tag " + (c.open ? "approved" : "pending"), { draft: "پیش‌نویس", active: c.open ? "در جریان" : "فعال (خارج از بازه)", closed: "بسته" }[c.status]));
       const open = el("button", "btn sm dark", "مدیریت طرح‌ها"); open.onclick = () => openChallenge(c);
-      acts.append(open);
+      const edit = el("button", "btn sm", "ادیت چالش"); edit.onclick = () => beginEdit(c);
+      const remove = el("button", "btn sm danger", "ریموو چالش"); remove.onclick = guard(async () => {
+        const warning = "چالش «" + c.title + "» و تمام " + fa(c.entries) + " طرح و رأی وابسته‌اش برای همیشه حذف می‌شود. مطمئنی؟";
+        if (!window.confirm(warning)) return;
+        await post({ action: "delete", id: c.id });
+        if (currentId === c.id) { currentId = ""; $("detail").hidden = true; }
+        say("چالش و اطلاعات وابسته‌اش حذف شد."); await loadList();
+      });
+      acts.append(open, edit, remove);
       [["active", "فعال کن"], ["closed", "ببند"], ["draft", "پیش‌نویس"]].filter(([s]) => s !== c.status).forEach(([s, label]) => {
         const b = el("button", "btn sm", label); b.onclick = guard(async () => { await post({ action: "set-status", id: c.id, status: s }); await loadList(); }); acts.append(b);
       });
@@ -100,12 +108,38 @@
   $("filter").onchange = renderEntries; $("reloadEntries").onclick = loadEntries;
   $("logout").onclick = () => { sessionStorage.removeItem("cara-admin"); token = ""; showLogin(); };
   $("loginForm").onsubmit = async (ev) => { ev.preventDefault(); const button = $("loginForm").querySelector("button[type=submit]"); token = $("token").value.trim(); if (!token) { showLogin("رمز را وارد کن."); return; } button.disabled = true; button.textContent = "در حال بررسی…"; $("loginError").hidden = true; sessionStorage.setItem("cara-admin", token); try { await loadList(); } finally { button.disabled = false; button.textContent = "ورود"; } };
+  function localInputTime(seconds) {
+    const d = new Date(Number(seconds) * 1000), pad = (n) => String(n).padStart(2, "0");
+    return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()) + "T" + pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+  function beginEdit(c) {
+    editingId = c.id;
+    $("fTitle").value = c.title || ""; $("fTheme").value = c.theme || ""; $("fRules").value = c.rules || "";
+    $("fStart").value = localInputTime(c.startsAt); $("fEnd").value = localInputTime(c.endsAt);
+    $("fPrize").value = c.prizePercent || 20; $("fStatus").value = c.status || "draft";
+    $("fColors").querySelectorAll("input").forEach((cb) => { cb.checked = (c.allowedColors || []).includes(cb.value); });
+    $("formTitle").textContent = "ویرایش چالش";
+    $("saveChallenge").textContent = "ذخیره‌ی تغییرات";
+    $("cancelEdit").hidden = false;
+    $("newForm").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function resetEditor() {
+    editingId = ""; $("newForm").reset(); buildChips();
+    $("formTitle").textContent = "ساخت چالش جدید";
+    $("saveChallenge").textContent = "ساخت چالش";
+    $("cancelEdit").hidden = true;
+  }
+  $("cancelEdit").onclick = resetEditor;
   $("newForm").onsubmit = guard(async (ev) => {
     ev.preventDefault();
     const colors = [...$("fColors").querySelectorAll("input:checked")].map((i) => i.value);
-    const r = await post({ action: "create", title: $("fTitle").value, theme: $("fTheme").value, rules: $("fRules").value, allowedColors: colors,
-      startsAt: new Date($("fStart").value).toISOString(), endsAt: new Date($("fEnd").value).toISOString(), prizePercent: Number($("fPrize").value), status: $("fStatus").value });
-    say("چالش ساخته شد."); $("newForm").reset(); buildChips(); await loadList();
+    const body = { action: editingId ? "update" : "create", ...(editingId ? { id: editingId } : {}),
+      title: $("fTitle").value, theme: $("fTheme").value, rules: $("fRules").value, allowedColors: colors,
+      startsAt: new Date($("fStart").value).toISOString(), endsAt: new Date($("fEnd").value).toISOString(),
+      prizePercent: Number($("fPrize").value), status: $("fStatus").value };
+    await post(body);
+    say(editingId ? "تغییرات چالش ذخیره شد." : "چالش ساخته شد.");
+    resetEditor(); await loadList();
   });
   const boot = () => { buildChips(); if (token) loadList(); else showLogin(); };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
