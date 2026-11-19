@@ -1574,12 +1574,12 @@ button, .btn, a.btn {
 
 
 /* DigiPay homepage banner: keep the title in the same style as other sections. */
-.cara-payment-promo/* The legacy promo's oversized decorative circle must not extend the new full-width banner. */
-.cara-payment-promo--banner::before{
+/* The legacy promo's oversized decorative circle must not extend the new full-width banner. */
+.cara-payment-promo.cara-payment-promo--banner::before{
   content:none;
 }
 
-.cara-payment-promo--banner{
+.cara-payment-promo.cara-payment-promo--banner{
   display:block;
   width:min(1920px,calc(100% - 44px));
   margin:clamp(56px,8vw,104px) auto 0;
