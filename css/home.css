@@ -1571,3 +1571,47 @@ button, .btn, a.btn {
   margin-right:auto !important;
   height:102px;
 }
+
+
+/* DigiPay homepage banner: keep the title in the same style as other sections. */
+.cara-payment-promo.cara-payment-promo--banner{
+  display:block;
+  width:min(1120px,calc(100% - 44px));
+  margin:clamp(56px,8vw,104px) auto 0;
+  padding:0;
+  overflow:visible;
+  border:0;
+  border-radius:0;
+  background:transparent;
+  box-shadow:none;
+}
+.cara-payment-promo--banner .cara-payment-promo__heading{
+  margin:0 0 clamp(18px,2.5vw,30px);
+}
+.cara-payment-promo--banner .cara-payment-promo__heading h2{
+  margin:0;
+  color:var(--ink);
+  font-size:clamp(25px,3vw,38px);
+  line-height:1.55;
+  font-weight:900;
+}
+.cara-payment-promo--banner .cara-payment-promo__banner{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:16/9;
+  object-fit:contain;
+  border-radius:clamp(14px,2vw,24px);
+}
+@media(max-width:720px){
+  .cara-payment-promo.cara-payment-promo--banner{
+    width:calc(100% - 28px);
+    margin-top:54px;
+  }
+  .cara-payment-promo--banner .cara-payment-promo__heading{
+    margin-bottom:16px;
+  }
+  .cara-payment-promo--banner .cara-payment-promo__banner{
+    border-radius:14px;
+  }
+}
