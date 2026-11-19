@@ -3,8 +3,9 @@
   const $ = (id) => document.getElementById(id);
   const fa = (n) => Number(n || 0).toLocaleString("fa-IR");
   const palette = () => (window.CARA && window.CARA.palette) || [];
-  const colorOf = (code) => (palette().find((p) => p[0] === code) || [])[2] || "#8b72a4";
-  const nameOf = (code) => (palette().find((p) => p[0] === code) || [])[1] || code;
+  const paletteItem = (code) => palette().find((p) => p && (p.code === code || p[0] === code));
+  const colorOf = (code) => { const p = paletteItem(code); return p ? (p.hex || p[2] || "#8b72a4") : "#8b72a4"; };
+  const nameOf = (code) => { const p = paletteItem(code); return p ? (p.name || p[1] || code) : code; };
   const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
   let state = null, timer = null;
 

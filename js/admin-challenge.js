@@ -4,7 +4,7 @@
   const fa = (n) => Number(n || 0).toLocaleString("fa-IR");
   const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
   const palette = () => (window.CARA && window.CARA.palette) || [];
-  const hexOf = (c) => (palette().find((p) => p[0] === c) || [])[2] || "#8b72a4";
+  const hexOf = (c) => { const p = palette().find((item) => item && (item.code === c || item[0] === c)); return p ? (p.hex || p[2] || "#8b72a4") : "#8b72a4"; };
   const fmt = (s) => new Date(s * 1000).toLocaleString("fa-IR", { dateStyle: "medium", timeStyle: "short" });
   let token = sessionStorage.getItem("cara-admin") || "", currentId = "", entries = [], editingId = "";
 
