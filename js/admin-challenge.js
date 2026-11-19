@@ -27,9 +27,19 @@
     rows.forEach((row, y) => row.forEach((c, x) => { if (!c) return; ctx.fillStyle = hexOf(c); ctx.beginPath(); ctx.arc(x * cell + r, y * cell + r, Math.max(r - .6, 1), 0, 7); ctx.fill(); }));
   }
 
+  // فقط رنگ‌هایی که در موجودی فعلی منجوق‌ها ثبت شده‌اند؛ کد و ظاهر از پالت خود استودیو می‌آید.
+  const OWNED_BEAD_CODES = new Set(["DB0010", "DB0310", "DB0721", "DB0724", "DB0726", "DB1832"]);
+
   function buildChips() {
     const box = $("fColors"); box.replaceChildren();
-    palette().forEach((p) => { const l = el("label", "chip"), i = el("i"), cb = el("input"); cb.type = "checkbox"; cb.value = p[0]; i.style.background = p[2]; l.append(cb, i, document.createTextNode(p[1])); box.append(l); });
+    palette().filter((p) => OWNED_BEAD_CODES.has(p.code)).forEach((p) => {
+      const l = el("label", "chip"), swatch = el("i"), cb = el("input");
+      cb.type = "checkbox";
+      cb.value = p.code;
+      swatch.style.background = p.hex;
+      l.append(cb, swatch, document.createTextNode(p.name + " · " + p.code));
+      box.append(l);
+    });
   }
 
   const loadList = guard(async () => {
