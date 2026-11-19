@@ -219,7 +219,7 @@ async function workInfo(env, url) {
   return json({ id: String(w.id), title: w.title || "", src: w.src, price: prices[String(w.id)] });
 }
 
-async function createPayment(request, env) {
+async function createPayment(request, env, ctx) {
   if (!isSameSiteRequest(request, env)) return json({ error: "درخواست معتبر نیست." }, 403);
   const C = cfg(env);
   if (!env.ORDERS) return json({ error: "ذخیره‌ساز سفارش (KV) به Worker وصل نشده." }, 500);
@@ -316,6 +316,9 @@ async function createPayment(request, env) {
   if (dc && !(await reserveCode(env, dc, order.id))) return json({ error: "کد تخفیف نامعتبر یا قبلاً استفاده شده." }, 400);
   await saveOrder(env, order);
 
+  /* اعلان ثبت سفارش بعد از آماده شدن لینک پرداخت ارسال می‌شه؛ پرداخت‌نشدن مانع اعلان نیست. */
+  const announceCreated = () => ctx ? ctx.waitUntil(notifyCreated(C, env, order)) : notifyCreated(C, env, order);
+
   /* دیجی‌پی: تیکت مستقیم از Worker ساخته می‌شه و مشتری به redirectUrl می‌ره */
   if (provider === "digipay") {
     const t = await digipayCreateTicket(env, {
@@ -329,6 +332,7 @@ async function createPayment(request, env) {
     }
     order.digipayTicket = t.ticket;
     await saveOrder(env, order);
+    announceCreated();
     return json({ paymentUrl: t.redirectUrl });
   }
 
@@ -341,7 +345,9 @@ async function createPayment(request, env) {
     x: `cara order ${order.id.slice(0, 8)}`,
     e: Math.floor(Date.now() / 1000) + 900,
   }));
-  return json({ paymentUrl: `${C.payUrl}?d=${d}&sig=${await hmac(C.relaySecret, d)}` });
+  const paymentUrl = `${C.payUrl}?d=${d}&sig=${await hmac(C.relaySecret, d)}`;
+  announceCreated();
+  return json({ paymentUrl });
 }
 
 /* تأیید پرداخت با زیبال. هم از بازگشت مشتری از درگاه صدا زده می‌شه، هم از دکمه‌ی «بررسی وضعیت» توی admin.html.
@@ -549,6 +555,23 @@ async function notifyPaid(C, env, o) {
   const r = await telegram(env, orderText(C, o));
   if (r.ok) { const f = await getOrder(env, o.id); if (f) { f.notified = true; await saveOrder(env, f); } }
 }
+async function notifyCreated(C, env, o) {
+  if (o.createdNotified) return;
+  const c = o.customer || {}, pt = o.pattern;
+  const what = o.kind === "cart" ? (o.items || []).map((item) => `• ${tgEsc(item.title)} × ${item.quantity} — ${Number(item.unitPrice * item.quantity).toLocaleString("fa-IR")} تومان`).join("\n") : o.kind === "work" ? `دستبند گالری: ${tgEsc(o.work && (o.work.title || o.work.id))}` : pt ? `الگوی دلخواه ${pt.width}×${pt.height} · ${pt.total} منجوق` : "";
+  const message = [
+    `🆕 سفارش جدید — در انتظار پرداخت #${o.id.slice(0, 8)}`,
+    `💰 ${Number(o.priceToman).toLocaleString("fa-IR")} تومان`,
+    `🏦 درگاه: ${o.provider === "digipay" ? "دیجی‌پی" : "زیبال"}`,
+    what,
+    `👤 ${tgEsc(c.firstName)} ${tgEsc(c.lastName)}`,
+    `📞 ${tgEsc(c.phone)}`,
+    `📍 ${tgEsc(c.address)}`,
+    `${C.site}/admin.html`,
+  ].filter(Boolean).join("\n");
+  const r = await telegram(env, message);
+  if (r.ok) { const f = await getOrder(env, o.id); if (f) { f.createdNotified = true; await saveOrder(env, f); } }
+}
 
 /* دیدن و مدیریت سفارش‌ها (توکن فقط توی هدر Authorization: Bearer ...). صفحه‌ی admin.html همین رو صدا می‌زنه.
    GET  /api/admin/orders              → سفارش‌های پرداخت‌شده (با ?status=all همه‌ی سفارش‌ها)
@@ -703,7 +726,7 @@ export default {
           tracking: typeof order.tracking === "string" ? order.tracking : null,
         });
       }
-      if (p === "/api/create-payment" && request.method === "POST") return await createPayment(request, env);
+      if (p === "/api/create-payment" && request.method === "POST") return await createPayment(request, env, ctx);
       if (p === "/api/payment-callback") return await paymentCallback(request, env, url, ctx);
       if (p === "/api/digipay-callback") return await digipayCallback(request, env, url, ctx);
       if (p === "/api/admin/debug") return await debug(request, env, url);
