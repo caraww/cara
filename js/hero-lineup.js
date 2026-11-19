@@ -168,5 +168,17 @@
   document.addEventListener("visibilitychange",sync);
   window.addEventListener("resize",()=>render(entries[active],performance.now()),{passive:true});
   window.addEventListener("pagehide",()=>{if(frame)cancelAnimationFrame(frame);},{once:true});
-  show(0);sync();
+  // Pick a different hero bracelet on each refresh in this tab.
+  let initialIndex=Math.floor(Math.random()*entries.length);
+  try{
+    const previous=sessionStorage.getItem("caraHeroBraceletIndex");
+    if(entries.length>1&&previous!==null){
+      const last=Number(previous);
+      if(Number.isInteger(last)&&last>=0&&last<entries.length&&initialIndex===last){
+        initialIndex=(last+1+Math.floor(Math.random()*(entries.length-1)))%entries.length;
+      }
+    }
+    sessionStorage.setItem("caraHeroBraceletIndex",String(initialIndex));
+  }catch(_){}
+  show(initialIndex);sync();
 })();
