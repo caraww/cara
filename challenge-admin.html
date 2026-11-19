@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>مدیریت چالش | cara</title>
+  <link rel="stylesheet" href="/css/fonts.css">
+  <style>
+    :root{color-scheme:light;--ink:#221a2c;--muted:#6b6377;--line:#ddd6e6;--bg:#f6f4f8;--plum:#3b2650;--tint:#ece6f2;--ok:#1f7a4d;--warn:#9a6a00;--bad:#a8321f}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.9 Vazirmatn,Tahoma,sans-serif}
+    main{width:min(1120px,100%);margin:auto;padding:30px 18px 80px}h1{margin:0;font-size:27px;font-weight:900}h2{font-size:20px;margin:30px 0 8px}
+    .muted{color:var(--muted)}.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0}
+    .box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0}
+    label{display:grid;gap:4px;font-weight:700;font-size:14px}input,select,textarea{font:inherit;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;width:100%}
+    textarea{min-height:90px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .btn{font:inherit;font-weight:800;padding:8px 16px;border:1px solid var(--plum);border-radius:999px;background:#fff;color:var(--plum);cursor:pointer;text-decoration:none;display:inline-block}
+    .btn.dark{background:var(--plum);color:#fff}.btn:disabled{opacity:.5}.btn.sm{padding:4px 12px;font-size:13px}
+    .err{color:var(--bad);font-weight:700}.ok{color:var(--ok);font-weight:700}
+    .chips{display:flex;flex-wrap:wrap;gap:6px;max-height:190px;overflow:auto;padding:8px;border:1px solid var(--line);border-radius:12px}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:2px 10px 2px 6px;border:1px solid var(--line);border-radius:999px;font-size:12px;cursor:pointer;background:#fff}
+    .chip input{width:auto}.chip i{width:16px;height:16px;border-radius:50%;border:1px solid rgba(0,0,0,.2)}
+    .list{display:grid;gap:10px}.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+    .entries{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+    .entry{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;display:grid;gap:6px;align-content:start}
+    .entry canvas{width:100%;height:200px;object-fit:contain;background:#ece9f2;border-radius:10px}
+    .tag{display:inline-block;padding:0 10px;border-radius:999px;background:var(--tint);font-size:12px;font-weight:800}
+    .tag.pending{background:#fff3cd;color:var(--warn)}.tag.approved{background:#d8f1e3;color:var(--ok)}.tag.winner{background:#f3e2b4;color:#5b4310}.tag.rejected{background:#f8d7d1;color:var(--bad)}
+    .prize{direction:ltr;text-align:left;font-weight:900;background:var(--tint);padding:6px 10px;border-radius:10px;word-break:break-all}
+    [hidden]{display:none!important}
+  </style>
+</head>
+<body>
+<main>
+  <section id="login" hidden>
+    <h1>مدیریت چالش</h1>
+    <p class="muted">رمز مدیریت (ADMIN_TOKEN) را وارد کن.</p>
+    <form id="loginForm" class="bar"><input id="token" type="password" autocomplete="current-password" placeholder="ADMIN_TOKEN" aria-label="رمز مدیریت" style="max-width:320px"><button class="btn dark" type="submit">ورود</button></form>
+    <p id="loginError" class="err" role="alert" hidden></p>
+  </section>
+  <section id="app" hidden>
+    <h1>چالش‌های هفتگی</h1>
+    <div class="bar"><a class="btn" href="/admin.html">سفارش‌ها</a><a class="btn" href="/customers.html">مشتریان</a><a class="btn" href="/challenge.html" target="_blank" rel="noopener">صفحه‌ی عمومی</a><button class="btn" id="logout" type="button">خروج</button></div>
+    <p id="msg" role="status" class="muted"></p>
+
+    <h2>ساخت چالش جدید</h2>
+    <form id="newForm" class="box">
+      <div class="grid">
+        <label>عنوان<input id="fTitle" required maxlength="80" placeholder="مثلاً: دستبند اقیانوسی"></label>
+        <label>موضوع (یک خط)<input id="fTheme" maxlength="160" placeholder="فقط با رنگ‌های آبی و سفید طراحی کن"></label>
+        <label>شروع<input id="fStart" type="datetime-local" required></label>
+        <label>پایان<input id="fEnd" type="datetime-local" required></label>
+        <label>درصد تخفیف جایزه<input id="fPrize" type="number" min="5" max="50" value="20"></label>
+        <label>وضعیت اولیه<select id="fStatus"><option value="draft">پیش‌نویس (عمومی نیست)</option><option value="active">فعال (طبق تاریخ‌ها عمومی می‌شه)</option></select></label>
+      </div>
+      <label style="margin-top:12px">قوانین (اختیاری)<textarea id="fRules" maxlength="1000" placeholder="مثلاً: حداکثر ۴ رنگ، هر نفر یک طرح…"></textarea></label>
+      <p class="muted" style="margin:10px 0 4px">رنگ‌های مجاز (هیچ‌کدوم انتخاب نشه = همه‌ی رنگ‌ها آزاده)</p>
+      <div class="chips" id="fColors"></div>
+      <div class="bar"><button class="btn dark" type="submit">ساخت چالش</button></div>
+    </form>
+
+    <h2>چالش‌ها</h2>
+    <div class="list" id="list"></div>
+
+    <section id="detail" hidden>
+      <h2 id="detailTitle"></h2>
+      <div class="bar"><button class="btn" id="reloadEntries" type="button">به‌روزرسانی</button><select id="filter" aria-label="فیلتر وضعیت"><option value="all">همه</option><option value="pending">در انتظار تأیید</option><option value="approved">تأییدشده</option><option value="winner">برنده</option><option value="rejected">ردشده</option></select></div>
+      <div class="entries" id="entries"></div>
+    </section>
+  </section>
+</main>
+<script src="/js/palette.js" defer></script>
+<script src="/js/admin-challenge.js?v=1" defer></script>
+</body>
+</html>

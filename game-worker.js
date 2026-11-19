@@ -132,6 +132,12 @@ export async function checkCode(env, raw) {
   if (env.GAME && !(await codeDO(env, code).codeAvailable(RESERVE_MS))) return null;
   return code;
 }
+/* ساخت کد تخفیف دستی (جایزه‌ی چالش). همون قالب کدهای بازی؛ ۷ روز اعتبار داره. */
+export async function mintCode(env, percent) {
+  const code = "CARA-" + [...crypto.getRandomValues(new Uint8Array(4))].map((b) => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+  await putRec(env, code, { createdAt: Date.now(), percent: Math.round(percent), reservedBy: null, reservedAt: 0, usedBy: null, source: "challenge" });
+  return code;
+}
 /* درصد تخفیف این کد (۰٫۱ یا ۰٫۱۵)؛ کدهای قدیمی بدون درصد ۱۰٪ حساب می‌شن */
 export async function codeDiscount(env, code) {
   const r = await getRec(env, code);

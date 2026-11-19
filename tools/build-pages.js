@@ -83,6 +83,7 @@ const urls = [
   "/builder.html",
   "/upload.html",
   "/gallery.html",
+  "/challenge.html",
   "/game.html",
   "/name-bracelet.html",
   "/colors/",
@@ -364,6 +365,6 @@ write(
 );
 write(
   "robots.txt",
-  `User-agent: *\nAllow: /\nDisallow: /admin.html\nDisallow: /checkout.html\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\n`,
+  `User-agent: *\nAllow: /\nDisallow: /admin.html\nDisallow: /checkout.html\nDisallow: /challenge-admin.html\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\n`,
 );
 console.log(`✓ sitemap.xml (${urls.length} آدرس) و robots.txt`);

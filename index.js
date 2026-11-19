@@ -1,5 +1,6 @@
-import { handleGame, checkCode, codeDiscount, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
+import { handleGame, mintCode, checkCode, codeDiscount, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
 import { handleAccountRequest, getAccountUser } from "./lib/accounts.mjs";
+import { handleChallengeRequest } from "./lib/challenge.mjs";
 import { handleCartRequest, loadCartForRequest, clearPurchasedCartItems } from "./lib/cart.mjs";
 import { mirrorOrder, unmirrorOrder, backfillOrders, compareOrders } from "./lib/order-store.mjs";
 import { digipayConfigured, digipayCreateTicket, digipayVerify } from "./lib/digipay.mjs";
@@ -707,6 +708,14 @@ export default {
         pricePerBead: cfg(env).price, baseFee: cfg(env).base,
       });
       if (cartResponse) return cartResponse;
+      const challengeResponse = await handleChallengeRequest(request, env, url, {
+        rateLimit, cleanPattern, mintCode, isValidColor: (c) => VALID.has(c),
+        adminGuard: async (req) => {
+          const gate = await adminGate(req, env); if (gate) return gate;
+          return authed(req, env) ? null : json({ error: "unauthorized" }, 401);
+        },
+      });
+      if (challengeResponse) return challengeResponse;
       const accountResponse = await handleAccountRequest(request, env, url, rateLimit, cleanPattern);
       if (accountResponse) return accountResponse;
       if (p === "/api/config" && request.method === "GET") {
