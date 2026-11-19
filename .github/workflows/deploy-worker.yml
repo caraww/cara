@@ -60,5 +60,8 @@ jobs:
       - name: Validate Worker bundle and configuration
         run: npx --yes wrangler@4 deploy --dry-run
 
+      - name: Apply pending D1 migrations to production
+        run: npx --yes wrangler@4 d1 migrations apply cara-accounts-production --remote
+
       - name: Deploy Worker to Cloudflare
         run: npx --yes wrangler@4 deploy
