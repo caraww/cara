@@ -16,9 +16,9 @@
     return data;
   }
   const post = (body) => api("/api/admin/challenges", { method: "POST", body: JSON.stringify(body) });
-  const say = (t, bad) => { const m = $("msg"); m.textContent = t || ""; m.className = bad ? "err" : "ok"; };
+  const say = (t, bad) => { if (!$("login").hidden) { $("loginError").textContent = t || ""; $("loginError").hidden = !t; } else { const m = $("msg"); m.textContent = t || ""; m.className = bad ? "err" : "ok"; } };
   function showLogin(err) { $("app").hidden = true; $("login").hidden = false; $("loginError").hidden = !err; $("loginError").textContent = err || ""; }
-  const guard = (fn) => async (...a) => { try { return await fn(...a); } catch (e) { if (e.auth) { sessionStorage.removeItem("cara-admin"); token = ""; showLogin("رمز اشتباهه یا منقضی شده."); } else say(e.message, true); } };
+  const guard = (fn) => async (...a) => { try { return await fn(...a); } catch (e) { if (e.auth) { sessionStorage.removeItem("cara-admin"); token = ""; showLogin("رمز ادمین پذیرفته نشد؛ همان ADMIN_TOKEN پنل اصلی را وارد کن."); } else if (!$("login").hidden) showLogin(e.message || "ارتباط با سرور برقرار نشد."); else say(e.message || "درخواست ناموفق بود.", true); } };
 
   function draw(canvas, design) {
     const rows = design && design.data; if (!Array.isArray(rows) || !rows.length) return;
@@ -89,7 +89,7 @@
 
   $("filter").onchange = renderEntries; $("reloadEntries").onclick = loadEntries;
   $("logout").onclick = () => { sessionStorage.removeItem("cara-admin"); token = ""; showLogin(); };
-  $("loginForm").onsubmit = (ev) => { ev.preventDefault(); token = $("token").value.trim(); if (!token) return; sessionStorage.setItem("cara-admin", token); loadList(); };
+  $("loginForm").onsubmit = async (ev) => { ev.preventDefault(); const button = $("loginForm").querySelector("button[type=submit]"); token = $("token").value.trim(); if (!token) { showLogin("رمز را وارد کن."); return; } button.disabled = true; button.textContent = "در حال بررسی…"; $("loginError").hidden = true; sessionStorage.setItem("cara-admin", token); try { await loadList(); } finally { button.disabled = false; button.textContent = "ورود"; } };
   $("newForm").onsubmit = guard(async (ev) => {
     ev.preventDefault();
     const colors = [...$("fColors").querySelectorAll("input:checked")].map((i) => i.value);
