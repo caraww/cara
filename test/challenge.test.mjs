@@ -69,6 +69,34 @@ test("admin creates a challenge and validates its fields", { skip }, async () =>
   assert.equal(pub.challenge.title, "چالش آبی"); assert.deepEqual(pub.challenge.allowedColors, ["DB0010", "DB0725"]); assert.equal(pub.loggedIn, false);
 });
 
+test("admin edits a challenge and deletes it with its entries and votes", { skip }, async () => {
+  const env = env0(), id = await seedChallenge(env);
+  const updated = await call(env, "POST", "/api/admin/challenges", { admin: true, body: {
+    action: "update", id, title: "چالش بنفش", theme: "رنگ‌های بنفش", rules: "حداکثر سه رنگ",
+    allowedColors: ["DB0010"], startsAt: now() - hour, endsAt: now() + 2 * hour, prizePercent: 25, status: "active"
+  } });
+  assert.equal(updated.status, 200);
+  const detail = await (await call(env, "GET", "/api/admin/challenges?id=" + id, { admin: true })).json();
+  assert.equal(detail.challenge.title, "چالش بنفش");
+  assert.equal(detail.challenge.prizePercent, 25);
+  assert.deepEqual(detail.challenge.allowedColors, ["DB0010"]);
+
+  const owner = await login(env, "u1"), voter = await login(env, "u2");
+  const submitted = await call(env, "POST", "/api/challenge/entries", { cookie: owner, body: {
+    title: "طرح بنفش", nickname: "هنرمند", design: design(["DB0010"])
+  } });
+  const entryId = (await submitted.json()).id;
+  await call(env, "POST", "/api/admin/challenges", { admin: true, body: { action: "review", entryId, status: "approved" } });
+  await call(env, "POST", "/api/challenge/entries/" + entryId + "/vote", { cookie: voter });
+  const removed = await call(env, "POST", "/api/admin/challenges", { admin: true, body: { action: "delete", id } });
+  assert.equal(removed.status, 200);
+  assert.deepEqual(await removed.json(), { ok: true, deleted: true });
+  assert.equal((await call(env, "GET", "/api/admin/challenges?id=" + id, { admin: true })).status, 404);
+  assert.equal(env.ACCOUNTS_DB.raw.prepare("SELECT COUNT(*) AS n FROM challenge_entries WHERE id = ?").get(entryId).n, 0);
+  assert.equal(env.ACCOUNTS_DB.raw.prepare("SELECT COUNT(*) AS n FROM challenge_votes WHERE entry_id = ?").get(entryId).n, 0);
+  assert.equal((await call(env, "POST", "/api/admin/challenges", { admin: true, body: { action: "delete", id } })).status, 404);
+});
+
 test("submitting needs login, same origin, a valid title/nickname and allowed colors", { skip }, async () => {
   const env = env0(); await seedChallenge(env);
   const body = { title: "موج", nickname: "سارا", design: design() };

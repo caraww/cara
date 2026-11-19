@@ -1,0 +1,27 @@
+name: Challenge admin tests
+
+on:
+  pull_request:
+    paths:
+      - "lib/challenge.mjs"
+      - "js/admin-challenge.js"
+      - "challenge-admin.html"
+      - "test/challenge.test.mjs"
+      - ".github/workflows/challenge-admin-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  challenge-admin:
+    name: Challenge API regression tests (Node 22)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Run challenge API tests with SQLite support
+        run: node --test test/challenge.test.mjs
