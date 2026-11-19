@@ -443,7 +443,7 @@
         </div>
         <section id="challengePanel" hidden style="margin-top:18px">
           <div class="bar"><button class="btn" id="backToOrders" type="button">بازگشت به سفارش‌ها</button></div>
-          <iframe id="challengeFrame" src="/challenge-admin.html" title="مدیریت چالش‌ها" style="display:block;width:100%;height: min(82vh, 1100px);min-height:760px;border:1px solid var(--line);border-radius:16px;background:var(--bg)"></iframe>
+          <iframe id="challengeFrame" title="مدیریت چالش‌ها" style="display:block;width:100%;height: min(82vh, 1100px);min-height:760px;border:1px solid var(--line);border-radius:16px;background:var(--bg)"></iframe>
         </section>
       </section>
     </main>
@@ -1029,6 +1029,8 @@
         $("#openChallenges").onclick = () => {
           $("#ordersPanel").hidden = true;
           $("#challengePanel").hidden = false;
+          const frame = $("#challengeFrame");
+          if (!frame.dataset.loaded) { frame.src = "/challenge-admin.html"; frame.dataset.loaded = "1"; }
           $("#challengePanel").scrollIntoView({ behavior: "smooth", block: "start" });
         };
         $("#backToOrders").onclick = () => {
