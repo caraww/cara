@@ -1578,6 +1578,9 @@ button, .btn, a.btn {
 .cara-payment-promo.cara-payment-promo--banner::before{
   content:none;
 }
+.cara-payment-promo.cara-payment-promo--banner::after{
+  content:none;
+}
 
 .cara-payment-promo.cara-payment-promo--banner{
   display:block;
