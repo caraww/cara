@@ -428,6 +428,7 @@
             ></textarea>
           </label>
           <div class="act" style="margin-top: 10px">
+            <button class="btn" id="tgTest">تست اتصال تلگرام</button>
             <button class="btn danger" id="pTest">
               حذف همه‌ی سفارش‌های آزمایشی
             </button>
@@ -922,6 +923,21 @@
             toast(er.message);
           }
         }
+        $("#tgTest").onclick = async () => {
+          const b = $("#tgTest");
+          b.disabled = true;
+          b.textContent = "در حال تست…";
+          try {
+            const j = await api("/api/admin/debug?telegram=1");
+            if (j.telegramTest && j.telegramTest.ok) toast("✅ پیام آزمایشی به تلگرام ارسال شد");
+            else toast("❌ ارسال نشد: " + (j.telegramTest?.description || "تنظیمات تلگرام را بررسی کن"));
+          } catch (er) {
+            toast(er.message || "خطا در تست تلگرام");
+          } finally {
+            b.disabled = false;
+            b.textContent = "تست اتصال تلگرام";
+          }
+        };
         $("#pTest").onclick = () =>
           purge(
             "sandbox",
