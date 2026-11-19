@@ -1,11 +1,9 @@
-/* challenge.css — صفحه‌ی چالش هفتگی. کلاس‌ها همه با chl- شروع می‌شن. */
+/* challenge.css — page-specific layout and components; heading typography and bead underline
+   are shared with account.html through account.css, polish.css and decor.css. */
 .chl { box-sizing: border-box; max-width: 1040px; margin: 0 auto; padding: calc(var(--nh-h, 72px) + 24px) clamp(16px, 3vw, 36px) 72px; color: var(--cara-text, #242431); }
-.chl-hero { padding: clamp(22px, 4vw, 40px); border-radius: var(--cara-radius-lg, 26px); color: #f7f6fb; text-align: center;
-  background: radial-gradient(ellipse 30rem 18rem at 50% 0, rgba(155, 143, 193, .22), transparent 70%), linear-gradient(118deg, #17192e, #22243b 60%, #191b31); }
-.chl-eyebrow { display: inline-block; margin: 0 0 12px; padding: 6px 14px; border: 1px solid rgba(207, 174, 108, .42); border-radius: 999px; background: rgba(207, 174, 108, .09); color: #f3e2b4; font-size: 13px; font-weight: 700; }
-.chl-hero h1 { margin: 0; font-size: clamp(26px, 4.4vw, 44px); font-weight: 900; line-height: 1.4; text-wrap: balance; }
-.chl-theme { margin: 10px auto 0; max-width: 34em; color: rgba(235, 233, 243, .8); font-size: 17px; line-height: 2; }
-.chl-timer { display: inline-block; margin: 16px 0 0; padding: 8px 18px; border-radius: 999px; background: rgba(207, 174, 108, .16); color: #f3e2b4; font-size: 15px; font-weight: 800; }
+.chl-hero { margin-bottom: 28px; }
+.chl-theme { max-width: 34em; }
+.chl-timer { display: inline-block; margin: 16px 0 0; padding: 8px 18px; border-radius: 999px; background: var(--cara-accent-soft, #eeeef5); color: var(--cara-accent, #343b64); font-size: 15px; font-weight: 800; }
 .chl-msg { margin: 18px 0; color: var(--cara-muted, #626273); font-size: 15px; text-align: center; }
 .chl-msg.is-error { color: #a8321f; }
 .chl h2 { margin: 40px 0 8px; font-size: 22px; font-weight: 900; }
