@@ -89,7 +89,8 @@
 @keyframes dl2-in{from{opacity:0}}
 
 /* ===== زمینه‌ی صفحه‌های استودیو: ردیف‌های مهره‌ی کم‌رنگ که به پایین محو می‌شن ===== */
-body:has(.wrap)::before{
+body:has(.wrap)::before,
+body:has(.cart-wrap)::before{
   content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
   background:
     radial-gradient(ellipse 5px 4px,rgba(91,31,154,.06) 0 65%,transparent 72%) 0 0/20px 16px,
