@@ -12,7 +12,7 @@
     const res = await fetch(path, { cache: "no-store", ...options, headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" } });
     const data = await res.json().catch(() => ({}));
     if (res.status === 401) { const e = new Error("401"); e.auth = true; throw e; }
-    if (!res.ok) throw new Error(data.error || "درخواست ناموفق بود.");
+    if (!res.ok) throw new Error([data.error, data.detail].filter(Boolean).join(" — ") || "درخواست ناموفق بود.");
     return data;
   }
   const post = (body) => api("/api/admin/challenges", { method: "POST", body: JSON.stringify(body) });
