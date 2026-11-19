@@ -835,3 +835,21 @@ header.top.solid nav a[href*="account.html"] {
   position: relative;
   z-index: 1;
 }
+
+
+/* Mobile viewport guard: prevent document-level horizontal scrolling from
+   leaving the homepage content offset while the fixed header stays in place. */
+@media (max-width: 850px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip !important;
+  }
+  #main-content,
+  .hx {
+    width: 100%;
+    max-width: 100%;
+    margin-inline: 0;
+  }
+}
