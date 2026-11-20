@@ -15,7 +15,7 @@
     label{display:grid;gap:4px;font-weight:700;font-size:14px}input,select,textarea{font:inherit;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;width:100%}
     textarea{min-height:90px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
     .btn{font:inherit;font-weight:800;padding:8px 16px;border:1px solid var(--plum);border-radius:999px;background:#fff;color:var(--plum);cursor:pointer;text-decoration:none;display:inline-block}
-    .btn.dark{background:var(--plum);color:#fff}.btn:disabled{opacity:.5}.btn.sm{padding:4px 12px;font-size:13px}
+    .btn.dark{background:var(--plum);color:#fff}.btn.danger{color:var(--bad);border-color:#e8b8b0}.btn:disabled{opacity:.5}.btn.sm{padding:4px 12px;font-size:13px}
     .err{color:var(--bad);font-weight:700}.ok{color:var(--ok);font-weight:700}
     .chips{display:flex;flex-wrap:wrap;gap:6px;max-height:190px;overflow:auto;padding:8px;border:1px solid var(--line);border-radius:12px}
     .chip{display:inline-flex;align-items:center;gap:6px;padding:2px 10px 2px 6px;border:1px solid var(--line);border-radius:999px;font-size:12px;cursor:pointer;background:#fff}
@@ -32,7 +32,7 @@
 </head>
 <body>
 <main>
-  <section id="login" hidden>
+  <section id="login">
     <h1>مدیریت چالش</h1>
     <p class="muted">رمز مدیریت (ADMIN_TOKEN) را وارد کن.</p>
     <form id="loginForm" class="bar"><input id="token" type="password" autocomplete="current-password" placeholder="ADMIN_TOKEN" aria-label="رمز مدیریت" style="max-width:320px"><button class="btn dark" type="submit">ورود</button></form>
@@ -40,10 +40,10 @@
   </section>
   <section id="app" hidden>
     <h1>چالش‌های هفتگی</h1>
-    <div class="bar"><a class="btn" href="/admin.html">سفارش‌ها</a><a class="btn" href="/customers.html">مشتریان</a><a class="btn" href="/challenge.html" target="_blank" rel="noopener">صفحه‌ی عمومی</a><button class="btn" id="logout" type="button">خروج</button></div>
+    <div class="bar"><a class="btn" href="/admin">بازگشت به پنل ادمین</a><a class="btn" href="/customers.html" target="_top">مشتریان</a><a class="btn" href="/challenge.html" target="_blank" rel="noopener">صفحه‌ی عمومی</a><button class="btn" id="logout" type="button">خروج</button></div>
     <p id="msg" role="status" class="muted"></p>
 
-    <h2>ساخت چالش جدید</h2>
+    <h2 id="formTitle">ساخت چالش جدید</h2>
     <form id="newForm" class="box">
       <div class="grid">
         <label>عنوان<input id="fTitle" required maxlength="80" placeholder="مثلاً: دستبند اقیانوسی"></label>
@@ -54,9 +54,9 @@
         <label>وضعیت اولیه<select id="fStatus"><option value="draft">پیش‌نویس (عمومی نیست)</option><option value="active">فعال (طبق تاریخ‌ها عمومی می‌شه)</option></select></label>
       </div>
       <label style="margin-top:12px">قوانین (اختیاری)<textarea id="fRules" maxlength="1000" placeholder="مثلاً: حداکثر ۴ رنگ، هر نفر یک طرح…"></textarea></label>
-      <p class="muted" style="margin:10px 0 4px">رنگ‌های مجاز (هیچ‌کدوم انتخاب نشه = همه‌ی رنگ‌ها آزاده)</p>
+      <p class="muted" style="margin:10px 0 4px">رنگ‌های مجاز از موجودی منجوق‌های استودیو (هیچ‌کدوم انتخاب نشه = همه‌ی رنگ‌ها آزاده)</p>
       <div class="chips" id="fColors"></div>
-      <div class="bar"><button class="btn dark" type="submit">ساخت چالش</button></div>
+      <div class="bar"><button class="btn dark" id="saveChallenge" type="submit">ساخت چالش</button><button class="btn" id="cancelEdit" type="button" hidden>انصراف از ویرایش</button></div>
     </form>
 
     <h2>چالش‌ها</h2>
@@ -70,6 +70,6 @@
   </section>
 </main>
 <script src="/js/palette.js" defer></script>
-<script src="/js/admin-challenge.js?v=1" defer></script>
+<script src="/js/admin-challenge.js?v=6" defer></script>
 </body>
 </html>

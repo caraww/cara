@@ -816,3 +816,22 @@ header.top.solid nav a[href*="account.html"] {
   border-radius: 99px;
   background: linear-gradient(90deg, var(--cara-detail), rgba(155, 143, 193, .12));
 }
+
+
+/* Homepage process section: soften the oversized decorative circles and keep copy above them. */
+#steps {
+  position: relative;
+  isolation: isolate;
+}
+#steps::before,
+#steps::after {
+  opacity: .16 !important;
+  z-index: 0;
+  pointer-events: none;
+}
+#steps > .section-kicker,
+#steps > h2,
+#steps > .steps {
+  position: relative;
+  z-index: 1;
+}
