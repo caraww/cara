@@ -1,0 +1,1179 @@
+diff --git a/account.html b/account.html
+index 8e57a3e..b51029c 100644
+--- a/account.html
++++ b/account.html
+@@ -45,7 +45,7 @@
+         <nav class="sh__nav" id="shNav" aria-label="منوی اصلی">
+           <a href="/builder.html">طراحی دستبند</a
+           ><a href="/upload.html">عکس به الگو</a
+-          ><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a
++          ><a href="/gallery.html">گالری</a><a href="/challenge.html">چالش</a><a href="/game.html">بازی</a
+           ><a href="/account.html" aria-current="page">حساب کاربری</a
+           ><a href="/cart.html">سبد خرید</a
+           ><a class="sh__cta" href="/checkout.html">سفارش</a>
+diff --git a/builder.html b/builder.html
+index 443e5e3..32f1772 100644
+--- a/builder.html
++++ b/builder.html
+@@ -361,7 +361,7 @@
+         <nav class="sh__nav" id="shNav" aria-label="منوی اصلی">
+           <a href="/builder.html" aria-current="page">طراحی دستبند</a
+           ><a href="/upload.html">عکس به الگو</a
+-          ><a href="/gallery.html">گالری</a><a href="/blog/wrist-size.html">راهنمای اندازه مچ</a><a href="/game.html">بازی</a
++          ><a href="/gallery.html">گالری</a><a href="/blog/wrist-size.html">راهنمای اندازه مچ</a><a href="/challenge.html">چالش</a><a href="/game.html">بازی</a
+           ><a href="/account.html">حساب کاربری</a
+           ><a href="/cart.html">سبد خرید</a
+           ><a class="sh__cta" href="/checkout.html">سفارش</a>
+diff --git a/cart.html b/cart.html
+index cb8c9e1..05c7eab 100644
+--- a/cart.html
++++ b/cart.html
+@@ -44,7 +44,7 @@
+         <nav class="sh__nav" id="shNav" aria-label="منوی اصلی">
+           <a href="/builder.html">طراحی دستبند</a
+           ><a href="/upload.html">عکس به الگو</a
+-          ><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a
++          ><a href="/gallery.html">گالری</a><a href="/challenge.html">چالش</a><a href="/game.html">بازی</a
+           ><a href="/account.html">حساب کاربری</a
+           ><a href="/cart.html" aria-current="page">سبد خرید</a
+           ><a class="sh__cta" href="/checkout.html">سفارش</a>
+diff --git a/challenge-admin.html b/challenge-admin.html
+new file mode 100644
+index 0000000..5bd7d56
+--- /dev/null
++++ b/challenge-admin.html
+@@ -0,0 +1,75 @@
++<!doctype html>
++<html lang="fa" dir="rtl">
++<head>
++  <meta charset="UTF-8">
++  <meta name="viewport" content="width=device-width, initial-scale=1">
++  <meta name="robots" content="noindex,nofollow">
++  <title>مدیریت چالش | cara</title>
++  <link rel="stylesheet" href="/css/fonts.css">
++  <style>
++    :root{color-scheme:light;--ink:#221a2c;--muted:#6b6377;--line:#ddd6e6;--bg:#f6f4f8;--plum:#3b2650;--tint:#ece6f2;--ok:#1f7a4d;--warn:#9a6a00;--bad:#a8321f}
++    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.9 Vazirmatn,Tahoma,sans-serif}
++    main{width:min(1120px,100%);margin:auto;padding:30px 18px 80px}h1{margin:0;font-size:27px;font-weight:900}h2{font-size:20px;margin:30px 0 8px}
++    .muted{color:var(--muted)}.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0}
++    .box{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin:14px 0}
++    label{display:grid;gap:4px;font-weight:700;font-size:14px}input,select,textarea{font:inherit;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;width:100%}
++    textarea{min-height:90px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
++    .btn{font:inherit;font-weight:800;padding:8px 16px;border:1px solid var(--plum);border-radius:999px;background:#fff;color:var(--plum);cursor:pointer;text-decoration:none;display:inline-block}
++    .btn.dark{background:var(--plum);color:#fff}.btn:disabled{opacity:.5}.btn.sm{padding:4px 12px;font-size:13px}
++    .err{color:var(--bad);font-weight:700}.ok{color:var(--ok);font-weight:700}
++    .chips{display:flex;flex-wrap:wrap;gap:6px;max-height:190px;overflow:auto;padding:8px;border:1px solid var(--line);border-radius:12px}
++    .chip{display:inline-flex;align-items:center;gap:6px;padding:2px 10px 2px 6px;border:1px solid var(--line);border-radius:999px;font-size:12px;cursor:pointer;background:#fff}
++    .chip input{width:auto}.chip i{width:16px;height:16px;border-radius:50%;border:1px solid rgba(0,0,0,.2)}
++    .list{display:grid;gap:10px}.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
++    .entries{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
++    .entry{background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;display:grid;gap:6px;align-content:start}
++    .entry canvas{width:100%;height:200px;object-fit:contain;background:#ece9f2;border-radius:10px}
++    .tag{display:inline-block;padding:0 10px;border-radius:999px;background:var(--tint);font-size:12px;font-weight:800}
++    .tag.pending{background:#fff3cd;color:var(--warn)}.tag.approved{background:#d8f1e3;color:var(--ok)}.tag.winner{background:#f3e2b4;color:#5b4310}.tag.rejected{background:#f8d7d1;color:var(--bad)}
++    .prize{direction:ltr;text-align:left;font-weight:900;background:var(--tint);padding:6px 10px;border-radius:10px;word-break:break-all}
++    [hidden]{display:none!important}
++  </style>
++</head>
++<body>
++<main>
++  <section id="login" hidden>
++    <h1>مدیریت چالش</h1>
++    <p class="muted">رمز مدیریت (ADMIN_TOKEN) را وارد کن.</p>
++    <form id="loginForm" class="bar"><input id="token" type="password" autocomplete="current-password" placeholder="ADMIN_TOKEN" aria-label="رمز مدیریت" style="max-width:320px"><button class="btn dark" type="submit">ورود</button></form>
++    <p id="loginError" class="err" role="alert" hidden></p>
++  </section>
++  <section id="app" hidden>
++    <h1>چالش‌های هفتگی</h1>
++    <div class="bar"><a class="btn" href="/admin.html">سفارش‌ها</a><a class="btn" href="/customers.html">مشتریان</a><a class="btn" href="/challenge.html" target="_blank" rel="noopener">صفحه‌ی عمومی</a><button class="btn" id="logout" type="button">خروج</button></div>
++    <p id="msg" role="status" class="muted"></p>
++
++    <h2>ساخت چالش جدید</h2>
++    <form id="newForm" class="box">
++      <div class="grid">
++        <label>عنوان<input id="fTitle" required maxlength="80" placeholder="مثلاً: دستبند اقیانوسی"></label>
++        <label>موضوع (یک خط)<input id="fTheme" maxlength="160" placeholder="فقط با رنگ‌های آبی و سفید طراحی کن"></label>
++        <label>شروع<input id="fStart" type="datetime-local" required></label>
++        <label>پایان<input id="fEnd" type="datetime-local" required></label>
++        <label>درصد تخفیف جایزه<input id="fPrize" type="number" min="5" max="50" value="20"></label>
++        <label>وضعیت اولیه<select id="fStatus"><option value="draft">پیش‌نویس (عمومی نیست)</option><option value="active">فعال (طبق تاریخ‌ها عمومی می‌شه)</option></select></label>
++      </div>
++      <label style="margin-top:12px">قوانین (اختیاری)<textarea id="fRules" maxlength="1000" placeholder="مثلاً: حداکثر ۴ رنگ، هر نفر یک طرح…"></textarea></label>
++      <p class="muted" style="margin:10px 0 4px">رنگ‌های مجاز (هیچ‌کدوم انتخاب نشه = همه‌ی رنگ‌ها آزاده)</p>
++      <div class="chips" id="fColors"></div>
++      <div class="bar"><button class="btn dark" type="submit">ساخت چالش</button></div>
++    </form>
++
++    <h2>چالش‌ها</h2>
++    <div class="list" id="list"></div>
++
++    <section id="detail" hidden>
++      <h2 id="detailTitle"></h2>
++      <div class="bar"><button class="btn" id="reloadEntries" type="button">به‌روزرسانی</button><select id="filter" aria-label="فیلتر وضعیت"><option value="all">همه</option><option value="pending">در انتظار تأیید</option><option value="approved">تأییدشده</option><option value="winner">برنده</option><option value="rejected">ردشده</option></select></div>
++      <div class="entries" id="entries"></div>
++    </section>
++  </section>
++</main>
++<script src="/js/palette.js" defer></script>
++<script src="/js/admin-challenge.js?v=1" defer></script>
++</body>
++</html>
+diff --git a/challenge.html b/challenge.html
+new file mode 100644
+index 0000000..2889658
+--- /dev/null
++++ b/challenge.html
+@@ -0,0 +1,84 @@
++<!doctype html>
++<html lang="fa" dir="rtl">
++<head>
++  <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-P54M67FG"></script>
++  <script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag("js", new Date());</script>
++  <meta charset="UTF-8">
++  <meta name="viewport" content="width=device-width, initial-scale=1">
++  <title>چالش هفتگی طراحی دستبند منجوقی | کارا (cara)</title>
++  <meta name="description" content="هر هفته یه چالش طراحی دستبند منجوقی با رنگ‌های محدود. طرحت رو توی استودیوی کارا بساز، ثبت کن و رأی بگیر؛ برنده کد تخفیف می‌گیره.">
++  <meta name="robots" content="index, follow, max-image-preview:large">
++  <meta name="theme-color" content="#343B64">
++  <link rel="canonical" href="https://caraw.ir/challenge.html">
++  <meta property="og:type" content="website"><meta property="og:locale" content="fa_IR"><meta property="og:site_name" content="کارا (cara)">
++  <meta property="og:title" content="چالش هفتگی طراحی دستبند منجوقی | کارا"><meta property="og:description" content="طرحت رو بساز، ثبت کن و رأی بگیر؛ برنده کد تخفیف می‌گیره.">
++  <meta property="og:url" content="https://caraw.ir/challenge.html"><meta property="og:image" content="https://caraw.ir/img/og-image.png?v=2">
++  <meta name="twitter:card" content="summary_large_image">
++  <link rel="icon" href="/img/cara-favicon.png?v=2">
++  <link rel="stylesheet" href="/css/fonts.css">
++  <link rel="stylesheet" href="/css/studio.css">
++  <link rel="stylesheet" href="/css/decor.css">
++  <link rel="stylesheet" href="/css/accessibility.css">
++  <link rel="stylesheet" href="/css/fixes.css?v=2">
++  <link rel="stylesheet" href="/css/polish.css?v=7">
++  <link rel="stylesheet" href="/css/nav-hero.css?v=1">
++  <link rel="stylesheet" href="/css/challenge.css?v=1">
++</head>
++<body>
++  <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
++  <header class="sh is-solid" data-sh="solid">
++<div class="sh__in">
++<a href="/" class="sh__logo" aria-label="cara، صفحه‌ی اصلی"><img class="is-dark" src="/img/cara-logo.png?v=2" alt="cara"></a>
++<button class="sh__toggle" type="button" aria-controls="shNav" aria-expanded="false" aria-label="باز کردن منو"><span aria-hidden="true">☰</span></button>
++<nav class="sh__nav" id="shNav" aria-label="منوی اصلی"><a href="/builder.html">طراحی دستبند</a><a href="/upload.html">عکس به الگو</a><a href="/gallery.html">گالری</a><a href="/challenge.html" aria-current="page">چالش</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a><a href="/cart.html">سبد خرید</a><a class="sh__cta" href="/checkout.html">سفارش</a></nav>
++</div>
++</header>
++  <main class="chl" id="main-content" tabindex="-1">
++    <header class="chl-hero">
++      <p class="chl-eyebrow">چالش هفتگی cara</p>
++      <h1 id="chlTitle">چالش طراحی دستبند منجوقی</h1>
++      <p class="chl-theme" id="chlTheme">با محدودیت رنگ طراحی کن، رأی بگیر و جایزه ببر.</p>
++      <p class="chl-timer" id="chlTimer" role="timer" aria-live="off" hidden></p>
++    </header>
++    <p class="chl-msg" id="chlMessage" role="status" aria-live="polite">دارم چالش رو میارم…</p>
++
++    <section class="chl-panel" id="chlInfo" aria-labelledby="chlInfoH" hidden>
++      <h2 id="chlInfoH" style="margin-top:0">قوانین این چالش</h2>
++      <p class="chl-rules" id="chlRules"></p>
++      <div id="chlColorsBox" hidden><strong>رنگ‌های مجاز:</strong><div class="chl-swatches" id="chlColors"></div></div>
++      <p class="chl-prize" id="chlPrize"></p>
++    </section>
++
++    <section class="chl-panel" id="chlJoin" aria-labelledby="chlJoinH" hidden>
++      <h2 id="chlJoinH" style="margin-top:0">شرکت توی چالش</h2>
++      <div id="chlJoinBody"></div>
++    </section>
++
++    <section aria-labelledby="chlEntriesH" id="chlEntriesBox" hidden>
++      <h2 id="chlEntriesH">طرح‌های شرکت‌کننده</h2>
++      <p class="chl-by" id="chlEntriesNote"></p>
++      <div class="chl-grid" id="chlGrid"></div>
++    </section>
++
++    <section aria-labelledby="chlWinH" id="chlWinBox" hidden>
++      <h2 id="chlWinH">برنده‌های چالش‌های قبلی</h2>
++      <div class="chl-grid" id="chlWinGrid"></div>
++    </section>
++
++    <section class="chl-panel" aria-labelledby="chlHowH">
++      <h2 id="chlHowH" style="margin-top:0">چطور شرکت کنم؟</h2>
++      <ol class="chl-how">
++        <li>توی <a href="/builder.html">استودیوی طراحی</a> یه دستبند بساز و فقط از رنگ‌های مجاز استفاده کن.</li>
++        <li>با تلگرام وارد <a href="/account.html">حساب کاربری</a> شو (فقط همین، بدون ثبت‌نام جدا).</li>
++        <li>برگرد به همین صفحه، اسم طرح و یه نام مستعار بنویس و ثبت کن. فقط نام مستعارت به بقیه نشون داده می‌شه.</li>
++        <li>بعد از تأیید، طرحت توی لیست میاد. لینکش رو برای دوستات بفرست تا رأی بدن.</li>
++        <li>وقتی چالش تموم شد، برنده کد تخفیف می‌گیره و طرحش توی «برنده‌های قبلی» می‌مونه.</li>
++      </ol>
++    </section>
++  </main>
++  <script src="/js/palette.js" defer></script>
++  <script src="/js/challenge.js?v=1" defer></script>
++  <script src="/js/nav-hero.js?v=1" defer></script>
++  <script src="/js/pwa.js" defer></script>
++</body>
++</html>
+diff --git a/checkout.html b/checkout.html
+index bae9815..b97801a 100644
+--- a/checkout.html
++++ b/checkout.html
+@@ -49,7 +49,7 @@
+         <nav class="sh__nav" id="shNav" aria-label="منوی اصلی">
+           <a href="/builder.html">طراحی دستبند</a
+           ><a href="/upload.html">عکس به الگو</a
+-          ><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a
++          ><a href="/gallery.html">گالری</a><a href="/challenge.html">چالش</a><a href="/game.html">بازی</a
+           ><a href="/account.html">حساب کاربری</a
+           ><a href="/cart.html">سبد خرید</a
+           ><a class="sh__cta" href="/checkout.html" aria-current="page"
+diff --git a/css/challenge.css b/css/challenge.css
+new file mode 100644
+index 0000000..a92f8d6
+--- /dev/null
++++ b/css/challenge.css
+@@ -0,0 +1,44 @@
++/* challenge.css — صفحه‌ی چالش هفتگی. کلاس‌ها همه با chl- شروع می‌شن. */
++.chl { box-sizing: border-box; max-width: 1040px; margin: 0 auto; padding: calc(var(--nh-h, 72px) + 24px) clamp(16px, 3vw, 36px) 72px; color: var(--cara-text, #242431); }
++.chl-hero { padding: clamp(22px, 4vw, 40px); border-radius: var(--cara-radius-lg, 26px); color: #f7f6fb; text-align: center;
++  background: radial-gradient(ellipse 30rem 18rem at 50% 0, rgba(155, 143, 193, .22), transparent 70%), linear-gradient(118deg, #17192e, #22243b 60%, #191b31); }
++.chl-eyebrow { display: inline-block; margin: 0 0 12px; padding: 6px 14px; border: 1px solid rgba(207, 174, 108, .42); border-radius: 999px; background: rgba(207, 174, 108, .09); color: #f3e2b4; font-size: 13px; font-weight: 700; }
++.chl-hero h1 { margin: 0; font-size: clamp(26px, 4.4vw, 44px); font-weight: 900; line-height: 1.4; text-wrap: balance; }
++.chl-theme { margin: 10px auto 0; max-width: 34em; color: rgba(235, 233, 243, .8); font-size: 17px; line-height: 2; }
++.chl-timer { display: inline-block; margin: 16px 0 0; padding: 8px 18px; border-radius: 999px; background: rgba(207, 174, 108, .16); color: #f3e2b4; font-size: 15px; font-weight: 800; }
++.chl-msg { margin: 18px 0; color: var(--cara-muted, #626273); font-size: 15px; text-align: center; }
++.chl-msg.is-error { color: #a8321f; }
++.chl h2 { margin: 40px 0 8px; font-size: 22px; font-weight: 900; }
++.chl-card, .chl-panel { box-sizing: border-box; background: #fff; border: 1px solid var(--cara-line, #d4d4df); border-radius: var(--cara-radius-lg, 26px); box-shadow: var(--cara-shadow-soft, 0 8px 24px rgba(36, 36, 49, .055)); }
++.chl-panel { margin-top: 20px; padding: clamp(18px, 3vw, 28px); }
++.chl-panel p { margin: 0 0 12px; line-height: 2; }
++.chl-rules { white-space: pre-line; }
++.chl-swatches { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 14px; }
++.chl-swatches i { display: block; width: 34px; height: 24px; border-radius: 8px; border: 1px solid rgba(0, 0, 0, .12); box-shadow: inset 0 2px rgba(255, 255, 255, .45), inset 0 -3px 5px rgba(0, 0, 0, .2); }
++.chl-prize { margin: 0; padding: 10px 14px; border-radius: 14px; background: var(--cara-accent-soft, #eeeef5); color: var(--cara-accent, #343b64); font-weight: 700; }
++.chl-form { display: grid; gap: 12px; max-width: 520px; }
++.chl-form label { display: grid; gap: 6px; font-size: 14px; font-weight: 700; }
++.chl-form input { min-height: 46px; padding: 0 14px; border: 1px solid var(--cara-line, #d4d4df); border-radius: 12px; font: inherit; font-weight: 400; background: #fff; }
++.chl-form input:focus-visible { outline: 3px solid var(--cara-detail, #9b8fc1); outline-offset: 2px; }
++.chl-preview { display: block; max-width: 100%; max-height: 260px; width: auto; height: auto; margin: 4px 0 8px; border-radius: 12px; background: #ece9f2; }
++.chl-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 22px; border: 1px solid var(--cara-accent, #343b64); border-radius: 999px; background: #fff; color: var(--cara-accent, #343b64); font: inherit; font-size: 15px; font-weight: 800; text-decoration: none; cursor: pointer; }
++.chl-btn:hover { background: var(--cara-accent-soft, #eeeef5); }
++.chl-btn--primary { background: var(--cara-accent, #343b64); color: #fff; }
++.chl-btn--primary:hover { background: #292f54; }
++.chl-btn:disabled { opacity: .55; cursor: not-allowed; }
++.chl-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
++.chl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; margin-top: 14px; }
++.chl-card { padding: 14px; display: flex; flex-direction: column; gap: 8px; scroll-margin-top: calc(var(--nh-h, 72px) + 16px); }
++.chl-card.is-target { outline: 3px solid var(--cara-detail, #9b8fc1); }
++.chl-card canvas { display: block; width: 100%; height: 240px; object-fit: contain; border-radius: 12px; background: #ece9f2; }
++.chl-card h3 { margin: 0; font-size: 16px; font-weight: 800; line-height: 1.6; }
++.chl-by { margin: 0; color: var(--cara-muted, #626273); font-size: 13px; }
++.chl-badge { align-self: flex-start; padding: 2px 12px; border-radius: 999px; background: #f3e2b4; color: #5b4310; font-size: 12px; font-weight: 800; }
++.chl-badge.is-mine { background: var(--cara-accent-soft, #eeeef5); color: var(--cara-accent, #343b64); }
++.chl-row { display: flex; gap: 8px; margin-top: auto; }
++.chl-row .chl-btn { flex: 1; min-height: 40px; padding: 0 10px; font-size: 14px; }
++.chl-vote[aria-pressed="true"] { background: var(--cara-accent, #343b64); color: #fff; }
++.chl-how { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 10px; }
++.chl-how li { counter-increment: s; position: relative; padding-inline-start: 42px; line-height: 2; }
++.chl-how li::before { content: counter(s, persian); position: absolute; inset-inline-start: 0; top: 4px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--cara-accent-soft, #eeeef5); color: var(--cara-accent, #343b64); font-weight: 900; line-height: 1; }
++@media (max-width: 560px) { .chl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .chl-card { padding: 10px; } .chl-card canvas { height: 190px; } .chl-actions .chl-btn { flex: 1 1 100%; } }
+diff --git a/docs/challenge.md b/docs/challenge.md
+new file mode 100644
+index 0000000..983c45d
+--- /dev/null
++++ b/docs/challenge.md
+@@ -0,0 +1,24 @@
++# چالش هفتگی cara
++
++**صفحه‌ها:** `challenge.html` (عمومی) و `challenge-admin.html` (مدیریت با ADMIN_TOKEN، noindex).
++**بک‌اند:** `lib/challenge.mjs` (مسیرهای `/api/challenge…` و `/api/admin/challenges`)، جدول‌ها: `migrations/0005_challenges.sql`.
++
++## راه‌اندازی (یک‌بار)
++1. commit و push؛ تست‌ها توی GitHub Actions اجرا می‌شن.
++2. از workflow «Apply customer accounts migration (production)» مایگریشن‌ها رو اجرا کن (`0005` رو هم می‌گیره).
++3. Worker رو دیپلوی کن.
++
++## یه چالش
++1. `/challenge-admin.html` → رمز ادمین → «ساخت چالش جدید» (عنوان، موضوع، تاریخ شروع/پایان، درصد جایزه، رنگ‌های مجاز). وضعیت «فعال» طبق تاریخ‌ها عمومی می‌شه.
++2. مشتری طرحش رو از استودیو می‌سازه، با تلگرام وارد می‌شه و توی `/challenge.html` ثبت می‌کنه.
++3. طرح‌ها اول «در انتظار»ن؛ از «مدیریت طرح‌ها» تأیید یا رد کن. فقط تأییدشده‌ها عمومی می‌شن و رأی می‌گیرن.
++4. بعد از پایان: چالش رو «ببند»، طرح برنده رو «برنده» کن، بعد «ساخت کد جایزه». کد `CARA-XXXXXXXX` و یه پیام آماده برای برنده می‌گیری (۷ روز اعتبار، فقط یک‌بار ساخته می‌شه).
++
++## قوانین ثابت
++- ورود با تلگرام لازمه؛ هر نفر یک طرح و یک رأی برای هر طرح؛ رأی به طرح خودت ممکن نیست.
++- فقط «نام مستعار» عمومی نشون داده می‌شه. تماس با برنده فقط توی پنل ادمین دیده می‌شه.
++- ثبت دوباره، طرح قبلی رو عوض می‌کنه، به «در انتظار» برمی‌گرده و رأی‌ها صفر می‌شن.
++- صفحه‌ی مدیریت و پرداخت تگ آمار ندارن.
++
++## تست
++`npm test`؛ تست‌های چالش روی SQLite واقعی (Node 22) اجرا می‌شن و روی Node 20 خودکار skip می‌شن.
+diff --git a/gallery.html b/gallery.html
+index 8d4a463..67105f3 100644
+--- a/gallery.html
++++ b/gallery.html
+@@ -509,7 +509,7 @@
+           <a href="/builder.html">طراحی دستبند</a
+           ><a href="/upload.html">عکس به الگو</a
+           ><a href="/gallery.html" aria-current="page">گالری</a
+-          ><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a
++          ><a href="/challenge.html">چالش</a><a href="/game.html">بازی</a><a href="/account.html">حساب کاربری</a
+           ><a href="/cart.html">سبد خرید</a
+           ><a class="sh__cta" href="/checkout.html">سفارش</a>
+         </nav>
+diff --git a/game-worker.js b/game-worker.js
+index 8aa921d..f653fd4 100644
+--- a/game-worker.js
++++ b/game-worker.js
+@@ -132,6 +132,12 @@ export async function checkCode(env, raw) {
+   if (env.GAME && !(await codeDO(env, code).codeAvailable(RESERVE_MS))) return null;
+   return code;
+ }
++/* ساخت کد تخفیف دستی (جایزه‌ی چالش). همون قالب کدهای بازی؛ ۷ روز اعتبار داره. */
++export async function mintCode(env, percent) {
++  const code = "CARA-" + [...crypto.getRandomValues(new Uint8Array(4))].map((b) => b.toString(16).padStart(2, "0")).join("").toUpperCase();
++  await putRec(env, code, { createdAt: Date.now(), percent: Math.round(percent), reservedBy: null, reservedAt: 0, usedBy: null, source: "challenge" });
++  return code;
++}
+ /* درصد تخفیف این کد (۰٫۱ یا ۰٫۱۵)؛ کدهای قدیمی بدون درصد ۱۰٪ حساب می‌شن */
+ export async function codeDiscount(env, code) {
+   const r = await getRec(env, code);
+diff --git a/game.html b/game.html
+index fd770aa..73bd089 100644
+--- a/game.html
++++ b/game.html
+@@ -98,7 +98,7 @@
+           <a href="/builder.html">طراحی دستبند</a
+           ><a href="/upload.html">عکس به الگو</a
+           ><a href="/gallery.html">گالری</a
+-          ><a href="/game.html" aria-current="page">بازی</a
++          ><a href="/challenge.html">چالش</a><a href="/game.html" aria-current="page">بازی</a
+           ><a href="/account.html">حساب کاربری</a
+           ><a href="/cart.html">سبد خرید</a
+           ><a class="sh__cta" href="/checkout.html">سفارش</a>
+diff --git a/index.html b/index.html
+index 4c4da65..e8acf53 100644
+--- a/index.html
++++ b/index.html
+@@ -307,7 +307,7 @@
+         <nav class="sh__nav" id="shNav" aria-label="منوی اصلی">
+           <a href="#paths">شروع</a><a href="gallery.html">نمونه‌ها</a
+           ><a href="#steps">مراحل</a><a href="#beads">رنگ منجوق‌ها</a
+-          ><a href="game.html">بازی</a><a href="/account.html">حساب کاربری</a
++          ><a href="challenge.html">چالش</a><a href="game.html">بازی</a><a href="/account.html">حساب کاربری</a
+           ><a href="/cart.html">سبد خرید</a
+           ><a class="sh__cta" href="builder.html">طراحی دستبند</a>
+         </nav>
+diff --git a/index.js b/index.js
+index b82b523..f8a20d9 100644
+--- a/index.js
++++ b/index.js
+@@ -1,5 +1,6 @@
+-import { handleGame, checkCode, codeDiscount, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
++import { handleGame, mintCode, checkCode, codeDiscount, reserveCode, releaseCode, useCode, rateLimit, DISCOUNT } from "./game-worker.js";
+ import { handleAccountRequest, getAccountUser } from "./lib/accounts.mjs";
++import { handleChallengeRequest } from "./lib/challenge.mjs";
+ import { handleCartRequest, loadCartForRequest, clearPurchasedCartItems } from "./lib/cart.mjs";
+ import { mirrorOrder, unmirrorOrder, backfillOrders, compareOrders } from "./lib/order-store.mjs";
+ import { digipayConfigured, digipayCreateTicket, digipayVerify } from "./lib/digipay.mjs";
+@@ -707,6 +708,14 @@ export default {
+         pricePerBead: cfg(env).price, baseFee: cfg(env).base,
+       });
+       if (cartResponse) return cartResponse;
++      const challengeResponse = await handleChallengeRequest(request, env, url, {
++        rateLimit, cleanPattern, mintCode, isValidColor: (c) => VALID.has(c),
++        adminGuard: async (req) => {
++          const gate = await adminGate(req, env); if (gate) return gate;
++          return authed(req, env) ? null : json({ error: "unauthorized" }, 401);
++        },
++      });
++      if (challengeResponse) return challengeResponse;
+       const accountResponse = await handleAccountRequest(request, env, url, rateLimit, cleanPattern);
+       if (accountResponse) return accountResponse;
+       if (p === "/api/config" && request.method === "GET") {
+diff --git a/js/admin-challenge.js b/js/admin-challenge.js
+new file mode 100644
+index 0000000..acde67d
+--- /dev/null
++++ b/js/admin-challenge.js
+@@ -0,0 +1,102 @@
++/* admin-challenge.js — مدیریت چالش (challenge-admin.html). توکن ادمین فقط توی sessionStorage مرورگر می‌مونه. */
++(() => {
++  const $ = (id) => document.getElementById(id);
++  const fa = (n) => Number(n || 0).toLocaleString("fa-IR");
++  const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
++  const palette = () => (window.CARA && window.CARA.palette) || [];
++  const hexOf = (c) => (palette().find((p) => p[0] === c) || [])[2] || "#8b72a4";
++  const fmt = (s) => new Date(s * 1000).toLocaleString("fa-IR", { dateStyle: "medium", timeStyle: "short" });
++  let token = sessionStorage.getItem("cara-admin") || "", currentId = "", entries = [];
++
++  async function api(path, options = {}) {
++    const res = await fetch(path, { cache: "no-store", ...options, headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" } });
++    const data = await res.json().catch(() => ({}));
++    if (res.status === 401) { const e = new Error("401"); e.auth = true; throw e; }
++    if (!res.ok) throw new Error(data.error || "درخواست ناموفق بود.");
++    return data;
++  }
++  const post = (body) => api("/api/admin/challenges", { method: "POST", body: JSON.stringify(body) });
++  const say = (t, bad) => { const m = $("msg"); m.textContent = t || ""; m.className = bad ? "err" : "ok"; };
++  function showLogin(err) { $("app").hidden = true; $("login").hidden = false; $("loginError").hidden = !err; $("loginError").textContent = err || ""; }
++  const guard = (fn) => async (...a) => { try { return await fn(...a); } catch (e) { if (e.auth) { sessionStorage.removeItem("cara-admin"); token = ""; showLogin("رمز اشتباهه یا منقضی شده."); } else say(e.message, true); } };
++
++  function draw(canvas, design) {
++    const rows = design && design.data; if (!Array.isArray(rows) || !rows.length) return;
++    const w = rows[0].length, cell = Math.max(4, Math.min(10, Math.floor(220 / w)));
++    canvas.width = w * cell; canvas.height = rows.length * cell; const ctx = canvas.getContext("2d"), r = cell / 2;
++    rows.forEach((row, y) => row.forEach((c, x) => { if (!c) return; ctx.fillStyle = hexOf(c); ctx.beginPath(); ctx.arc(x * cell + r, y * cell + r, Math.max(r - .6, 1), 0, 7); ctx.fill(); }));
++  }
++
++  function buildChips() {
++    const box = $("fColors"); box.replaceChildren();
++    palette().forEach((p) => { const l = el("label", "chip"), i = el("i"), cb = el("input"); cb.type = "checkbox"; cb.value = p[0]; i.style.background = p[2]; l.append(cb, i, document.createTextNode(p[1])); box.append(l); });
++  }
++
++  const loadList = guard(async () => {
++    const data = await api("/api/admin/challenges");
++    $("login").hidden = true; $("app").hidden = false;
++    const list = $("list"); list.replaceChildren();
++    if (!data.length) list.append(el("p", "muted", "هنوز چالشی نساختی."));
++    data.forEach((c) => {
++      const box = el("div", "box"), row = el("div", "row");
++      const info = el("div"); info.append(el("strong", "", c.title), el("div", "muted", c.theme || ""), el("div", "muted", fmt(c.startsAt) + " تا " + fmt(c.endsAt) + " · " + fa(c.entries) + " طرح (" + fa(c.pending) + " در انتظار تأیید)"));
++      const acts = el("div", "bar"); acts.append(el("span", "tag " + (c.open ? "approved" : "pending"), { draft: "پیش‌نویس", active: c.open ? "در جریان" : "فعال (خارج از بازه)", closed: "بسته" }[c.status]));
++      const open = el("button", "btn sm dark", "مدیریت طرح‌ها"); open.onclick = () => openChallenge(c);
++      acts.append(open);
++      [["active", "فعال کن"], ["closed", "ببند"], ["draft", "پیش‌نویس"]].filter(([s]) => s !== c.status).forEach(([s, label]) => {
++        const b = el("button", "btn sm", label); b.onclick = guard(async () => { await post({ action: "set-status", id: c.id, status: s }); await loadList(); }); acts.append(b);
++      });
++      row.append(info, acts); box.append(row); list.append(box);
++    });
++  });
++
++  function openChallenge(c) { currentId = c.id; $("detail").hidden = false; $("detailTitle").textContent = "طرح‌های «" + c.title + "»"; loadEntries(); $("detail").scrollIntoView({ behavior: "smooth" }); }
++
++  const loadEntries = guard(async () => { if (!currentId) return; const d = await api("/api/admin/challenges?id=" + encodeURIComponent(currentId)); entries = d.entries; renderEntries(); });
++
++  function winnerMessage(e, code, percent) {
++    return "سلام " + (e.nickname || "") + " 👋\nطرح «" + e.title + "» تو چالش هفتگی cara برنده شد! 🎉\nکد تخفیف " + percent + "٪ برای سفارش دستبند: " + code + "\n(این کد ۷ روز اعتبار داره؛ موقع سفارش توی فیلد کد تخفیف واردش کن.)";
++  }
++
++  function renderEntries() {
++    const f = $("filter").value, wrap = $("entries"); wrap.replaceChildren();
++    const shown = entries.filter((e) => f === "all" || e.status === f);
++    if (!shown.length) wrap.append(el("p", "muted", "طرحی نیست."));
++    shown.forEach((e) => {
++      const card = el("div", "entry"), cv = el("canvas"); draw(cv, e.design);
++      const contact = e.contact.username ? "@" + e.contact.username : (e.contact.displayName || "—");
++      card.append(cv, el("strong", "", e.title), el("div", "muted", "نام مستعار: " + e.nickname + " · رأی: " + fa(e.votes)),
++        el("div", "muted", "تماس: " + contact + (e.contact.telegramId ? " · شناسه‌ی تلگرام " + e.contact.telegramId : "")), el("span", "tag " + e.status, { pending: "در انتظار", approved: "تأییدشده", winner: "برنده", rejected: "ردشده" }[e.status]));
++      const acts = el("div", "bar");
++      [["approved", "تأیید"], ["rejected", "رد"], ["winner", "برنده"]].filter(([s]) => s !== e.status).forEach(([s, label]) => {
++        const b = el("button", "btn sm" + (s === "approved" ? " dark" : ""), label);
++        b.onclick = guard(async () => { await post({ action: "review", entryId: e.id, status: s }); await loadEntries(); }); acts.append(b);
++      });
++      if (e.status === "winner") {
++        const b = el("button", "btn sm dark", e.prizeCode ? "نمایش کد جایزه" : "ساخت کد جایزه");
++        b.onclick = guard(async () => {
++          const r = await post({ action: "prize", entryId: e.id }); e.prizeCode = r.code;
++          const old = card.querySelector(".prize-box"); if (old) old.remove();
++          const pb = el("div", "prize-box"), msg = winnerMessage(e, r.code, r.percent);
++          pb.append(el("div", "prize", r.code), el("pre", "muted", msg), (() => { const c = el("button", "btn sm", "کپی پیام"); c.onclick = () => navigator.clipboard.writeText(msg).then(() => say("پیام کپی شد.")); return c; })());
++          card.append(pb);
++        });
++        acts.append(b);
++      }
++      card.append(acts); wrap.append(card);
++    });
++  }
++
++  $("filter").onchange = renderEntries; $("reloadEntries").onclick = loadEntries;
++  $("logout").onclick = () => { sessionStorage.removeItem("cara-admin"); token = ""; showLogin(); };
++  $("loginForm").onsubmit = (ev) => { ev.preventDefault(); token = $("token").value.trim(); if (!token) return; sessionStorage.setItem("cara-admin", token); loadList(); };
++  $("newForm").onsubmit = guard(async (ev) => {
++    ev.preventDefault();
++    const colors = [...$("fColors").querySelectorAll("input:checked")].map((i) => i.value);
++    const r = await post({ action: "create", title: $("fTitle").value, theme: $("fTheme").value, rules: $("fRules").value, allowedColors: colors,
++      startsAt: new Date($("fStart").value).toISOString(), endsAt: new Date($("fEnd").value).toISOString(), prizePercent: Number($("fPrize").value), status: $("fStatus").value });
++    say("چالش ساخته شد."); $("newForm").reset(); buildChips(); await loadList();
++  });
++  const boot = () => { buildChips(); if (token) loadList(); else showLogin(); };
++  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
++})();
+diff --git a/js/challenge.js b/js/challenge.js
+new file mode 100644
+index 0000000..beabaf1
+--- /dev/null
++++ b/js/challenge.js
+@@ -0,0 +1,152 @@
++/* challenge.js — صفحه‌ی چالش هفتگی (challenge.html). همه‌ی متن‌ها فقط با textContent وارد صفحه می‌شن. */
++(() => {
++  const $ = (id) => document.getElementById(id);
++  const fa = (n) => Number(n || 0).toLocaleString("fa-IR");
++  const palette = () => (window.CARA && window.CARA.palette) || [];
++  const colorOf = (code) => (palette().find((p) => p[0] === code) || [])[2] || "#8b72a4";
++  const nameOf = (code) => (palette().find((p) => p[0] === code) || [])[1] || code;
++  const el = (tag, cls, text) => { const n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; };
++  let state = null, timer = null;
++
++  async function api(path, options = {}) {
++    const res = await fetch(path, { credentials: "same-origin", cache: "no-store", ...options, headers: { "Content-Type": "application/json", ...(options.headers || {}) } });
++    let data = {}; try { data = await res.json(); } catch {}
++    if (!res.ok) { const e = new Error(data.error || "مشکلی پیش اومد؛ دوباره امتحان کن."); e.status = res.status; e.data = data; throw e; }
++    return data;
++  }
++  function say(text, isError) { const m = $("chlMessage"); m.textContent = text || ""; m.classList.toggle("is-error", !!isError); m.hidden = !text; }
++
++  function drawPattern(canvas, design) {
++    const rows = design && design.data; if (!Array.isArray(rows) || !rows.length) return;
++    const w = rows[0].length, h = rows.length, cell = Math.max(4, Math.min(12, Math.floor(240 / Math.max(w, 1))));
++    canvas.width = w * cell; canvas.height = h * cell;
++    const ctx = canvas.getContext("2d"), r = cell / 2;
++    rows.forEach((row, y) => row.forEach((c, x) => {
++      if (!c) return; ctx.fillStyle = colorOf(c); ctx.beginPath(); ctx.arc(x * cell + r, y * cell + r, Math.max(r - .6, 1), 0, Math.PI * 2); ctx.fill();
++    }));
++  }
++  const codesOf = (design) => { const s = new Set(); (design && design.data || []).forEach((row) => row.forEach((c) => c && s.add(c))); return [...s]; };
++  const studioDesign = () => { try { const d = JSON.parse(localStorage.getItem("cara-pattern") || "null"); return d && Array.isArray(d.data) && d.data.length ? d : null; } catch { return null; } };
++
++  function tick() {
++    const c = state && state.challenge, box = $("chlTimer");
++    if (!c || !c.open) { box.hidden = true; return; }
++    const left = c.endsAt - Math.floor(Date.now() / 1000);
++    if (left <= 0) { box.hidden = true; return; }
++    const d = Math.floor(left / 86400), h = Math.floor(left % 86400 / 3600), m = Math.floor(left % 3600 / 60);
++    box.textContent = "مهلت: " + (d ? fa(d) + " روز و " : "") + fa(h) + " ساعت" + (d ? "" : " و " + fa(m) + " دقیقه") + " مانده";
++    box.hidden = false;
++  }
++
++  function renderHeader() {
++    const c = state.challenge, up = state.upcoming;
++    if (c) { $("chlTitle").textContent = c.title; $("chlTheme").textContent = c.theme || "طرحت رو بساز، رأی بگیر و جایزه ببر."; }
++    if (c && c.open) say("");
++    else if (c) say("این چالش تموم شده. برنده‌ها پایین هستن؛ چالش بعدی به‌زودی میاد.");
++    else if (up) say("چالش بعدی «" + up.title + "» از " + new Date(up.startsAt * 1000).toLocaleDateString("fa-IR", { dateStyle: "long" }) + " شروع می‌شه.");
++    else say("الان چالش فعالی نداریم؛ به‌زودی یه چالش تازه میاد. تا اون موقع توی استودیو طراحی کن.");
++    tick(); clearInterval(timer); timer = setInterval(tick, 30000);
++  }
++
++  function renderInfo() {
++    const c = state.challenge, show = !!(c && c.open);
++    $("chlInfo").hidden = !show; if (!show) return;
++    $("chlRules").textContent = c.rules || "هر نفر یک طرح می‌تونه ثبت کنه و هر کس به هر طرح فقط یک رأی می‌ده.";
++    const colors = $("chlColors"); colors.replaceChildren();
++    c.allowedColors.forEach((code) => { const i = el("i"); i.style.background = colorOf(code); i.title = nameOf(code) + " (" + code + ")"; colors.append(i); });
++    $("chlColorsBox").hidden = !c.allowedColors.length;
++    $("chlPrize").textContent = "جایزه‌ی برنده: " + fa(c.prizePercent) + "٪ کد تخفیف برای سفارش دستبند (۷ روز اعتبار)";
++  }
++
++  function renderJoin() {
++    const c = state.challenge, box = $("chlJoin"), body = $("chlJoinBody");
++    box.hidden = !(c && c.open); if (box.hidden) return; body.replaceChildren();
++    if (!state.loggedIn) {
++      body.append(el("p", "", "برای شرکت یا رأی‌دادن اول با تلگرام وارد شو؛ ثبت‌نام جدا لازم نیست."), Object.assign(el("a", "chl-btn chl-btn--primary", "ورود با تلگرام"), { href: "/account.html" }));
++      return;
++    }
++    const mine = state.entries.find((e) => e.mine);
++    if (mine) {
++      const label = { pending: "در انتظار تأیید ما", approved: "تأیید شد و توی لیست هست", rejected: "تأیید نشد", winner: "برنده شدی! 🎉" }[mine.status] || "";
++      body.append(el("p", "", "طرح «" + mine.title + "» ثبت شده. وضعیت: " + label));
++      if (mine.status !== "winner") {
++        const row = el("div", "chl-actions"), del = el("button", "chl-btn", "حذف طرحم"); del.type = "button";
++        del.onclick = async () => { if (!confirm("طرحت از چالش حذف بشه؟")) return; try { await api("/api/challenge/entries/" + mine.id, { method: "DELETE" }); await load(); } catch (e) { say(e.message, true); } };
++        row.append(del); body.append(row);
++      }
++      body.append(el("p", "chl-by", "می‌خوای عوضش کنی؟ طرح جدیدت رو از استودیو بیار و دوباره ثبت کن؛ جایگزین قبلی می‌شه و رأی‌ها صفر می‌شن."));
++    }
++    const design = studioDesign();
++    if (!design) {
++      body.append(el("p", "", "هنوز توی استودیو طرحی نساختی. اول طرحت رو بساز، بعد برگرد همین‌جا ثبتش کن."), Object.assign(el("a", "chl-btn chl-btn--primary", "رفتن به استودیو"), { href: "/builder.html" }));
++      return;
++    }
++    const bad = c.allowedColors.length ? codesOf(design).filter((x) => !c.allowedColors.includes(x)) : [];
++    const canvas = el("canvas", "chl-preview"); drawPattern(canvas, design);
++    body.append(el("p", "", "آخرین طرح استودیوی تو:"), canvas);
++    if (bad.length) {
++      body.append(el("p", "chl-msg is-error", "این طرح رنگ‌های غیرمجاز داره: " + bad.map(nameOf).join("، ") + ". توی استودیو عوضشون کن و دوباره بیا."), Object.assign(el("a", "chl-btn", "برگشت به استودیو"), { href: "/builder.html" }));
++      return;
++    }
++    const form = el("form", "chl-form"), t = el("input"), n = el("input"), btn = el("button", "chl-btn chl-btn--primary", mine ? "ثبت دوباره (جایگزین قبلی)" : "ثبت طرح توی چالش");
++    t.maxLength = 60; t.required = true; n.maxLength = 30; n.required = true; btn.type = "submit";
++    try { n.value = localStorage.getItem("cara-chl-nick") || ""; } catch {}
++    const l1 = el("label", "", "اسم طرح"), l2 = el("label", "", "نام مستعار (فقط همین به بقیه نشون داده می‌شه)");
++    l1.append(t); l2.append(n); form.append(l1, l2, btn);
++    form.onsubmit = async (ev) => {
++      ev.preventDefault(); btn.disabled = true;
++      try {
++        await api("/api/challenge/entries", { method: "POST", body: JSON.stringify({ title: t.value, nickname: n.value, design }) });
++        try { localStorage.setItem("cara-chl-nick", n.value); } catch {}
++        await load(); say("طرحت ثبت شد و بعد از تأیید توی لیست میاد. 🎉");
++      } catch (e) { say(e.status === 401 ? "نشستت تموم شده؛ دوباره با تلگرام وارد شو." : e.message, true); btn.disabled = false; }
++    };
++    body.append(form);
++  }
++
++  function entryCard(e, open) {
++    const card = el("article", "chl-card"); card.id = "e-" + e.id;
++    const canvas = el("canvas"); canvas.setAttribute("role", "img"); canvas.setAttribute("aria-label", "طرح " + e.title); drawPattern(canvas, e.design);
++    card.append(canvas);
++    if (e.winner) card.append(el("span", "chl-badge", "برنده 🏆"));
++    else if (e.mine) card.append(el("span", "chl-badge is-mine", { pending: "طرح تو · در انتظار تأیید", approved: "طرح تو", rejected: "طرح تو · تأیید نشد" }[e.status] || "طرح تو"));
++    card.append(el("h3", "", e.title), el("p", "chl-by", "از " + e.nickname));
++    const row = el("div", "chl-row");
++    const vote = el("button", "chl-btn chl-vote", "♥ " + fa(e.votes)); vote.type = "button"; vote.setAttribute("aria-pressed", String(!!e.voted));
++    vote.setAttribute("aria-label", "رأی به " + e.title + "، الان " + fa(e.votes) + " رأی");
++    vote.disabled = !open || e.mine || e.status === "pending" || e.status === "rejected";
++    vote.onclick = async () => {
++      if (!state.loggedIn) { say("برای رأی‌دادن اول با تلگرام وارد شو.", true); return; }
++      vote.disabled = true;
++      try { const r = await api("/api/challenge/entries/" + e.id + "/vote", { method: "POST" }); e.voted = r.voted; e.votes = r.votes; vote.textContent = "♥ " + fa(r.votes); vote.setAttribute("aria-pressed", String(r.voted)); }
++      catch (err) { say(err.message, true); } finally { vote.disabled = false; }
++    };
++    const share = el("button", "chl-btn", "اشتراک"); share.type = "button";
++    share.onclick = async () => {
++      const url = location.origin + "/challenge.html#e-" + e.id;
++      try { if (navigator.share) await navigator.share({ title: e.title + " | چالش cara", url }); else { await navigator.clipboard.writeText(url); say("لینک طرح کپی شد."); } } catch {}
++    };
++    if (e.status === "approved" || e.winner) row.append(vote, share); else row.append(vote);
++    card.append(row); return card;
++  }
++
++  function renderEntries() {
++    const c = state.challenge, grid = $("chlGrid"); grid.replaceChildren();
++    $("chlEntriesBox").hidden = !c;
++    if (!c) return;
++    $("chlEntriesNote").textContent = state.entries.length ? "هر نفر به هر طرح یک رأی می‌ده و به طرح خودش نمی‌تونه." : "هنوز طرحی تأیید نشده؛ اولین نفر باش!";
++    state.entries.forEach((e) => grid.append(entryCard(e, c.open)));
++    const win = $("chlWinGrid"); win.replaceChildren();
++    state.winners.forEach((w) => { const card = el("article", "chl-card"); const cv = el("canvas"); drawPattern(cv, w.design); card.append(cv, el("span", "chl-badge", "برنده 🏆"), el("h3", "", w.title), el("p", "chl-by", "از " + w.nickname + " · " + w.challengeTitle)); win.append(card); });
++    $("chlWinBox").hidden = !state.winners.length;
++    const target = location.hash.startsWith("#e-") ? document.getElementById(location.hash.slice(1)) : null;
++    if (target) { target.classList.add("is-target"); target.scrollIntoView({ block: "center" }); }
++  }
++
++  async function load() {
++    try { state = await api("/api/challenge"); }
++    catch (e) { say("الان نمی‌تونم چالش رو بیارم؛ کمی بعد دوباره سر بزن.", true); return; }
++    renderHeader(); renderInfo(); renderJoin(); renderEntries();
++  }
++  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", load); else load();
++})();
+diff --git a/lib/accounts.mjs b/lib/accounts.mjs
+index 4724921..d79c18b 100644
+--- a/lib/accounts.mjs
++++ b/lib/accounts.mjs
+@@ -257,4 +257,4 @@ export async function handleAccountRequest(request, env, url, rateLimit, validat
+   return json({ error: "not found" }, 404);
+ }
+ 
+-export { SESSION_COOKIE, SESSION_TTL, sha256 };
++export { SESSION_COOKIE, SESSION_TTL, sha256, requestIsSameOrigin };
+diff --git a/lib/challenge.mjs b/lib/challenge.mjs
+new file mode 100644
+index 0000000..973c52a
+--- /dev/null
++++ b/lib/challenge.mjs
+@@ -0,0 +1,221 @@
++/* challenge.mjs — چالش طراحی هفتگی cara.
++   عمومی:  GET /api/challenge · POST /api/challenge/entries · DELETE /api/challenge/entries/:id · POST /api/challenge/entries/:id/vote
++   ادمین:  GET|POST /api/admin/challenges  (با ADMIN_TOKEN؛ بررسی‌اش با adminGuard از index.js می‌آد)
++   قانون‌ها: ورود با تلگرام لازمه، هر کاربر یک طرح و یک رأی برای هر طرح، فقط نام مستعار نمایش داده می‌شه،
++   و طرح‌ها تا تأیید ادمین عمومی نیستن. */
++import { getAccountUser, requestIsSameOrigin } from "./accounts.mjs";
++
++const json = (value, status = 200) => new Response(JSON.stringify(value), {
++  status, headers: { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" },
++});
++const clean = (v, max) => String(v || "").replace(/[\u0000-\u001f\u007f]/g, "").replace(/\s+/g, " ").trim().slice(0, max);
++const nowSec = () => Math.floor(Date.now() / 1000);
++const parseColors = (text) => { try { const a = JSON.parse(text || "[]"); return Array.isArray(a) ? a.map(String) : []; } catch { return []; } };
++const parseDesign = (text) => { try { return JSON.parse(text); } catch { return null; } };
++const toSec = (v) => {
++  if (typeof v === "number" && Number.isFinite(v)) return Math.floor(v > 1e11 ? v / 1000 : v);
++  const t = Date.parse(String(v || ""));
++  return Number.isFinite(t) ? Math.floor(t / 1000) : NaN;
++};
++const isOpen = (c, t = nowSec()) => !!c && c.status === "active" && c.starts_at <= t && c.ends_at >= t;
++
++const publicChallenge = (c, t = nowSec()) => c && ({
++  id: c.id, title: c.title, theme: c.theme, rules: c.rules, allowedColors: parseColors(c.allowed_colors),
++  prizePercent: c.prize_percent, startsAt: c.starts_at, endsAt: c.ends_at, status: c.status, open: isOpen(c, t),
++});
++
++async function currentChallenge(db, t) {
++  const open = await db.prepare("SELECT * FROM challenges WHERE status = 'active' AND starts_at <= ? AND ends_at >= ? ORDER BY starts_at DESC LIMIT 1").bind(t, t).first();
++  if (open) return { challenge: open, upcoming: null };
++  const upcoming = await db.prepare("SELECT * FROM challenges WHERE status = 'active' AND starts_at > ? ORDER BY starts_at ASC LIMIT 1").bind(t).first();
++  const last = await db.prepare("SELECT * FROM challenges WHERE status = 'closed' OR (status = 'active' AND ends_at < ?) ORDER BY ends_at DESC LIMIT 1").bind(t).first();
++  return { challenge: last || null, upcoming: upcoming || null };
++}
++
++const ENTRY_SELECT = `SELECT e.id, e.title, e.nickname, e.design_json, e.status, e.user_id, e.created_at,
++    (SELECT COUNT(*) FROM challenge_votes v WHERE v.entry_id = e.id) AS votes,
++    (SELECT 1 FROM challenge_votes v WHERE v.entry_id = e.id AND v.user_id = ?) AS voted
++  FROM challenge_entries e`;
++
++async function publicState(request, env) {
++  const db = env.ACCOUNTS_DB, t = nowSec();
++  const user = await getAccountUser(request, env);
++  const { challenge, upcoming } = await currentChallenge(db, t);
++  let entries = [];
++  if (challenge) {
++    const rows = await db.prepare(`${ENTRY_SELECT} WHERE e.challenge_id = ? AND (e.status IN ('approved', 'winner') OR e.user_id = ?)
++      ORDER BY (e.status = 'winner') DESC, votes DESC, e.created_at ASC LIMIT 80`).bind(user ? user.id : "", challenge.id, user ? user.id : "").all();
++    entries = (rows.results || []).map((r) => ({
++      id: r.id, title: r.title, nickname: r.nickname, design: parseDesign(r.design_json), votes: Number(r.votes) || 0,
++      voted: !!r.voted, winner: r.status === "winner", mine: !!user && r.user_id === user.id,
++      ...(user && r.user_id === user.id ? { status: r.status } : {}),
++    }));
++  }
++  const w = await db.prepare(`SELECT e.id, e.title, e.nickname, e.design_json, c.title AS challenge_title FROM challenge_entries e
++    JOIN challenges c ON c.id = e.challenge_id WHERE e.status = 'winner' ORDER BY c.ends_at DESC LIMIT 12`).all();
++  return {
++    now: t, loggedIn: !!user, challenge: publicChallenge(challenge, t), upcoming: publicChallenge(upcoming, t), entries,
++    winners: (w.results || []).map((r) => ({ id: r.id, title: r.title, nickname: r.nickname, challengeTitle: r.challenge_title, design: parseDesign(r.design_json) })),
++  };
++}
++
++async function submitEntry(request, env, o) {
++  if (!requestIsSameOrigin(request, env)) return json({ error: "درخواست معتبر نیست." }, 403);
++  const user = await getAccountUser(request, env);
++  if (!user) return json({ error: "برای شرکت توی چالش اول با تلگرام وارد شو." }, 401);
++  if (!(await o.rateLimit(env, "chal:entry:" + user.id, 10, 3600 * 1000))) return json({ error: "خیلی سریع شد؛ چند دقیقه‌ی دیگه دوباره امتحان کن." }, 429);
++  let body; try { body = await request.json(); } catch { return json({ error: "اطلاعات معتبر نیست." }, 400); }
++  const title = clean(body && body.title, 60), nickname = clean(body && body.nickname, 30);
++  if (title.length < 2) return json({ error: "برای طرحت یه اسم بنویس (حداقل ۲ حرف)." }, 400);
++  if (nickname.length < 2) return json({ error: "یه نام مستعار بنویس؛ فقط همین اسم به بقیه نشون داده می‌شه." }, 400);
++  const raw = body && body.design;
++  const design = raw ? o.cleanPattern(raw) : null;
++  if (!design || design.width > 40 || design.height > 200 || new TextEncoder().encode(JSON.stringify(design)).length > 32000)
++    return json({ error: "طرح معتبر نیست یا از اندازه‌ی مجاز بزرگ‌تره." }, 400);
++  const db = env.ACCOUNTS_DB, t = nowSec();
++  const challenge = await db.prepare("SELECT * FROM challenges WHERE status = 'active' AND starts_at <= ? AND ends_at >= ? ORDER BY starts_at DESC LIMIT 1").bind(t, t).first();
++  if (!challenge) return json({ error: "الان چالش بازی در جریان نیست." }, 409);
++  const allowed = parseColors(challenge.allowed_colors);
++  if (allowed.length) {
++    const bad = Object.keys(design.counts || {}).filter((c) => !allowed.includes(c));
++    if (bad.length) return json({ error: "این طرح رنگ‌های خارج از لیست چالش داره.", disallowed: bad }, 400);
++  }
++  const existing = await db.prepare("SELECT id, status FROM challenge_entries WHERE challenge_id = ? AND user_id = ?").bind(challenge.id, user.id).first();
++  if (existing && existing.status === "winner") return json({ error: "طرح برنده رو دیگه نمی‌شه عوض کرد." }, 409);
++  const id = existing ? existing.id : crypto.randomUUID();
++  const stmts = [];
++  if (existing) stmts.push(db.prepare("DELETE FROM challenge_votes WHERE entry_id = ?").bind(id));
++  stmts.push(db.prepare(`INSERT INTO challenge_entries (id, challenge_id, user_id, title, nickname, design_json, status, created_at, updated_at)
++    VALUES (?, ?, ?, ?, ?, ?, 'pending', ?, ?)
++    ON CONFLICT(challenge_id, user_id) DO UPDATE SET title = excluded.title, nickname = excluded.nickname,
++      design_json = excluded.design_json, status = 'pending', updated_at = excluded.updated_at`)
++    .bind(id, challenge.id, user.id, title, nickname, JSON.stringify(design), t, t));
++  await db.batch(stmts);
++  return json({ ok: true, id, status: "pending", replaced: !!existing }, existing ? 200 : 201);
++}
++
++async function deleteEntry(request, env, id) {
++  if (!requestIsSameOrigin(request, env)) return json({ error: "درخواست معتبر نیست." }, 403);
++  const user = await getAccountUser(request, env);
++  if (!user) return json({ error: "اول وارد شو." }, 401);
++  const row = await env.ACCOUNTS_DB.prepare("SELECT status FROM challenge_entries WHERE id = ? AND user_id = ?").bind(id, user.id).first();
++  if (!row) return json({ error: "طرح پیدا نشد." }, 404);
++  if (row.status === "winner") return json({ error: "برای حذف طرح برنده با ما تماس بگیر." }, 409);
++  await env.ACCOUNTS_DB.prepare("DELETE FROM challenge_entries WHERE id = ? AND user_id = ?").bind(id, user.id).run();
++  return json({ ok: true });
++}
++
++async function toggleVote(request, env, id, o) {
++  if (!requestIsSameOrigin(request, env)) return json({ error: "درخواست معتبر نیست." }, 403);
++  const user = await getAccountUser(request, env);
++  if (!user) return json({ error: "برای رأی دادن اول با تلگرام وارد شو." }, 401);
++  if (!(await o.rateLimit(env, "chal:vote:" + user.id, 60, 3600 * 1000))) return json({ error: "خیلی سریع شد؛ کمی بعد دوباره امتحان کن." }, 429);
++  const db = env.ACCOUNTS_DB, t = nowSec();
++  const entry = await db.prepare(`SELECT e.id, e.user_id, c.status AS cstatus, c.starts_at, c.ends_at FROM challenge_entries e
++    JOIN challenges c ON c.id = e.challenge_id WHERE e.id = ? AND e.status IN ('approved', 'winner')`).bind(id).first();
++  if (!entry) return json({ error: "طرح پیدا نشد." }, 404);
++  if (!isOpen({ status: entry.cstatus, starts_at: entry.starts_at, ends_at: entry.ends_at }, t)) return json({ error: "رأی‌گیری این چالش بسته شده." }, 409);
++  if (entry.user_id === user.id) return json({ error: "به طرح خودت نمی‌تونی رأی بدی." }, 403);
++  const had = await db.prepare("SELECT 1 AS x FROM challenge_votes WHERE entry_id = ? AND user_id = ?").bind(id, user.id).first();
++  if (had) await db.prepare("DELETE FROM challenge_votes WHERE entry_id = ? AND user_id = ?").bind(id, user.id).run();
++  else await db.prepare("INSERT INTO challenge_votes (entry_id, user_id, created_at) VALUES (?, ?, ?)").bind(id, user.id, t).run();
++  const n = await db.prepare("SELECT COUNT(*) AS n FROM challenge_votes WHERE entry_id = ?").bind(id).first();
++  return json({ ok: true, voted: !had, votes: Number(n && n.n) || 0 });
++}
++
++/* ===== ادمین ===== */
++async function adminList(env, url) {
++  const db = env.ACCOUNTS_DB, id = url.searchParams.get("id");
++  if (id) {
++    const c = await db.prepare("SELECT * FROM challenges WHERE id = ?").bind(id).first();
++    if (!c) return json({ error: "چالش پیدا نشد." }, 404);
++    const rows = await db.prepare(`SELECT e.id, e.title, e.nickname, e.design_json, e.status, e.prize_code, e.created_at,
++        (SELECT COUNT(*) FROM challenge_votes v WHERE v.entry_id = e.id) AS votes,
++        p.display_name, p.username, t.provider_subject AS telegram_id
++      FROM challenge_entries e LEFT JOIN user_profiles p ON p.user_id = e.user_id
++      LEFT JOIN identity_links t ON t.user_id = e.user_id AND t.provider = 'telegram'
++      WHERE e.challenge_id = ? ORDER BY (e.status = 'pending') DESC, votes DESC, e.created_at ASC LIMIT 300`).bind(id).all();
++    return json({
++      challenge: { ...publicChallenge(c), draft: c.status === "draft" },
++      entries: (rows.results || []).map((r) => ({
++        id: r.id, title: r.title, nickname: r.nickname, design: parseDesign(r.design_json), status: r.status, votes: Number(r.votes) || 0,
++        prizeCode: r.prize_code || null, createdAt: r.created_at,
++        contact: { displayName: r.display_name || "", username: r.username || null, telegramId: r.telegram_id || null },
++      })),
++    });
++  }
++  const rows = await db.prepare(`SELECT c.*, (SELECT COUNT(*) FROM challenge_entries e WHERE e.challenge_id = c.id) AS entries,
++      (SELECT COUNT(*) FROM challenge_entries e WHERE e.challenge_id = c.id AND e.status = 'pending') AS pending
++    FROM challenges c ORDER BY c.starts_at DESC LIMIT 100`).all();
++  return json((rows.results || []).map((c) => ({ ...publicChallenge(c), entries: Number(c.entries) || 0, pending: Number(c.pending) || 0 })));
++}
++
++function readFields(b, isValidColor) {
++  const title = clean(b.title, 80), theme = clean(b.theme, 160), rules = String(b.rules || "").replace(/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/g, "").trim().slice(0, 1000);
++  const startsAt = toSec(b.startsAt), endsAt = toSec(b.endsAt);
++  const colors = Array.isArray(b.allowedColors) ? [...new Set(b.allowedColors.map(String))] : [];
++  const percent = Math.round(Number(b.prizePercent == null ? 20 : b.prizePercent));
++  if (title.length < 3) return { error: "عنوان چالش حداقل ۳ حرف باشه." };
++  if (!Number.isFinite(startsAt) || !Number.isFinite(endsAt) || endsAt <= startsAt) return { error: "تاریخ شروع و پایان معتبر نیست (پایان باید بعد از شروع باشه)." };
++  if (colors.length > 40 || colors.some((c) => !isValidColor(c))) return { error: "یکی از رنگ‌های انتخاب‌شده توی پالت cara نیست." };
++  if (!(percent >= 5 && percent <= 50)) return { error: "درصد جایزه باید بین ۵ تا ۵۰ باشه." };
++  return { title, theme, rules, startsAt, endsAt, colors, percent };
++}
++
++async function adminAction(request, env, o) {
++  let b; try { b = await request.json(); } catch { return json({ error: "bad request" }, 400); }
++  const db = env.ACCOUNTS_DB, t = nowSec(), action = String(b && b.action || "");
++  if (action === "create" || action === "update") {
++    const f = readFields(b, o.isValidColor); if (f.error) return json({ error: f.error }, 400);
++    const status = ["draft", "active", "closed"].includes(b.status) ? b.status : "draft";
++    if (action === "create") {
++      const id = crypto.randomUUID();
++      await db.prepare(`INSERT INTO challenges (id, title, theme, rules, allowed_colors, prize_percent, starts_at, ends_at, status, created_at, updated_at)
++        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`).bind(id, f.title, f.theme, f.rules, JSON.stringify(f.colors), f.percent, f.startsAt, f.endsAt, status, t, t).run();
++      return json({ ok: true, id }, 201);
++    }
++    const r = await db.prepare(`UPDATE challenges SET title = ?, theme = ?, rules = ?, allowed_colors = ?, prize_percent = ?, starts_at = ?, ends_at = ?, status = ?, updated_at = ? WHERE id = ?`)
++      .bind(f.title, f.theme, f.rules, JSON.stringify(f.colors), f.percent, f.startsAt, f.endsAt, status, t, String(b.id || "")).run();
++    return json({ ok: true, changed: Number(r.meta && r.meta.changes || 0) });
++  }
++  if (action === "set-status") {
++    if (!["draft", "active", "closed"].includes(b.status)) return json({ error: "وضعیت نامعتبر." }, 400);
++    const r = await db.prepare("UPDATE challenges SET status = ?, updated_at = ? WHERE id = ?").bind(b.status, t, String(b.id || "")).run();
++    return json({ ok: true, changed: Number(r.meta && r.meta.changes || 0) });
++  }
++  if (action === "review") {
++    if (!["pending", "approved", "rejected", "winner"].includes(b.status)) return json({ error: "وضعیت نامعتبر." }, 400);
++    const r = await db.prepare("UPDATE challenge_entries SET status = ?, updated_at = ? WHERE id = ?").bind(b.status, t, String(b.entryId || "")).run();
++    return json({ ok: true, changed: Number(r.meta && r.meta.changes || 0) });
++  }
++  if (action === "prize") {
++    const e = await db.prepare(`SELECT e.id, e.status, e.prize_code, c.prize_percent FROM challenge_entries e JOIN challenges c ON c.id = e.challenge_id WHERE e.id = ?`).bind(String(b.entryId || "")).first();
++    if (!e) return json({ error: "طرح پیدا نشد." }, 404);
++    if (e.status !== "winner") return json({ error: "اول این طرح رو «برنده» کن." }, 409);
++    if (e.prize_code) return json({ ok: true, code: e.prize_code, percent: e.prize_percent, existing: true, validDays: 7 });
++    const code = await o.mintCode(env, e.prize_percent);
++    await db.prepare("UPDATE challenge_entries SET prize_code = ?, updated_at = ? WHERE id = ?").bind(code, t, e.id).run();
++    return json({ ok: true, code, percent: e.prize_percent, validDays: 7 });
++  }
++  return json({ error: "action نامعتبر." }, 400);
++}
++
++/* o: { rateLimit, cleanPattern, mintCode, isValidColor, adminGuard } */
++export async function handleChallengeRequest(request, env, url, o) {
++  const p = url.pathname, m = request.method;
++  if (p !== "/api/challenge" && !p.startsWith("/api/challenge/") && p !== "/api/admin/challenges") return null;
++  if (!env.ACCOUNTS_DB) return json({ error: "پایگاه داده در دسترس نیست." }, 503);
++  if (p === "/api/admin/challenges") {
++    const denied = await o.adminGuard(request); if (denied) return denied;
++    if (m === "GET") return adminList(env, url);
++    if (m === "POST") return adminAction(request, env, o);
++    return json({ error: "method not allowed" }, 405);
++  }
++  if (p === "/api/challenge" && m === "GET") return json(await publicState(request, env));
++  if (p === "/api/challenge/entries" && m === "POST") return submitEntry(request, env, o);
++  let mt = p.match(/^\/api\/challenge\/entries\/([0-9a-f-]{36})$/i);
++  if (mt && m === "DELETE") return deleteEntry(request, env, mt[1]);
++  mt = p.match(/^\/api\/challenge\/entries\/([0-9a-f-]{36})\/vote$/i);
++  if (mt && m === "POST") return toggleVote(request, env, mt[1], o);
++  return json({ error: "not found" }, 404);
++}
+diff --git a/migrations/0005_challenges.sql b/migrations/0005_challenges.sql
+new file mode 100644
+index 0000000..e928d04
+--- /dev/null
++++ b/migrations/0005_challenges.sql
+@@ -0,0 +1,40 @@
++-- Weekly design challenge: challenges, one entry per user per challenge, and one vote per user per entry.
++-- Entries stay 'pending' until an admin approves them; only approved/winner entries are public.
++PRAGMA foreign_keys = ON;
++
++CREATE TABLE IF NOT EXISTS challenges (
++  id TEXT PRIMARY KEY,
++  title TEXT NOT NULL,
++  theme TEXT NOT NULL DEFAULT '',
++  rules TEXT NOT NULL DEFAULT '',
++  allowed_colors TEXT NOT NULL DEFAULT '[]',      -- JSON array of bead codes; [] = every color
++  prize_percent INTEGER NOT NULL DEFAULT 20 CHECK (prize_percent BETWEEN 5 AND 50),
++  starts_at INTEGER NOT NULL,
++  ends_at INTEGER NOT NULL,
++  status TEXT NOT NULL DEFAULT 'draft' CHECK (status IN ('draft', 'active', 'closed')),
++  created_at INTEGER NOT NULL,
++  updated_at INTEGER NOT NULL
++);
++CREATE INDEX IF NOT EXISTS challenges_status_idx ON challenges(status, starts_at, ends_at);
++
++CREATE TABLE IF NOT EXISTS challenge_entries (
++  id TEXT PRIMARY KEY,
++  challenge_id TEXT NOT NULL REFERENCES challenges(id) ON DELETE CASCADE,
++  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
++  title TEXT NOT NULL,
++  nickname TEXT NOT NULL,                          -- the only name ever shown publicly
++  design_json TEXT NOT NULL,
++  status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected', 'winner')),
++  prize_code TEXT,
++  created_at INTEGER NOT NULL,
++  updated_at INTEGER NOT NULL,
++  UNIQUE (challenge_id, user_id)
++);
++CREATE INDEX IF NOT EXISTS challenge_entries_public_idx ON challenge_entries(challenge_id, status);
++
++CREATE TABLE IF NOT EXISTS challenge_votes (
++  entry_id TEXT NOT NULL REFERENCES challenge_entries(id) ON DELETE CASCADE,
++  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
++  created_at INTEGER NOT NULL,
++  PRIMARY KEY (entry_id, user_id)
++);
+diff --git a/name-bracelet.html b/name-bracelet.html
+index c6cdd98..ac9b443 100644
+--- a/name-bracelet.html
++++ b/name-bracelet.html
+@@ -127,7 +127,7 @@
+         <nav class="sh__nav" id="shNav" aria-label="منوی اصلی">
+           <a href="/builder.html">طراحی دستبند</a
+           ><a href="/upload.html">عکس به الگو</a
+-          ><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a
++          ><a href="/gallery.html">گالری</a><a href="/challenge.html">چالش</a><a href="/game.html">بازی</a
+           ><a href="/account.html">حساب کاربری</a
+           ><a href="/cart.html">سبد خرید</a
+           ><a class="sh__cta" href="/checkout.html">سفارش</a>
+diff --git a/robots.txt b/robots.txt
+index bb4d361..1ae78c2 100644
+--- a/robots.txt
++++ b/robots.txt
+@@ -2,6 +2,7 @@ User-agent: *
+ Allow: /
+ Disallow: /admin.html
+ Disallow: /checkout.html
++Disallow: /challenge-admin.html
+ Disallow: /api/
+ 
+ Sitemap: https://caraw.ir/sitemap.xml
+diff --git a/sitemap.xml b/sitemap.xml
+index fa1f505..135b883 100644
+--- a/sitemap.xml
++++ b/sitemap.xml
+@@ -4,6 +4,7 @@
+   <url><loc>https://caraw.ir/builder.html</loc><lastmod>2026-11-18</lastmod><priority>0.6</priority></url>
+   <url><loc>https://caraw.ir/upload.html</loc><lastmod>2026-11-18</lastmod><priority>0.6</priority></url>
+   <url><loc>https://caraw.ir/gallery.html</loc><lastmod>2026-11-18</lastmod><priority>0.8</priority></url>
++  <url><loc>https://caraw.ir/challenge.html</loc><lastmod>2026-11-18</lastmod><priority>0.7</priority></url>
+   <url><loc>https://caraw.ir/game.html</loc><lastmod>2026-11-18</lastmod><priority>0.6</priority></url>
+   <url><loc>https://caraw.ir/name-bracelet.html</loc><lastmod>2026-11-18</lastmod><priority>0.8</priority></url>
+   <url><loc>https://caraw.ir/colors/</loc><lastmod>2026-11-18</lastmod><priority>0.6</priority></url>
+diff --git a/test/challenge.test.mjs b/test/challenge.test.mjs
+new file mode 100644
+index 0000000..8076fc1
+--- /dev/null
++++ b/test/challenge.test.mjs
+@@ -0,0 +1,155 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import fs from "node:fs";
++import { handleChallengeRequest } from "../lib/challenge.mjs";
++import { sha256 } from "../lib/accounts.mjs";
++
++/* تست روی SQLite واقعی (node:sqlite). Node 20 توی CI اینو نداره؛ اون‌جا تست‌ها skip می‌شن. */
++let DatabaseSync = null;
++try { ({ DatabaseSync } = await import("node:sqlite")); } catch {}
++const skip = !DatabaseSync && "node:sqlite نیست (Node >= 22.5 لازمه)";
++
++const root = new URL("../", import.meta.url);
++const sql = (f) => fs.readFileSync(new URL("migrations/" + f, root), "utf8");
++
++function makeD1() {
++  const db = new DatabaseSync(":memory:");
++  for (const f of ["0001_accounts.sql", "0002_account_sessions.sql", "0005_challenges.sql"]) db.exec(sql(f));
++  const stmt = (q, args = []) => ({
++    bind: (...a) => stmt(q, a),
++    first: async () => db.prepare(q).get(...args) ?? null,
++    all: async () => ({ results: db.prepare(q).all(...args) }),
++    run: async () => { const r = db.prepare(q).run(...args); return { success: true, meta: { changes: Number(r.changes) } }; },
++    _run: () => db.prepare(q).run(...args),
++  });
++  return { raw: db, prepare: (q) => stmt(q), batch: async (list) => { list.forEach((s) => s._run()); return list.map(() => ({ success: true })); } };
++}
++
++const BASE = "https://caraw.ir";
++const env0 = () => ({ ACCOUNTS_DB: makeD1(), BASE_URL: BASE });
++const opts = {
++  rateLimit: async () => true,
++  cleanPattern: (p) => (p && Array.isArray(p.data) && p.data.length ? { width: p.data[0].length, height: p.data.length, data: p.data, counts: p.counts || {}, total: 1 } : null),
++  mintCode: async () => "CARA-ABCD1234",
++  isValidColor: (c) => /^DB\d+$/.test(c),
++  adminGuard: async (req) => (req.headers.get("Authorization") === "Bearer admin" ? null : new Response("{}", { status: 401 })),
++};
++async function login(env, id) {
++  const raw = (id + "0".repeat(64)).slice(0, 64).replace(/[^a-f0-9]/g, "a");
++  const now = Math.floor(Date.now() / 1000);
++  env.ACCOUNTS_DB.raw.prepare("INSERT OR IGNORE INTO users (id, status, created_at, updated_at) VALUES (?, 'active', ?, ?)").run(id, now, now);
++  env.ACCOUNTS_DB.raw.prepare("INSERT INTO sessions (token_hash, user_id, created_at, expires_at, last_seen_at) VALUES (?, ?, ?, ?, ?)").run(await sha256(raw), id, now, now + 3600, now);
++  return "__Host-cara_session=" + raw;
++}
++const call = (env, method, path, { cookie, body, admin, origin = BASE } = {}) => handleChallengeRequest(
++  new Request(BASE + path, { method, headers: { ...(cookie ? { Cookie: cookie } : {}), ...(origin && method !== "GET" ? { Origin: origin } : {}), ...(admin ? { Authorization: "Bearer admin" } : {}), "Content-Type": "application/json" }, body: body ? JSON.stringify(body) : undefined }),
++  env, new URL(BASE + path), opts);
++const design = (colors = ["DB0010"]) => ({ data: [colors, colors], counts: Object.fromEntries(colors.map((c) => [c, 2])) });
++const hour = 3600;
++const now = () => Math.floor(Date.now() / 1000);
++async function seedChallenge(env, extra = {}) {
++  const r = await call(env, "POST", "/api/admin/challenges", { admin: true, body: { action: "create", title: "چالش آبی", theme: "اقیانوس", allowedColors: ["DB0010", "DB0725"], startsAt: now() - hour, endsAt: now() + hour, status: "active", ...extra } });
++  return (await r.json()).id;
++}
++
++test("admin endpoints are closed without the admin token", { skip }, async () => {
++  const env = env0();
++  assert.equal((await call(env, "GET", "/api/admin/challenges")).status, 401);
++  assert.equal((await call(env, "POST", "/api/admin/challenges", { body: { action: "create" } })).status, 401);
++});
++
++test("admin creates a challenge and validates its fields", { skip }, async () => {
++  const env = env0();
++  const bad = await call(env, "POST", "/api/admin/challenges", { admin: true, body: { action: "create", title: "x", startsAt: 5, endsAt: 1 } });
++  assert.equal(bad.status, 400);
++  const id = await seedChallenge(env);
++  const list = await (await call(env, "GET", "/api/admin/challenges", { admin: true })).json();
++  assert.equal(list.length, 1); assert.equal(list[0].id, id); assert.equal(list[0].open, true);
++  const pub = await (await call(env, "GET", "/api/challenge")).json();
++  assert.equal(pub.challenge.title, "چالش آبی"); assert.deepEqual(pub.challenge.allowedColors, ["DB0010", "DB0725"]); assert.equal(pub.loggedIn, false);
++});
++
++test("submitting needs login, same origin, a valid title/nickname and allowed colors", { skip }, async () => {
++  const env = env0(); await seedChallenge(env);
++  const body = { title: "موج", nickname: "سارا", design: design() };
++  assert.equal((await call(env, "POST", "/api/challenge/entries", { body })).status, 401);
++  const cookie = await login(env, "u1");
++  assert.equal((await call(env, "POST", "/api/challenge/entries", { cookie, body, origin: "https://evil.example" })).status, 403);
++  assert.equal((await call(env, "POST", "/api/challenge/entries", { cookie, body: { ...body, nickname: "" } })).status, 400);
++  const off = await call(env, "POST", "/api/challenge/entries", { cookie, body: { ...body, design: design(["DB0010", "DB9999"]) } });
++  assert.equal(off.status, 400); assert.deepEqual((await off.json()).disallowed, ["DB9999"]);
++  assert.equal((await call(env, "POST", "/api/challenge/entries", { cookie, body })).status, 201);
++});
++
++test("entries stay private until approved; the owner sees their own pending entry", { skip }, async () => {
++  const env = env0(); await seedChallenge(env);
++  const c1 = await login(env, "u1"), c2 = await login(env, "u2");
++  const { id } = await (await call(env, "POST", "/api/challenge/entries", { cookie: c1, body: { title: "موج", nickname: "سارا", design: design() } })).json();
++  const guest = await (await call(env, "GET", "/api/challenge")).json();
++  assert.equal(guest.entries.length, 0);
++  const mine = await (await call(env, "GET", "/api/challenge", { cookie: c1 })).json();
++  assert.equal(mine.entries.length, 1); assert.equal(mine.entries[0].mine, true); assert.equal(mine.entries[0].status, "pending");
++  assert.equal((await (await call(env, "GET", "/api/challenge", { cookie: c2 })).json()).entries.length, 0);
++  await call(env, "POST", "/api/admin/challenges", { admin: true, body: { action: "review", entryId: id, status: "approved" } });
++  const pub = await (await call(env, "GET", "/api/challenge")).json();
++  assert.equal(pub.entries.length, 1); assert.equal(pub.entries[0].nickname, "سارا");
++  assert.equal("userId" in pub.entries[0] || "user_id" in pub.entries[0], false);
++});
++
++test("one entry per user: resubmitting replaces it, goes back to pending and clears votes", { skip }, async () => {
++  const env = env0(); await seedChallenge(env);
++  const c1 = await login(env, "u1"), c2 = await login(env, "u2");
++  const first = await (await call(env, "POST", "/api/challenge/entries", { cookie: c1, body: { title: "یک", nickname: "سارا", design: design() } })).json();
++  await call(env, "POST", "/api/admin/challenges", { admin: true, body: { action: "review", entryId: first.id, status: "approved" } });
++  assert.equal((await (await call(env, "POST", `/api/challenge/entries/${first.id}/vote`, { cookie: c2 })).json()).votes, 1);
++  const again = await call(env, "POST", "/api/challenge/entries", { cookie: c1, body: { title: "دو", nickname: "سارا", design: design() } });
++  const r = await again.json(); assert.equal(again.status, 200); assert.equal(r.id, first.id); assert.equal(r.replaced, true);
++  const mine = await (await call(env, "GET", "/api/challenge", { cookie: c1 })).json();
++  assert.equal(mine.entries.length, 1); assert.equal(mine.entries[0].title, "دو"); assert.equal(mine.entries[0].votes, 0); assert.equal(mine.entries[0].status, "pending");
++});
++
++test("voting: login required, no self-vote, toggles on/off, only on approved entries", { skip }, async () => {
++  const env = env0(); await seedChallenge(env);
++  const c1 = await login(env, "u1"), c2 = await login(env, "u2");
++  const { id } = await (await call(env, "POST", "/api/challenge/entries", { cookie: c1, body: { title: "موج", nickname: "سارا", design: design() } })).json();
++  const url = `/api/challenge/entries/${id}/vote`;
++  assert.equal((await call(env, "POST", url, { cookie: c2 })).status, 404);               // still pending
++  await call(env, "POST", "/api/admin/challenges", { admin: true, body: { action: "review", entryId: id, status: "approved" } });
++  assert.equal((await call(env, "POST", url)).status, 401);
++  assert.equal((await call(env, "POST", url, { cookie: c1 })).status, 403);               // own entry
++  assert.deepEqual(await (await call(env, "POST", url, { cookie: c2 })).json(), { ok: true, voted: true, votes: 1 });
++  assert.deepEqual(await (await call(env, "POST", url, { cookie: c2 })).json(), { ok: true, voted: false, votes: 0 });
++});
++
++test("winner flow: prize code is minted once and only for winners; votes close with the challenge", { skip }, async () => {
++  const env = env0(); const cid = await seedChallenge(env);
++  const c1 = await login(env, "u1"), c2 = await login(env, "u2");
++  const { id } = await (await call(env, "POST", "/api/challenge/entries", { cookie: c1, body: { title: "موج", nickname: "سارا", design: design() } })).json();
++  const prize = () => call(env, "POST", "/api/admin/challenges", { admin: true, body: { action: "prize", entryId: id } });
++  assert.equal((await prize()).status, 409);
++  await call(env, "POST", "/api/admin/challenges", { admin: true, body: { action: "review", entryId: id, status: "winner" } });
++  const p1 = await (await prize()).json(); assert.equal(p1.code, "CARA-ABCD1234"); assert.equal(p1.validDays, 7);
++  assert.equal((await (await prize()).json()).existing, true);
++  await call(env, "POST", "/api/admin/challenges", { admin: true, body: { action: "set-status", id: cid, status: "closed" } });
++  assert.equal((await call(env, "POST", `/api/challenge/entries/${id}/vote`, { cookie: c2 })).status, 409);
++  assert.equal((await call(env, "POST", "/api/challenge/entries", { cookie: c1, body: { title: "دوباره", nickname: "سارا", design: design() } })).status, 409);
++  const pub = await (await call(env, "GET", "/api/challenge")).json();
++  assert.equal(pub.winners.length, 1); assert.equal(pub.winners[0].nickname, "سارا"); assert.equal(pub.challenge.open, false);
++  const detail = await (await call(env, "GET", `/api/admin/challenges?id=${cid}`, { admin: true })).json();
++  assert.equal(detail.entries[0].prizeCode, "CARA-ABCD1234");
++});
++
++test("owners can withdraw their entry (not once it has won)", { skip }, async () => {
++  const env = env0(); await seedChallenge(env);
++  const c1 = await login(env, "u1");
++  const { id } = await (await call(env, "POST", "/api/challenge/entries", { cookie: c1, body: { title: "موج", nickname: "سارا", design: design() } })).json();
++  assert.equal((await call(env, "DELETE", `/api/challenge/entries/${id}`, { cookie: await login(env, "u2") })).status, 404);
++  assert.equal((await call(env, "DELETE", `/api/challenge/entries/${id}`, { cookie: c1 })).status, 200);
++  assert.equal((await (await call(env, "GET", "/api/challenge", { cookie: c1 })).json()).entries.length, 0);
++});
++
++test("Worker wiring: challenge handler runs before accounts and admin routes use the admin guard", () => {
++  const w = fs.readFileSync(new URL("index.js", root), "utf8");
++  assert.ok(w.indexOf("handleChallengeRequest(request, env, url") > 0);
++  assert.match(w, /adminGuard: async \(req\) => \{\s*const gate = await adminGate\(req, env\); if \(gate\) return gate;\s*return authed\(req, env\)/);
++});
+diff --git a/test/sitemap-freshness.test.js b/test/sitemap-freshness.test.js
+index 24df2d8..163c583 100644
+--- a/test/sitemap-freshness.test.js
++++ b/test/sitemap-freshness.test.js
+@@ -7,7 +7,7 @@ const sitemap = fs.readFileSync(path.join(__dirname, "..", "sitemap.xml"), "utf8
+ 
+ test("sitemap lastmod values reflect the latest committed page regeneration", () => {
+   const entries = [...sitemap.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/g)];
+-  assert.equal(entries.length, 62, "all public bracelet, color, and primary pages stay listed");
++  assert.equal(entries.length, 63, "all public bracelet, color, and primary pages stay listed");
+   for (const [, url, lastmod] of entries) {
+     assert.ok(lastmod >= "2026-11-14", url + " has stale lastmod " + lastmod);
+   }
+diff --git a/tools/build-pages.js b/tools/build-pages.js
+index f1d09c9..cb93bda 100644
+--- a/tools/build-pages.js
++++ b/tools/build-pages.js
+@@ -83,6 +83,7 @@ const urls = [
+   "/builder.html",
+   "/upload.html",
+   "/gallery.html",
++  "/challenge.html",
+   "/game.html",
+   "/name-bracelet.html",
+   "/colors/",
+@@ -364,6 +365,6 @@ write(
+ );
+ write(
+   "robots.txt",
+-  `User-agent: *\nAllow: /\nDisallow: /admin.html\nDisallow: /checkout.html\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\n`,
++  `User-agent: *\nAllow: /\nDisallow: /admin.html\nDisallow: /checkout.html\nDisallow: /challenge-admin.html\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\n`,
+ );
+ console.log(`✓ sitemap.xml (${urls.length} آدرس) و robots.txt`);
+diff --git a/upload.html b/upload.html
+index a19a19b..ec1a44d 100644
+--- a/upload.html
++++ b/upload.html
+@@ -253,7 +253,7 @@
+         <nav class="sh__nav" id="shNav" aria-label="منوی اصلی">
+           <a href="/builder.html">طراحی دستبند</a
+           ><a href="/upload.html" aria-current="page">عکس به الگو</a
+-          ><a href="/gallery.html">گالری</a><a href="/game.html">بازی</a
++          ><a href="/gallery.html">گالری</a><a href="/challenge.html">چالش</a><a href="/game.html">بازی</a
+           ><a href="/account.html">حساب کاربری</a
+           ><a href="/cart.html">سبد خرید</a
+           ><a class="sh__cta" href="/checkout.html">سفارش</a>
