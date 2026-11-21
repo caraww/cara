@@ -22,9 +22,8 @@ test("service worker precaches offline styles, retry script, and local font weig
     "/css/fonts.css",
     "/css/offline.css",
     "/js/offline.js",
-    "/fonts/vazirmatn-arabic-400.woff2",
-    "/fonts/vazirmatn-arabic-700.woff2",
-    "/fonts/vazirmatn-arabic-900.woff2",
+    "/fonts/estedad-arabic.woff2",
+    "/fonts/estedad-latin.woff2",
   ]) assert.ok(sw.includes('"' + asset + '"'), asset);
 });
 
