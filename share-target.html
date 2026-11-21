@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>دریافت عکس برای تبدیل به الگو | کارا</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#343B64" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="stylesheet" href="/css/studio.css" />
+    <link rel="stylesheet" href="/css/accessibility.css" />
+    <link rel="stylesheet" href="/css/polish.css?v=7" />
+    <style>
+      .share-wrap { max-width: 620px; margin: 0 auto; padding: 80px 20px; text-align: center; }
+      .share-wrap h1 { font-size: clamp(24px, 4vw, 34px); margin: 0 0 12px; }
+      .share-wrap p { line-height: 2; font-size: 16px; opacity: .85; }
+    </style>
+  </head>
+  <body>
+    <main class="share-wrap" id="main-content">
+      <h1>عکست را برای تبدیل به الگو آماده می‌کنیم…</h1>
+      <p>
+        اگر این صفحه را مستقیم باز کرده‌ای، از دکمه‌ی زیر به صفحه‌ی «عکس به الگو» برو.
+        وقتی عکس را از گالری گوشی با کارا به اشتراک بگذاری، خودکار به همان صفحه می‌روی.
+      </p>
+      <p><a class="btn dark" href="/upload.html">انتخاب عکس</a></p>
+    </main>
+    <script>
+      /* If the service worker is not controlling the POST, fall back to the picker. */
+      if (!navigator.serviceWorker || !navigator.serviceWorker.controller) {
+        setTimeout(function () { location.replace("/upload.html"); }, 1200);
+      }
+    </script>
+    <script src="/js/pwa.js" defer></script>
+  </body>
+</html>

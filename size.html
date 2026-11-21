@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/img/cara-favicon.png?v=2" />
+    <link rel="icon" href="/favicon.ico?v=2" sizes="any" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    <link rel="preload" href="/fonts/vazirmatn-arabic-400.woff2" as="font" type="font/woff2" crossorigin />
+    <title>اندازه‌ی مچ و انتخاب سایز دستبند | راهنمای کارا</title>
+    <meta
+      name="description"
+      content="با یک کارت بانکی و خط‌کش روی صفحه، اندازه‌ی دقیق مچت را پیدا کن و ببین چه طولی از دستبند منجوقی برایت راحت‌تر است. تخمین تعداد ردیف منجوق هم آماده است."
+    />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#343B64" />
+    <link rel="canonical" href="https://caraw.ir/size.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fa_IR" />
+    <meta property="og:site_name" content="کارا (cara)" />
+    <meta property="og:title" content="اندازه‌ی مچ و انتخاب سایز دستبند | کارا" />
+    <meta property="og:description" content="با یک کارت بانکی و خط‌کش روی صفحه، سایز دقیق مچت را پیدا کن." />
+    <meta property="og:url" content="https://caraw.ir/size.html" />
+    <meta property="og:image" content="https://caraw.ir/img/og-image.png?v=2" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" href="/css/studio.css" />
+    <link rel="stylesheet" href="/css/decor.css" />
+    <link rel="stylesheet" href="/css/accessibility.css" />
+    <link rel="stylesheet" href="/css/polish.css?v=7" />
+    <link rel="stylesheet" href="/css/site-nav.css?v=20261113" />
+    <link rel="stylesheet" href="/css/nav-hero.css?v=1" />
+    <link rel="stylesheet" href="/css/premium.css?v=1" />
+    <style>
+      .size-wrap { max-width: 900px; margin: 0 auto; padding: 108px 18px 60px; }
+      .size-wrap h1 { font-size: clamp(26px, 4vw, 40px); font-weight: 900; margin: 0 0 10px; }
+      .size-lead { font-size: 17px; line-height: 2; opacity: .86; margin: 0 0 28px; }
+      .size-card { background: rgba(255,255,255,.72); border: 1px solid rgba(128,128,128,.22); border-radius: 22px; padding: 22px; margin: 0 0 20px; }
+      @supports (background: color-mix(in srgb, red 10%, transparent)) { .size-card { background: color-mix(in srgb, currentColor 4%, transparent); border-color: color-mix(in srgb, currentColor 14%, transparent); } }
+      .size-card h2 { font-size: 20px; margin: 0 0 8px; }
+      .size-card p { line-height: 1.9; margin: 0 0 12px; }
+      .card-box { height: 54px; width: 320px; max-width: 100%; border-radius: 8px; background: linear-gradient(135deg,#cfae6c,#8a6a3d); box-shadow: 0 6px 18px rgba(0,0,0,.18); margin: 10px auto 18px; }
+      .size-range { width: 100%; accent-color: #b8975a; }
+      .size-ruler-wrap { overflow-x: auto; padding: 6px 0 2px; }
+      #ruler { display: block; border-radius: 10px; }
+      .size-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; margin: 14px 0; }
+      .size-grid > div { border-radius: 14px; padding: 12px; background: rgba(184,151,90,.12); text-align: center; }
+      .size-grid > div.is-main { background: rgba(184,151,90,.28); outline: 2px solid rgba(184,151,90,.55); }
+      .size-grid small { display: block; opacity: .7; margin-bottom: 4px; }
+      .size-grid strong { font-size: 18px; }
+      .size-note, .size-rows { line-height: 1.9; }
+      .size-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 15px; }
+      .size-table th, .size-table td { border-bottom: 1px solid rgba(128,128,128,.22); padding: 9px 6px; text-align: right; }
+      .size-table th { font-weight: 800; }
+      .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+      .err { color: #c93a2b; }
+      @media (max-width: 560px) { .size-grid { grid-template-columns: 1fr; } }
+    </style>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "چطور اندازه‌ی مچ را برای دستبند منجوقی پیدا کنیم",
+        "description": "با کالیبره کردن یک کارت بانکی روی صفحه و اندازه‌گیری دور مچ، طول مناسب دستبند را پیدا کن.",
+        "totalTime": "PT3M",
+        "step": [
+          { "@type": "HowToStep", "name": "کالیبره کردن صفحه", "text": "یک کارت بانکی را روی کادر بگذار و اسلایدر را تا هم‌اندازه شدن با کارت واقعی حرکت بده." },
+          { "@type": "HowToStep", "name": "اندازه‌گیری دور مچ", "text": "یک نوار کاغذی دور مچ بپیچ، جای تلاقی را علامت بزن و روی خط‌کش صفحه اندازه بگیر." },
+          { "@type": "HowToStep", "name": "انتخاب طول دستبند", "text": "برای حالت راحت، ۱٫۲ سانتی‌متر به دور مچ اضافه کن." }
+        ]
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
+    <header class="top solid">
+      <a href="/" class="logo" aria-label="cara — صفحه‌ی اصلی"><img src="/img/cara-logo.webp?v=1" alt="cara" style="height:44px;width:auto;display:block" /></a>
+      <nav aria-label="منوی اصلی">
+        <a href="/gallery.html">گالری</a>
+        <a href="/upload.html">عکس به الگو</a>
+        <a href="/name-bracelet.html">اسم روی دستبند</a>
+        <a href="/size.html" aria-current="page">سایز مچ</a>
+        <a href="/game.html">بازی</a>
+        <a href="/cart.html">سبد خرید</a>
+        <a href="/account.html">حساب کاربری</a>
+        <a class="cta" href="/builder.html">طراحی دستبند</a>
+      </nav>
+    </header>
+
+    <main class="size-wrap" id="main-content" tabindex="-1">
+      <h1>سایز مچت را دقیق پیدا کن</h1>
+      <p class="size-lead">
+        با یک کارت بانکی و همین صفحه، بدون متر پارچه‌ای هم می‌توانی اندازه‌ی مچت را پیدا کنی.
+        بعد از کالیبره کردن، خط‌کش روی صفحه دقیق می‌شود و می‌توانی نوار کاغذی را رویش بگذاری.
+      </p>
+
+      <section class="size-card" aria-labelledby="calH">
+        <h2 id="calH">۱) صفحه را کالیبره کن</h2>
+        <p>یک کارت بانکی معمولی را روی کادر زیر بگذار. اسلایدر را حرکت بده تا کادر دقیقاً هم‌اندازه‌ی کارت واقعی شود.</p>
+        <div class="card-box" id="cardBox" aria-hidden="true"></div>
+        <label class="size-range-label" for="calibrate">عرض کارت روی صفحه</label>
+        <input class="size-range" id="calibrate" type="range" min="160" max="520" step="1" value="320" />
+        <div class="size-ruler-wrap"><canvas id="ruler" aria-label="خط‌کش سانتی‌متری روی صفحه"></canvas></div>
+      </section>
+
+      <section class="size-card" aria-labelledby="wristH">
+        <h2 id="wristH">۲) دور مچت را اندازه بگیر</h2>
+        <p>
+          یک نوار کاغذی دور مچت بپیچ (نه خیلی سفت)، جای تلاقی را علامت بزن و نوار را روی خط‌کش بالا بگذار.
+          یا اگر متر پارچه‌ای داری، همان عدد را این‌جا بنویس.
+        </p>
+        <label for="wristCm">دور مچ (سانتی‌متر)</label>
+        <input class="size-range" id="wristCm" type="range" min="12" max="24" step="0.1" value="16.5" />
+        <div class="btns"><a class="btn" href="/blog/wrist-size.html">راهنمای کامل اندازه‌گیری</a></div>
+      </section>
+
+      <section class="size-card" aria-labelledby="outH">
+        <h2 id="outH">۳) اندازه‌ی پیشنهادی دستبند</h2>
+        <div id="sizeOut" role="status" aria-live="polite" aria-atomic="true"></div>
+      </section>
+
+      <section class="size-card" aria-labelledby="tableH">
+        <h2 id="tableH">جدول سریع سایزها</h2>
+        <table class="size-table">
+          <thead><tr><th>دور مچ</th><th>طول راحت دستبند</th><th>حدود ردیف منجوق</th></tr></thead>
+          <tbody>
+            <tr><td>۱۴ سانتی‌متر</td><td>۱۵٫۲ سانتی‌متر</td><td>۹۵</td></tr>
+            <tr><td>۱۵٫۵ سانتی‌متر</td><td>۱۶٫۷ سانتی‌متر</td><td>۱۰۴</td></tr>
+            <tr><td>۱۷ سانتی‌متر</td><td>۱۸٫۲ سانتی‌متر</td><td>۱۱۴</td></tr>
+            <tr><td>۱۸٫۵ سانتی‌متر</td><td>۱۹٫۷ سانتی‌متر</td><td>۱۲۳</td></tr>
+            <tr><td>۲۰ سانتی‌متر</td><td>۲۱٫۲ سانتی‌متر</td><td>۱۳۳</td></tr>
+          </tbody>
+        </table>
+        <p class="size-rows">اگر بین دو اندازه هستی، اندازه‌ی بزرگ‌تر را انتخاب کن؛ دستبند منجوقی کمی کش می‌آید و بند تنظیم هم دارد.</p>
+      </section>
+    </main>
+
+    <script src="/js/size.js?v=1"></script>
+    <script>window.CARA_SIZE && window.CARA_SIZE.init();</script>
+    <script src="/js/contact.js" defer></script>
+    <script src="/js/mobile-nav.js?v=20261113" defer></script>
+    <script src="/js/nav-hero.js?v=1" defer></script>
+    <script src="/js/pwa.js" defer></script>
+      <script src="/js/analytics.js?v=1" defer></script>
+  </body>
+</html>

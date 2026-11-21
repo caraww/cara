@@ -128,6 +128,7 @@
       render(updatedCart);
       const updatedItem = updatedCart.items.find((item) => String(item.id) === String(id));
       message(updatedItem ? `تعداد ${updatedItem.title} به ${fa(updatedItem.quantity)} تغییر کرد.` : "سبد خرید به‌روزرسانی شد.");
+      window.CARA && CARA.track && CARA.track("cart_quantity", { quantity });
     } else {
       await load();
       if (failure) message(failure.message);
@@ -145,6 +146,7 @@
     if (updatedCart && Array.isArray(updatedCart.items)) {
       render(updatedCart);
       message("کالا از سبد خرید حذف شد.");
+      window.CARA && CARA.track && CARA.track("cart_remove");
     } else {
       await load();
       if (failure) message(failure.message);
@@ -165,6 +167,7 @@
         await api("/api/cart/items", { method: "POST", body: JSON.stringify({ type: "design", title: "طرح من", design, quantity: 1 }) });
       } else throw new Error("نوع کالا معتبر نیست.");
       message("به سبد خرید اضافه شد.");
+      window.CARA && CARA.track && CARA.track("cart_add", { type });
       return true;
     } catch (error) { addError = "به سبد اضافه نشد: " + error.message; message(addError); return false; }
   }

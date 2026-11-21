@@ -94,6 +94,7 @@
   }
 
   const orderLabels = { pending:"در انتظار پرداخت", paid:"پرداخت‌شده", review:"در حال بررسی", failed:"ناموفق", new:"ثبت‌شده", weaving:"در حال بافت", shipped:"ارسال‌شده" };
+  const workSlug = (id) => String(id).trim().replace(/[\s\u200c]+/g, "-").replace(/[\/\\?#%.]+/g, "");
   async function loadOrders() {
     let orders;
     try { orders = await api("/api/account/orders"); }
@@ -107,7 +108,34 @@
       info.innerHTML = '<strong>سفارش ' + esc(order.code) + '</strong><small>' + esc(new Date(order.createdAt).toLocaleDateString("fa-IR")) + ' · ' + fa(order.priceToman) + ' تومان</small>';
       const status = document.createElement("span"); status.className = "account-status";
       status.textContent = order.status === "paid" ? (orderLabels[order.fulfillment] || "ثبت‌شده") : (orderLabels[order.status] || "در حال بررسی");
-      card.append(info, status); list.append(card);
+      card.append(info, status);
+      const actions = document.createElement("div");
+      actions.className = "account-order-actions";
+      let trackToken = "";
+      try { trackToken = localStorage.getItem("cara-track-" + order.id) || ""; } catch {}
+      if (trackToken) {
+        const track = document.createElement("a");
+        track.className = "btn sm";
+        track.href = "/track.html?t=" + encodeURIComponent(trackToken);
+        track.textContent = "پیگیری";
+        actions.append(track);
+      }
+      if (order.work && order.work.id) {
+        const again = document.createElement("a");
+        again.className = "btn sm";
+        again.href = "/checkout.html?work=" + encodeURIComponent(order.work.id);
+        again.textContent = "سفارش دوباره";
+        actions.append(again);
+      }
+      if (order.work && order.work.id && order.status === "paid") {
+        const review = document.createElement("a");
+        review.className = "btn sm";
+        review.href = "/bracelet/" + encodeURIComponent(workSlug(order.work.id)) + ".html";
+        review.textContent = "ثبت نظر";
+        actions.append(review);
+      }
+      if (actions.children.length) card.append(actions);
+      list.append(card);
     });
   }
 

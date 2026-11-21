@@ -11,6 +11,11 @@
    ================================================================== */
 const digits = (s) => s.replace(/[۰-۹]/g, (d) => "۰۱۲۳۴۵۶۷۸۹".indexOf(d)).replace(/[٠-٩]/g, (d) => "٠١٢٣٤٥٦٧٨٩".indexOf(d));
 const phoneFix = (s) => { s = digits(String(s)).replace(/[\s\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff().-]/g, ""); s = s.replace(/^(?:\+98|0098|98)0?(?=9\d{9}$)/, "0"); return /^9\d{9}$/.test(s) ? "0" + s : s; }; /* فرمت‌های محلی و +98/0098 با رقم فارسی یا عربی */
+const giftOf = (f) => {
+  const wrap = !!f.giftWrap, hidePrice = !!f.hidePrice;
+  const message = String(f.giftMessage || "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 200);
+  return wrap || hidePrice || message ? { wrap, hidePrice, message } : null;
+};
 
 
 /* ==================================================================
@@ -144,13 +149,18 @@ try {
     if (!customer.firstName || !customer.lastName || !customer.address) return showErr("اسم، فامیلی و آدرس رو کامل بنویس.");
     if (!/^09\d{9}$/.test(customer.phone)) return showErr("شماره موبایل باید شبیه 09123456789 باشه.");
     if (pay) pay.disabled = true;
+    window.CARA && CARA.track && CARA.track("checkout_start", { mode: "work", provider: window.CARA_GATEWAY });
     try {
       const r = await fetch("/api/create-payment", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ workId: id, customer, discountCode: String(f.discountCode || "").trim(), provider: window.CARA_GATEWAY }),
+        body: JSON.stringify({ workId: id, customer, discountCode: String(f.discountCode || "").trim(), provider: window.CARA_GATEWAY, gift: giftOf(f) }),
       });
       const j = await r.json().catch(() => ({}));
-      if (j.paymentUrl) return (location.href = j.paymentUrl);
+      if (j.paymentUrl) {
+        if (j.orderId && j.trackToken) { try { localStorage.setItem("cara-track-" + j.orderId, j.trackToken); } catch {} }
+        window.CARA && CARA.track && CARA.track("payment_redirect", { mode: "work", provider: window.CARA_GATEWAY });
+        return (location.href = j.paymentUrl);
+      }
       showErr(j.error || `یه مشکل پیش اومد، دوباره امتحان کن. (کد ${r.status})`);
     } catch {
       showErr("اتصال برقرار نشد، دوباره امتحان کن.");
@@ -212,7 +222,18 @@ try {
           strong.dir = "ltr";
           strong.textContent = code;
           paragraph.append(strong);
+          let trackToken = "";
+          try { trackToken = localStorage.getItem("cara-track-" + id) || ""; } catch {}
+          if (trackToken) {
+            const link = document.createElement("a");
+            link.className = "btn sm";
+            link.href = "/track.html?t=" + encodeURIComponent(trackToken);
+            link.textContent = "پیگیری سفارش";
+            link.style.marginInlineStart = "10px";
+            paragraph.append(" ", link);
+          }
           box.append(paragraph);
+          window.CARA && CARA.track && CARA.track("purchase", { code });
           $("formCard").hidden = true;
           $("sumCard").hidden = true;
           try {
@@ -282,13 +303,19 @@ try {
     if (!fd.firstName.trim() || !fd.lastName.trim() || !fd.address.trim()) return showErr("اسم، فامیلی و آدرس رو کامل بنویس.");
     if (!/^09\d{9}$/.test(fd.phone)) return showErr("شماره موبایل باید شبیه 09123456789 باشه.");
     const btn = $("pay"); btn.disabled = true; btn.textContent = "دارم می‌برمت به درگاه…";
+    const mode = cartMode ? "cart" : "pattern";
+    window.CARA && CARA.track && CARA.track("checkout_start", { mode, provider: window.CARA_GATEWAY });
     try {
       const r = await fetch("/api/create-payment", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify(cartMode
-          ? { cart: true, customer: fd, discountCode: String(fd.discountCode || "").trim(), provider: window.CARA_GATEWAY }
-          : { customer: fd, discountCode: String(fd.discountCode || "").trim(), provider: window.CARA_GATEWAY, pattern: { width: p.width, height: p.height, data: p.data } }) });
+          ? { cart: true, customer: fd, discountCode: String(fd.discountCode || "").trim(), provider: window.CARA_GATEWAY, gift: giftOf(fd) }
+          : { customer: fd, discountCode: String(fd.discountCode || "").trim(), provider: window.CARA_GATEWAY, gift: giftOf(fd), pattern: { width: p.width, height: p.height, data: p.data } }) });
       const j = await r.json().catch(() => ({}));
-      if (r.ok && j.paymentUrl) return (location.href = j.paymentUrl);
+      if (r.ok && j.paymentUrl) {
+        if (j.orderId && j.trackToken) { try { localStorage.setItem("cara-track-" + j.orderId, j.trackToken); } catch {} }
+        window.CARA && CARA.track && CARA.track("payment_redirect", { mode, provider: window.CARA_GATEWAY });
+        return (location.href = j.paymentUrl);
+      }
       showErr(j.error || "وصل شدن به درگاه نشد، یه کم بعد دوباره امتحان کن.");
     } catch { showErr("به سرور وصل نشدم."); }
     btn.disabled = false; btn.textContent = "ادامه و پرداخت";

@@ -127,7 +127,14 @@
       const url = location.origin + "/challenge.html#e-" + e.id;
       try { if (navigator.share) await navigator.share({ title: e.title + " | چالش cara", url }); else { await navigator.clipboard.writeText(url); say("لینک طرح کپی شد."); } } catch {}
     };
-    if (e.status === "approved" || e.winner) row.append(vote, share); else row.append(vote);
+    const remix = el("button", "chl-btn", "ویرایش این طرح"); remix.type = "button";
+    remix.onclick = () => {
+      const api = window.CARA_PATTERN_SHARE;
+      if (!api || !e.design) { say("این طرح قابل ویرایش نیست.", true); return; }
+      try { location.href = "/builder.html" + api.makeHash(e.design.data, palette()); }
+      catch { say("این طرح قابل ویرایش نیست.", true); }
+    };
+    if (e.status === "approved" || e.winner) row.append(vote, share, remix); else row.append(vote);
     card.append(row); return card;
   }
 

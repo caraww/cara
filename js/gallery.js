@@ -14,6 +14,28 @@ try {
   const FAV = "cara-fav-works";
   let favs = new Set(); try { favs = new Set(JSON.parse(localStorage.getItem(FAV)) || []); } catch {}
   const saveFav = () => { try { localStorage.setItem(FAV, JSON.stringify([...favs])); } catch {} };
+  const syncFav = (id, on) => {
+    fetch("/api/account/favorites", {
+      method: "POST", credentials: "same-origin",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ workId: id, action: on ? "add" : "remove" }),
+    }).catch(() => {});
+  };
+  async function mergeRemoteFavs() {
+    try {
+      const response = await fetch("/api/account/favorites", { credentials: "same-origin", cache: "no-store" });
+      if (!response.ok) return;
+      const data = await response.json();
+      const remote = new Set(data.favorites || []);
+      if (!remote.size && favs.size) {
+        favs.forEach((id) => syncFav(id, true));
+        return;
+      }
+      let changed = false;
+      remote.forEach((id) => { if (!favs.has(id)) { favs.add(id); changed = true; } });
+      if (changed) { saveFav(); render(); }
+    } catch {}
+  }
   let tag = "همه", onlyFav = false, q = "", list = W.slice(), cur = -1;
   const grid = $("wkGrid"), lb = $("lb");
   const SHARE_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>';
@@ -120,6 +142,7 @@ try {
     if (i < 0) return;
     show(i);
     if (!lb.open) lb.showModal ? lb.showModal() : lb.setAttribute("open", "");
+    window.CARA && CARA.track && CARA.track("work_view", { work: id });
   }
   $("lbThumbs").addEventListener("click", (e) => {
     const b = e.target.closest("button[data-src]"); if (!b) return;
@@ -154,13 +177,20 @@ try {
   stage.addEventListener("pointerup", (e) => { if (sx == null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 50) show(cur + (dx < 0 ? 1 : -1)); });
   stage.addEventListener("pointercancel", () => { sx = null; });
   $("lbShare").onclick = () => { if (list[cur]) share(list[cur]); };
-  $("lbFav").onclick = () => { const w = list[cur]; favs.has(w.id) ? favs.delete(w.id) : favs.add(w.id); saveFav(); $("lbFav").setAttribute("aria-pressed", favs.has(w.id)); const b = grid.querySelector(`[data-id="${CSS.escape(w.id)}"] .wk-fav`); if (b) b.setAttribute("aria-pressed", favs.has(w.id)); };
+  $("lbFav").onclick = () => {
+    const w = list[cur], on = !favs.has(w.id);
+    on ? favs.add(w.id) : favs.delete(w.id);
+    saveFav(); syncFav(w.id, on);
+    $("lbFav").setAttribute("aria-pressed", favs.has(w.id));
+    const b = grid.querySelector(`[data-id="${CSS.escape(w.id)}"] .wk-fav`); if (b) b.setAttribute("aria-pressed", favs.has(w.id));
+  };
 
   grid.addEventListener("click", (e) => {
     const card = e.target.closest(".wk-card"); if (!card) return;
     if (e.target.closest(".wk-share")) { const w = W.find((x) => x.id === card.dataset.id); if (w) share(w); return; }
     if (e.target.closest(".wk-fav")) {
-      const id = card.dataset.id; favs.has(id) ? favs.delete(id) : favs.add(id); saveFav();
+      const id = card.dataset.id, on = !favs.has(id);
+      on ? favs.add(id) : favs.delete(id); saveFav(); syncFav(id, on);
       e.target.closest(".wk-fav").setAttribute("aria-pressed", favs.has(id)); if (onlyFav) render(); return;
     }
     open(card.dataset.id);
@@ -175,6 +205,7 @@ try {
   $("surprise").onclick = () => { setPanel(false); if (W.length) { tag = "همه"; q = ""; onlyFav = false; render(); open(W[Math.floor(Math.random() * W.length)].id); } };
 
   render();
+  mergeRemoteFavs();
   const fromHash = () => { const id = decodeURIComponent(location.hash.slice(1)); if (id) open(id); };
   fromHash(); addEventListener("hashchange", () => { if (!lb.open) fromHash(); });
 })();

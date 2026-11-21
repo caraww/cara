@@ -30,6 +30,12 @@
     <link rel="stylesheet" href="/css/polish.css?v=7" />
     <link rel="stylesheet" href="/css/nav-hero.css?v=1" />
     <link rel="stylesheet" href="/css/premium.css?v=1">
+    <style>
+      .gift-fields { border: 1px solid rgba(128,128,128,.25); border-radius: 16px; padding: 12px 14px; margin: 4px 0 14px; }
+      .gift-fields legend { font-weight: 700; padding: 0 6px; }
+      .gift-check { display: flex; align-items: center; gap: 8px; margin: 8px 0; font-size: 15px; }
+      .gift-check input { width: 18px; height: 18px; accent-color: #b8975a; }
+    </style>
   </head>
   <body>
     <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
@@ -113,6 +119,24 @@
                 autocomplete="street-address"
               ></textarea>
             </label>
+            <fieldset class="gift-fields">
+              <legend>این سفارش هدیه است؟ (اختیاری)</legend>
+              <label class="gift-check"
+                ><input type="checkbox" name="giftWrap" /> بسته‌بندی هدیه</label
+              >
+              <label class="gift-check"
+                ><input type="checkbox" name="hidePrice" /> قیمت روی بسته
+                نوشته نشود</label
+              >
+              <label class="field full"
+                >پیام هدیه<textarea
+                  name="giftMessage"
+                  rows="2"
+                  maxlength="200"
+                  placeholder="مثلاً: تولدت مبارک!"
+                ></textarea>
+              </label>
+            </fieldset>
             <label class="field full"
               >کد تخفیف (اختیاری)<input
                 name="discountCode"
@@ -142,5 +166,6 @@
     <script src="/js/contact.js" defer></script>
     <script src="/js/pwa.js?v=20261105-no-install-button" defer></script>
     <script src="/js/nav-hero.js?v=1" defer></script>
+      <script src="/js/analytics.js?v=1" defer></script>
   </body>
 </html>

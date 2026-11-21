@@ -2,6 +2,8 @@ import { handleGame, mintCode, checkCode, codeDiscount, reserveCode, releaseCode
 import { handleAccountRequest, getAccountUser } from "./lib/accounts.mjs";
 import { handleChallengeRequest } from "./lib/challenge.mjs";
 import { handleCartRequest, loadCartForRequest, clearPurchasedCartItems } from "./lib/cart.mjs";
+import { handleReviewRequest } from "./lib/reviews.mjs";
+import { handleTrackRequest, issueOrderToken } from "./lib/track.mjs";
 import { mirrorOrder, unmirrorOrder, backfillOrders, compareOrders } from "./lib/order-store.mjs";
 import { digipayConfigured, digipayCreateTicket, digipayVerify } from "./lib/digipay.mjs";
 import "./lib/works-pricing.js";
@@ -149,6 +151,14 @@ function cleanPattern(p) {
   return total ? { width: w, height: h, data, counts, total } : null;
 }
 
+/* Gift options are presentation data only; they never affect price or payment state. */
+function cleanGift(g) {
+  if (!g || typeof g !== "object" || Array.isArray(g)) return null;
+  const wrap = !!g.wrap, hidePrice = !!g.hidePrice;
+  const message = String(g.message || "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 200);
+  return wrap || hidePrice || message ? { wrap, hidePrice, message } : null;
+}
+
 /* کارهای گالری: از js/works.js خود سایت خونده می‌شه (فایل خودکار ساخته می‌شه؛ قیمت رو این‌جا کنترل می‌کنیم).
    اگه توی works.js برای یه اثر فیلد price (تومان) باشه همون استفاده می‌شه، وگرنه قیمت خودکار (PRICE_OVERRIDES بالای همین بخش). */
 function extractArray(text) {
@@ -240,6 +250,7 @@ async function createPayment(request, env, ctx) {
   if (!customer.firstName || !customer.lastName || !customer.address)
     return json({ error: "اسم، فامیلی و آدرس رو کامل بنویس." }, 400);
   if (!/^09\d{9}$/.test(customer.phone)) return json({ error: "شماره موبایل باید شبیه 09123456789 باشه." }, 400);
+  const gift = cleanGift(body.gift);
 
   let priceToman, extra;
   if (body.workId != null && body.workId !== "") {
@@ -311,11 +322,14 @@ async function createPayment(request, env, ctx) {
     customer,
     ...(account ? { userId: account.id } : {}),
     ...(dc ? { discountCode: dc } : {}),
+    ...(gift ? { gift } : {}),
     ...extra,
   };
   /* رزرو اتمیک کد قبل از ساختن سفارش؛ اگه هم‌زمان یکی دیگه گرفتتش، این سفارش ساخته نمی‌شه */
   if (dc && !(await reserveCode(env, dc, order.id))) return json({ error: "کد تخفیف نامعتبر یا قبلاً استفاده شده." }, 400);
   await saveOrder(env, order);
+  /* Best-effort public tracking token; a D1 outage must never block checkout. */
+  const trackToken = await issueOrderToken(env, order.id);
 
   /* اعلان ثبت سفارش بعد از آماده شدن لینک پرداخت ارسال می‌شه؛ پرداخت‌نشدن مانع اعلان نیست. */
   const announceCreated = () => ctx ? ctx.waitUntil(notifyCreated(C, env, order)) : notifyCreated(C, env, order);
@@ -334,7 +348,7 @@ async function createPayment(request, env, ctx) {
     order.digipayTicket = t.ticket;
     await saveOrder(env, order);
     announceCreated();
-    return json({ paymentUrl: t.redirectUrl });
+    return json({ paymentUrl: t.redirectUrl, orderId: order.id, trackToken });
   }
 
   /* Worker دیگه خودش با زیبال حرف نمی‌زنه (فایروال هاست آی‌پی Cloudflare رو می‌بنده).
@@ -348,7 +362,7 @@ async function createPayment(request, env, ctx) {
   }));
   const paymentUrl = `${C.payUrl}?d=${d}&sig=${await hmac(C.relaySecret, d)}`;
   announceCreated();
-  return json({ paymentUrl });
+  return json({ paymentUrl, orderId: order.id, trackToken });
 }
 
 /* تأیید پرداخت با زیبال. هم از بازگشت مشتری از درگاه صدا زده می‌شه، هم از دکمه‌ی «بررسی وضعیت» توی admin.html.
@@ -389,6 +403,7 @@ async function settle(C, env, order, markFailed, ctx, pre) {
       catch (error) { console.error("paid order cart cleanup failed", order.id, String(error).slice(0, 160)); }
     }
     await later(notifyPaid(C, env, order));
+    await later(notifyCustomer(env, order, "paid", C));
     return order;
   }
   if (markFailed) order.status = "failed";
@@ -514,6 +529,7 @@ function row(o) {
     size: pt ? `${pt.width}x${pt.height}` : "", beads: pt ? pt.total : 0, colors: pt ? pt.counts : null,
     tracking: o.tracking || "", note: o.note || "",
     trackId: o.trackId || null, refNumber: o.refNumber || null, cardNumber: o.cardNumber || null, error: o.error || null,
+    gift: o.gift || null,
   };
 }
 
@@ -548,6 +564,7 @@ function orderText(C, o) {
     `📞 ${tgEsc(c.phone)}`,
     `📍 ${tgEsc(c.address)}`,
     o.refNumber ? `🧾 مرجع بانکی: ${tgEsc(o.refNumber)}` : "",
+    o.gift ? `🎁 هدیه${o.gift.wrap ? " · بسته‌بندی هدیه" : ""}${o.gift.hidePrice ? " · بدون قیمت" : ""}${o.gift.message ? `\n💌 ${tgEsc(o.gift.message)}` : ""}` : "",
     `${C.site}/admin.html`,
   ].filter(Boolean).join("\n");
 }
@@ -555,6 +572,61 @@ async function notifyPaid(C, env, o) {
   if (o.notified) return;
   const r = await telegram(env, orderText(C, o));
   if (r.ok) { const f = await getOrder(env, o.id); if (f) { f.notified = true; await saveOrder(env, f); } }
+}
+
+/* Direct messages to the customer's Telegram chat, when they signed in with Telegram.
+   The bot can only message a user who has started it; failures are logged, never surfaced. */
+async function telegramTo(env, chatId, text) {
+  const token = String(env.TELEGRAM_BOT_TOKEN || "").trim();
+  if (!token || !chatId) return false;
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ chat_id: String(chatId), text, parse_mode: "HTML", disable_web_page_preview: true }),
+      signal: AbortSignal.timeout(10000),
+    });
+    const j = await r.json().catch(() => ({}));
+    if (!j.ok) console.error("customer telegram failed", r.status, String(j.description || "").slice(0, 120));
+    return !!j.ok;
+  } catch (e) {
+    console.error("customer telegram error", String(e).slice(0, 120));
+    return false;
+  }
+}
+
+async function notifyCustomer(env, order, event, C) {
+  if (!order || !order.userId || !env.ACCOUNTS_DB || !env.TELEGRAM_BOT_TOKEN) return false;
+  if (order.customerNotified && order.customerNotified[event]) return false;
+  let chatId = "";
+  try {
+    const row = await env.ACCOUNTS_DB.prepare(
+      "SELECT provider_subject FROM identity_links WHERE user_id = ? AND provider = 'telegram' LIMIT 1",
+    ).bind(String(order.userId)).first();
+    chatId = row ? String(row.provider_subject || "") : "";
+  } catch (error) {
+    console.error("customer chat lookup failed", String(error).slice(0, 120));
+    return false;
+  }
+  if (!chatId) return false;
+  const code = String(order.id).slice(0, 8);
+  const lines = {
+    paid: `✅ پرداخت سفارش <b>#${code}</b> تأیید شد.\nمبلغ: ${Number(order.priceToman).toLocaleString("fa-IR")} تومان\nبه‌زودی بافت سفارشت شروع می‌شه.`,
+    weaving: `🧵 سفارش <b>#${code}</b> وارد مرحله‌ی بافت شد.\nوقتی آماده شد، کد رهگیری پست رو برات می‌فرستیم.`,
+    shipped: `📦 سفارش <b>#${code}</b> ارسال شد.${order.tracking ? `\nکد رهگیری پست: <b>${tgEsc(order.tracking)}</b>` : ""}\nممنون که کارا رو انتخاب کردی.`,
+  }[event];
+  if (!lines) return false;
+  const ok = await telegramTo(env, chatId, `${lines}\n\n${C.site}`);
+  if (ok) {
+    const stamp = new Date().toISOString();
+    order.customerNotified = { ...(order.customerNotified || {}), [event]: stamp };
+    const fresh = await getOrder(env, order.id);
+    if (fresh) {
+      fresh.customerNotified = { ...(fresh.customerNotified || {}), [event]: stamp };
+      await saveOrder(env, fresh);
+    }
+  }
+  return ok;
 }
 async function notifyCreated(C, env, o) {
   if (o.createdNotified) return;
@@ -568,6 +640,7 @@ async function notifyCreated(C, env, o) {
     `👤 ${tgEsc(c.firstName)} ${tgEsc(c.lastName)}`,
     `📞 ${tgEsc(c.phone)}`,
     `📍 ${tgEsc(c.address)}`,
+    o.gift ? `🎁 هدیه${o.gift.wrap ? " · بسته‌بندی هدیه" : ""}${o.gift.hidePrice ? " · بدون قیمت" : ""}${o.gift.message ? `\n💌 ${tgEsc(o.gift.message)}` : ""}` : "",
     `${C.site}/admin.html`,
   ].filter(Boolean).join("\n");
   const r = await telegram(env, message);
@@ -614,6 +687,54 @@ async function adminCustomers(request, env) {
     marketingEligible: !!(row.phone && row.phone_verified_at && row.marketing_sms_consent),
   })));
 }
+/* وضعیت سامانه برای پنل ادمین: نسخه‌ی Worker، bindingها، مایگریشن‌ها و شمارش‌ها. */
+async function adminSystem(request, env) {
+  const gate = await adminGate(request, env); if (gate) return gate;
+  if (!authed(request, env)) return json({ error: "unauthorized" }, 401);
+  if (request.method !== "GET") return json({ error: "method not allowed" }, 405);
+  const meta = env.CF_VERSION_METADATA || {};
+  const out = {
+    version: meta.id || null,
+    tag: meta.tag || null,
+    now: new Date().toISOString(),
+    bindings: {
+      orders: !!env.ORDERS,
+      accounts: !!env.ACCOUNTS_DB,
+      game: !!env.GAME,
+      telegram: !!(env.TELEGRAM_BOT_TOKEN && env.TELEGRAM_CHAT_ID),
+      customerTelegram: !!env.TELEGRAM_BOT_TOKEN,
+      digipay: digipayConfigured(env),
+      admin: !!env.ADMIN_TOKEN,
+      site: cfg(env).site,
+    },
+    migrations: [],
+    counts: {},
+  };
+  if (env.ACCOUNTS_DB) {
+    try {
+      const m = await env.ACCOUNTS_DB.prepare("SELECT name FROM d1_migrations ORDER BY id").all();
+      out.migrations = (m.results || []).map((row) => row.name);
+    } catch (error) {
+      out.migrationsError = String(error).slice(0, 160);
+    }
+    for (const [name, sql] of [
+      ["users", "SELECT COUNT(*) AS n FROM users"],
+      ["orders", "SELECT COUNT(*) AS n FROM orders"],
+      ["challenges", "SELECT COUNT(*) AS n FROM challenges"],
+      ["reviews", "SELECT COUNT(*) AS n FROM reviews"],
+      ["tokens", "SELECT COUNT(*) AS n FROM order_access_tokens"],
+    ]) {
+      try {
+        const row = await env.ACCOUNTS_DB.prepare(sql).first();
+        out.counts[name] = row ? Number(row.n) || 0 : 0;
+      } catch {
+        out.counts[name] = null;
+      }
+    }
+  }
+  return json(out);
+}
+
 /* همگام‌سازی KV → D1: GET = مقایسه، POST {cursor} = یک قدم کپی سفارش‌های قدیمی (تا done:true تکرار کن) */
 async function adminOrdersSync(request, env) {
   const gate = await adminGate(request, env); if (gate) return gate;
@@ -662,8 +783,20 @@ async function admin(request, env, url, ctx) {
       if (typeof b.tracking === "string") o.tracking = b.tracking.trim().slice(0, 60); /* کد رهگیری پست */
       if (typeof b.note === "string") o.note = b.note.trim().slice(0, 500); /* یادداشت داخلی */
       await saveOrder(env, o);
+      if (o.tracking && o.fulfillment === "shipped") {
+        const C = cfg(env);
+        if (ctx) ctx.waitUntil(notifyCustomer(env, o, "shipped", C)); else await notifyCustomer(env, o, "shipped", C);
+      }
     }
-    if (FULFIL.includes(b.fulfillment)) { o.fulfillment = b.fulfillment; await saveOrder(env, o); }
+    if (FULFIL.includes(b.fulfillment)) {
+      const changed = (o.fulfillment || "new") !== b.fulfillment;
+      o.fulfillment = b.fulfillment;
+      await saveOrder(env, o);
+      if (changed && (b.fulfillment === "weaving" || b.fulfillment === "shipped")) {
+        const C = cfg(env);
+        if (ctx) ctx.waitUntil(notifyCustomer(env, o, b.fulfillment, C)); else await notifyCustomer(env, o, b.fulfillment, C);
+      }
+    }
     return json(row(o));
   }
   const id = url.searchParams.get("id");
@@ -718,6 +851,19 @@ export default {
       if (challengeResponse) return challengeResponse;
       const accountResponse = await handleAccountRequest(request, env, url, rateLimit, cleanPattern);
       if (accountResponse) return accountResponse;
+      const adminOnly = async (req) => {
+        const gate = await adminGate(req, env);
+        if (gate) return gate;
+        return authed(req, env) ? null : json({ error: "unauthorized" }, 401);
+      };
+      const trackResponse = await handleTrackRequest(request, env, url, { rateLimit, getOrder, adminGuard: adminOnly });
+      if (trackResponse) return trackResponse;
+      const reviewResponse = await handleReviewRequest(request, env, url, { rateLimit, getAccountUser, adminGuard: adminOnly });
+      if (reviewResponse) return reviewResponse;
+      if (p === "/api/version" && request.method === "GET") {
+        const meta = env.CF_VERSION_METADATA || {};
+        return json({ version: meta.id || null, tag: meta.tag || null, now: new Date().toISOString() });
+      }
       if (p === "/api/config" && request.method === "GET") {
         const C = cfg(env);
         return json({ pricePerBead: C.price, baseFee: C.base });
@@ -740,6 +886,7 @@ export default {
       if (p === "/api/digipay-callback") return await digipayCallback(request, env, url, ctx);
       if (p === "/api/admin/debug") return await debug(request, env, url);
       if (p === "/api/admin/customers") return await adminCustomers(request, env);
+      if (p === "/api/admin/system") return await adminSystem(request, env);
       if (p === "/api/admin/orders-sync") return await adminOrdersSync(request, env);
       if (p === "/api/admin/orders") return await admin(request, env, url, ctx);
       const gameRes = await handleGame(request, env, url);

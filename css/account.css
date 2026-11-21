@@ -21,6 +21,7 @@
 .account-order{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
 .account-order strong{display:block}
 .account-order small{color:var(--muted)}
+.account-order-actions{display:flex;gap:6px;flex-wrap:wrap}
 .account-empty{padding:24px;text-align:center;color:var(--muted);background:rgba(255,255,255,.55);border:1px dashed #cfc4db;border-radius:18px}
 .account-status{display:inline-flex;padding:5px 10px;border-radius:999px;background:#f0eaf5;color:#563477;font-size:12px}
 @media(max-width:640px){.account-wrap{padding-top:96px}.account-section-head h2{font-size:21px}.account-order{align-items:flex-start}}

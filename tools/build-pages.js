@@ -83,6 +83,7 @@ const urls = [
   "/builder.html",
   "/upload.html",
   "/gallery.html",
+  "/size.html",
   "/challenge.html",
   "/game.html",
   "/name-bracelet.html",
@@ -153,11 +154,12 @@ ${
 ${(w.tags || []).length ? `<div class="tags">${w.tags.map((g) => `<span>${esc(g)}</span>`).join("")}</div>` : ""}
 ${
   orderable
-    ? `<div class="pg-price">${fa(price)} تومان</div><div class="btns"><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a><a class="btn" href="/upload.html?src=${encodeURIComponent(w.source || w.src)}">از روی این عکس الگو بساز</a></div>`
-    : `<div class="btns"><a class="btn dark" href="/upload.html">عکس خودت رو به الگو تبدیل کن</a><a class="btn" href="/builder.html">طراحی دستی</a></div>`
+    ? `<div class="pg-price">${fa(price)} تومان</div><div class="btns"><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a><a class="btn" href="/upload.html?src=${encodeURIComponent(w.source || w.src)}">از روی این عکس الگو بساز</a><button class="btn" type="button" data-share-work data-share-title="دستبند منجوقی ${esc(t)} | کارا">اشتراک‌گذاری</button></div>`
+    : `<div class="btns"><a class="btn dark" href="/upload.html">عکس خودت رو به الگو تبدیل کن</a><a class="btn" href="/builder.html">طراحی دستی</a><button class="btn" type="button" data-share-work data-share-title="دستبند منجوقی ${esc(t)} | کارا">اشتراک‌گذاری</button></div>`
 }
 <p style="margin-top:16px;color:var(--muted);font-size:16px">دست‌باف با منجوق دلیکای میوکی ژاپنی. حداکثر تا یک هفته بعد از سفارش آماده و برات پست می‌شه. می‌تونی همین طرح رو توی <a href="/builder.html" style="text-decoration:underline">استودیو</a> عوض کنی یا طرح خودت رو بسازی.</p></div></div>
-<h2>دستبندهای دیگه</h2><div class="rel">${rel.map((x) => `<a href="${urlOf(x)}"><img src="${esc(abs(x.thumb || x.src))}" alt="دستبند منجوقی ${esc(titleOf(x))}" loading="lazy">${esc(titleOf(x))}</a>`).join("")}</div>`;
+<h2>دستبندهای دیگه</h2><div class="rel">${rel.map((x) => `<a href="${urlOf(x)}"><img src="${esc(abs(x.thumb || x.src))}" alt="دستبند منجوقی ${esc(titleOf(x))}" loading="lazy">${esc(titleOf(x))}</a>`).join("")}</div>
+<h2>نظر خریداران</h2><div class="reviews" data-reviews data-work="${esc(w.id)}"></div>`;
   write(
     `bracelet/${slug(w.id)}.html`,
     HEAD({ title, desc, path: urlOf(w), image: imgs[0], ld }) + body + FOOT,
@@ -365,6 +367,6 @@ write(
 );
 write(
   "robots.txt",
-  `User-agent: *\nAllow: /\nDisallow: /admin.html\nDisallow: /checkout.html\nDisallow: /challenge-admin.html\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\n`,
+  `User-agent: *\nAllow: /\nDisallow: /admin.html\nDisallow: /admin-reviews.html\nDisallow: /checkout.html\nDisallow: /challenge-admin.html\nDisallow: /track.html\nDisallow: /api/\n\nSitemap: ${SITE}/sitemap.xml\nFeed: ${SITE}/feed.xml\n`,
 );
 console.log(`✓ sitemap.xml (${urls.length} آدرس) و robots.txt`);

@@ -73,6 +73,7 @@
       }
     </script>
     <link rel="stylesheet" href="/css/game.css" />
+    <link rel="stylesheet" href="/css/daily.css?v=1" />
     <link rel="stylesheet" href="/css/accessibility.css" />
     <link rel="stylesheet" href="/css/fixes.css?v=2" />
     <link rel="stylesheet" href="/css/polish.css?v=7" />
@@ -171,12 +172,32 @@
             <button type="button" class="gbtn" id="again">بازی دوباره</button>
           </div>
         </section>
+
+        <section class="card daily" id="daily" aria-labelledby="dailyH">
+          <h2 id="dailyH">چالش روزانه</h2>
+          <p class="sub">
+            هر روز ۵ راند تازه؛ یک منجوق رنگش با بقیه فرق دارد. پنج‌تا را پشت
+            سر هم پیدا کن تا زنجیره‌ات حفظ شود. این بخش آفلاین هم کار می‌کند.
+          </p>
+          <div class="daily-stats" id="dailyStats"></div>
+          <div class="daily-grid" id="dailyGrid" hidden></div>
+          <p class="sub daily-msg" id="dailyMsg" role="status" aria-live="polite" aria-atomic="true"></p>
+          <div class="gacts">
+            <button type="button" class="gbtn" id="dailyPlay">شروع چالش امروز</button>
+            <button type="button" class="gbtn line" id="dailyShare" hidden>کارت اشتراک‌گذاری</button>
+          </div>
+        </section>
       </div>
     </main>
+    <script src="js/palette.js?v=34"></script>
+    <script src="js/share-card.js?v=1"></script>
+    <script src="js/daily-puzzle.js?v=1"></script>
     <script src="js/game.js?v=3"></script>
+    <script src="js/daily.js?v=1"></script>
     <script src="js/decor.js?v=14" defer></script>
     <script src="/js/contact.js" defer></script>
     <script src="/js/pwa.js?v=20261105-no-install-button" defer></script>
     <script src="/js/nav-hero.js?v=1" defer></script>
+      <script src="/js/analytics.js?v=1" defer></script>
   </body>
 </html>

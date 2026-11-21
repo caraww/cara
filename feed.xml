@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>دفتر کارا | cara journal</title>
+    <link>https://caraw.ir/blog/</link>
+    <description>از انتخاب رنگ تا ریزه‌کاری‌های ساخت دستبند؛ هر پست یه چیز تازه برای کشف کردن داره.</description>
+    <language>fa-IR</language>
+    <lastBuildDate>Fri, 21 Nov 2026 06:00:00 GMT</lastBuildDate>
+    <atom:link href="https://caraw.ir/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>چطور اندازه‌ی درست مچت رو پیدا کنی؟</title>
+      <link>https://caraw.ir/blog/wrist-size.html</link>
+      <guid isPermaLink="true">https://caraw.ir/blog/wrist-size.html</guid>
+      <pubDate>Fri, 21 Nov 2026 06:00:00 GMT</pubDate>
+      <description>راهنمای اندازه‌گیری دور مچ، انتخاب اندازه‌ی دستبند و تبدیلش به تعداد منجوق.</description>
+    </item>
+    <item>
+      <title>چطور رنگ‌ها رو کنار هم بچینیم؟</title>
+      <link>https://caraw.ir/blog/color-meanings.html</link>
+      <guid isPermaLink="true">https://caraw.ir/blog/color-meanings.html</guid>
+      <pubDate>Fri, 21 Nov 2026 05:00:00 GMT</pubDate>
+      <description>چند قاعده‌ی ساده برای ترکیب رنگ منجوق‌ها و ساختن پالت‌های چشم‌نواز.</description>
+    </item>
+    <item>
+      <title>قصه‌ی منجوق‌های میوکی دلیکا</title>
+      <link>https://caraw.ir/blog/miyuki-delica.html</link>
+      <guid isPermaLink="true">https://caraw.ir/blog/miyuki-delica.html</guid>
+      <pubDate>Fri, 21 Nov 2026 04:00:00 GMT</pubDate>
+      <description>چرا منجوق دلیکا برای دستبندهای ظریف و یکدست انتخاب می‌شود.</description>
+    </item>
+    <item>
+      <title>چطور از دستبندت مراقبت کنی؟</title>
+      <link>https://caraw.ir/blog/bracelet-care.html</link>
+      <guid isPermaLink="true">https://caraw.ir/blog/bracelet-care.html</guid>
+      <pubDate>Fri, 21 Nov 2026 03:00:00 GMT</pubDate>
+      <description>نگهداری روزمره، جلوگیری از کشیدگی نخ و تمیز کردن منجوق‌ها.</description>
+    </item>
+  </channel>
+</rss>

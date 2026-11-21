@@ -7,7 +7,7 @@ const sitemap = fs.readFileSync(path.join(__dirname, "..", "sitemap.xml"), "utf8
 
 test("sitemap lastmod values reflect the latest committed page regeneration", () => {
   const entries = [...sitemap.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/g)];
-  assert.equal(entries.length, 63, "all public bracelet, color, and primary pages stay listed");
+  assert.equal(entries.length, 64, "all public bracelet, color, and primary pages stay listed");
   for (const [, url, lastmod] of entries) {
     assert.ok(lastmod >= "2026-11-14", url + " has stale lastmod " + lastmod);
   }

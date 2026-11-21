@@ -93,6 +93,7 @@
     </script>
     <link rel="stylesheet" href="css/decor.css" />
     <link rel="stylesheet" href="css/builder.css?v=20261105-textlayout3" />
+    <link rel="stylesheet" href="css/pattern-extras.css?v=1" />
     <style>
       .seo-text {
         max-width: 780px;
@@ -339,6 +340,14 @@
           <path d="M4 7h10M18 7h2M4 17h2M10 17h10" />
           <circle cx="16" cy="7" r="2" />
           <circle cx="8" cy="17" r="2" />
+        </symbol>
+        <symbol id="i-card" viewBox="0 0 24 24">
+          <rect x="3" y="5" width="18" height="14" rx="2" />
+          <path d="M3 9h18M7 15h4" />
+        </symbol>
+        <symbol id="i-print" viewBox="0 0 24 24">
+          <path d="M6 9V4h12v5M6 18H4v-6h16v6h-2" />
+          <rect x="7" y="14" width="10" height="6" rx="1" />
         </symbol>
         <symbol id="i-close" viewBox="0 0 24 24">
           <path d="M6 6l12 12M18 6L6 18" />
@@ -599,6 +608,26 @@
                   <circle cx="18" cy="19" r="3" />
                   <path d="M8.7 10.7l6.6-4.4M8.7 13.3l6.6 4.4" />
                 </svg></button
+              ><button
+                type="button"
+                class="tool ib"
+                id="shareCard"
+                aria-label="ساخت کارت تصویری طرح"
+                data-tip="کارت اشتراک‌گذاری"
+              >
+                <svg class="ic" aria-hidden="true">
+                  <use href="#i-card" />
+                </svg></button
+              ><button
+                type="button"
+                class="tool ib"
+                id="printPattern"
+                aria-label="چاپ الگو و لیست منجوق‌ها"
+                data-tip="چاپ الگو"
+              >
+                <svg class="ic" aria-hidden="true">
+                  <use href="#i-print" />
+                </svg></button
               ><a class="btn accent sm" id="next" href="checkout.html"
                 >ادامه سفارش</a
               ><a
@@ -644,6 +673,15 @@
           <div class="stat" id="priceRow" hidden>
             <span>قیمت تقریبی</span><strong id="priceText">—</strong>
           </div>
+          <p
+            class="sr-narration"
+            id="patternNarration"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          >
+            هنوز منجوقی نچیده‌ای.
+          </p>
           <div class="colors" id="colors"></div>
         </aside>
       </div>
@@ -1108,12 +1146,23 @@
       <button type="button" class="btn accent" id="mbNext">ادامه سفارش</button>
       <a class="btn" href="/cart.html?add=design">افزودن به سبد</a>
     </div>
+    <div class="print-sheet" id="printSheet">
+      <h1>الگوی دستبند منجوقی کارا</h1>
+      <p id="printMeta"></p>
+      <canvas id="printCanvas"></canvas>
+      <ul id="printList"></ul>
+      <p>cara · caraw.ir · همین طرح را می‌توانی در استودیوی سایت ویرایش کنی.</p>
+    </div>
     <script src="js/palette.js?v=34"></script>
     <script src="js/pattern-share.js?v=2"></script>
+    <script src="js/pattern-narrate.js?v=1"></script>
+    <script src="js/share-card.js?v=1"></script>
     <script src="js/builder.js?v=7"></script>
+    <script src="js/builder-extras.js?v=1"></script>
     <script src="js/decor.js?v=14" defer></script>
     <script src="/js/contact.js" defer></script>
     <script src="/js/pwa.js?v=20261105-no-install-button" defer></script>
     <script src="/js/nav-hero.js?v=1" defer></script>
+      <script src="/js/analytics.js?v=1" defer></script>
   </body>
 </html>

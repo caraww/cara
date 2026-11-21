@@ -1,4 +1,4 @@
-const CACHE_NAME = "cara-pwa-v8";
+const CACHE_NAME = "cara-pwa-v9";
 const CORE_ASSETS = [
   "/",
   "/offline.html",
@@ -30,9 +30,33 @@ self.addEventListener("activate", (event) => {
   );
 });
 
+/* Web Share Target: the browser posts the shared image here, we park it in a
+   short-lived cache and send the user to the photo-to-pattern page. */
+async function receiveSharedImage(request) {
+  try {
+    const form = await request.formData();
+    const file = form.get("image");
+    if (file && typeof file === "object" && file.size > 0) {
+      const cache = await caches.open("cara-share-target");
+      await cache.put("/shared-image", new Response(file, {
+        headers: { "Content-Type": file.type || "image/jpeg", "X-Cara-Name": encodeURIComponent(file.name || "shared.jpg") },
+      }));
+      return Response.redirect("/upload.html?shared=1", 303);
+    }
+  } catch (error) {
+    console.warn("share target failed", error);
+  }
+  return Response.redirect("/upload.html?shared=none", 303);
+}
+
 self.addEventListener("fetch", (event) => {
   const request = event.request;
   const url = new URL(request.url);
+
+  if (url.origin === self.location.origin && url.pathname === "/share-target.html" && request.method === "POST") {
+    event.respondWith(receiveSharedImage(request));
+    return;
+  }
 
   if (request.method !== "GET" || url.origin !== self.location.origin) return;
   if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/admin")) return;

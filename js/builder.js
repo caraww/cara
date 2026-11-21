@@ -100,6 +100,12 @@ try {
   const saved = C.loadPattern();
   if (shared) { data = shared.data; w = shared.width; h = shared.height; }
   else if (saved) { data = saved.data; w = saved.width; h = saved.height; }
+  else {
+    /* Deep link from the wrist-size helper: /builder.html?w=15&h=114 */
+    const qp = new URLSearchParams(location.search);
+    const qw = Math.round(Number(qp.get("w"))), qh = Math.round(Number(qp.get("h")));
+    if (qw >= 1 && qw <= L.MAX_W && qh >= 1 && qh <= L.MAX_H) { w = qw; h = qh; data = empty(w, h); }
+  }
   wIn.value = w; hIn.value = h;
   try { recent = (JSON.parse(localStorage.getItem("cara-recent")) || []).filter((c) => C.byCode(c)).slice(0, 8); } catch {}
 
@@ -366,6 +372,7 @@ try {
       ? window.CARA_PATTERN_SHARE.makeHash(data, C.palette)
       : "";
     if (!hash) return;
+    window.CARA && CARA.track && CARA.track("pattern_share");
     const url = location.origin + location.pathname + location.search + hash;
     try {
       if (navigator.share) await navigator.share({ title: "الگوی دستبند کارا", url });
@@ -389,6 +396,7 @@ try {
 
   /* خروجی چارت */
   $("export").onclick = () => {
+    window.CARA && CARA.track && CARA.track("pattern_export");
     const { counts } = summary(), rows = Object.entries(counts).sort((a, b) => b[1] - a[1]);
     const cw2 = 26, ch2 = Math.round(cw2 / L.BEAD_ASPECT), gw = M + w * cw2 + 4, LW = 300;
     const W = gw + 24 + LW, H = Math.max(T + h * ch2 + 20, 60 + rows.length * 30);

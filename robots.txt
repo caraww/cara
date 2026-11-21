@@ -1,8 +1,11 @@
 User-agent: *
 Allow: /
 Disallow: /admin.html
+Disallow: /admin-reviews.html
 Disallow: /checkout.html
 Disallow: /challenge-admin.html
+Disallow: /track.html
 Disallow: /api/
 
 Sitemap: https://caraw.ir/sitemap.xml
+Feed: https://caraw.ir/feed.xml

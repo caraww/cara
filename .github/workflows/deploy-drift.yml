@@ -1,0 +1,34 @@
+name: Production deploy drift
+
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compare the deployed Worker tag with the latest Worker commit
+        env:
+          PROD_URL: ${{ vars.PRODUCTION_URL }}
+        run: |
+          if [ -z "$PROD_URL" ]; then
+            echo "::notice::Set the PRODUCTION_URL repository variable to enable drift checks."
+            exit 0
+          fi
+          expected="$(git log -1 --format=%H -- index.js lib wrangler.jsonc migrations)"
+          actual="$(curl -fsS "$PROD_URL/api/version" | node -e "let s='';process.stdin.on('data',d=>s+=d).on('end',()=>console.log((JSON.parse(s).tag||'').trim()))")"
+          echo "expected=$expected" >> "$GITHUB_STEP_SUMMARY"
+          echo "deployed=$actual" >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$expected" ] && [ "$actual" != "$expected" ]; then
+            echo "::warning::The production Worker is not running the latest commit that touched Worker files."
+          else
+            echo "Production Worker matches the latest Worker commit."
+          fi

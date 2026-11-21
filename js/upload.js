@@ -60,6 +60,27 @@
     im.onerror = () => { msg.textContent = "عکس گالری باز نشد؛ می‌تونی خودت یه عکس انتخاب کنی."; };
     im.src = u.href;
   })();
+  /* PWA share target: sw.js parks the shared photo in this cache. */
+  (async function fromShareTarget() {
+    const sp = new URLSearchParams(location.search);
+    if (sp.get("shared") !== "1") {
+      if (sp.get("shared") === "none") { msg.hidden = false; msg.textContent = "عکسی همراه اشتراک‌گذاری نیامد؛ می‌تونی خودت انتخابش کنی."; }
+      return;
+    }
+    try {
+      const cache = await caches.open("cara-share-target");
+      const response = await cache.match("/shared-image");
+      if (!response) { msg.hidden = false; msg.textContent = "عکس اشتراکی پیدا نشد؛ دوباره از گالری گوشی انتخابش کن."; return; }
+      const blob = await response.blob();
+      const name = decodeURIComponent(response.headers.get("X-Cara-Name") || "shared.jpg");
+      await cache.delete("/shared-image");
+      msg.hidden = false; msg.textContent = "عکس اشتراکی رو باز کردم؛ حالا برش و رنگ‌هاش رو تنظیم کن.";
+      load(new File([blob], name, { type: blob.type || "image/jpeg" }));
+      try { history.replaceState(null, "", location.pathname); } catch {}
+    } catch {
+      msg.hidden = false; msg.textContent = "نتونستم عکس اشتراکی رو باز کنم؛ از دکمه‌ی انتخاب عکس استفاده کن.";
+    }
+  })();
   $("file").addEventListener("change", (e) => { const f = e.target.files[0]; load(f); e.target.value = ""; });
   ["dragenter", "dragover"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.add("over"); }));
   ["dragleave", "drop"].forEach((ev) => drop.addEventListener(ev, (e) => { e.preventDefault(); drop.classList.remove("over"); }));
@@ -301,6 +322,11 @@
         msg.hidden = false;
         msg.textContent = "الگو ساخته شد، اما در مرورگر ذخیره نشد؛ فضای ذخیره‌سازی را آزاد کن و دوباره امتحان کن.";
       } /* ذخیره خودکار برای سازنده و سفارش */
+      const now = Date.now();
+      if (!convert.lastTrack || now - convert.lastTrack > 3000) {
+        convert.lastTrack = now;
+        window.CARA && CARA.track && CARA.track("photo_convert", { beads: w * h, colors: used });
+      }
     } catch (err) {
       console.error(err); msg.hidden = false; msg.textContent = "تبدیل عکس به مشکل خورد؛ یه عکس دیگه امتحان کن.";
     }

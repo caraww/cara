@@ -11,7 +11,8 @@ test("Cloudflare Worker production deploy is gated, scoped, and dry-run first", 
   assert.match(workflow, /branches:\s*\n\s+- main/);
   assert.match(workflow, /paths:\s*\n[\s\S]*?index\.js[\s\S]*?lib\/\*\*/);
   assert.match(workflow, /wrangler@4 deploy --dry-run/);
-  assert.ok(workflow.indexOf("wrangler@4 deploy --dry-run") < workflow.indexOf("wrangler@4 deploy\n"));
+  const deployAt = workflow.search(/wrangler@4 deploy(?: --tag [^\n]+)?\n/);
+  assert.ok(workflow.indexOf("wrangler@4 deploy --dry-run") < deployAt);
   assert.match(workflow, /secrets\.CLOUDFLARE_API_TOKEN/);
   assert.match(workflow, /vars\.CLOUDFLARE_ACCOUNT_ID/);
   assert.doesNotMatch(workflow, /^\s*pull_request:/m);
