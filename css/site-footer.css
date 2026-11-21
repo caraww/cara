@@ -29,7 +29,6 @@
 .sf__logo { display: inline-flex; }
 .sf__brand img { display: block; width: auto; height: 46px; }
 .sf__brand p { max-width: 32em; margin: 0; color: var(--sf-muted); font-size: 14px; line-height: 2; }
-.sf__brand .sf__note { color: var(--sf-dim); font-size: 13px; }
 .sf__seal {
   display: inline-flex;
   padding: 8px;
