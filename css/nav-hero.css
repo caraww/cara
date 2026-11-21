@@ -322,3 +322,10 @@
   .sh.is-open .sh__nav { animation: none; }
   .hx__btn--gold:hover { transform: none; }
 }
+
+/* موبایل: دکمه‌های شناور تماس گوشه‌ی پایین-چپ‌اند؛ فلش‌های اسلایدر کمی
+   به داخل می‌آیند تا ناحیه‌ی لمسشان با هم هم‌پوشانی نکند. */
+@media (max-width: 820px) {
+  .cara-bracelet-lineup__arrow--prev { right: 72px; }
+  .cara-bracelet-lineup__arrow--next { left: 72px; }
+}
