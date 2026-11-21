@@ -692,7 +692,7 @@
   backdrop-filter:blur(10px);
   border:1px solid rgba(184,151,90,.35) !important;
   box-shadow:0 4px 14px rgba(34,26,44,.12) !important;
-  color:#8c809c !important;
+  color:var(--cara-detail-ink, #6a5aa0) !important;
   transition:transform .25s cubic-bezier(.2,.7,.2,1),background .2s,border-color .2s,box-shadow .25s;
 }
 .wk-grid .wk-card button.wk-fav::before{

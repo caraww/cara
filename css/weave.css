@@ -154,7 +154,7 @@
 
 /* Keep every English section label consistent and understated. */
 .section-kicker {
-  color: #b8975a !important;
+  color: var(--cara-gold-ink, #7d5f26) !important;
 }
 .wv-heading > .section-kicker {
   display: flex;

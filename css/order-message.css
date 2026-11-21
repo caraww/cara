@@ -19,7 +19,7 @@
   padding: 0 16px;
   border: 1px solid rgba(184, 151, 90, .45);
   border-radius: 999px;
-  color: var(--cara-detail, #4a3a20);
+  color: var(--cara-detail-ink, #6a5aa0);
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;

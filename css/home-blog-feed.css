@@ -2,7 +2,7 @@
 .cara-journal__heading{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:22px}
 .cara-journal__eyebrow{margin:0 0 8px;color:#a47d75;font-size:12px;font-weight:800;}
 .cara-journal__heading h2{margin:0;color:#343b64;font-size:clamp(24px,3vw,36px);line-height:1.5}
-.cara-journal__heading p:not(.cara-journal__eyebrow){margin:6px 0 0;color:#77758a;font-size:13px}
+.cara-journal__heading p:not(.cara-journal__eyebrow){margin:6px 0 0;color:#5f586e;font-size:13px}
 .cara-journal__arrows{display:flex;gap:8px;flex:none}
 .cara-journal__arrows button{width:44px;height:44px;border:1px solid #ded6d2;border-radius:50%;background:transparent;color:#343b64;font-size:20px;cursor:pointer;transition:background .2s,color .2s;direction:ltr;unicode-bidi:bidi-override}
 .cara-journal__arrows button:hover{background:#343b64;color:#fff}
@@ -58,21 +58,21 @@
 
 /* Refined homepage section labels — scoped and cache-busted in index.html. */
 .cara-weaving__copy > .section-kicker {
-  color: #b8975a !important;
+  color: var(--cara-gold-ink, #7d5f26) !important;
   font-size: 12px !important;
   font-weight: 800;
   
   line-height: 1.6;
 }
 .wv-heading > .section-kicker {
-  color: #b8975a !important;
+  color: var(--cara-gold-ink, #7d5f26) !important;
   font-size: 12px !important;
   font-weight: 800;
   
   line-height: 1.6;
 }
 .cara-journal__heading .section-kicker {
-  color: #b8975a !important;
+  color: var(--cara-gold-ink, #7d5f26) !important;
   font-size: 11px !important;
   font-weight: 800;
   
@@ -85,7 +85,7 @@
 #samples > .section-kicker,
 #steps > .section-kicker,
 #beads > .section-kicker {
-  color: #b8975a !important;
+  color: var(--cara-gold-ink, #7d5f26) !important;
 }
 
 /* Keep every English homepage section title the same compact size. */

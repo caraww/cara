@@ -519,3 +519,89 @@ html[data-theme="dark"] .chl-how li::before {
   background: linear-gradient(145deg, #332b1c, #241f16);
   color: var(--cara-gold);
 }
+
+/* کارت‌های «از کجا شروع کنیم» در شب */
+html[data-theme="dark"] .path {
+  border: 1px solid var(--cara-line);
+  background: linear-gradient(160deg, var(--cara-surface-2) 0%, var(--cara-surface) 100%);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .38);
+}
+html[data-theme="dark"] .path.tint {
+  background: linear-gradient(160deg, #2c2440 0%, #221c33 100%);
+  border-color: rgba(143, 138, 216, .28);
+}
+html[data-theme="dark"] .path h3 { color: var(--cara-text); }
+html[data-theme="dark"] .path p { color: var(--cara-muted); }
+html[data-theme="dark"] .path::before { color: rgba(217, 187, 133, .28); }
+html[data-theme="dark"] .path:hover { box-shadow: 0 26px 54px rgba(0, 0, 0, .5); }
+html[data-theme="dark"] .path .btn:not(.dark) {
+  border: 1px solid var(--cara-line);
+  background: rgba(255, 255, 255, .06);
+  color: var(--cara-text);
+  box-shadow: none;
+}
+html[data-theme="dark"] .paths-quiz a { color: var(--cara-gold); }
+
+/* جعبه‌ی دعوت به ساخت در انتهای مقاله + برچسب بالای صفحه‌های حساب */
+html[data-theme="dark"] .blog-cta {
+  border-color: rgba(217, 187, 133, .3);
+  background: linear-gradient(160deg, var(--cara-surface-2), var(--cara-surface));
+}
+html[data-theme="dark"] .blog-cta strong { color: var(--cara-text); }
+html[data-theme="dark"] .blog-cta p,
+html[data-theme="dark"] .blog-cta a { color: var(--cara-gold); }
+html[data-theme="dark"] .account-eyebrow,
+html[data-theme="dark"] .section-kicker,
+html[data-theme="dark"] .eyebrow { color: var(--cara-gold); }
+
+/* کپشن روی کارت سفید هیرو همیشه تیره می‌مونه، چون پشتش عکسه */
+html[data-theme="dark"] .hx__real figcaption { color: #3b3157; }
+
+/* بنر پرداخت دیجی‌پی در شب */
+html[data-theme="dark"] .cara-payment-promo {
+  border-color: rgba(126, 196, 205, .24);
+  background:
+    radial-gradient(circle at 12% 12%, rgba(126, 196, 205, .16), transparent 42%),
+    linear-gradient(120deg, #16222c 0%, #172a2e 52%, #241d2f 100%);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, .45);
+}
+html[data-theme="dark"] .cara-payment-promo__copy h2 { color: #eaf3f5; }
+html[data-theme="dark"] .cara-payment-promo__copy > p:not(.section-kicker) { color: #a9bcc4; }
+html[data-theme="dark"] .cara-payment-promo__link {
+  background: #d9bb85;
+  color: #241d12;
+}
+html[data-theme="dark"] .cara-payment-promo__link:hover { background: #e7cfa0; color: #241d12; }
+
+/* --- خوانایی متن‌های ریز در تم روشن (WCAG AA) --- */
+html[data-theme="light"] {
+  --cara-detail-ink: #6a5aa0;
+  --cara-gold-ink: #7d5f26;
+}
+html[data-theme="dark"] {
+  --cara-detail-ink: #cfc7f2;
+  --cara-gold-ink: #d9bb85;
+}
+html[data-theme="light"] .cara-journal__hint,
+html[data-theme="light"] .cara-bracelet-lineup__count,
+html[data-theme="light"] .cp__hero figcaption,
+html[data-theme="light"] .cara-weaving__caption,
+html[data-theme="light"] .wv-heading > p { color: #5f586e; }
+html[data-theme="light"] .cara-journal__art small,
+html[data-theme="light"] .cara-journal__copy > small,
+html[data-theme="light"] .card-art small,
+html[data-theme="light"] .card-kicker { opacity: 1; }
+html[data-theme="light"] .cara-bracelet-lineup__arrow { color: rgba(52, 59, 100, .72); }
+html[data-theme="light"] .cara-weaving__link { color: #4d3f1d; }
+html[data-theme="light"] .wk-fav { color: var(--cara-detail-ink) !important; }
+html[data-theme="light"] .trust-strip__item a { color: var(--cara-detail-ink) !important; }
+html[data-theme="light"] .scroll-hint,
+html[data-theme="light"] .drop .msg { color: #5f586e !important; }
+
+/* Gold surfaces keep dark ink in the night theme too. */
+html[data-theme="dark"] .gbtn { color: #2b2237 !important; }
+html[data-theme="dark"] .account-mark { color: #2b2237; }
+html[data-theme="dark"] .cara-journal__art small,
+html[data-theme="dark"] .cara-journal__copy > small,
+html[data-theme="dark"] .card-art small,
+html[data-theme="dark"] .card-kicker { opacity: 1; }

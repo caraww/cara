@@ -1081,7 +1081,7 @@ button, .btn, a.btn {
 .section-kicker {
   display: block;
   margin: 0 0 8px;
-  color: #a47d75;
+  color: var(--cara-gold-ink, #7d5f26);
   font-size: 10px;
   font-weight: 800;
   line-height: 1.5;
@@ -1511,7 +1511,7 @@ button, .btn, a.btn {
 }
 .cara-payment-promo:before{content:"";position:absolute;z-index:-1;width:390px;height:390px;border-radius:50%;right:-170px;top:-245px;background:rgba(255,255,255,.55)}
 .cara-payment-promo__copy{position:relative;z-index:2;text-align:right}
-.cara-payment-promo__copy .section-kicker{color:#6e9ca0;font-size:12px}
+.cara-payment-promo__copy .section-kicker{color:#3f6f74;font-size:12px}
 .cara-payment-promo__copy h2{margin:10px 0 13px;color:#29434a;font-size:clamp(26px,3.2vw,39px);line-height:1.55}
 .cara-payment-promo__copy>p:not(.section-kicker){max-width:39em;margin:0;color:#6b7e82;font-size:clamp(14px,1.3vw,17px);line-height:2.15}
 .cara-payment-promo__link{display:inline-flex;align-items:center;gap:14px;margin-top:25px;padding:12px 20px;border:1px solid #d4e5e6;border-radius:13px;background:#fff;color:#28616b;font-weight:800;font-size:13px;box-shadow:0 7px 20px rgba(45,101,109,.07);transition:transform .2s,box-shadow .2s,background .2s}

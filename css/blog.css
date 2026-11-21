@@ -12,7 +12,7 @@ a{color:inherit}
 .brand-mark{position:relative;z-index:1;align-self:flex-start;color:#fff;text-decoration:none;font-size:28px;font-weight:700}
 .brand-mark img{display:block;width:auto;height:40px;max-width:160px;object-fit:contain}
 .feed-heading{position:relative;z-index:1;max-width:620px;margin:28px 0 8px}
-.eyebrow{font-size:13px;color:#b98f83;margin:0 0 9px}
+.eyebrow{font-size:13px;color:var(--cara-gold-ink, #8a5a4a);margin:0 0 9px}
 .feed-heading .eyebrow{color:#f0c2b0}
 .feed-heading h1{font-size:clamp(36px,6vw,66px);line-height:1.45;margin:0;font-weight:700}
 .feed-heading h1 em{font-style:normal;color:#f1bca8}
@@ -78,7 +78,7 @@ a{color:inherit}
 .card-open{display:flex;align-items:center;justify-content:space-between;border-top:1px solid currentColor;padding-top:10px;font-size:12px;font-weight:600}
 .card-open b{font-size:18px}
 .scroll-hint{display:flex;align-items:center;justify-content:center;gap:12px;color:var(--muted);font-size:12px;margin:2px 0 0}
-.scroll-hint span{color:#b98f83;font-size:18px}
+.scroll-hint span{color:var(--cara-gold-ink, #8a5a4a);font-size:18px}
 .post-reader{margin:28px 0 46px;padding:clamp(18px,4vw,42px);background:#fff;border:1px solid var(--line);border-radius:26px;box-shadow:0 16px 50px #3027420c;scroll-margin-top:18px}
 .post-reader[hidden]{display:none}
 .reader-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:24px}
