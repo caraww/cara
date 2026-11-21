@@ -13,7 +13,7 @@ test("homepage logo images declare intrinsic dimensions to prevent layout shift"
   ];
 
   for (const logo of logos) {
-    const srcIndex = html.indexOf(`src=\"img/${logo.src}`);
+    const srcIndex = Math.max(html.indexOf(`src=\"img/${logo.src}`), html.indexOf(`src=\"/img/${logo.src}`));
     assert.notEqual(srcIndex, -1, `homepage should include ${logo.src}`);
     const tagStart = html.lastIndexOf("<img", srcIndex);
     const tagEnd = html.indexOf(">", srcIndex);
