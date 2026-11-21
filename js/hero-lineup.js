@@ -103,6 +103,13 @@
 
   let active=0,frame=0,visible=false,mx=0,my=0,w=0,h=0,dpr=1,startX=0,startY=0,pointerId=null;
   const count=root.querySelector(".cara-bracelet-lineup__count");
+  const realImages=[...root.querySelectorAll("[data-hero-real]")];
+  const realCaption=root.querySelector("[data-hero-caption]");
+  const realLabels={
+    "thousand-eyes":"هزارچشم · بافته‌شده با دست",
+    waterfall:"آبشار رنگی · بافته‌شده با دست",
+    chain:"زنجیر · بافته‌شده با دست"
+  };
   function fit(entry){
     const c=entry.canvas,rect=c.getBoundingClientRect(),box=rect.width||Math.min(innerWidth<=820?innerWidth*.82:620,innerHeight*.78);
     const size=Math.max(1,box);dpr=Math.min(devicePixelRatio||1,2);
@@ -150,7 +157,10 @@
   }
   function show(next){
     active=(next+entries.length)%entries.length;
+    const currentId=entries[active].card.dataset.bracelet;
     entries.forEach((entry,i)=>{const on=i===active;entry.card.classList.toggle("is-active",on);entry.card.setAttribute("aria-hidden",on?"false":"true");});
+    realImages.forEach(img=>img.classList.toggle("is-active",img.dataset.heroReal===currentId));
+    if(realCaption)realCaption.textContent=realLabels[currentId]||entries[active].title;
     if(count)count.textContent=(active+1).toLocaleString("fa-IR")+" از "+entries.length.toLocaleString("fa-IR");
     render(entries[active],performance.now());
   }

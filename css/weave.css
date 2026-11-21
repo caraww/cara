@@ -157,7 +157,9 @@
   color: #b8975a !important;
 }
 .wv-heading > .section-kicker {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   margin: 0 0 10px;
   font-size: 11px !important;
   font-weight: 800;
