@@ -6,7 +6,7 @@
   --cara-bg: #E9E9ED;
   --cara-surface: #FFFFFF;
   --cara-text: #242431;
-  --cara-muted: #626273;
+  --cara-muted: #544f60;
   --cara-line: #D4D4DF;
   --cara-accent: #343B64;
   --cara-detail: #9B8FC1;
@@ -38,7 +38,7 @@
   --cara-plum-deep: #22243B;
   --cara-lilac: var(--cara-accent-soft);
   --cara-paper: var(--cara-bg);
-  --cara-muted: #626273;
+  --cara-muted: #544f60;
   --cara-line: #D4D4DF;
   --cara-gold: var(--cara-detail);
 }
@@ -48,7 +48,7 @@
    the shared footer/nav layers build from these tokens. */
 :root {
   --cara-font: "Vazir", Tahoma, system-ui, sans-serif;
-  --cara-font-display: "Lalezar", "Vazir", Tahoma, system-ui, sans-serif;
+  --cara-font-display: "Baloo", "Vazir", Tahoma, system-ui, sans-serif;
 
   --cara-text-xs: 12px;
   --cara-text-sm: 14px;
