@@ -1,12 +1,13 @@
 /* theme.css — لایه‌ی روز/شب. آخر از همه لود می‌شه تا از توکن‌های مشترک
    همه‌ی صفحه‌ها رو دوباره رنگ کنه. روز پیش‌فرض است؛ شب وقتی سیستم‌عامل
    تیره باشه یا خود بازدیدکننده انتخابش کنه (js/theme.js روی html می‌نویسه).
-   هیچ قاعده‌ای اینجا !important نمی‌خواد: فقط توکن‌ها و سطح‌هایی رو عوض
-   می‌کنیم که در صفحه‌ها رنگ ثابت دارند. */
+   فقط توکن‌ها و سطح‌هایی رو عوض می‌کنیم که در صفحه‌ها رنگ ثابت دارند؛
+   تنها استثنا رنگ تیترهاست که با !important روی همه‌ی صفحه‌ها قفل می‌شه. */
 
 :root {
   color-scheme: light;
   --cara-heading: #343b64;
+  --cara-heading-invert: #f6f4fb;
   --cara-surface-2: #f2f0f7;
   --cara-surface-3: #e7e4ef;
   --cara-on-accent: #fff;
@@ -15,12 +16,10 @@
 }
 
 /* ---------- تیترها: یک رنگ برای کل سایت ---------- */
-/* هر تیتری که رنگ اختصاصی نداشته باشد از این توکن رنگ می‌گیرد. سطح‌های
-   تیره (هیرو، فوتر، کارت‌های رنگی) خودشان --cara-heading را عوض می‌کنند. */
+/* همه‌ی تیترها یک رنگ دارند: سرمه‌ای روی سطح روشن و همان رنگ روشن‌شده روی
+   سطح تیره (هیرو، فوتر، استودیو). هیچ تیتری رنگ سومی نمی‌گیرد. */
 :root :is(h1, h2, h3, h4, h5, h6) { color: var(--cara-heading) !important; }
-.hx, .hero, .wv-stage, .pg-hero { --cara-heading: #f6f4fb; }
-.sf { --cara-heading: var(--sf-gold, #e8d3a5); }
-.cara-journal__card, .post-card { --cara-heading: #2c2438; }
+.hx, .hero, .wv-stage, .pg-hero, .feed-header, .sf { --cara-heading: var(--cara-heading-invert); }
 
 /* ---------- شب ---------- */
 html[data-theme="dark"] {
@@ -37,7 +36,7 @@ html[data-theme="dark"] {
   --cara-accent: #5b66ab;
   --cara-detail: #d9bb85;
   --cara-accent-soft: #262338;
-  --cara-heading: #f3f0fa;
+  --cara-heading: #f6f4fb;
   --cara-ink: #ece9f6;
   --cara-plum: #8f8ad8;
   --cara-plum-deep: #d9d4f4;
@@ -89,7 +88,11 @@ html[data-theme="dark"] {
 }
 
 html[data-theme="dark"] body {
-  background: var(--cara-bg);
+  background:
+    radial-gradient(58rem 40rem at 88% -6%, rgba(143, 138, 216, .13), transparent 62%),
+    radial-gradient(46rem 32rem at -6% 104%, rgba(217, 187, 133, .08), transparent 62%),
+    var(--cara-bg);
+  background-repeat: no-repeat;
   color: var(--cara-text);
 }
 
@@ -108,6 +111,17 @@ html[data-theme="dark"] .sh__logo:has(.is-light) .is-dark { display: none; }
 html[data-theme="dark"] .sh__logo .is-light { display: block; }
 html[data-theme="dark"] .sh__logo .is-dark { filter: brightness(0) invert(1); }
 html[data-theme="dark"] .sh__nav a:hover { background: var(--cara-surface-2); }
+@media (max-width: 850px) {
+  html[data-theme="dark"] .sh__nav {
+    background: var(--cara-surface);
+    border-color: var(--cara-line);
+    color: var(--cara-text);
+    box-shadow: 0 20px 54px rgba(0, 0, 0, .55);
+  }
+}
+html[data-theme="dark"] .sh__toggle { background: rgba(255, 255, 255, .06); color: var(--cara-text); }
+html[data-theme="dark"] .sh.is-solid .sh__toggle,
+html[data-theme="dark"] .sh.is-open .sh__toggle { background: var(--cara-surface-2); }
 html[data-theme="dark"] .sh.is-solid .sh__nav a.sh__cta { background: var(--cara-accent); color: #fff; }
 html[data-theme="dark"] .sh.is-solid .sh__nav a.sh__cta:hover { background: #7c86c6; }
 html[data-theme="dark"] .sh__toggle { border-color: var(--cara-line); }
@@ -130,7 +144,7 @@ html[data-theme="dark"] :is(
   .cara-journal__reader, .cart-summary, .chl-card, .chl-panel,
   .quiz__opt, .quiz__work, .quiz__card, .sp-note, .sp-slots li, .sp-tab,
   .wk-card, .wk-card figcaption, .gal-tools, .wk-lb, .flt-panel,
-  .featured-card, .cara-payment-promo__card, .wv-card, .wv-done, .rv,
+  .featured-card, .cara-payment-promo__card, .wv-card, .wv-done,
   .order-message, .trust-strip__item, .checkout-payment-choice,
   .starter-card, .tune, .controls, .crop-bar, .preview, .drop__icon,
   .faq details, details.faq-item, .dl-sound
@@ -273,4 +287,235 @@ html[data-theme="dark"] .theme-toggle { border-color: rgba(236, 233, 246, .3); }
 }
 @media (prefers-reduced-motion: reduce) {
   .theme-toggle { transition: none; }
+}
+
+/* ======================================================================
+   هیرو در روز: روشن، گرم و دست‌ساز — در شب همان هیروی سرمه‌ای می‌ماند.
+   ====================================================================== */
+html[data-theme="light"] .hx {
+  --cara-heading: #343b64;
+  color: #2f2b3d;
+  background:
+    radial-gradient(ellipse 32rem 30rem at 26% 42%, rgba(184, 151, 90, .20), transparent 70%),
+    radial-gradient(ellipse 26rem 26rem at 82% 78%, rgba(155, 143, 193, .18), transparent 72%),
+    linear-gradient(118deg, #fffdf8 0%, #f6f1fa 56%, #fbf6ee 100%);
+  box-shadow: inset 0 -1px 0 rgba(52, 59, 100, .08);
+}
+html[data-theme="light"] .hx__copy h1 { color: var(--cara-heading); }
+html[data-theme="light"] .hx__copy h1 .gilt { color: #8a6522; }
+html[data-theme="light"] .hx__copy p.hx__lead { color: #4c4660; }
+html[data-theme="light"] .hx__eyebrow {
+  border-color: rgba(160, 124, 58, .45);
+  background: rgba(184, 151, 90, .16);
+  color: #74521a;
+}
+html[data-theme="light"] .hx__btn--ghost {
+  border-color: rgba(52, 59, 100, .22);
+  background: rgba(255, 255, 255, .8);
+  color: var(--cara-heading);
+}
+html[data-theme="light"] .hx__btn--ghost:hover {
+  border-color: rgba(160, 124, 58, .6);
+  background: #fff;
+  color: #74521a;
+}
+html[data-theme="light"] .hx__proof { border-top-color: rgba(52, 59, 100, .14); }
+html[data-theme="light"] .hx__proof span {
+  border-color: rgba(52, 59, 100, .13);
+  background: rgba(255, 255, 255, .82);
+  color: #4c4660;
+}
+html[data-theme="light"] .hx__proof i { color: #9a7a34; }
+html[data-theme="light"] .cara-bracelet-lineup__viewport::before {
+  border-color: rgba(160, 124, 58, .30);
+  background: radial-gradient(circle, rgba(184, 151, 90, .16), transparent 68%);
+  box-shadow: 0 0 0 18px rgba(184, 151, 90, .05);
+}
+html[data-theme="light"] .cara-bracelet-card__art { filter: drop-shadow(0 20px 24px rgba(52, 59, 100, .18)); }
+html[data-theme="light"] .cara-bracelet-card figcaption { color: var(--cara-heading); }
+html[data-theme="light"] .cara-bracelet-lineup__arrow { color: rgba(52, 59, 100, .45); }
+html[data-theme="light"] .cara-bracelet-lineup__arrow:hover { color: #8a6522; }
+html[data-theme="light"] .cara-bracelet-lineup__count { color: #6a6479; }
+html[data-theme="light"] .cara-bracelet-lineup:focus-visible { outline-color: rgba(160, 124, 58, .8); }
+html[data-theme="light"] .hx__real {
+  border: 1px solid rgba(52, 59, 100, .1);
+  box-shadow: 0 22px 44px rgba(52, 59, 100, .16);
+}
+html[data-theme="light"] .hx__real figcaption { color: #5d5468; }
+
+/* هدر شفاف روی هیروی روشن: متن سرمه‌ای و لوگوی تیره */
+html[data-theme="light"] .sh:not(.is-solid):not(.is-open) { color: var(--cara-heading); }
+html[data-theme="light"] .sh:not(.is-solid):not(.is-open) .sh__logo .is-light { display: none; }
+html[data-theme="light"] .sh:not(.is-solid):not(.is-open) .sh__logo .is-dark { display: block; }
+html[data-theme="light"] .sh:not(.is-solid):not(.is-open) .sh__toggle {
+  border-color: rgba(52, 59, 100, .2);
+  background: rgba(255, 255, 255, .72);
+  color: var(--cara-heading);
+}
+
+/* ======================================================================
+   شب: کارت‌های نمونه و پست‌ها سطح تیره می‌گیرند، ولی رنگ هر کارت می‌ماند.
+   ====================================================================== */
+html[data-theme="dark"] .mini-gal > a {
+  border-color: var(--cara-line) !important;
+  background: linear-gradient(180deg, var(--cara-surface-2) 0%, var(--cara-surface) 100%) !important;
+  box-shadow: var(--cara-panel-shadow);
+}
+html[data-theme="dark"] .mini-gal > a:hover { border-color: rgba(217, 187, 133, .55) !important; }
+html[data-theme="dark"] .mini-gal > a b { color: var(--cara-text); }
+html[data-theme="dark"] .mini-gal > a span { color: var(--cara-muted); }
+html[data-theme="dark"] .mini-gal img { filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .55)); }
+
+html[data-theme="dark"] :is(.post-card, .cara-journal__card) {
+  background: var(--cara-surface) !important;
+  border-color: var(--cara-line) !important;
+  box-shadow: var(--cara-panel-shadow);
+}
+html[data-theme="dark"] :is(.post-card, .cara-journal__card) :is(b, strong, h3, p, span, time) { color: var(--cara-text); }
+html[data-theme="dark"] :is(.post-card, .cara-journal__card) :is(p, time, small, .muted) { color: var(--cara-muted); }
+
+/* لوگو در شب: وقتی منو باز یا هدر چسبیده است، نسخه‌ی روشن بماند */
+html[data-theme="dark"] .sh.is-solid .sh__logo .is-light,
+html[data-theme="dark"] .sh.is-open .sh__logo .is-light { display: block; }
+html[data-theme="dark"] .sh.is-solid .sh__logo .is-dark,
+html[data-theme="dark"] .sh.is-open .sh__logo .is-dark { display: none; }
+
+/* دکمه‌ی تم در منوی موبایل: یک ردیف کامل، نه حباب شناور */
+@media (max-width: 850px) {
+  .sh__nav .theme-toggle {
+    width: 100%;
+    height: 44px;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 0 13px;
+    border: 0;
+    border-top: 1px solid var(--nh-line, rgba(52, 59, 100, .12));
+    border-radius: 0;
+    margin-top: 6px;
+    padding-top: 6px;
+    opacity: .9;
+  }
+  .sh__nav .theme-toggle::after {
+    content: "حالت نمایش";
+    font-size: 15px;
+    font-weight: 600;
+  }
+}
+
+/* ======================================================================
+   شب: دکمه‌ها، چیپ‌ها و سطوح سفیدِ هاردکدشده
+   ====================================================================== */
+html[data-theme="dark"] :is(
+  .cp__actions a:not(:first-child),
+  .quiz__btn:not(.quiz__btn--primary),
+  .tools .tool,
+  .flt-btn,
+  .pg-view-toggle button,
+  .wk-fav,
+  .gal-tools .tool,
+  .recovery a:not(:first-child)
+) {
+  background: var(--cara-surface-2);
+  border-color: var(--cara-line);
+  color: var(--cara-text);
+  box-shadow: none;
+}
+html[data-theme="dark"] .tools .tool:hover,
+html[data-theme="dark"] .flt-btn:hover { border-color: rgba(217, 187, 133, .6); }
+html[data-theme="dark"] body .pg .btns .btn {
+  background: var(--cara-surface-2);
+  border-color: var(--cara-line);
+  color: var(--cara-text);
+  box-shadow: none;
+}
+html[data-theme="dark"] .pg a:not(.btn) { color: #c9c3f2; }
+html[data-theme="dark"] .wk-grid figcaption span:not(.wk-price) { color: var(--cara-muted); }
+html[data-theme="dark"] main.blog-article > p:first-child {
+  background: var(--cara-surface-2);
+  border-color: var(--cara-line);
+  color: #e0c48f;
+}
+html[data-theme="dark"] main.blog-article > p:first-child a { color: #e0c48f; }
+html[data-theme="dark"] body .pg .btns .btn.dark { background: var(--cara-accent); border-color: var(--cara-accent); color: #fff; }
+html[data-theme="dark"] .flt-btn.has,
+html[data-theme="dark"] .flt-btn[aria-expanded="true"] { color: #c9c3f2; border-color: rgba(143, 138, 216, .55); }
+
+/* مقاله‌های دفتر کارا: کارت مقاله در شب تیره می‌شود */
+html[data-theme="dark"] .blog-article {
+  background: var(--cara-surface);
+  border-color: var(--cara-line);
+  color: var(--cara-text);
+}
+html[data-theme="dark"] .blog-article :is(p, li, h2, h3, h4, b, strong, figcaption) { color: var(--cara-text); }
+html[data-theme="dark"] .blog-article :is(.meta, .byline, time, .note, blockquote cite) { color: var(--cara-muted); }
+html[data-theme="dark"] .blog-article a { color: #c9c3f2; }
+
+/* متن‌های طلایی/قرمز که در شب روی زمینه‌ی تیره محو می‌شدند */
+html[data-theme="dark"] :is(
+  .cp a, .trust-strip__item a, .featured-card__row b,
+  .quiz__opt b, .quiz__work span, .starter-card span
+) { color: #e0c48f; }
+html[data-theme="dark"] .chl-msg.is-error { color: #f2a08d; }
+html[data-theme="dark"] figcaption { color: var(--cara-muted); }
+html[data-theme="dark"] :is(.pill, .cp-note, .note-pill, .premium-pill) {
+  background: var(--cara-surface-2);
+  border-color: var(--cara-line);
+  color: #e0c48f;
+}
+html[data-theme="dark"] .wk-grid .wk-card button.wk-fav { color: #5f5468 !important; }
+
+/* شب: هر کارت پست رنگ خودش را نگه می‌دارد، فقط تیره و کم‌نور */
+html[data-theme="dark"] .post-card { border: 1px solid rgba(255, 255, 255, .07); }
+html[data-theme="dark"] .post-card--peach  { background: linear-gradient(165deg, #3a2622, #241a1a) !important; }
+html[data-theme="dark"] .post-card--lilac  { background: linear-gradient(165deg, #2f2438, #211a26) !important; }
+html[data-theme="dark"] .post-card--sage   { background: linear-gradient(165deg, #22301f, #18211a) !important; }
+html[data-theme="dark"] .post-card--butter { background: linear-gradient(165deg, #3a3220, #241f16) !important; }
+html[data-theme="dark"] .post-card--rose   { background: linear-gradient(165deg, #3a2226, #251a1d) !important; }
+html[data-theme="dark"] .post-card--mint   { background: linear-gradient(165deg, #1f3129, #17211d) !important; }
+html[data-theme="dark"] .post-card--sky    { background: linear-gradient(165deg, #1f2b3a, #171e26) !important; }
+html[data-theme="dark"] .post-card--sand   { background: linear-gradient(165deg, #362b1e, #221c15) !important; }
+html[data-theme="dark"] .post-card--plum   { background: linear-gradient(165deg, #2e2334, #1f1a24) !important; }
+html[data-theme="dark"] .post-card--teal   { background: linear-gradient(165deg, #1c2f31, #16211f) !important; }
+
+/* نوار اعتماد (trust strip) در شب */
+html[data-theme="dark"] .trust-strip {
+  border-color: rgba(217, 187, 133, .28);
+  background: linear-gradient(145deg, rgba(38, 35, 56, .9), rgba(27, 26, 43, .94));
+}
+html[data-theme="dark"] .trust-strip__item {
+  border-color: rgba(217, 187, 133, .16);
+  background: rgba(255, 255, 255, .04);
+}
+html[data-theme="dark"] .trust-strip__item b { color: var(--cara-text); }
+html[data-theme="dark"] .trust-strip__item span { color: var(--cara-muted); }
+
+/* محل رها کردن عکس در شب: قاب تیره با حاشیه‌ی طلایی، نه کارت کرم */
+html[data-theme="dark"] .drop {
+  border-color: rgba(217, 187, 133, .45);
+  background: linear-gradient(160deg, var(--cara-surface-2) 0%, var(--cara-surface) 100%);
+}
+html[data-theme="dark"] .drop:hover,
+html[data-theme="dark"] .drop.over {
+  border-color: var(--cara-gold);
+  background: var(--cara-surface-2);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .45);
+}
+html[data-theme="dark"] .drop :is(b, span, small, p) { color: var(--cara-text); }
+html[data-theme="dark"] .drop small { color: var(--cara-muted); }
+
+/* کارت‌های کرم‌رنگ بازی و چالش در شب */
+html[data-theme="dark"] .gm .card,
+html[data-theme="dark"] .chl .card,
+html[data-theme="dark"] .gm .card * { color: var(--cara-text); }
+html[data-theme="dark"] .gm .card {
+  border-color: rgba(217, 187, 133, .3);
+  background: linear-gradient(160deg, var(--cara-surface-2) 0%, var(--cara-surface) 100%);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .4);
+}
+html[data-theme="dark"] .gm .card .sub,
+html[data-theme="dark"] .gm .card .sub b { color: var(--cara-muted); }
+html[data-theme="dark"] .gm .card .sub b { color: var(--cara-gold); }
+html[data-theme="dark"] .chl-how li::before {
+  background: linear-gradient(145deg, #332b1c, #241f16);
+  color: var(--cara-gold);
 }
