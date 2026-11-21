@@ -430,7 +430,7 @@ html[data-theme="dark"] body .pg .btns .btn {
   box-shadow: none;
 }
 html[data-theme="dark"] .pg a:not(.btn) { color: #c9c3f2; }
-html[data-theme="dark"] .wk-grid figcaption span:not(.wk-price) { color: var(--cara-muted); }
+html[data-theme="dark"] .wk-grid figcaption span:not(.wk-price):not(.price) { color: var(--cara-muted); }
 html[data-theme="dark"] main.blog-article > p:first-child {
   background: var(--cara-surface-2);
   border-color: var(--cara-line);
@@ -606,3 +606,164 @@ html[data-theme="dark"] .cara-journal__art small,
 html[data-theme="dark"] .cara-journal__copy > small,
 html[data-theme="dark"] .card-art small,
 html[data-theme="dark"] .card-kicker { opacity: 1; }
+
+/* ==========================================================================
+   Pass 6 — dark-theme repairs (builder bar, canvas tools, payments, pattern
+   summary) and the light footer for day mode.
+   ========================================================================== */
+
+/* 1) نوار سفارش ثابت پایین صفحه (بیلدر و صفحه‌ی اول) در حالت شب */
+html[data-theme="dark"] :is(.mb-bar, .m-cta) {
+  background: #1e1b2e;
+  border-block-start: 1px solid var(--cara-line);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, .45);
+  color: var(--cara-text);
+}
+html[data-theme="dark"] :is(.mb-bar, .m-cta) :is(.mb-info b, .mb-info small, .mb-color) {
+  color: var(--cara-text) !important;
+}
+html[data-theme="dark"] .mb-color {
+  background: var(--cara-surface-3) !important;
+  border-color: var(--cara-line) !important;
+}
+
+/* 2) نوار ابزار بوم منجوق در حالت شب (قاب‌های سفید، آیکن روشن) */
+html[data-theme="dark"] .tools .grp.bare .tool.ib,
+html[data-theme="dark"] .tools .tool.ib:hover {
+  background: var(--cara-surface-3) !important;
+  border-color: var(--cara-line) !important;
+  color: var(--cara-text);
+}
+html[data-theme="dark"] .tools .tool.ib[aria-pressed="true"] {
+  background: var(--cara-detail) !important;
+  border-color: var(--cara-detail) !important;
+  color: #241c33 !important;
+}
+
+/* 3) دکمه‌ی اصلی در حالت شب: طلاییِ برند به‌جای نیلیِ کم‌کنتراست */
+html[data-theme="dark"] .btn.dark,
+html[data-theme="dark"] .btn.accent,
+html[data-theme="dark"] .sh.is-solid .sh__nav a.sh__cta {
+  background: #c9a86b;
+  border-color: #c9a86b;
+  color: #231b31;
+}
+html[data-theme="dark"] .btn.dark:hover,
+html[data-theme="dark"] .btn.accent:hover {
+  background: #d8ba85;
+  border-color: #d8ba85;
+}
+
+/* 4) انتخاب روش پرداخت: حالت غیرفعال و دیجی‌پی در شب */
+.checkout-payment-choice:disabled {
+  opacity: 1 !important;
+  cursor: not-allowed;
+}
+.checkout-payment-choice:disabled :is(.checkout-payment-choice__title, .checkout-payment-choice__hint) {
+  color: inherit !important;
+  opacity: 1 !important;
+}
+.checkout-payment-choice--zibal:disabled {
+  background: #efe9f5 !important;
+  border-color: #ded3ea !important;
+  color: #6b5d80 !important;
+}
+.checkout-payment-choice--digipay:disabled {
+  background: #eef9fc !important;
+  border-color: #cfe7ee !important;
+  color: #4a8496 !important;
+}
+html[data-theme="dark"] .checkout-payment-choice--digipay {
+  background: #0f2b33 !important;
+  border-color: #1d5b6b !important;
+  color: #a9e4f1 !important;
+}
+html[data-theme="dark"] .checkout-payment-choice--digipay:hover {
+  background: #143842 !important;
+  border-color: #2a7f93 !important;
+}
+html[data-theme="dark"] .checkout-payment-choice--zibal:disabled {
+  background: #2a2638 !important;
+  border-color: #3a3550 !important;
+  color: #b3aac9 !important;
+}
+html[data-theme="dark"] .checkout-payment-choice--digipay:disabled {
+  background: #16232a !important;
+  border-color: #23414b !important;
+  color: #8bb3bf !important;
+}
+
+/* 5) «الگوی تو» در صفحه‌ی سفارش: سه ستون خوانا، مقدارها همیشه دیده شوند */
+#sumCard .sum dl {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: auto auto;
+  align-items: center;
+  justify-content: center;
+  gap: 6px 16px;
+  text-align: center;
+}
+#sumCard .sum dt {
+  font-size: 12.5px;
+  color: var(--cp-muted, #6b6274);
+}
+#sumCard .sum dd {
+  margin: 0;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #f3eef5;
+  color: #3a2f4d;
+  font-size: 15px;
+  font-weight: 800;
+}
+html[data-theme="dark"] #sumCard .sum dt { color: var(--cara-muted); }
+html[data-theme="dark"] #sumCard .sum dd {
+  background: rgba(255, 255, 255, .10);
+  color: var(--cara-text);
+}
+
+/* 6) فوتر روشن در حالت روز */
+html:not([data-theme="dark"]) .sf {
+  --sf-ink: #2b2440;
+  --sf-muted: #5a5170;
+  --sf-dim: #6f6784;
+  --sf-gold: #8a6521;
+  --cara-heading: #8a6521;
+  background: linear-gradient(180deg, #fdfaf4 0%, #f4ece1 100%);
+  border-block-start: 1px solid rgba(184, 151, 90, .35);
+  color: var(--sf-ink);
+}
+html:not([data-theme="dark"]) .sf__bottom { border-block-start-color: rgba(60, 40, 20, .14); }
+html:not([data-theme="dark"]) .sf__logo img { content: url("/img/cara-logo-fa.png"); }
+html:not([data-theme="dark"]) .sf__seal { box-shadow: 0 10px 26px rgba(60, 44, 20, .14); }
+
+/* 7) علاقه‌مندی و اشتراک‌گذاری روی کارت: کنتراست بیشتر */
+.wk-grid > .wk-card .wk-fav,
+.wk-grid > .wk-card .wk-share {
+  width: 40px !important;
+  height: 40px !important;
+  color: #4b3f5e !important;
+  border: 1px solid rgba(63, 44, 76, .18) !important;
+  background: rgba(255, 255, 255, .95) !important;
+  box-shadow: 0 4px 14px rgba(29, 21, 39, .16) !important;
+}
+html[data-theme="dark"] .wk-grid > .wk-card .wk-fav,
+html[data-theme="dark"] .wk-grid > .wk-card .wk-share {
+  background: rgba(30, 26, 44, .88) !important;
+  border-color: rgba(255, 255, 255, .24) !important;
+  color: #efeaf9 !important;
+}
+
+/* 8) متن جانشین ویدئو (اگر مرورگر پخش نکند) */
+.cara-weaving__video { color: #fff; }
+
+/* 9) تیترهای نمایشی: بدون بولد مصنوعی (Lalezar خودش سنگین است) */
+:is(h1, h2, h3, h4, h5, h6, .page-title, .hx__copy h1, .section-head h2) {
+  font-weight: 400;
+  font-synthesis-weight: none;
+}
+html[data-theme="dark"] .order-message__links a:first-child {
+  background: #c9a86b;
+  border-color: #c9a86b;
+  color: #231b31;
+}
