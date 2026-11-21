@@ -31,3 +31,46 @@
 @media (prefers-reduced-motion: no-preference) {
   .skip-link { transition: transform 160ms ease; }
 }
+
+/* Touch targets: every standalone control is at least 44px tall on phones. */
+@media (max-width: 760px) {
+  .sh__logo,
+  .brand-mark,
+  .rail-arrow,
+  .cara-journal__arrows button,
+  .wk-fav,
+  .wk-share,
+  .lb-close,
+  .wk-nav,
+  .nav-toggle,
+  .menu-toggle {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .sh__logo { display: inline-flex; align-items: center; }
+  label:has(> input[type="checkbox"]),
+  label:has(> input[type="radio"]) {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  input[type="checkbox"],
+  input[type="radio"] {
+    inline-size: 20px;
+    block-size: 20px;
+  }
+}
+
+/* Respect the system motion preference for every animation, including the
+   ones declared in page stylesheets. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

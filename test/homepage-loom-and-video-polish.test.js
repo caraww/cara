@@ -21,7 +21,7 @@ test("handmade video feature is compact and proportionate", () => {
   const css = read("css/weaving.css");
   assert.match(css, /grid-template-columns: minmax\(0, 1fr\) minmax\(0, 240px\)/);
   assert.match(css, /max-width: 240px/);
-  assert.match(read("index.html"), /<h2 id="weaving-title">ببین چطور میبافم<\/h2>/);
+  assert.match(read("index.html"), /<h2 id="weaving-title">ببین چطور می‌بافم<\/h2>/);
 });
 
 test("name bracelet starts with Cara in gold on purple", () => {

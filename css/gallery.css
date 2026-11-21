@@ -610,11 +610,11 @@
   margin:0 22px !important;padding:14px 0 20px !important;
   border-top:1px solid var(--hair);
 }
-.wk-grid figcaption b{font-size:17px;font-weight:900;letter-spacing:-.2px}
+.wk-grid figcaption b{font-size:17px;font-weight:900}
 .wk-grid figcaption span:not(.wk-price){font-size:13.5px;color:var(--muted);line-height:1.9}
 .wk-grid figcaption .wk-price{
   background:none;border:0;padding:0;margin-top:6px;
-  font-size:15px;color:var(--gold);letter-spacing:.02em;
+  font-size:15px;color:var(--gold);
 }
 @media(max-width:560px){.wk-grid figcaption{margin:0 12px !important}}
 
@@ -630,7 +630,7 @@
     drop-shadow(0 3px 4px rgba(34,26,44,.10))
     drop-shadow(0 26px 30px rgba(34,26,44,.18));
 }
-.wk-info h2{font-size:30px;font-weight:900;letter-spacing:-.3px}
+.wk-info h2{font-size:30px;font-weight:900}
 .wk-info h2::after{content:"";display:block;width:56px;height:1px;margin-top:12px;background:var(--gold)}
 .wk-info .tags>*{background:none;border:1px solid var(--hair);color:var(--gold);font-size:13px}
 
@@ -925,7 +925,6 @@
   color: #2b2035;
   font-size: 16px;
   text-align: right;
-  letter-spacing: -.25px;
 }
 .wk-grid > .wk-card figcaption span:not(.wk-price) {
   min-height: 0;

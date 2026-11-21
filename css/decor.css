@@ -236,7 +236,7 @@ form .field textarea:valid{background-position:14px 14px}
 /* ===== امضای ته صفحه ===== */
 .wrap::after{
   content:"منجوق‌به‌منجوق";display:block;margin-top:56px;padding-top:30px;text-align:center;
-  color:var(--muted,#6c6478);font-size:15px;letter-spacing:.04em;
+  color:var(--muted,#6c6478);font-size:15px;
   background:radial-gradient(circle,var(--g1) 0 3px,transparent 3.6px) 50% 0/17px 12px repeat-x;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 25%,#000 75%,transparent);
   mask-image:linear-gradient(90deg,transparent,#000 25%,#000 75%,transparent)}

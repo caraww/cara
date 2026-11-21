@@ -58,16 +58,14 @@ body:has(#game) .page-title::before {
   display: block;
   margin-bottom: 8px;
   color: #9b7a48;
-  font-size: 10.5px;
+  font-size: 12px;
   font-weight: 800;
-  letter-spacing: .2em;
   line-height: 1.5;
-  text-transform: uppercase;
 }
-body:has(#wkGrid) .page-title::before { content: "HANDMADE GALLERY"; }
-body:has(.ws-page) .page-title::before { content: "PHOTO TO PATTERN"; }
-body:has(.builder) .page-title::before { content: "DESIGN STUDIO"; }
-body:has(#game) .page-title::before { content: "A LITTLE GAME"; }
+body:has(#wkGrid) .page-title::before { content: "گالری دست‌بافت"; }
+body:has(.ws-page) .page-title::before { content: "عکس به الگو"; }
+body:has(.builder) .page-title::before { content: "استودیوی طراحی"; }
+body:has(#game) .page-title::before { content: "یه بازی کوچیک"; }
 
 .sub,
 .lead {
@@ -81,8 +79,7 @@ body:has(#game) .page-title::before { content: "A LITTLE GAME"; }
   align-items: center;
   gap: 10px;
   color: #9b7a48;
-  font-size: 10.5px;
-  letter-spacing: .18em;
+  font-size: 12px;
 }
 .section-kicker::before {
   content: "";
@@ -260,13 +257,11 @@ body:has(.builder) .wrap { max-width: 1400px; }
   border-color: rgba(198, 161, 95, .5);
   background: rgba(198, 161, 95, .10);
   color: #f4e4bd;
-  letter-spacing: .02em;
 }
 .hx__copy h1 {
   max-width: 11em;
   font-size: clamp(40px, 5.2vw, 76px);
   line-height: 1.3;
-  letter-spacing: -.02em;
 }
 .hx__copy h1 .gilt {
   background: linear-gradient(100deg, #f4dfb0 0%, #d8b878 42%, #b89355 100%);
@@ -354,9 +349,8 @@ body:has(.builder) .wrap { max-width: 1400px; }
 }
 .hx__seal small {
   display: block;
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 800;
-  letter-spacing: .08em;
 }
 
 /* ---------- Home sections ---------- */
@@ -493,13 +487,15 @@ body:has(.builder) .wrap { max-width: 1400px; }
   box-shadow: var(--cp-shadow-sm);
 }
 .gal-tools #q {
-  max-width: none;
+  max-width: 420px;
+  flex: 1 1 240px;
   height: 46px;
   border: 0;
   background: #f7f3f8;
   box-shadow: none;
 }
 .gal-tools #q:focus { box-shadow: inset 0 0 0 2px rgba(198, 161, 95, .55); }
+.gal-tools .wk-count { margin-inline-start: auto; }
 .gal-tools .flt-btn {
   height: 46px;
   border: 0;
@@ -598,13 +594,41 @@ textarea:focus {
 .cart-summary { border-radius: 22px; }
 .cart-checkout { min-height: 50px; border-radius: 14px; }
 .checkout-payment-choice { border-radius: 18px !important; }
-#sumCard .sum { align-items: flex-start; }
-#sumCard .sum canvas {
-  width: auto;
-  max-width: 180px;
-  max-height: 260px;
-  object-fit: contain;
+#sumCard .sum {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-height: 200px;
+  text-align: center;
 }
+#sumCard .sum canvas {
+  max-width: min(100%, 220px);
+  max-height: 240px;
+  background: #fff;
+  padding: 8px;
+  border: 1px solid var(--cp-line, #e4dcd2);
+  border-radius: 16px;
+  box-shadow: 0 10px 26px rgba(32, 23, 45, .10);
+}
+#sumCard .sum dl {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px 10px;
+}
+#sumCard .sum dt { font-size: 13px; }
+#sumCard .sum dd {
+  margin-inline-end: 8px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: #f5f0f6;
+  font-size: 14px;
+}
+.sum-empty { padding: 8px 2px; text-align: start; }
+.sum-empty p { margin: 0 0 14px; color: var(--cp-muted, #6b6274); line-height: 1.9; }
+.sum-empty__actions { display: flex; flex-wrap: wrap; gap: 10px; }
 
 /* ---------- Blog ---------- */
 .blog-feed { width: min(1240px, 100%); padding: 28px clamp(18px, 4vw, 40px) 40px; }
@@ -613,7 +637,7 @@ textarea:focus {
   min-height: 380px;
   box-shadow: 0 26px 70px rgba(31, 24, 50, .20);
 }
-.feed-heading h1 { letter-spacing: -.02em; }
+
 .post-card {
   border-radius: 24px;
   box-shadow: 0 12px 32px rgba(48, 39, 66, .10);
@@ -659,9 +683,8 @@ main.blog-article > p:first-child a { color: #6a4d20; text-decoration: none; }
 main.blog-article .meta {
   margin: 0 0 10px;
   color: #9b7a48;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
-  letter-spacing: .12em;
 }
 main.blog-article h1 {
   margin: 0 0 28px;

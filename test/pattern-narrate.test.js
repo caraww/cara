@@ -20,7 +20,7 @@ test("describes a pattern with color counts and compressed rows", () => {
     ["DB0010", 2, 66.7],
     ["DB0200", 1, 33.3],
   ]);
-  assert.equal(out.rows[0].text, "مشکی×۲، سفید×۱");
+  assert.equal(out.rows[0].text, "۲ دونه مشکی، ۱ دونه سفید");
   assert.equal(out.rows[1].text, "خالی");
   assert.match(out.summary, /۴ در ۲/);
   assert.match(out.summary, /۳ منجوق/);

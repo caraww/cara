@@ -28,7 +28,7 @@
         background: var(--bg);
         color: var(--ink);
         font:
-          400 16px/1.9 "Vazirmatn",
+          400 16px/1.9 'Estedad',
           Tahoma,
           system-ui,
           sans-serif;
@@ -38,7 +38,7 @@
         margin: auto;
         padding: 28px 18px 80px;
       }
-      h1 {
+      h1, .h1 {
         font-size: 28px;
         font-weight: 900;
         margin: 0 0 4px;
@@ -367,7 +367,7 @@
     <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
     <main id="main-content" tabindex="-1">
       <section id="login" hidden>
-        <h1>سفارش‌های cara</h1>
+        <h2 class="h1">سفارش‌های cara</h2>
         <p class="muted" style="margin: 0">رمز ADMIN_TOKEN رو بنویس.</p>
         <form id="lf">
           <input
@@ -661,7 +661,7 @@
                 );
             }
           g.fillStyle = "#6C6478";
-          g.font = "11px Vazirmatn,Tahoma,sans-serif";
+          g.font = "11px Estedad,Tahoma,sans-serif";
           g.textBaseline = "middle";
           g.textAlign = "right";
           for (let r = 0; r < p.height; r++)
@@ -671,7 +671,7 @@
           for (let k = 0; k < p.width; k++)
             if (k === 0 || (k + 1) % 5 === 0)
               g.fillText(k + 1, M + k * cw + cw / 2, T - 10);
-          g.font = "14px Vazirmatn,Tahoma,sans-serif";
+          g.font = "14px Estedad,Tahoma,sans-serif";
           g.textAlign = "left";
           cols.forEach(([id, n], i) => {
             const pc = CARA.byCode(id),
@@ -883,7 +883,7 @@
             )
             .join("");
           const css =
-            "@page{size:A4;margin:8mm}*{box-sizing:border-box}body{margin:0;font:14px/1.8 Vazirmatn,Tahoma,sans-serif;color:#000}.g{display:grid;grid-template-columns:1fr 1fr;gap:6mm}.l{border:1.5px dashed #555;border-radius:3mm;padding:5mm;height:88mm;break-inside:avoid;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}small{display:block;color:#555;font-size:11px}.to b{font-size:20px;font-weight:900}.to p{margin:4px 0;font-size:16px;white-space:pre-wrap;word-break:break-word}.ph{font-size:18px;font-weight:700;direction:ltr;text-align:right}.from{border-top:1px solid #999;padding-top:3mm;font-size:12px}.from span{display:block;white-space:pre-wrap}.from em{font-style:normal;direction:ltr;color:#555}";
+            "@page{size:A4;margin:8mm}*{box-sizing:border-box}body{margin:0;font:14px/1.8 Estedad,Tahoma,sans-serif;color:#000}.g{display:grid;grid-template-columns:1fr 1fr;gap:6mm}.l{border:1.5px dashed #555;border-radius:3mm;padding:5mm;height:88mm;break-inside:avoid;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}small{display:block;color:#555;font-size:11px}.to b{font-size:20px;font-weight:900}.to p{margin:4px 0;font-size:16px;white-space:pre-wrap;word-break:break-word}.ph{font-size:18px;font-weight:700;direction:ltr;text-align:right}.from{border-top:1px solid #999;padding-top:3mm;font-size:12px}.from span{display:block;white-space:pre-wrap}.from em{font-style:normal;direction:ltr;color:#555}";
           const doc =
             '<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><style>' +
             css +

@@ -1,6 +1,6 @@
 /* content-pages.css — About, FAQ, starter and category landing pages. */
 .cp { width: min(1040px, 100%); margin: 0 auto; padding: 104px max(18px, 4vw) 20px; }
-.cp__eyebrow { display: inline-block; margin: 0 0 14px; color: #8a6a3d; font-size: 12px; font-weight: 800; letter-spacing: .12em; }
+.cp__eyebrow { display: inline-block; margin: 0 0 14px; color: #8a6a3d; font-size: 13px; font-weight: 800; }
 .cp h1 { margin: 0 0 14px; color: #241d31; font-size: clamp(28px, 4.4vw, 46px); font-weight: 900; line-height: 1.35; }
 .cp h2 { margin: 36px 0 10px; color: #2d2440; font-size: clamp(21px, 2.6vw, 28px); font-weight: 900; line-height: 1.5; }
 .cp h3 { margin: 22px 0 8px; color: #352a47; font-size: 18px; font-weight: 800; }

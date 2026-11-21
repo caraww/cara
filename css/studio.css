@@ -16,7 +16,7 @@
   --accent-2: #7a34c4;
   --hot: #e24a2b;
   --r: 20px;
-  --font: "Vazirmatn", Tahoma, system-ui, sans-serif;
+  --font: "Estedad", Tahoma, system-ui, sans-serif;
 }
 
 *{
@@ -626,7 +626,12 @@ button, input, select, textarea{
 
 .h2b{margin-top:4px}
 
-.drop b::before{content:"◆ ◇ ◆ ◇ ◆";display:block;color:var(--accent);letter-spacing:.5em;font-size:14px}
+.drop{max-width:620px;margin-inline:auto;padding:26px 20px;gap:8px}
+.drop b{font-size:17px}
+.drop .drop__icon{display:grid;place-items:center;width:58px;height:58px;border-radius:18px;background:#f4edfb;color:var(--accent)}
+.drop .drop__icon svg{width:28px;height:28px}
+.drop .muted{max-width:38ch;line-height:1.8}
+.drop .drop__formats{font-size:12px;font-weight:600;color:#8a8092;letter-spacing:.08em}
 
 .drop.over{animation:pulse .9s ease-in-out infinite}
 

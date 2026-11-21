@@ -48,7 +48,7 @@
         index: index + 1,
         runs,
         text: runs.length
-          ? runs.map((run) => `${run.name}×${run.count.toLocaleString("fa-IR")}`).join("، ")
+          ? runs.map((run) => `${run.count.toLocaleString("fa-IR")} دونه ${run.name}`).join("، ")
           : "خالی",
       });
     });

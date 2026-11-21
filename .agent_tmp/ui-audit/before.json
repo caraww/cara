@@ -1,0 +1,3277 @@
+{
+ "360:index": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "طرحش رو بکش، منجوق‌به‌منجوق برات\n              می‌بافمش."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 12,
+    "h3": 6
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 4,
+   "imgsNoDim": 35,
+   "imgsBroken": [
+    "https://trustseal.enamad.ir/logo.aspx?id=8005519&Code=l6ZvIdVKpflNBLRq62mOcOthCU4MYP5a"
+   ],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:gallery": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "گالری دستبندها"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 1,
+   "imgsNoDim": 2,
+   "imgsBroken": [
+    ""
+   ],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:builder": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبندت رو خودت بساز"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:upload": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "عکس رو تبدیل کن به الگوی دستبند"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:checkout": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "تقریباً آماده‌ای."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 1
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:game": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "منجوق متفاوت رو پیدا کن"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:name-bracelet": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی اسم"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:admin": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سفارش‌های cara",
+    "سفارش‌ها"
+   ],
+   "hCount": {
+    "h1": 2,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:about": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "پشت هر دستبند کارا، یه آدم واقعی نشسته و منجوق می‌چینه."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 4,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:faq": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سوال‌های پرتکرار و قوانین خرید"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:size": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سایز مچت را دقیق پیدا کن"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 4,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:starter": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "برای اولین دستبندت از کجا شروع کنی؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 3,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 4,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:quiz": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "کدام دستبند مال توست؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 6,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:track": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سفارشت کجاست؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:cart": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سبد خریدت"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:account": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "گوشه‌ی خودت توی cara"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:challenge": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "چالش طراحی دستبند منجوقی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:customers": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "مشتریان cara",
+    "مشتریان و اطلاعات تماس"
+   ],
+   "hCount": {
+    "h1": 2,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:blog": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "چیزهای کوچیک،ایده‌های رنگی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 10
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:category": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "راهنمای خرید کارا"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:colors": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "رنگ منجوق‌های دلیکا میوکی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:bracelet-abc": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی آبشار رنگی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 6,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:bracelet-vmn": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی و من یتق .."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 5,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:color-db0010": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "منجوق دلیکا میوکی DB0010 · مشکی براق"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 2,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:admin-reviews": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "نظرات خریداران"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "360:offline": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "فعلاً آفلاین هستی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:index": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "طرحش رو بکش، منجوق‌به‌منجوق برات\n              می‌بافمش."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 12,
+    "h3": 6
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 4,
+   "imgsNoDim": 35,
+   "imgsBroken": [
+    "https://trustseal.enamad.ir/logo.aspx?id=8005519&Code=l6ZvIdVKpflNBLRq62mOcOthCU4MYP5a"
+   ],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:gallery": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "گالری دستبندها"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 1,
+   "imgsNoDim": 2,
+   "imgsBroken": [
+    ""
+   ],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:builder": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبندت رو خودت بساز"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:upload": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "عکس رو تبدیل کن به الگوی دستبند"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:checkout": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "تقریباً آماده‌ای."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 1
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:game": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "منجوق متفاوت رو پیدا کن"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:name-bracelet": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی اسم"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:admin": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سفارش‌های cara",
+    "سفارش‌ها"
+   ],
+   "hCount": {
+    "h1": 2,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:about": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "پشت هر دستبند کارا، یه آدم واقعی نشسته و منجوق می‌چینه."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 4,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:faq": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سوال‌های پرتکرار و قوانین خرید"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:size": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سایز مچت را دقیق پیدا کن"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 4,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:starter": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "برای اولین دستبندت از کجا شروع کنی؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 3,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 4,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:quiz": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "کدام دستبند مال توست؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 6,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:track": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سفارشت کجاست؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:cart": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سبد خریدت"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:account": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "گوشه‌ی خودت توی cara"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:challenge": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "چالش طراحی دستبند منجوقی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:customers": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "مشتریان cara",
+    "مشتریان و اطلاعات تماس"
+   ],
+   "hCount": {
+    "h1": 2,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:blog": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "چیزهای کوچیک،ایده‌های رنگی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 10
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:category": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "راهنمای خرید کارا"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:colors": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "رنگ منجوق‌های دلیکا میوکی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:bracelet-abc": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی آبشار رنگی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 6,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:bracelet-vmn": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی و من یتق .."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 5,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:color-db0010": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "منجوق دلیکا میوکی DB0010 · مشکی براق"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 2,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:admin-reviews": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "نظرات خریداران"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "390:offline": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "فعلاً آفلاین هستی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:index": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "طرحش رو بکش، منجوق‌به‌منجوق برات\n              می‌بافمش."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 12,
+    "h3": 6
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 4,
+   "imgsNoDim": 35,
+   "imgsBroken": [
+    "https://trustseal.enamad.ir/logo.aspx?id=8005519&Code=l6ZvIdVKpflNBLRq62mOcOthCU4MYP5a"
+   ],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:gallery": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "گالری دستبندها"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 1,
+   "imgsNoDim": 2,
+   "imgsBroken": [
+    ""
+   ],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:builder": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبندت رو خودت بساز"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:upload": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "عکس رو تبدیل کن به الگوی دستبند"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:checkout": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "تقریباً آماده‌ای."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 1
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:game": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "منجوق متفاوت رو پیدا کن"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:name-bracelet": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی اسم"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:admin": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سفارش‌های cara",
+    "سفارش‌ها"
+   ],
+   "hCount": {
+    "h1": 2,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:about": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "پشت هر دستبند کارا، یه آدم واقعی نشسته و منجوق می‌چینه."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 4,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:faq": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سوال‌های پرتکرار و قوانین خرید"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:size": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سایز مچت را دقیق پیدا کن"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 4,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:starter": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "برای اولین دستبندت از کجا شروع کنی؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 3,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 4,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:quiz": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "کدام دستبند مال توست؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 6,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:track": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سفارشت کجاست؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:cart": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سبد خریدت"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:account": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "گوشه‌ی خودت توی cara"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:challenge": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "چالش طراحی دستبند منجوقی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:customers": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "مشتریان cara",
+    "مشتریان و اطلاعات تماس"
+   ],
+   "hCount": {
+    "h1": 2,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:blog": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "چیزهای کوچیک،ایده‌های رنگی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 10
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:category": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "راهنمای خرید کارا"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:colors": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "رنگ منجوق‌های دلیکا میوکی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:bracelet-abc": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی آبشار رنگی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 6,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:bracelet-vmn": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی و من یتق .."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 5,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:color-db0010": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "منجوق دلیکا میوکی DB0010 · مشکی براق"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 2,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:admin-reviews": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "نظرات خریداران"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "768:offline": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "فعلاً آفلاین هستی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:index": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "طرحش رو بکش، منجوق‌به‌منجوق برات\n              می‌بافمش."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 12,
+    "h3": 6
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 4,
+   "imgsNoDim": 35,
+   "imgsBroken": [
+    "https://trustseal.enamad.ir/logo.aspx?id=8005519&Code=l6ZvIdVKpflNBLRq62mOcOthCU4MYP5a"
+   ],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:gallery": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "گالری دستبندها"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 1,
+   "imgsNoDim": 2,
+   "imgsBroken": [
+    ""
+   ],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:builder": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبندت رو خودت بساز"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:upload": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "عکس رو تبدیل کن به الگوی دستبند"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:checkout": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "تقریباً آماده‌ای."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 1
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:game": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "منجوق متفاوت رو پیدا کن"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:name-bracelet": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی اسم"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:admin": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سفارش‌های cara",
+    "سفارش‌ها"
+   ],
+   "hCount": {
+    "h1": 2,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:about": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "پشت هر دستبند کارا، یه آدم واقعی نشسته و منجوق می‌چینه."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 4,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:faq": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سوال‌های پرتکرار و قوانین خرید"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:size": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سایز مچت را دقیق پیدا کن"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 4,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:starter": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "برای اولین دستبندت از کجا شروع کنی؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 3,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 4,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:quiz": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "کدام دستبند مال توست؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 6,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:track": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سفارشت کجاست؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:cart": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سبد خریدت"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:account": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "گوشه‌ی خودت توی cara"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:challenge": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "چالش طراحی دستبند منجوقی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:customers": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "مشتریان cara",
+    "مشتریان و اطلاعات تماس"
+   ],
+   "hCount": {
+    "h1": 2,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:blog": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "چیزهای کوچیک،ایده‌های رنگی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 10
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:category": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "راهنمای خرید کارا"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:colors": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "رنگ منجوق‌های دلیکا میوکی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:bracelet-abc": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی آبشار رنگی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 6,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:bracelet-vmn": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی و من یتق .."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 5,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:color-db0010": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "منجوق دلیکا میوکی DB0010 · مشکی براق"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 2,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:admin-reviews": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "نظرات خریداران"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1024:offline": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "فعلاً آفلاین هستی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:index": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "طرحش رو بکش، منجوق‌به‌منجوق برات\n              می‌بافمش."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 12,
+    "h3": 6
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 4,
+   "imgsNoDim": 35,
+   "imgsBroken": [
+    "https://trustseal.enamad.ir/logo.aspx?id=8005519&Code=l6ZvIdVKpflNBLRq62mOcOthCU4MYP5a"
+   ],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:gallery": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "گالری دستبندها"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 1,
+   "imgsNoDim": 2,
+   "imgsBroken": [
+    ""
+   ],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:builder": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبندت رو خودت بساز"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:upload": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "عکس رو تبدیل کن به الگوی دستبند"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:checkout": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "تقریباً آماده‌ای."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 1
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:game": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "منجوق متفاوت رو پیدا کن"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:name-bracelet": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی اسم"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:admin": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سفارش‌های cara",
+    "سفارش‌ها"
+   ],
+   "hCount": {
+    "h1": 2,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:about": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "پشت هر دستبند کارا، یه آدم واقعی نشسته و منجوق می‌چینه."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 4,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:faq": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سوال‌های پرتکرار و قوانین خرید"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:size": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سایز مچت را دقیق پیدا کن"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 4,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:starter": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "برای اولین دستبندت از کجا شروع کنی؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 3,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 4,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:quiz": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "کدام دستبند مال توست؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 6,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:track": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سفارشت کجاست؟"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:cart": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "سبد خریدت"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:account": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "گوشه‌ی خودت توی cara"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:challenge": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "چالش طراحی دستبند منجوقی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 5,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:customers": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "مشتریان cara",
+    "مشتریان و اطلاعات تماس"
+   ],
+   "hCount": {
+    "h1": 2,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:blog": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "چیزهای کوچیک،ایده‌های رنگی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 10
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:category": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "راهنمای خرید کارا"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:colors": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "رنگ منجوق‌های دلیکا میوکی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:bracelet-abc": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی آبشار رنگی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 6,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:bracelet-vmn": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [
+   "Failed to load resource: the server responded with a status of 404 (File not found)",
+   "Failed to load resource: the server responded with a status of 404 (File not found)"
+  ],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "دستبند منجوقی و من یتق .."
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 2,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 5,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:color-db0010": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "منجوق دلیکا میوکی DB0010 · مشکی براق"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 2,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Vazir, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:admin-reviews": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "نظرات خریداران"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 1,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 0,
+   "imgsBroken": [],
+   "font": "Vazirmatn, system-ui, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ },
+ "1440:offline": {
+  "overflowPx": 0,
+  "overflowEls": [],
+  "console": [],
+  "failedRequests": [],
+  "a11y": {
+   "h1": [
+    "فعلاً آفلاین هستی"
+   ],
+   "hCount": {
+    "h1": 1,
+    "h2": 0,
+    "h3": 0
+   },
+   "imgsNoAlt": 0,
+   "imgsEmptyAlt": 0,
+   "imgsNoDim": 1,
+   "imgsBroken": [],
+   "font": "Vazirmatn, Tahoma, sans-serif",
+   "inputsNoLabel": [],
+   "lang": "fa",
+   "dir": "rtl"
+  }
+ }
+}

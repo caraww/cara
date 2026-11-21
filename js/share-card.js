@@ -8,7 +8,7 @@
   const W = 1200;
   const H = 630;
   const SITE = "caraw.ir";
-  const FONT = "Vazirmatn, Tahoma, sans-serif";
+  const FONT = "Estedad, Tahoma, sans-serif";
 
   function roundRect(g, x, y, w, h, r) {
     if (g.roundRect) {

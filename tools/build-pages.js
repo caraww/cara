@@ -63,7 +63,7 @@ const write = (rel, txt) => {
 /* اگه tools/self-host-fonts.js اجرا شده باشه فونت از خود سایت لود می‌شه */
 const FONT = fs.existsSync(path.join(ROOT, "css/fonts.css"))
   ? '<link rel="stylesheet" href="/css/fonts.css">'
-  : '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap">';
+  : '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800;900&display=swap">';
 const { HEAD, FOOT } = require(path.join(ROOT, "lib/generated-page-layout.js"))(
   { SITE, FONT, esc },
 );
@@ -170,8 +170,8 @@ ${
   <div class="trust-strip__item"><b>پرداخت امن</b><span>درگاه بانکی زیبال / دیجی‌پی</span></div>
   <div class="trust-strip__item"><b>پیگیری سفارش</b><span><a href="/track.html">لینک اختصاصی</a></span></div>
 </section>
-<div class="pg-help"><a href="/size.html">راهنمای اندازه‌ی مچ</a><span>·</span><a href="https://instagram.com/_.caraw" target="_blank" rel="noopener">سؤالی داری؟ توی اینستاگرام پیام بده</a><span>·</span><a href="tel:+989352528201" dir="ltr">تماس تلفنی</a></div>
-<p style="margin-top:16px;color:var(--muted);font-size:16px">دست‌باف با منجوق دلیکای میوکی ژاپنی. حداکثر تا یک هفته بعد از سفارش آماده و برات پست می‌شه. می‌تونی همین طرح رو توی <a href="/builder.html" style="text-decoration:underline">استودیو</a> عوض کنی یا طرح خودت رو بسازی. اگر دنبال یک شروع کم‌خطرتر هستی، <a href="/starter.html" style="text-decoration:underline">دستبندهای شروع</a> رو ببین.</p></div></div>
+<p style="margin-top:16px;color:var(--muted);font-size:16px">دست‌باف با منجوق دلیکای میوکی ژاپنی. حداکثر تا یک هفته بعد از سفارش آماده و برات پست می‌شه. می‌تونی همین طرح رو توی <a href="/builder.html" style="text-decoration:underline">استودیو</a> عوض کنی یا طرح خودت رو بسازی. اگر دنبال یک شروع کم‌خطرتر هستی، <a href="/starter.html" style="text-decoration:underline">دستبندهای شروع</a> رو ببین.</p>
+<div class="pg-help"><a href="/size.html">راهنمای اندازه‌ی مچ</a><a href="https://instagram.com/_.caraw" target="_blank" rel="noopener">پیام در اینستاگرام</a><a href="tel:+989352528201" dir="ltr">تماس تلفنی</a></div></div></div>
 <h2>دستبندهای دیگه</h2><div class="rel">${rel.map((x) => `<a href="${urlOf(x)}"><img src="${esc(abs(x.thumb || x.src))}" alt="دستبند منجوقی ${esc(titleOf(x))}" loading="lazy">${esc(titleOf(x))}</a>`).join("")}</div>
 <h2 id="reviews">نظر خریداران</h2><div class="reviews" data-reviews data-work="${esc(w.id)}"></div>`;
   write(
