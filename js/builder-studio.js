@@ -147,7 +147,8 @@
     '<button type="button" data-zoom="out" aria-label="کوچک‌تر">−</button>' +
     '<button type="button" class="bs-zoom__fit" data-zoom="reset">۱۰۰٪</button>' +
     '<button type="button" class="bs-zoom__fit" data-zoom="fit">نمای کامل</button>' +
-    '<button type="button" data-zoom="in" aria-label="بزرگ‌تر">+</button>';
+    '<button type="button" data-zoom="in" aria-label="بزرگ‌تر">+</button>' +
+    '<button type="button" class="bs-zoom__fit bs-zoom__flip" data-zoom="flip" aria-pressed="true">افقی</button>';
   wrap.appendChild(zoomBox);
 
   let fitMode = false;
@@ -160,7 +161,7 @@
   let fitting = false;
 
   function fitToView() {
-    const avail = wrap.clientHeight - 32;
+    const avail = wrap.clientHeight - 44;
     if (avail < 80) return;
     fitting = true;
     try {
@@ -171,11 +172,12 @@
   }
 
   function fitLoop(avail) {
+    const availW = wrap.clientWidth - 44;
     for (let i = 0; i < 3; i++) {
-      const h = canvas.getBoundingClientRect().height;
-      if (!h) return;
-      if (Math.abs(h - avail) < 8) return;
-      const ratio = avail / h;
+      const r = canvas.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      const ratio = Math.min(availW / r.width, avail / r.height);
+      if (Math.abs(ratio - 1) < 0.015) return;
       const next = clamp((Number(zoomIn.value) || 100) * ratio, 20, 250);
       if (Math.abs(next - Number(zoomIn.value)) < 1) return;
       setZoomTo(next);
@@ -185,6 +187,11 @@
   zoomBox.addEventListener("click", (event) => {
     const act = (event.target.closest("[data-zoom]") || {}).dataset?.zoom;
     if (!act) return;
+    if (act === "flip") {
+      document.dispatchEvent(new CustomEvent("builder:flip"));
+      setTimeout(() => { if (fitMode) fitToView(); }, 30);
+      return;
+    }
     if (act === "fit") {
       fitMode = true;
       fitToView();
@@ -231,6 +238,23 @@
   });
   if (dimW) dimW.addEventListener("change", () => { if (fitMode) setTimeout(fitToView, 40); });
   if (dimH) dimH.addEventListener("change", () => { if (fitMode) setTimeout(fitToView, 40); });
+
+  const flipBtn = zoomBox.querySelector("[data-zoom='flip']");
+  const syncFlip = () => {
+    const h = document.body.dataset.gridAxis === "h";
+    if (!flipBtn) return;
+    flipBtn.textContent = h ? "افقی" : "عمودی";
+    flipBtn.setAttribute("aria-pressed", h ? "true" : "false");
+    flipBtn.setAttribute("aria-label", h ? "چیدمان افقی؛ برای عمودی کلیک کن" : "چیدمان عمودی؛ برای افقی کلیک کن");
+  };
+  syncFlip();
+  document.addEventListener("builder:flipped", syncFlip);
+
+  /* روی نمایشگر عریض از همان اول کل الگو در دید است */
+  if (wide.matches) {
+    fitMode = true;
+    setTimeout(fitToView, 120);
+  }
 
   updateTip();
 })();
