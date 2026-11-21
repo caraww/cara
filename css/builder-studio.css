@@ -366,7 +366,7 @@ html[data-theme="dark"] .bs-zoom button:hover { background: rgba(255, 255, 255, 
 
 
 /* ================= موبایل و تبلت ================= */
-@media (max-width: 1099px) {
+@media (max-width: 760px) {
   .builder > section.panel:not(.sp-card) {
     position: relative;
   }
@@ -407,4 +407,186 @@ html[data-theme="dark"] .bs-zoom button:hover { background: rgba(255, 255, 255, 
   .builder #grid {
     margin: auto;
   }
+}
+
+
+/* ================= ظاهر اپ‌مانند (الهام از Loomerly) ================= */
+/* بوم سفید و تمیز، بدون قاب خاکستری؛ منجوق‌ها روی کاغذ */
+.builder #gridWrap,
+.builder > section.panel .grid-wrap {
+  background: #fff;
+  border: 1px solid #e8e3f0;
+  box-shadow: none;
+}
+
+@media (max-width: 760px) {
+  /* پالت همیشه پایینِ بوم می‌ماند، مثل اپ؛ دیگر کشویی نیست */
+  .builder > aside:first-child {
+    position: static;
+    inset: auto;
+    transform: none;
+    visibility: visible;
+    z-index: auto;
+    order: 2;
+    flex: none;
+    max-height: 32svh;
+    overflow-y: auto;
+    padding: 8px 10px 10px;
+    border-radius: 16px;
+    box-shadow: none;
+    background: var(--cara-surface, #fff);
+  }
+
+  .builder > aside:first-child h2,
+  .builder > aside:first-child .current,
+  .builder > aside:first-child .sp-recent {
+    display: none;
+  }
+
+  .builder > aside:first-child .palette {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 7px;
+    max-height: none;
+    padding: 0;
+    overflow: visible;
+  }
+
+  .builder > aside:first-child .palette .swatch {
+    width: auto;
+    min-height: 42px;
+    border-radius: 12px;
+  }
+
+  /* راهنمای بالای بوم و پرده‌ی پالت روی گوشی لازم نیست */
+  .builder .bs-tip { display: none; }
+  .mb-scrim { display: none !important; }
+}
+
+
+/* ================= چیدمان ثابتِ موبایل: بوم بالا، پالت پایین ================= */
+@media (max-width: 760px) {
+  html:has(.builder-page), body.builder-page { height: 100dvh; overflow: hidden; }
+  body.builder-page { position: fixed; inset: 0; width: 100%; }
+
+  body.builder-page .wrap {
+    height: 100dvh;
+    padding: calc(var(--bs-hdr, 64px) + 6px) 10px calc(var(--bs-mb, 64px) + 8px);
+    box-sizing: border-box;
+    max-width: none;
+    overflow: hidden;
+  }
+
+  body.builder-page .builder {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow: hidden;
+  }
+
+  body.builder-page .builder > section.panel:not(.sp-card) {
+    height: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    overflow: hidden;
+  }
+
+  body.builder-page .builder > section.panel .grid-wrap {
+    order: 1;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+  }
+
+  body.builder-page .builder > section.panel .tools {
+    order: 2;
+    flex: none;
+  }
+
+  body.builder-page .builder > aside:first-child {
+    order: 2;
+    flex: 0 0 auto;
+    max-height: 30svh;
+  }
+
+  body.builder-page .builder > .summary { display: none; }
+}
+
+
+@media (max-width: 760px) {
+  /* سرتیتر کشویی پالت لازم نیست؛ پالت همیشه باز است */
+  .builder-page .mb-hd { display: none !important; }
+
+  body.builder-page .builder > aside:first-child {
+    max-height: 27svh;
+    padding: 8px 10px;
+  }
+
+  body.builder-page .builder > aside:first-child .palette .swatch {
+    min-height: 38px;
+  }
+
+  /* نوار «متن / تبدیل‌ها / فایل» فشرده‌تر تا بوم جا باز کند */
+  body.builder-page .sp-dock {
+    padding: 4px 2px;
+    gap: 6px;
+  }
+
+  body.builder-page .sp-dock .sp-tab {
+    min-height: 38px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+}
+
+
+.builder > section.panel { position: relative; }
+
+
+/* نوار زوم بالای بوم (به‌جای شناور) تا روی منجوق‌ها نیفتد */
+@media (max-width: 760px) {
+  body.builder-page .builder > section.panel > .head { order: 0; }
+  body.builder-page .builder > section.panel > .bs-zoom {
+    position: static;
+    order: 1;
+    inset: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: auto;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  body.builder-page .builder > section.panel > .bs-zoom > button {
+    height: 34px;
+    min-height: 34px;
+    padding: 0 11px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #221a2c;
+    background: #f6f3fb;
+    border: 1px solid #e8e3f0;
+    border-radius: 10px;
+    box-shadow: none;
+  }
+
+  body.builder-page .builder > section.panel > .bs-zoom > button[data-zoom="fit"] {
+    color: #6b4fa0;
+    background: #f0eafa;
+    border-color: #ddd2f0;
+  }
+
+  body.builder-page .builder > section.panel > .grid-wrap { order: 2; }
+  body.builder-page .builder > section.panel > .tools { order: 3; }
 }
