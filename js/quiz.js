@@ -80,7 +80,7 @@
   });
 
   function showResult() {
-    const cap = answers.budget === "low" ? 900000 : answers.budget === "mid" ? 1600000 : Infinity;
+    const cap = answers.budget === "low" ? 800000 : answers.budget === "mid" ? 1500000 : Infinity;
     const usable = works.filter((w) => typeof w.price === "number" && w.price > 0);
     if (!usable.length) {
       result.classList.add("is-on");

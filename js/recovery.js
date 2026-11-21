@@ -1,6 +1,8 @@
 /* Non-intrusive design/cart recovery reminder. No personal data leaves the browser. */
 (function () {
   "use strict";
+  if (window.__CARA_RECOVERY_INITIALIZED__) return;
+  window.__CARA_RECOVERY_INITIALIZED__ = true;
   const path = location.pathname;
   if (/\/(?:builder|cart|checkout|admin|customers|track)\.html$/.test(path)) return;
   const DISMISS_KEY = "cara-recovery-dismissed";
@@ -26,6 +28,7 @@
 
   const box = document.createElement("aside");
   box.className = "recovery";
+  box.dataset.caraRecovery = "1";
   box.setAttribute("role", "status");
   box.setAttribute("aria-live", "polite");
   box.innerHTML = design
