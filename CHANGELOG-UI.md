@@ -1,14 +1,30 @@
 # تغییرات UI/UX — کارا (cara)
 
-این سند کار دو پاس بازبینی رابط کاربری را خلاصه می‌کند: پاس اول (شاخه‌ی
-`ui-polish`، ادغام‌شده در `main` با PR #255) و پاس دوم (شاخه‌ی
-`font-and-arrows`) که فونت سایت را عوض کرد، فلش‌های هیرو و ترتیب تماس فوتر را
-درست کرد و صفحه‌های تولیدی را دوباره هم‌تراز کرد. هر بخش می‌گوید چه چیزی
-عوض شد، چرا، و چه چیزی عمداً دست نخورد.
+این سند کار سه پاس بازبینی رابط کاربری را خلاصه می‌کند: پاس اول (شاخه‌ی
+`ui-polish`، ادغام‌شده در `main` با PR #255)، پاس دوم (شاخه‌ی
+`font-and-arrows`) و پاس سوم (شاخه‌ی `font-vazir-and-arrows`، PR #259) که
+فونت متن را به وزیرمتن برد، وزن تیترها را یکدست کرد، فلش‌های هیرو و بخش
+الهام را سر جای درست نشاند و لینک ادامه‌ی کارت‌ها را اضافه کرد. هر بخش
+می‌گوید چه چیزی عوض شد، چرا، و چه چیزی عمداً دست نخورد.
 
 ---
 
-## ۰) تغییرات پاس دوم (این شاخه)
+## ۰) تغییرات پاس سوم (این شاخه)
+
+| # | تغییر | فایل‌های اصلی |
+|---|---|---|
+| ۱ | فونت متن و رابط از Baloo Bhaijaan 2 به **وزیرمتن (Vazirmatn)** عوض شد؛ یک فایل متغیر ۱۰۰–۹۰۰ (~۱۱۱KB، OFL 1.1) که همه‌ی وزن‌ها را می‌دهد و بولد مصنوعی لازم ندارد. تیترها با **لاله‌زار** ماند | `css/fonts.css`، `fonts/vazirmatn-var.woff2`، `fonts/OFL-Vazirmatn.txt`، `sw.js`، `tools/self-host-fonts.js` |
+| ۲ | وزن تیترها یکدست شد: قواعد صفحه‌ای ۴۰۰/۷۰۰/۸۰۰/۸۵۰/۹۰۰ روی لاله‌زار (که یک وزن دارد) تیترها را یکی‌درمیان بولد/نیمه‌بولد نشان می‌داد؛ حالا همه‌ی `h1..h6` و تیترها روی ۸۰۰ قفل‌اند | `css/polish.css` |
+| ۳ | فلش‌های اسلایدر دستبند در موبایل از روی منجوق‌ها برداشته و زیر حلقه، دو طرف شمارنده‌ی «۱ از ۳» گذاشته شدند (ناحیه‌ی لمس ۴۴px) | `css/nav-hero.css` |
+| ۴ | فلش‌های بخش «یه کم الهام» برعکس کار می‌کردند: گلیف‌ها در RTL آینه می‌شدند. داخل دکمه `direction:ltr` + `unicode-bidi:bidi-override` گذاشته شد تا «قبلی» راست و «بعدی» چپ اشاره کند؛ ناحیه‌ی لمس ۴۴px | `index.html`، `css/home-blog-feed.css` |
+| ۵ | زیر ریل پست‌ها لینک «ادامه‌ی پست‌های دفتر کارا ←» اضافه شد | `index.html`، `css/home-blog-feed.css` |
+| ۶ | صفحه‌های تولیدی دیگر به Google Fonts وصل نمی‌شوند؛ `tools/build-pages.js` همیشه `css/fonts.css` محلی را لینک می‌دهد | `tools/build-pages.js`، `lib/generated-page-layout.js`، `bracelet/*`، `colors/*` |
+| ۷ | جمله‌ی برند فوتر روان‌تر شد: «اینجا هر طرحی با حوصله و با دست بافته می‌شه؛ تو فقط ایده‌ات رو انتخاب کن…» | `lib/site-footer.js`، همه‌ی صفحه‌ها |
+| ۸ | نسخه‌ی همه‌ی CSS/JS تغییر‌یافته بالا رفت (`nav-hero.css?v=3`، `polish.css?v=10`، `home-blog-feed.css?v=7`، `site-footer.css?v=3`، `fonts.css?v=20261121-vazir`، `contact.js?v=20261121-seal`) و کش سرویس‌ورکر به `cara-pwa-v11` رسید | `*.html`، `lib/generated-page-layout.js`، `sw.js`، تست‌ها |
+
+---
+
+## ۰٫۱) تغییرات پاس دوم
 
 | # | تغییر | فایل‌های اصلی |
 |---|---|---|
@@ -290,6 +306,17 @@ test: align expectations with Estedad fonts, RTL arrows and new copy
 chore: ignore local UI audit artifacts
 fix(reminder): remove the duplicate saved-pattern alert
 docs: add UI changelog
+```
+
+پاس سوم روی `font-vazir-and-arrows` (PR #259):
+
+```
+feat(fonts): swap the body face to self-hosted Vazirmatn
+fix(hero): move the mobile carousel arrows out of the bracelet
+style(headings): give every heading the same bold weight
+fix(journal): point the carousel arrows outwards and link to the blog
+chore(cache): refresh asset versions, regenerate SEO pages, tidy footer copy
+style(journal): respect reduced motion on the new link
 ```
 
 پاس دوم روی `font-and-arrows`:
