@@ -1,0 +1,276 @@
+/* theme.css — لایه‌ی روز/شب. آخر از همه لود می‌شه تا از توکن‌های مشترک
+   همه‌ی صفحه‌ها رو دوباره رنگ کنه. روز پیش‌فرض است؛ شب وقتی سیستم‌عامل
+   تیره باشه یا خود بازدیدکننده انتخابش کنه (js/theme.js روی html می‌نویسه).
+   هیچ قاعده‌ای اینجا !important نمی‌خواد: فقط توکن‌ها و سطح‌هایی رو عوض
+   می‌کنیم که در صفحه‌ها رنگ ثابت دارند. */
+
+:root {
+  color-scheme: light;
+  --cara-heading: #343b64;
+  --cara-surface-2: #f2f0f7;
+  --cara-surface-3: #e7e4ef;
+  --cara-on-accent: #fff;
+  --cara-panel-shadow: 0 18px 42px rgba(36, 36, 49, .10);
+  --cara-img-plate: #fff;
+}
+
+/* ---------- تیترها: یک رنگ برای کل سایت ---------- */
+/* هر تیتری که رنگ اختصاصی نداشته باشد از این توکن رنگ می‌گیرد. سطح‌های
+   تیره (هیرو، فوتر، کارت‌های رنگی) خودشان --cara-heading را عوض می‌کنند. */
+:root :is(h1, h2, h3, h4, h5, h6) { color: var(--cara-heading) !important; }
+.hx, .hero, .wv-stage, .pg-hero { --cara-heading: #f6f4fb; }
+.sf { --cara-heading: var(--sf-gold, #e8d3a5); }
+.cara-journal__card, .post-card { --cara-heading: #2c2438; }
+
+/* ---------- شب ---------- */
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* هسته‌ی پالت */
+  --cara-bg: #121120;
+  --cara-surface: #1b1a2b;
+  --cara-surface-2: #232135;
+  --cara-surface-3: #2c2940;
+  --cara-text: #ece9f6;
+  --cara-muted: #aca6c2;
+  --cara-line: rgba(236, 233, 246, .16);
+  --cara-accent: #5b66ab;
+  --cara-detail: #d9bb85;
+  --cara-accent-soft: #262338;
+  --cara-heading: #f3f0fa;
+  --cara-ink: #ece9f6;
+  --cara-plum: #8f8ad8;
+  --cara-plum-deep: #d9d4f4;
+  --cara-lilac: #2a2740;
+  --cara-paper: #121120;
+  --cara-gold: #d9bb85;
+  --cara-shadow-soft: 0 12px 34px rgba(0, 0, 0, .38);
+  --cara-shadow-card: 0 20px 55px rgba(0, 0, 0, .46);
+  --cara-panel-shadow: 0 18px 42px rgba(0, 0, 0, .46);
+  --cara-img-plate: #f7f6fb;
+
+  /* نام‌های قدیمی که صفحه‌ها استفاده می‌کنند (tokens.css، home.css،
+     studio.css، gallery.css، blog.css) */
+  --bg: #121120;
+  --paper: #121120;
+  --paper-2: #1f1d2e;
+  --panel: #1b1a2b;
+  --ink: #ece9f6;
+  --muted: #aca6c2;
+  --line: rgba(236, 233, 246, .16);
+  --tint: #262338;
+  --plum: #6b5b9e;
+  --night: #0d0c17;
+  --gold: #d9bb85;
+  --accent: #6a74b8;
+  --accent-2: #6a74b8;
+  --hot: #8f8ad8;
+  --wk-tint: #1f1d2e;
+  --hair: rgba(217, 187, 133, .34);
+
+  /* لایه‌ی premium.css */
+  --cp-ink: #ece9f6;
+  --cp-plum: #cfc6f0;
+  --cp-plum-deep: #0d0c17;
+  --cp-cream: #1b1a2b;
+  --cp-paper: #121120;
+  --cp-line: rgba(236, 233, 246, .16);
+  --cp-muted: #aca6c2;
+  --cp-gold: #d9bb85;
+  --cp-gold-soft: #e7d3a5;
+  --cp-shadow-sm: 0 2px 10px rgba(0, 0, 0, .4);
+  --cp-shadow-md: 0 16px 40px rgba(0, 0, 0, .5);
+  --cp-shadow-lg: 0 30px 80px rgba(0, 0, 0, .6);
+
+  /* هدر و فوتر متغیرهای خودشان را دارند */
+  --nh-ink: #ece9f6;
+  --nh-line: rgba(236, 233, 246, .16);
+  --sf-ink: #ece8f5;
+}
+
+html[data-theme="dark"] body {
+  background: var(--cara-bg);
+  color: var(--cara-text);
+}
+
+/* ---------- هدر ---------- */
+html[data-theme="dark"] .sh.is-solid,
+html[data-theme="dark"] .sh.is-open {
+  background: rgba(24, 23, 38, .95);
+  box-shadow: 0 1px 0 var(--cara-line), 0 10px 30px rgba(0, 0, 0, .45);
+}
+html[data-theme="dark"] header.top.solid {
+  background: rgba(24, 23, 38, .94);
+  border-bottom-color: var(--cara-line);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, .4);
+}
+html[data-theme="dark"] .sh__logo:has(.is-light) .is-dark { display: none; }
+html[data-theme="dark"] .sh__logo .is-light { display: block; }
+html[data-theme="dark"] .sh__logo .is-dark { filter: brightness(0) invert(1); }
+html[data-theme="dark"] .sh__nav a:hover { background: var(--cara-surface-2); }
+html[data-theme="dark"] .sh.is-solid .sh__nav a.sh__cta { background: var(--cara-accent); color: #fff; }
+html[data-theme="dark"] .sh.is-solid .sh__nav a.sh__cta:hover { background: #7c86c6; }
+html[data-theme="dark"] .sh__toggle { border-color: var(--cara-line); }
+html[data-theme="dark"] .sh.is-solid .sh__toggle,
+html[data-theme="dark"] .sh.is-open .sh__toggle {
+  border-color: var(--cara-line);
+  background: var(--cara-surface-2);
+  color: var(--cara-text);
+}
+html[data-theme="dark"] .sh.is-solid .sh__nav a[aria-current="page"]:not(.sh__cta) {
+  color: #e2d9ff;
+  background: rgba(143, 138, 216, .18);
+}
+
+/* ---------- سطح‌های روشن که در صفحه‌ها رنگ ثابت دارند ---------- */
+/* بعضی صفحه‌ها سطح‌هایشان را با سلکتورهای id‌دار یا !important رنگ می‌کنند؛
+   در حالت شب همان‌جا با !important خنثی می‌شود تا متن روشن روی کارت تیره بماند. */
+html[data-theme="dark"] :is(
+  .account-card, .account-design, .account-order, .post-reader,
+  .cara-journal__reader, .cart-summary, .chl-card, .chl-panel,
+  .quiz__opt, .quiz__work, .quiz__card, .sp-note, .sp-slots li, .sp-tab,
+  .wk-card, .wk-card figcaption, .gal-tools, .wk-lb, .flt-panel,
+  .featured-card, .cara-payment-promo__card, .wv-card, .wv-done, .rv,
+  .order-message, .trust-strip__item, .checkout-payment-choice,
+  .starter-card, .tune, .controls, .crop-bar, .preview, .drop__icon,
+  .faq details, details.faq-item, .dl-sound
+) {
+  background: var(--cara-surface) !important;
+  color: var(--cara-text);
+  border-color: var(--cara-line) !important;
+  box-shadow: var(--cara-panel-shadow);
+}
+html[data-theme="dark"] :is(.flt-panel, .wk-card, .wk-card figcaption, .gal-tools) { background: var(--cara-surface-2) !important; }
+html[data-theme="dark"] :is(.wk-card, .wk-card figcaption) { background: var(--cara-surface) !important; }
+html[data-theme="dark"] .reader-close,
+html[data-theme="dark"] .cara-journal__reader-top button {
+  background: var(--cara-surface-2);
+  color: var(--cara-text);
+  border-color: var(--cara-line);
+}
+html[data-theme="dark"] :is(.featured-card__img, .wk-card img, .wk-lb img, .gal-card img, .starter-card img) {
+  background: var(--cara-img-plate);
+}
+
+/* ---------- فرم‌ها ---------- */
+html[data-theme="dark"] :where(input:not([type="range"]):not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  background: var(--cara-surface-2) !important;
+  color: var(--cara-text) !important;
+  border-color: var(--cara-line) !important;
+}
+html[data-theme="dark"] input::placeholder,
+html[data-theme="dark"] textarea::placeholder { color: #8f89a6; }
+html[data-theme="dark"] input[type="range"] { accent-color: var(--cara-accent); }
+html[data-theme="dark"] option { background: var(--cara-surface-2); color: var(--cara-text); }
+
+/* ---------- دکمه‌ها ---------- */
+html[data-theme="dark"] .btn.dark {
+  background: var(--cara-accent);
+  border-color: var(--cara-accent);
+  color: #fff;
+}
+html[data-theme="dark"] .btn.dark:hover { background: #7c86c6; }
+html[data-theme="dark"] .btn.light {
+  background: var(--cara-surface-3);
+  color: var(--cara-text);
+}
+html[data-theme="dark"] .btn.light:hover { background: var(--cara-surface-2); }
+html[data-theme="dark"] .btn.plum { background: var(--plum); color: #fff; }
+html[data-theme="dark"] .btn.plum:hover { background: #7b6aae; }
+html[data-theme="dark"] .btn.line,
+html[data-theme="dark"] .btn.ghost,
+html[data-theme="dark"] .btn.secondary {
+  background: transparent;
+  border-color: var(--cara-line);
+  color: var(--cara-text);
+}
+html[data-theme="dark"] .btn.line:hover,
+html[data-theme="dark"] .btn.ghost:hover,
+html[data-theme="dark"] .btn.secondary:hover {
+  background: var(--cara-surface-2);
+  border-color: var(--cara-accent);
+  color: var(--cara-text);
+}
+html[data-theme="dark"] .btn:disabled,
+html[data-theme="dark"] .btn[disabled] {
+  background: var(--cara-surface-3);
+  border-color: var(--cara-line);
+  color: #b7b1c9;
+}
+
+/* ---------- متن‌هایی که رنگ ثابت دارند ---------- */
+html[data-theme="dark"] .sub,
+html[data-theme="dark"] .page-head p,
+html[data-theme="dark"] .wk-count,
+html[data-theme="dark"] .crumb,
+html[data-theme="dark"] .crumb a,
+html[data-theme="dark"] .cp__lead,
+html[data-theme="dark"] .review-empty,
+html[data-theme="dark"] .review-hint,
+html[data-theme="dark"] .drop__formats,
+html[data-theme="dark"] .msg,
+html[data-theme="dark"] .wv-heading p,
+html[data-theme="dark"] .wv-field,
+html[data-theme="dark"] .wv-done p,
+html[data-theme="dark"] .cara-weaving p,
+html[data-theme="dark"] .cara-weaving__caption,
+html[data-theme="dark"] .cara-weaving__link,
+html[data-theme="dark"] .paths-quiz a,
+html[data-theme="dark"] .cara-journal,
+html[data-theme="dark"] .cara-journal__heading p,
+html[data-theme="dark"] .cara-journal__hint,
+html[data-theme="dark"] .cara-journal__more,
+html[data-theme="dark"] .cara-journal__arrows button,
+html[data-theme="dark"] .featured-card__body p,
+html[data-theme="dark"] .account-mark,
+html[data-theme="dark"] label.check,
+html[data-theme="dark"] label.tr,
+html[data-theme="dark"] label.cb-check,
+html[data-theme="dark"] button.cb,
+html[data-theme="dark"] summary,
+html[data-theme="dark"] .checkout-payment-choice__title,
+html[data-theme="dark"] .checkout-payment-choice__hint {
+  color: var(--cara-text);
+}
+html[data-theme="dark"] .cp__eyebrow,
+html[data-theme="dark"] .cara-journal__eyebrow,
+html[data-theme="dark"] .section-kicker { color: var(--cara-detail); }
+html[data-theme="dark"] .pg-price,
+html[data-theme="dark"] .featured-card__row b,
+html[data-theme="dark"] .starter-card span,
+html[data-theme="dark"] .cara-weaving__link:hover { color: var(--cara-detail); }
+
+/* متن‌های ثانویه‌ی صفحه‌های محتوایی و کارت‌های سفید */
+html[data-theme="dark"] :is(.pg, .cp, .quiz__card, .trust-strip__item, .flt-sec, .cara-journal__reader) :is(p, li, b, strong, small, span, dt, dd) {
+  color: var(--cara-text);
+}
+html[data-theme="dark"] :is(.pg, .cp, .quiz__card) :is(.pg-price, .price, .cp__eyebrow) { color: var(--cara-detail); }
+
+/* ---------- دکمه‌ی تعویض تم ---------- */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  opacity: .8;
+  transition: opacity .16s ease, background .16s ease;
+}
+.theme-toggle:hover { opacity: 1; background: rgba(127, 127, 160, .14); }
+.theme-toggle:focus-visible { outline: 2px solid var(--cara-gold-brand, #b8975a); outline-offset: 3px; }
+.theme-toggle svg { width: 20px; height: 20px; display: block; }
+html[data-theme="dark"] .theme-toggle { border-color: rgba(236, 233, 246, .3); }
+
+@media (max-width: 900px) {
+  .theme-toggle { width: 44px; height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle { transition: none; }
+}

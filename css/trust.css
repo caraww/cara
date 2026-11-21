@@ -18,9 +18,9 @@
   border-radius: 14px;
   background: rgba(255, 255, 255, .62);
 }
-.trust-strip__item b { color: #2d2440; font-size: 15px; font-weight: 800; }
-.trust-strip__item span { color: #6c6478; font-size: 13px; line-height: 1.8; }
-.trust-strip__item a { color: #7b5a24; text-decoration: underline; text-underline-offset: 3px; }
+.trust-strip__item b { color: var(--ink, #2d2440); font-size: 15px; font-weight: 800; }
+.trust-strip__item span { color: var(--muted, #6c6478); font-size: 13px; line-height: 1.8; }
+.trust-strip__item a { color: var(--cara-detail, #7b5a24); text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 430px) {
   .trust-strip { grid-template-columns: 1fr; }
 }

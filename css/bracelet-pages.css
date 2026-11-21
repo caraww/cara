@@ -12,12 +12,12 @@ html body .pg {
   line-height: 1.9;
 }
 html body .pg .crumb {
-  color: #766d81;
+  color: var(--muted, #766d81);
   font-size: 13px;
   margin: 0 0 14px;
 }
 html body .pg .crumb a {
-  color: #6d527f;
+  color: var(--cara-plum, #6d527f);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -50,7 +50,7 @@ html body .pg-grid > div:not(.pg-img) {
   padding: clamp(16px, 2.5vw, 26px);
   border: 1px solid #e9e0ec;
   border-radius: 22px;
-  background: rgba(255,255,255,.86);
+  background: var(--panel, rgba(255,255,255,.86));
   box-shadow: 0 12px 34px rgba(43, 30, 58, .06);
 }
 html body .pg p {
@@ -107,12 +107,12 @@ html body .pg .rel {
   gap: 14px;
 }
 html body .pg .rel a {
-  color: #4e3b60;
+  color: var(--ink, #4e3b60);
   text-decoration: none;
   padding: 10px;
   border: 0;
   border-radius: 16px;
-  background: #fff;
+  background: var(--panel, #fff);
   transition: transform .2s, box-shadow .2s;
 }
 html body .pg .rel a:hover {
