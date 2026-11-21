@@ -91,8 +91,8 @@ try {
   let w = L.DEF_W, h = L.DEF_H, data = empty(w, h), sel = C.palette[0].code, tool = "brush";
   let panning = null, space = false, mirror = false, erasing = false, painting = false, last = null, history = [], redo = [], cw = 24, ch = 20, saveT, sumQ = false;
   let zoom = 1, fillShapes = false, drag = null, snap = null, track = null, selRect = null, selDrag = null, clip = null, hover = null, recent = [];
-  /* طول دستبند افقی کشیده می‌شود تا کل الگو در یک نگاه جا شود */
-  let horizontal = true;
+  /* دسکتاپ: طول دستبند افقی. موبایل: نوار عمودی مثل اپ‌های الگوساز */
+  let horizontal = window.matchMedia("(min-width: 761px)").matches;
   document.body.dataset.gridAxis = horizontal ? "h" : "v";
 
   /* الگوی اشتراکی در fragment لینک قرار دارد؛ داده‌ای به سرور فرستاده نمی‌شود. */
@@ -211,8 +211,11 @@ try {
   function drawCell(g, r, c, cw, ch, ox, oy, G) {
     const [gx, gy] = cellXY(r, c, cw, ch, G || geomMain());
     const x = ox + gx, y = oy + gy, code = data[r][c];
-    g.fillStyle = "#EFECF4"; g.fillRect(x + 1, y + 1, cw - 1, ch - 1);
-    if (code) C.drawBead(g, x + 1, y + 1, cw - 1, ch - 1, C.byCode(code).hex);
+    if (code) { C.drawBead(g, x + 1, y + 1, cw - 1, ch - 1, C.byCode(code).hex); return; }
+    /* خانه‌ی خالی: نقطه‌ی محو روی بوم سفید، مثل دفتر الگو */
+    const rad = clamp(Math.min(cw, ch) * 0.1, 0.7, 1.6);
+    g.fillStyle = "#CFC7DA";
+    g.beginPath(); g.arc(x + cw / 2, y + ch / 2, rad, 0, Math.PI * 2); g.fill();
   }
   function paintGrid(g, cw, ch, ox, oy, G) {
     G = G || geomMain();
@@ -220,10 +223,10 @@ try {
     const per = G.horiz ? G.per : w;
     const W = per * cw, BH = w * ch;
     const H = G.horiz ? blocks * BH + (blocks - 1) * LINE_GAP : h * ch;
-    g.fillStyle = "#D3CCDD"; g.fillRect(ox, oy, W + 1, H + 1);
+    g.fillStyle = "#FFFFFF"; g.fillRect(ox, oy, W + 1, H + 1);
     for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) drawCell(g, r, c, cw, ch, ox, oy, G);
-    const vline = (x, i, y, hh) => { g.fillStyle = i % 10 ? "#A99BC0" : "#7E6A9C"; g.fillRect(x, y, 1, hh); };
-    const hline = (y, i, x, ww) => { g.fillStyle = i % 10 ? "#A99BC0" : "#7E6A9C"; g.fillRect(x, y, ww, 1); };
+    const vline = (x, i, y, hh) => { g.fillStyle = i % 10 ? "#EFEBF5" : "#E0D9EC"; g.fillRect(x, y, 1, hh); };
+    const hline = (y, i, x, ww) => { g.fillStyle = i % 10 ? "#EFEBF5" : "#E0D9EC"; g.fillRect(x, y, ww, 1); };
     g.font = `${clamp(Math.min(cw, ch) * 0.6, 9, 12)}px "Vazir",Tahoma,sans-serif`;
     g.textBaseline = "middle";
     for (let b = 0; b < blocks; b++) {
@@ -265,12 +268,7 @@ try {
   }
   function layout() {
     const avail = wrap.clientWidth - 28 - M;
-    if (horizontal) {
-      lines = Math.floor(avail / h) < 7 ? 2 : 1;
-      perMain = lines > 1 ? Math.ceil(h / lines) : h;
-    } else {
-      lines = 1; perMain = h;
-    }
+    lines = 1; perMain = h;
     const base = clamp(Math.floor(avail / (horizontal ? perMain : w)), 6, 30);
     cw = clamp(Math.round(base * zoom), 3, 60); ch = Math.round(cw / L.BEAD_ASPECT);
     const d = devicePixelRatio || 1;
