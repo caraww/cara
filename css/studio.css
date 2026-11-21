@@ -86,7 +86,7 @@ button, input, select, textarea{
 .logo{
   font-size: 40px;
   font-weight: 900;
-  letter-spacing: -1px;
+  letter-spacing: normal;
 }
 
 .top nav{
@@ -181,7 +181,7 @@ button, input, select, textarea{
 .page-title{
   font-size: clamp(30px, 4vw, 52px);
   line-height: 1.2;
-  letter-spacing: -1.5px;
+  letter-spacing: normal;
   margin: 0 0 6px;
   font-weight: 900;
 }

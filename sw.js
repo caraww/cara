@@ -1,4 +1,4 @@
-const CACHE_NAME = "cara-pwa-v11";
+const CACHE_NAME = "cara-pwa-v12";
 const CORE_ASSETS = [
   "/",
   "/offline.html",
@@ -79,6 +79,17 @@ self.addEventListener("fetch", (event) => {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE_NAME);
       const cached = await cache.match(request);
+      /* فایل‌های نسخه‌دار (?v=) تغییرناپذیرند؛ بقیه stale-while-revalidate می‌مانند
+         تا قیمت و حراج بعد از انتشار، حتی روی موبایل، به‌روز دیده شود. */
+      if (url.searchParams.has("v")) {
+        try {
+          const fresh = await fetch(request);
+          if (fresh && fresh.ok) cache.put(request, fresh.clone());
+          return fresh;
+        } catch {
+          return cached || Response.error();
+        }
+      }
       const network = fetch(request).then((response) => {
         if (response && response.ok) cache.put(request, response.clone());
         return response;

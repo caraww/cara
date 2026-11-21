@@ -1,4 +1,4 @@
-/* حراج بلک فریدی: کلاس is-sale روی <html> تا قیمت خط‌خورده و نوار حراج دیده بشن.
+/* حراج بلک فرایدی: کلاس is-sale روی <html> تا نوار حراج و قیمت حراج دیده بشن.
    قیمت‌ها از lib/works-pricing.js می‌آیند؛ هم Worker و هم مرورگر از یک قاعده استفاده می‌کنند
    تا مبلغی که مشتری می‌بینه با مبلغ درگاه یکی باشه. بعد از پایان بازه، کلاس گذاشته نمی‌شه. */
 (function () {
@@ -18,9 +18,9 @@
     var unit = opts && opts.unit === false ? "" : " تومان";
     var now = sale.final(o);
     if (!onSale || now >= o) return '<span class="price">' + faNum(o) + unit + "</span>";
+    /* در حراج فقط قیمت روز نشان داده می‌شود؛ مبلغ قبلی در data-price-list می‌ماند. */
     return '<span class="price" data-price="' + now + '" data-price-list="' + o + '">' +
-      '<s class="price-list">' + faNum(o) + "</s>" +
-      '<b class="price-now">' + faNum(now) + unit + "</b></span>";
+      faNum(now) + unit + "</span>";
   }
 
   globalThis.CARA_SALE = Object.freeze({

@@ -39,8 +39,8 @@ test("writes verified font files and rewrites Google Fonts links only after all 
       fetchImpl: async (url) => (String(url).includes("googleapis") ? ok(css) : ok(font)),
     });
     assert.deepEqual(result, { fontFiles: FAMILIES.length, pages: 1 });
-    assert.equal(fs.readFileSync(path.join(root, "fonts/lalezar-latin.woff2")).subarray(0, 4).toString(), "wOF2");
-    assert.match(fs.readFileSync(path.join(root, "css/fonts.css"), "utf8"), /\/fonts\/lalezar-latin.woff2/);
+    assert.equal(fs.readFileSync(path.join(root, "fonts/baloo-latin.woff2")).subarray(0, 4).toString(), "wOF2");
+    assert.match(fs.readFileSync(path.join(root, "css/fonts.css"), "utf8"), /\/fonts\/baloo-latin.woff2/);
     const updated = fs.readFileSync(path.join(root, "index.html"), "utf8");
     assert.match(updated, /\/css\/fonts.css/);
     assert.doesNotMatch(updated, /fonts\.(googleapis|gstatic)\.com/);

@@ -31,7 +31,7 @@ html[data-theme="dark"] {
   --cara-surface-2: #232135;
   --cara-surface-3: #2c2940;
   --cara-text: #ece9f6;
-  --cara-muted: #aca6c2;
+  --cara-muted: #b7b1cd;
   --cara-line: rgba(236, 233, 246, .16);
   --cara-accent: #5b66ab;
   --cara-detail: #d9bb85;
@@ -165,6 +165,40 @@ html[data-theme="dark"] .cara-journal__reader-top button {
 html[data-theme="dark"] :is(.featured-card__img, .wk-card img, .wk-lb img, .gal-card img, .starter-card img) {
   background: var(--cara-img-plate);
 }
+
+/* ---------- صفحه‌ی محصول ---------- */
+html[data-theme="dark"] body .pg .tags span {
+  background: var(--cara-surface-3) !important;
+  color: var(--cara-plum-deep) !important;
+}
+
+/* ---------- پنل‌های ساخت دستبند ---------- */
+html[data-theme="dark"] .sp-sub {
+  background: var(--cara-surface-2);
+  border-color: var(--cara-line);
+}
+html[data-theme="dark"] .sp-sub > summary:hover { background: var(--cara-surface-3); }
+
+/* ---------- سبد خرید ---------- */
+html[data-theme="dark"] :is(.cart-item, .cart-summary, .cart-empty) {
+  background: var(--cara-surface) !important;
+  border-color: var(--cara-line) !important;
+  box-shadow: var(--cara-panel-shadow);
+}
+html[data-theme="dark"] :is(.cart-item img, .cart-art) { background: var(--cara-img-plate); }
+html[data-theme="dark"] .cart-item h2 { color: var(--cara-heading); }
+html[data-theme="dark"] :is(.cart-checkout, .cart-empty a) {
+  background: var(--cara-gold);
+  color: #241a08;
+  border-color: transparent;
+}
+html[data-theme="dark"] :is(.cart-checkout, .cart-empty a):hover { filter: brightness(1.06); }
+html[data-theme="dark"] .cart-actions button:not(.cart-remove) {
+  background: var(--cara-surface-2);
+  color: var(--cara-text);
+  border-color: var(--cara-line);
+}
+html[data-theme="dark"] .cart-unavailable { color: #f0a9b1 !important; }
 
 /* ---------- فرم‌ها ---------- */
 html[data-theme="dark"] :where(input:not([type="range"]):not([type="checkbox"]):not([type="radio"]), select, textarea) {
@@ -303,7 +337,13 @@ html[data-theme="light"] .hx {
     linear-gradient(118deg, #fffdf8 0%, #f6f1fa 56%, #fbf6ee 100%);
 }
 html[data-theme="light"] .hx__copy h1 { color: var(--cara-heading); }
-html[data-theme="light"] .hx__copy h1 .gilt { color: #8a6522; }
+html[data-theme="light"] .hx__copy h1 .gilt {
+  background: linear-gradient(96deg, #7d5a1a 0%, #a67c2c 42%, #7a5a1c 78%, #96702a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
 html[data-theme="light"] .hx__copy p.hx__lead { color: #4c4660; }
 html[data-theme="light"] .hx__eyebrow {
   border-color: rgba(160, 124, 58, .45);
@@ -327,12 +367,24 @@ html[data-theme="light"] .hx__proof span {
   color: #4c4660;
 }
 html[data-theme="light"] .hx__proof i { color: #9a7a34; }
-html[data-theme="light"] .cara-bracelet-lineup__viewport::before {
-  border-color: rgba(160, 124, 58, .30);
-  background: radial-gradient(circle, rgba(184, 151, 90, .16), transparent 68%);
-  box-shadow: 0 0 0 18px rgba(184, 151, 90, .05);
+/* صحنه‌ی دستبندها در روز: فلش‌های روشن، هاله‌ی ملایم و نقطه‌های تیره‌تر */
+html[data-theme="light"] .hx__halo {
+  background:
+    radial-gradient(circle at 50% 38%, rgba(184, 151, 90, .26), rgba(184, 151, 90, .05) 46%, transparent 66%),
+    radial-gradient(circle at 50% 92%, rgba(155, 143, 193, .14), transparent 60%);
 }
-html[data-theme="light"] .cara-bracelet-card__art { filter: drop-shadow(0 20px 24px rgba(52, 59, 100, .18)); }
+html[data-theme="light"] .hx__orbit { border-color: rgba(160, 124, 58, .34); }
+html[data-theme="light"] .hx__arrow {
+  border-color: rgba(160, 124, 58, .45);
+  background: rgba(255, 255, 255, .82);
+  color: #74521a;
+  box-shadow: 0 6px 18px -8px rgba(52, 59, 100, .35);
+}
+html[data-theme="light"] .hx__arrow:hover { background: #b8975a; border-color: #b8975a; color: #fff; }
+html[data-theme="light"] .hx__dot::before { background: rgba(90, 74, 110, .26); }
+html[data-theme="light"] .hx__dot.is-active::before { background: #9a7a34; }
+html[data-theme="light"] .hx__card { box-shadow: 0 34px 60px -34px rgba(52, 59, 100, .45), 0 0 0 1px rgba(160, 124, 58, .28), inset 0 1px 0 #fff; }
+html[data-theme="light"] .hx__card.is-active { box-shadow: 0 40px 70px -32px rgba(52, 59, 100, .5), 0 0 0 1px rgba(160, 124, 58, .4), inset 0 1px 0 #fff; }
 html[data-theme="light"] .cara-bracelet-card figcaption { color: var(--cara-heading); }
 html[data-theme="light"] .cara-bracelet-lineup__arrow { color: rgba(52, 59, 100, .45); }
 html[data-theme="light"] .cara-bracelet-lineup__arrow:hover { color: #8a6522; }
@@ -378,8 +430,11 @@ html[data-theme="dark"] :is(.post-card, .cara-journal__card) :is(p, time, small,
 /* لوگو در شب: وقتی منو باز یا هدر چسبیده است، نسخه‌ی روشن بماند */
 html[data-theme="dark"] .sh.is-solid .sh__logo .is-light,
 html[data-theme="dark"] .sh.is-open .sh__logo .is-light { display: block; }
-html[data-theme="dark"] .sh.is-solid .sh__logo .is-dark,
-html[data-theme="dark"] .sh.is-open .sh__logo .is-dark { display: none; }
+/* فقط وقتی نسخه‌ی روشن لوگو وجود دارد پنهانش کن؛ صفحه‌هایی که تنها لوگوی تیره دارند
+   نباید در تم شب بی‌لوگو شوند. */
+html[data-theme="dark"] .sh.is-solid .sh__logo:has(.is-light) .is-dark,
+html[data-theme="dark"] .sh.is-open .sh__logo:has(.is-light) .is-dark { display: none; }
+html[data-theme="dark"] .sh__logo .is-dark { filter: brightness(0) invert(1); }
 
 /* دکمه‌ی تم در منوی موبایل: یک ردیف کامل، نه حباب شناور */
 @media (max-width: 850px) {
@@ -458,6 +513,9 @@ html[data-theme="dark"] :is(
 ) { color: #e0c48f; }
 html[data-theme="dark"] .chl-msg.is-error { color: #f2a08d; }
 html[data-theme="dark"] figcaption { color: var(--cara-muted); }
+/* کارت‌های صحنه‌ی هیرو همیشه روی سطح کرم‌اند، پس متنشان در هر دو تم تیره می‌ماند */
+html[data-theme="dark"] .hx__card figcaption { color: #352a4a; }
+html[data-theme="dark"] .hx__card figcaption small { color: #8b7f6d; }
 html[data-theme="dark"] :is(.pill, .cp-note, .note-pill, .premium-pill) {
   background: var(--cara-surface-2);
   border-color: var(--cara-line);
@@ -757,9 +815,9 @@ html[data-theme="dark"] .wk-grid > .wk-card .wk-share {
 /* 8) متن جانشین ویدئو (اگر مرورگر پخش نکند) */
 .cara-weaving__video { color: #fff; }
 
-/* 9) تیترهای نمایشی: بدون بولد مصنوعی (Lalezar خودش سنگین است) */
+/* 9) تیترهای نمایشی: وزن واقعی ۸۰۰ فونت Baloo، بدون بولد مصنوعی */
 :is(h1, h2, h3, h4, h5, h6, .page-title, .hx__copy h1, .section-head h2) {
-  font-weight: 400;
+  font-weight: 800;
   font-synthesis-weight: none;
 }
 html[data-theme="dark"] .order-message__links a:first-child {
