@@ -234,18 +234,13 @@
       const paint = () => { b.setAttribute("aria-pressed", sound.on); b.textContent = sound.on ? "♪ صدای منجوق: روشن" : "♪ صدای منجوق: خاموش"; };
       b.onclick = () => { sound.on = !sound.on; LS.set("cara-sound", sound.on ? "1" : "0"); paint(); tick(); }; paint(); bar.appendChild(b);
     }
-    let lastCell = "";
-    cvGrid.addEventListener("pointerdown", (e) => { if (e.button === 0 || e.button === 2) { lastCell = ""; tick(); } });
-    cvGrid.addEventListener("pointermove", (e) => {
-      if (e.buttons !== 1 && e.buttons !== 2) return;
-      const k = Math.floor(e.clientX / 14) + "," + Math.floor(e.clientY / 14);
-      if (k !== lastCell) { lastCell = k; tick(); }
-    });
     const MS = [[1, "اولین منجوق نشست! 🧵"], [50, "پنجاه‌تا شد؛ نخ داره راه می‌افته"], [100, "صدتا! الان دیگه اسمش طرحه"], [250, "دویست‌وپنجاه منجوق… دستت درد نکنه!"], [500, "پانصدتا؟! من باید زودتر شروع کنم بافتن"], [1000, "هزارتا! این دیگه یه شاهکاره 👑"]];
     const tot = $("total"), num = () => Number(faToEn((tot && tot.textContent) || "0").replace(/\D/g, "")) || 0;
-    let prev = num();
+    let prev = num(), lastSnd = 0;
     if (tot) new MutationObserver(() => {
       const n = num(); tot.classList.remove("dl-bump"); void tot.offsetWidth; if (n !== prev) tot.classList.add("dl-bump");
+      /* صدا فقط وقتی منجوق واقعاً کم یا زیاد می‌شود؛ زوم و جابه‌جایی ساکت‌اند */
+      if (n !== prev) { const now = performance.now(); if (now - lastSnd > 45) { tick(); lastSnd = now; } }
       for (const [m, t] of MS) if (prev < m && n >= m) say(t);
       prev = n;
     }).observe(tot, { childList: true, characterData: true, subtree: true });

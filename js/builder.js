@@ -230,7 +230,7 @@ try {
     for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) drawCell(g, r, c, cw, ch, ox, oy, G);
     const vline = (x, i, y, hh) => { g.fillStyle = i % 10 ? "#EFEBF5" : "#E0D9EC"; g.fillRect(x, y, 1, hh); };
     const hline = (y, i, x, ww) => { g.fillStyle = i % 10 ? "#EFEBF5" : "#E0D9EC"; g.fillRect(x, y, ww, 1); };
-    g.font = `${clamp(Math.min(cw, ch) * 0.6, 9, 12)}px "Vazir",Tahoma,sans-serif`;
+    g.font = `${clamp(Math.min(cw, ch) * 0.55, 8, 11)}px "Vazir",Tahoma,sans-serif`;
     g.textBaseline = "middle";
     for (let b = 0; b < blocks; b++) {
       const by = oy + b * (BH + LINE_GAP);
@@ -240,20 +240,20 @@ try {
           const gr = b * per + r;
           if (gr >= h) break;
           if (gr && gr % 5 === 0) vline(ox + r * cw, gr, by, BH + 1);
-          if (gr % 5 === 0) { g.fillStyle = "#6C6478"; g.textAlign = "center"; g.fillText(C.faNum(gr + 1), ox + r * cw + cw / 2, by - 10); }
+          if (gr % 5 === 0) { g.fillStyle = "#6C6478"; g.textAlign = "center"; g.fillText(C.faNum(gr + 1), ox + r * cw + cw / 2, by - 11); }
         }
         for (let c = 0; c < w; c++) {
           if (c && c % 5 === 0) hline(by + c * ch, c, ox, W + 1);
-          if (c % 5 === 0) { g.fillStyle = "#6C6478"; g.textAlign = "right"; g.fillText(C.faNum(c + 1), ox - 6, by + c * ch + ch / 2); }
+          if (c % 5 === 0) { g.fillStyle = "#6C6478"; g.textAlign = "right"; g.fillText(C.faNum(c + 1), ox - 10, by + c * ch + ch / 2); }
         }
       } else {
         for (let r = 0; r < h; r++) {
           if (r && r % 5 === 0) hline(by + r * ch, r, ox, W + 1);
-          if (r % 5 === 0) { g.fillStyle = "#6C6478"; g.textAlign = "right"; g.fillText(C.faNum(r + 1), ox - 6, by + r * ch + ch / 2); }
+          if (r % 5 === 0) { g.fillStyle = "#6C6478"; g.textAlign = "right"; g.fillText(C.faNum(r + 1), ox - 10, by + r * ch + ch / 2); }
         }
         for (let c = 0; c < w; c++) {
           if (c && c % 5 === 0) vline(ox + c * cw, c, by, H + 1);
-          if (c % 5 === 0) { g.fillStyle = "#6C6478"; g.textAlign = "center"; g.fillText(C.faNum(c + 1), ox + c * cw + cw / 2, by - 10); }
+          if (c % 5 === 0) { g.fillStyle = "#6C6478"; g.textAlign = "center"; g.fillText(C.faNum(c + 1), ox + c * cw + cw / 2, by - 11); }
         }
       }
     }
