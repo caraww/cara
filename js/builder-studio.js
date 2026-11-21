@@ -162,7 +162,7 @@
   let fitting = false;
 
   function fitToView() {
-    const avail = wrap.clientHeight - 44;
+    const avail = wrap.clientHeight - 26;
     if (avail < 80) return;
     fitting = true;
     try {
@@ -173,7 +173,7 @@
   }
 
   function fitLoop(avail) {
-    const availW = wrap.clientWidth - 44;
+    const availW = wrap.clientWidth - 26;
     for (let i = 0; i < 3; i++) {
       const r = canvas.getBoundingClientRect();
       if (!r.width || !r.height) return;
@@ -267,6 +267,8 @@
   const syncToolsH = () => {
     if (toolsRow) document.documentElement.style.setProperty("--bs-tools-h", toolsRow.offsetHeight + "px");
     document.documentElement.style.setProperty("--bs-hdr", (hdr ? hdr.offsetHeight : 0) + "px");
+    const headRow = section.querySelector(".head");
+    document.documentElement.style.setProperty("--bs-head-h", (headRow ? headRow.offsetHeight : 0) + "px");
     const mbH = mbBar && getComputedStyle(mbBar).display !== "none" ? mbBar.offsetHeight : 0;
     document.documentElement.style.setProperty("--bs-mb", mbH + "px");
   };
@@ -285,11 +287,9 @@
   syncFlip();
   document.addEventListener("builder:flipped", syncFlip);
 
-  /* دسکتاپ: از همان اول کل الگو در دید. موبایل: خانه‌های درشت و اسکرول طول، مثل اپ */
-  if (!narrow.matches) {
-    fitMode = true;
-    setTimeout(fitToView, 120);
-  }
+  /* از همان اول کل الگو در دید تا بیشترین منجوق هم‌زمان دیده شود */
+  fitMode = true;
+  setTimeout(fitToView, 120);
 
   updateTip();
 })();
