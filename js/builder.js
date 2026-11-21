@@ -180,55 +180,102 @@ try {
   if ($("shapeFill")) $("shapeFill").onclick = (e) => { fillShapes = !fillShapes; e.currentTarget.setAttribute("aria-pressed", fillShapes); };
 
   /* رسم */
+  /* هندسه‌ی بوم: در حالت افقی طول دستبند روی عرض صفحه پخش می‌شود. اگر خانه‌ها
+     از این هم کوچک‌تر شوند (گوشی) الگو به دو خط می‌شکند تا خانه‌ها دو برابر شوند. */
+  const LINE_GAP = 34;
+  let lines = 1, perMain = 0;
+  const geomMain = () => ({ horiz: horizontal, lines, per: perMain });
+  const blockH = () => w * ch + LINE_GAP;
+
   function cellRect(r, c) {
-    return horizontal
-      ? { x: M + r * cw, y: T + c * ch, w: cw, h: ch }
-      : { x: M + c * cw, y: T + r * ch, w: cw, h: ch };
+    if (!horizontal) return { x: M + c * cw, y: T + r * ch, w: cw, h: ch };
+    const ln = Math.floor(r / perMain), lr = r % perMain;
+    return { x: M + lr * cw, y: T + ln * blockH() + c * ch, w: cw, h: ch };
   }
   function spanRect(r0, c0, r1, c1) {
+    /* انتخابِ دو خطی یک کادر نمی‌شود؛ کادر تا آخر خط اول کشیده می‌شود */
+    if (horizontal && lines > 1 && Math.floor(r0 / perMain) !== Math.floor(r1 / perMain)) {
+      r1 = Math.floor(r0 / perMain) * perMain + perMain - 1;
+    }
     const a = cellRect(r0, c0), b = cellRect(r1, c1);
     return {
       x: Math.min(a.x, b.x), y: Math.min(a.y, b.y),
       w: Math.abs(b.x - a.x) + cw, h: Math.abs(b.y - a.y) + ch,
     };
   }
-  function drawCell(g, r, c, cw, ch, ox, oy) {
-    const x = ox + (horizontal ? r : c) * cw, y = oy + (horizontal ? c : r) * ch, code = data[r][c];
+  function cellXY(r, c, cw, ch, G) {
+    if (!G.horiz) return [c * cw, r * ch];
+    const ln = Math.floor(r / G.per), lr = r % G.per;
+    return [lr * cw, ln * (w * ch + LINE_GAP) + c * ch];
+  }
+  function drawCell(g, r, c, cw, ch, ox, oy, G) {
+    const [gx, gy] = cellXY(r, c, cw, ch, G || geomMain());
+    const x = ox + gx, y = oy + gy, code = data[r][c];
     g.fillStyle = "#EFECF4"; g.fillRect(x + 1, y + 1, cw - 1, ch - 1);
     if (code) C.drawBead(g, x + 1, y + 1, cw - 1, ch - 1, C.byCode(code).hex);
   }
-  function paintGrid(g, cw, ch, ox, oy) {
-    const W = (horizontal ? h : w) * cw, H = (horizontal ? w : h) * ch;
+  function paintGrid(g, cw, ch, ox, oy, G) {
+    G = G || geomMain();
+    const blocks = G.horiz ? G.lines : 1;
+    const per = G.horiz ? G.per : w;
+    const W = per * cw, BH = w * ch;
+    const H = G.horiz ? blocks * BH + (blocks - 1) * LINE_GAP : h * ch;
     g.fillStyle = "#D3CCDD"; g.fillRect(ox, oy, W + 1, H + 1);
-    for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) drawCell(g, r, c, cw, ch, ox, oy);
-    /* خط راهنما هر ۵ خونه (پررنگ‌تر هر ۱۰) تا شمردن راحت باشه */
-    const vline = (x, i) => { g.fillStyle = i % 10 ? "#A99BC0" : "#7E6A9C"; g.fillRect(x, oy, 1, H + 1); };
-    const hline = (y, i) => { g.fillStyle = i % 10 ? "#A99BC0" : "#7E6A9C"; g.fillRect(ox, y, W + 1, 1); };
-    for (let r = 5; r < h; r += 5) horizontal ? vline(ox + r * cw, r) : hline(oy + r * ch, r);
-    for (let c = 5; c < w; c += 5) horizontal ? hline(oy + c * ch, c) : vline(ox + c * cw, c);
-    g.fillStyle = "#6C6478"; g.font = `${clamp(Math.min(cw, ch) * 0.6, 9, 12)}px "Vazir",Tahoma,sans-serif`;
+    for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) drawCell(g, r, c, cw, ch, ox, oy, G);
+    const vline = (x, i, y, hh) => { g.fillStyle = i % 10 ? "#A99BC0" : "#7E6A9C"; g.fillRect(x, y, 1, hh); };
+    const hline = (y, i, x, ww) => { g.fillStyle = i % 10 ? "#A99BC0" : "#7E6A9C"; g.fillRect(x, y, ww, 1); };
+    g.font = `${clamp(Math.min(cw, ch) * 0.6, 9, 12)}px "Vazir",Tahoma,sans-serif`;
     g.textBaseline = "middle";
-    for (let r = 0; r < h; r++) {
-      if (r !== 0 && (r + 1) % 5) continue;
-      g.textAlign = horizontal ? "center" : "right";
-      horizontal
-        ? g.fillText(C.faNum(r + 1), ox + r * cw + cw / 2, oy - 10)
-        : g.fillText(C.faNum(r + 1), ox - 6, oy + r * ch + ch / 2);
+    for (let b = 0; b < blocks; b++) {
+      const by = oy + b * (BH + LINE_GAP);
+      if (G.horiz) {
+        /* شماره‌ی ردیف‌های طول بالای هر خط، شماره‌ی ستون‌های عرض سمت راست */
+        for (let r = 0; r < per; r++) {
+          const gr = b * per + r;
+          if (gr >= h) break;
+          if (gr && gr % 5 === 0) vline(ox + r * cw, gr, by, BH + 1);
+          if (gr % 5 === 0) { g.fillStyle = "#6C6478"; g.textAlign = "center"; g.fillText(C.faNum(gr + 1), ox + r * cw + cw / 2, by - 10); }
+        }
+        for (let c = 0; c < w; c++) {
+          if (c && c % 5 === 0) hline(by + c * ch, c, ox, W + 1);
+          if (c % 5 === 0) { g.fillStyle = "#6C6478"; g.textAlign = "right"; g.fillText(C.faNum(c + 1), ox - 6, by + c * ch + ch / 2); }
+        }
+      } else {
+        for (let r = 0; r < h; r++) {
+          if (r && r % 5 === 0) hline(by + r * ch, r, ox, W + 1);
+          if (r % 5 === 0) { g.fillStyle = "#6C6478"; g.textAlign = "right"; g.fillText(C.faNum(r + 1), ox - 6, by + r * ch + ch / 2); }
+        }
+        for (let c = 0; c < w; c++) {
+          if (c && c % 5 === 0) vline(ox + c * cw, c, by, H + 1);
+          if (c % 5 === 0) { g.fillStyle = "#6C6478"; g.textAlign = "center"; g.fillText(C.faNum(c + 1), ox + c * cw + cw / 2, by - 10); }
+        }
+      }
     }
-    for (let c = 0; c < w; c++) {
-      if (c !== 0 && (c + 1) % 5) continue;
-      g.textAlign = horizontal ? "right" : "center";
-      horizontal
-        ? g.fillText(C.faNum(c + 1), ox - 6, oy + c * ch + ch / 2)
-        : g.fillText(C.faNum(c + 1), ox + c * cw + cw / 2, oy - 10);
+    if (G.horiz && blocks > 1) {
+      for (let b = 1; b < blocks; b++) {
+        const y = Math.round(oy + b * (BH + LINE_GAP) - LINE_GAP / 2);
+        g.fillStyle = "#C9A96A"; g.fillRect(ox, y, W + 1, 1);
+        g.fillStyle = "#9A7B3F"; g.textAlign = "center";
+        const label = "ادامه";
+        const tw = g.measureText(label).width + 12;
+        g.fillStyle = "#F3EEE4"; g.fillRect(ox + W / 2 - tw / 2, y - 8, tw, 16);
+        g.fillStyle = "#8A6A33"; g.fillText(label, ox + W / 2, y);
+      }
     }
   }
   function layout() {
-    const span = horizontal ? h : w;
-    const base = clamp(Math.floor((wrap.clientWidth - 28 - M) / span), 6, 30);
+    const avail = wrap.clientWidth - 28 - M;
+    if (horizontal) {
+      lines = Math.floor(avail / h) < 7 ? 2 : 1;
+      perMain = lines > 1 ? Math.ceil(h / lines) : h;
+    } else {
+      lines = 1; perMain = h;
+    }
+    const base = clamp(Math.floor(avail / (horizontal ? perMain : w)), 6, 30);
     cw = clamp(Math.round(base * zoom), 3, 60); ch = Math.round(cw / L.BEAD_ASPECT);
     const d = devicePixelRatio || 1;
-    const W = M + (horizontal ? h : w) * cw + 4, H = T + (horizontal ? w : h) * ch + 4;
+    const W = M + (horizontal ? perMain : w) * cw + 4;
+    const H = T + (horizontal ? lines * w * ch + (lines - 1) * LINE_GAP : h * ch) + 4;
     canvas.width = W * d; canvas.height = H * d; canvas.style.width = W + "px"; canvas.style.height = H + "px";
     ctx.setTransform(d, 0, 0, d, 0, 0); paintGrid(ctx, cw, ch, M, T); updateSelBox();
   }
@@ -245,8 +292,17 @@ try {
   const cellFrom = (e, clampIt) => {
     const b = canvas.getBoundingClientRect();
     const dx = e.clientX - b.left - M, dy = e.clientY - b.top - T;
-    let r = Math.floor((horizontal ? dx : dy) / (horizontal ? cw : ch));
-    let c = Math.floor((horizontal ? dy : dx) / (horizontal ? ch : cw));
+    let r, c;
+    if (horizontal) {
+      const bh = blockH();
+      const ln = clamp(Math.floor(dy / bh), 0, lines - 1);
+      const ly = dy - ln * bh;
+      r = ln * perMain + Math.floor(dx / cw);
+      c = Math.floor(ly / ch);
+      if (!clampIt && (dy < 0 || ly < 0 || ly >= w * ch || dx < 0 || dx >= perMain * cw)) return null;
+    } else {
+      r = Math.floor(dy / ch); c = Math.floor(dx / cw);
+    }
     if (clampIt) return [clamp(r, 0, h - 1), clamp(c, 0, w - 1)];
     return r >= 0 && r < h && c >= 0 && c < w ? [r, c] : null;
   };
@@ -521,7 +577,7 @@ try {
     const W = gw + 24 + LW, H = Math.max(T + h * ch2 + 20, 60 + rows.length * 30);
     const c = document.createElement("canvas"); c.width = W; c.height = H;
     const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, W, H);
-    paintGrid(g, cw2, ch2, M, T);
+    paintGrid(g, cw2, ch2, M, T, { horiz: false, lines: 1, per: w });
     g.font = "14px 'Vazir',Tahoma,sans-serif"; g.textAlign = "left"; g.textBaseline = "middle";
     rows.forEach(([code, n], i) => {
       const p = C.byCode(code), y = 30 + i * 30;
