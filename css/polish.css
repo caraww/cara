@@ -122,7 +122,7 @@ button, .btn, header.top nav a[href*="builder.html"] {
 }
 button:not(:disabled):active, .btn:active { transform:translateY(1px); }
 button:disabled { cursor:not-allowed; }
-.page-title { letter-spacing:-.7px; }
+.page-title { letter-spacing: normal; }
 .sub, .lead { color:var(--cara-muted); }
 .account-wrap { padding-top:112px; }
 .account-heading { margin-bottom:30px; }
@@ -227,7 +227,7 @@ body { background-color:var(--cara-paper); color:var(--cara-ink); }
 .sec h2 {
   max-width:17em;
   line-height:1.42;
-  letter-spacing:-.45px;
+  letter-spacing: normal;
 }
 .sec h2::after {
   content:"";
@@ -561,7 +561,7 @@ button:not(:disabled):active, .btn:active, .tool:active { transform:translateY(1
 button:disabled { cursor:not-allowed; opacity:.58; }
 .btn {
   min-height:46px; border-radius:14px; padding-inline:20px;
-  font-weight:800; letter-spacing:-.1px;
+  font-weight:800; letter-spacing: normal;
 }
 .btn.sm { min-height:40px; border-radius:12px; padding-inline:15px; }
 .btn.dark, .btn.accent, .btn.plum {
@@ -575,14 +575,14 @@ button:disabled { cursor:not-allowed; opacity:.58; }
   max-width:1400px;
   padding-inline:clamp(16px,3vw,40px);
 }
-.page-title { line-height:1.32; letter-spacing:-.8px; }
+.page-title { line-height:1.32; letter-spacing: normal; }
 .sub, .lead { color:var(--cara-muted); line-height:1.9; }
 .panel, .account-card, .account-design, .account-order, .path, .sp-card, .wk-card, .gallery-card {
   border:1px solid var(--cara-line);
   box-shadow:var(--cara-shadow-soft);
 }
 .panel { border-radius:22px; }
-.panel h2, .account-section-head h2 { letter-spacing:-.3px; }
+.panel h2, .account-section-head h2 { letter-spacing: normal; }
 input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 select, textarea {
   min-height:46px; border:1px solid var(--cara-line);
@@ -593,7 +593,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   border-color:var(--cara-accent) !important; box-shadow:var(--cara-focus-ring);
 }
 .sec { max-width:1400px; margin-inline:auto; }
-.sec h2 { line-height:1.4; letter-spacing:-.55px; }
+.sec h2 { line-height:1.4; letter-spacing: normal; }
 .lead { max-width:42em; }
 .paths { gap:clamp(14px,2vw,24px); }
 .path {
@@ -603,7 +603,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
 }
 .path.tint { background:linear-gradient(145deg,#F1F0F7 0%,#E8E8F0 100%); }
 .path:hover { transform:translateY(-5px); box-shadow:0 22px 48px rgba(36,36,49,.11); }
-.path h3 { line-height:1.45; letter-spacing:-.35px; }
+.path h3 { line-height:1.45; letter-spacing: normal; }
 .mini-gal > a, .wk-grid > * {
   overflow:hidden; border-radius:22px !important;
   transition:transform .22s ease, box-shadow .22s ease, border-color .22s ease;
@@ -666,7 +666,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible {
   .btns .btn { flex:1 1 140px; }
 }
 @media (max-width:520px) {
-  .page-title { letter-spacing:-.45px; }
+  .page-title { letter-spacing: normal; }
   .path { padding:20px; }
   .chips { grid-template-columns:repeat(3,minmax(0,1fr)); }
   .wk-grid figcaption { padding:10px 8px 12px; }
@@ -837,10 +837,10 @@ header.top.solid nav a[href*="account.html"] {
 }
 
 
-/* ---- فونت نمایشی (Lalezar) برای تیترها ----
-   Lalezar یک وزن دارد؛ برای این‌که همه‌ی تیترها یک‌دست و بولد دیده شوند، وزن را
-   روی همه‌ی تیترها قفل می‌کنیم. بدون !important قواعد صفحه‌ای (۸۵۰/۹۰۰/۴۰۰)
-   دوباره پراکنده می‌شدند و تیترها یکی‌درمیان بولد دیده می‌شدند.
+/* ---- فونت نمایشی (Baloo Bhaijaan 2، وزن ۸۰۰) برای تیترها ----
+   وزن ۸۰۰ تنها وزنی است که از این فونت خودمیزبان می‌شود؛ با قفل کردنش روی همه‌ی
+   تیترها دیگر هیچ مرورگری بولد مصنوعی نمی‌سازد (بدون !important قواعد صفحه‌ای
+   ۸۵۰/۹۰۰/۴۰۰ دوباره پراکنده می‌شدند).
    متن بدنه و دکمه‌ها با Vazir می‌ماند. */
 h1,
 h2,
@@ -851,7 +851,7 @@ h6,
 .page-title,
 .hx__copy h1,
 .section-head h2 {
-  font-family: var(--cara-font-display, "Lalezar", "Vazir", Tahoma, sans-serif);
+  font-family: var(--cara-font-display, "Baloo", "Vazir", Tahoma, sans-serif);
   font-weight: 800 !important;
   letter-spacing: 0;
   text-transform: none;
@@ -882,7 +882,7 @@ nav.seo-links a { display: inline-flex; align-items: center; min-height: 40px; }
 html[data-theme="dark"] .preview .msg { background: rgba(32, 29, 52, .82); color: #cfc7dd; }
 
 /* ======================================================================
-   حراج بلک فریدی (۳۰ آبان تا ۱۳ آذر): قیمت خط‌خورده + قیمت قرمز + نوار حراج
+   حراج بلک فرایدی (۳۰ آبان تا ۱۳ آذر): قیمت خط‌خورده + قیمت قرمز + نوار حراج
    کلاس is-sale را js/sale.js روی <html> می‌گذارد؛ بیرون از بازه هیچ‌چیز دیده نمی‌شود.
    ====================================================================== */
 :root { --sale: #c8102e; --sale-soft: #fdecee; }
@@ -944,13 +944,32 @@ html.is-sale .bf {
   border-radius: 26px;
   box-shadow: 0 22px 50px rgba(24, 16, 36, 0.28);
 }
-.bf__gif {
-  display: block;
-  width: 100%;
-  height: auto;
+/* نشان حراج: قبلاً یک GIF انگلیسی بود؛ حالا با CSS و متن فارسی ساخته می‌شود */
+.bf__badge {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2px;
+  aspect-ratio: 4 / 3;
+  padding: 12px;
+  text-align: center;
+  color: #f6d79b;
+  background:
+    radial-gradient(120% 120% at 30% 15%, rgba(246, 215, 155, .22), transparent 60%),
+    linear-gradient(160deg, #3b2a58, #221932 60%, #191226);
+  border: 1px solid rgba(184, 151, 90, .5);
   border-radius: 18px;
-  background: #000;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05);
 }
+.bf__badge b {
+  font-family: var(--cara-font-display, inherit);
+  font-size: clamp(46px, 7vw, 86px);
+  line-height: 1;
+  letter-spacing: normal;
+  text-shadow: 0 6px 18px rgba(246, 215, 155, .35);
+}
+.bf__badge span { font-size: clamp(15px, 1.7vw, 20px); font-weight: 800; color: #fff; }
+.bf__badge small { margin-top: 4px; font-size: 12px; color: #cbbfe6; }
 .bf__copy {
   display: flex;
   flex-direction: column;
@@ -1003,7 +1022,10 @@ html.is-sale .bf {
   padding: 12px 18px;
   border-radius: 20px;
 }
-.bf--slim .bf__gif { border-radius: 12px; }
+.bf--slim .bf__badge { aspect-ratio: 1; border-radius: 14px; padding: 6px; }
+.bf--slim .bf__badge b { font-size: 26px; }
+.bf--slim .bf__badge span { font-size: 11px; }
+.bf--slim .bf__badge small { display: none; }
 .bf--slim h2 { margin: 0; font-size: clamp(16px, 2.2vw, 21px); }
 .bf--slim .bf__lead { margin: 2px 0 0; font-size: 14px; line-height: 1.9; }
 .bf--slim .bf__cta { min-height: 44px; padding: 0 18px; font-size: 15px; }
@@ -1011,7 +1033,7 @@ html.is-sale .bf {
 @media (max-width: 760px) {
   .bf__in { grid-template-columns: minmax(0, 1fr); text-align: center; }
   .bf__copy { align-items: center; }
-  .bf__gif { max-width: 360px; margin-inline: auto; }
+  .bf__badge { max-width: 300px; margin-inline: auto; }
   .bf--slim .bf__in { grid-template-columns: 84px minmax(0, 1fr); text-align: start; }
   .bf--slim .bf__cta { grid-column: 1 / -1; width: 100%; }
 }

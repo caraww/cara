@@ -17,14 +17,15 @@ require(path.join(ROOT, "lib/works-pricing.js"));
 const prices = globalThis.CARA_WORK_PRICING.priceMap(works);
 const listPrices = globalThis.CARA_WORK_PRICING.baseMap(works);
 const SALE = globalThis.CARA_WORK_PRICING.sale;
-/* قیمت با احتساب حراج: قیمت قبلی خط‌خورده + قیمت روز. خارج از بازه‌ی حراج، JS کلاس is-sale را نمی‌گذارد و فقط قیمت عادی دیده می‌شود. */
+/* قیمت روزِ حراج؛ خودِ مبلغ کم می‌شود (بدون خط‌خوردن قیمت قبلی). مبلغ پرداختی در درگاه هم
+   از همین lib/works-pricing.js می‌آید، پس عدد صفحه و عدد درگاه یکی است. */
 function priceHTML(id, withToman) {
   const now = Number(prices[String(id)]) || 0;
   const before = Number(listPrices[String(id)]) || now;
   if (!now) return "";
   const unit = withToman ? " تومان" : "";
-  if (!SALE.active() || before <= now) return `<span class="price" data-price="${now}">${fa(now)}${unit}</span>`;
-  return `<span class="price" data-price="${now}" data-price-list="${before}"><s class="price-list">${fa(before)}</s><b class="price-now">${fa(now)}${unit}</b></span>`;
+  const list = SALE.active() && before > now ? ` data-price-list="${before}"` : "";
+  return `<span class="price" data-price="${now}"${list}>${fa(now)}${unit}</span>`;
 }
 let beadFiles = {};
 try {

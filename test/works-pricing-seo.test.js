@@ -36,7 +36,7 @@ test("shared pricing preserves the current fixed, auto, and noOrder rules", () =
   assert.equal(Object.keys(prices).length, works.filter((w) => !w.noOrder).length);
 });
 
-test("حراج بلک فریدی: ۳۰٪ تخفیف فقط بین ۳۰ آبان و ۱۳ آذر", () => {
+test("حراج بلک فرایدی: ۳۰٪ تخفیف فقط بین ۳۰ آبان و ۱۳ آذر", () => {
   const at = (iso) => Date.parse(iso);
   assert.equal(sale.active(at("2026-11-20T23:59:00+03:30")), false, "قبل از ۳۰ آبان تخفیف نداریم");
   assert.equal(sale.active(at("2026-11-21T00:00:00+03:30")), true, "۳۰ آبان شروع حراج");
@@ -121,9 +121,9 @@ test("build-pages generates gallery JSON-LD and bracelet pages from the same cat
     assert.ok(albumPage.includes("<title>نمونه دستبند منجوقی آلبوم | کارا</title>"));
     const duckPage = fs.readFileSync(path.join(temp, "bracelet", "اردک-تک-تک.html"), "utf8");
     assert.ok(duckPage.includes("سفارش این دستبند"));
-    /* قیمت قبلی خط‌خورده + قیمت حراج، هر دو توی صفحه */
-    assert.ok(duckPage.includes('<s class="price-list">۲٬۱۲۷٬۰۰۰</s>'));
-    assert.ok(duckPage.includes('<b class="price-now">۱٬۴۸۹٬۰۰۰ تومان</b>'));
+    /* در حراج فقط مبلغ کم‌شده دیده می‌شود؛ مبلغ قبلی فقط در data-price-list می‌ماند. */
+    assert.ok(duckPage.includes('data-price="1489000" data-price-list="2127000">۱٬۴۸۹٬۰۰۰ تومان</span>'));
+    assert.ok(!duckPage.includes('<s class="price-list">'));
   } finally {
     fs.rmSync(temp, { recursive: true, force: true });
   }
