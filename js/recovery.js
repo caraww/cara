@@ -32,7 +32,7 @@
   box.setAttribute("role", "status");
   box.setAttribute("aria-live", "polite");
   box.innerHTML = design
-    ? `<div class="recovery__text"><b>طرحت هنوز منتظره</b><span>${Number(design.width).toLocaleString("fa-IR")} × ${Number(design.height).toLocaleString("fa-IR")} · ${design.total.toLocaleString("fa-IR")} منجوق ذخیره شده</span></div><a href="/builder.html">ادامه طراحی</a><button type="button" aria-label="بستن یادآوری">×</button>`
+    ? `<div class="recovery__text"><b>طرحت هنوز منتظره</b><span><bdi dir="ltr">${Number(design.width).toLocaleString("fa-IR")} × ${Number(design.height).toLocaleString("fa-IR")}</bdi> · ${design.total.toLocaleString("fa-IR")} منجوق ذخیره شده</span></div><a href="/builder.html">ادامه طراحی</a><button type="button" aria-label="بستن یادآوری">×</button>`
     : `<div class="recovery__text"><b>سبدت منتظرت است</b><span>${count.toLocaleString("fa-IR")} کالا در سبد خرید ذخیره شده</span></div><a href="/cart.html">دیدن سبد</a><button type="button" aria-label="بستن یادآوری">×</button>`;
   box.querySelector("button").addEventListener("click", () => {
     try { localStorage.setItem(DISMISS_KEY, String(Date.now())); } catch {}

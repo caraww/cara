@@ -1,17 +1,14 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
   <head>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+    </script>
     <script
       async
       src="https://www.googletagmanager.com/gtm.js?id=GTM-P54M67FG"
     ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
@@ -269,11 +266,19 @@
         رنگ هر خونه با نزدیک‌ترین منجوق موجود عوض می‌شه. عکس ساده و پررنگ بهتر
         جواب می‌ده.
       </p>
-      <label class="drop" id="drop"
-        ><b>عکس رو بنداز اینجا یا کلیک کن</b
-        ><span class="muted">JPG، PNG یا WebP</span
-        ><input id="file" type="file" accept="image/*"
-      /></label>
+      <label class="drop" id="drop">
+        <span class="drop__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="16" rx="3" />
+            <circle cx="8.5" cy="9.5" r="1.8" />
+            <path d="M21 15.5l-4.6-4.6a2 2 0 0 0-2.8 0L4 20" />
+          </svg>
+        </span>
+        <b>عکس رو بکش و اینجا رها کن</b>
+        <span class="muted">یا برای انتخاب از گوشی یا کامپیوترت کلیک کن</span>
+        <span class="drop__formats" dir="ltr">JPG · PNG · WebP</span>
+        <input id="file" type="file" accept="image/*" />
+      </label>
 
       <div class="ws">
         <div class="ws-tools">
@@ -291,10 +296,10 @@
               >
             </div>
             <div class="crop-bar">
-              <button type="button" class="cb" id="rotL">↺ چرخش به چپ</button>
-              <button type="button" class="cb" id="rotR">↻ چرخش به راست</button>
-              <button type="button" class="cb" id="flipH">⇋ آینه</button>
-              <button type="button" class="cb" id="cropReset">برگردوندن</button>
+              <button type="button" class="cb" id="rotL"><span class="cb__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5v6h6" /><path d="M3.5 11a8.5 8.5 0 1 1 2.1 8.4" /></svg></span>چرخش به چپ</button>
+              <button type="button" class="cb" id="rotR"><span class="cb__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 5v6h-6" /><path d="M20.5 11a8.5 8.5 0 1 0-2.1 8.4" /></svg></span>چرخش به راست</button>
+              <button type="button" class="cb" id="flipH"><span class="cb__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18" stroke-dasharray="2 3" /><path d="M9 7 3.5 12 9 17z" /><path d="M15 7l5.5 5L15 17z" /></svg></span>آینه</button>
+              <button type="button" class="cb" id="cropReset"><span class="cb__ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 1 0 2.6-5.9" /><path d="M4 4v5h5" /></svg></span>برگردوندن</button>
               <label class="cb-check"
                 ><input id="lock" type="checkbox" checked /> قفل نسبت به ابعاد
                 الگو</label
@@ -422,8 +427,8 @@
         </div>
       </div>
       <div class="btns" style="margin-top: 18px">
-        <a class="btn dark" href="builder.html">ویرایشش کن</a
-        ><a class="btn" href="checkout.html">ادامه سفارش</a>
+        <a class="btn" href="builder.html">ویرایشش کن</a
+        ><a class="btn dark" href="checkout.html">ادامه سفارش</a>
       </div>
 
       <section class="seo-text" aria-labelledby="seo-h">

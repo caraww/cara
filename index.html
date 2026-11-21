@@ -1,17 +1,14 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
   <head>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+    </script>
     <script
       async
       src="https://www.googletagmanager.com/gtm.js?id=GTM-P54M67FG"
     ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
@@ -137,6 +134,7 @@
             height="176"
             alt="cara" /><img
             class="is-dark"
+            aria-hidden="true"
             src="img/cara-logo.webp?v=1"
             width="542"
             height="176"
@@ -234,14 +232,14 @@
                 type="button"
                 aria-label="دستبند قبلی"
               >
-                ‹
+                ›
               </button>
               <button
                 class="cara-bracelet-lineup__arrow cara-bracelet-lineup__arrow--next"
                 type="button"
                 aria-label="دستبند بعدی"
               >
-                ›
+                ‹
               </button>
             </div>
             <div class="cara-bracelet-lineup__controls">
@@ -286,7 +284,7 @@
       </section>
 
 <section class="sec" id="samples">
-        <p class="section-kicker">MADE BY HAND, MADE WITH LOVE</p>
+        <p class="section-kicker">دست‌بافت، با عشق</p>
         <h2>ببین چی بافتم</h2>
         <p class="lead">
           چندتا از دستبندهایی که خودم با دست بافتم. هر کدوم رو دوست داشتی، ازش
@@ -305,8 +303,8 @@
       >
         <div class="cara-weaving__inner">
           <div class="cara-weaving__copy">
-            <span class="section-kicker">HANDMADE, ONE BEAD AT A TIME</span>
-            <h2 id="weaving-title">ببین چطور میبافم</h2>
+            <span class="section-kicker">دست‌باف، منجوق‌به‌منجوق</span>
+            <h2 id="weaving-title">ببین چطور می‌بافم</h2>
             <p>
               هر دستبند با دونه‌های منجوق شکل می‌گیره؛ با حوصله، ظرافت و دست‌های
               خودم. این چند لحظه، بخشی از مسیر ساختشه تا قبل از انتخاب، دنیای
@@ -342,14 +340,14 @@
       </section>
 
 <section class="sec featured" id="featured" aria-labelledby="featuredTitle">
-        <p class="section-kicker">DESIGN OF THE WEEK</p>
+        <p class="section-kicker">پیشنهاد این هفته</p>
         <h2 id="featuredTitle">طرح این هفته</h2>
         <p class="lead">هر هفته یکی از دستبندهای واقعی گالری رو می‌ذارم اینجا؛ نه قرعه‌کشی داریم، نه قیمت الکی.</p>
         <div class="featured-card" id="featuredWork"></div>
       </section>
 
 <section class="sec" id="paths">
-        <p class="section-kicker">START YOUR DESIGN</p>
+        <p class="section-kicker">شروع طراحی</p>
         <h2>از کجا شروع کنیم؟</h2>
         <p class="lead">
           هر راهی بری، آخرش یه الگوی کامل دستته و می‌دونی هر منجوقش چه رنگیه.
@@ -384,7 +382,7 @@
 <section class="wv-home" id="loom" aria-labelledby="wvTitle">
         <div class="wv-home__inner">
           <header class="wv-heading">
-            <p class="section-kicker">YOUR NAME, BEAD BY BEAD</p>
+            <p class="section-kicker">اسم تو، منجوق‌به‌منجوق</p>
             <h2 id="wvTitle">اسمت رو با منجوق بنویس</h2>
             <p>
               اسمت رو بنویس و رنگ‌ها رو انتخاب کن؛ منجوق‌ها یکی‌یکی روی دار
@@ -466,7 +464,7 @@
       </section>
 
 <section class="sec" id="steps">
-        <p class="section-kicker">FROM PATTERN TO BRACELET</p>
+        <p class="section-kicker">از الگو تا دستبند</p>
         <h2>از الگو تا مچ دستت</h2>
         <ol class="steps">
           <li>
@@ -508,46 +506,46 @@
 <section class="cara-journal" aria-labelledby="caraJournalTitle">
         <div class="cara-journal__heading">
           <div>
-            <p class="section-kicker">THE CARA JOURNAL</p>
+            <p class="section-kicker">دفتر کارا</p>
             <h2 id="caraJournalTitle">یه کم الهام، قبل از انتخابت</h2>
             <p>پست‌ها رو ورق بزن؛ هر کدوم رو باز کنی، داستان کاملش همین‌جا برات نمایش داده می‌شه.</p>
           </div>
           <div class="cara-journal__arrows" aria-label="کنترل پست‌ها">
-            <button type="button" data-journal-scroll="next" aria-label="پست‌های بعدی">→</button>
-            <button type="button" data-journal-scroll="prev" aria-label="پست‌های قبلی">←</button>
+            <button type="button" data-journal-scroll="next" aria-label="پست‌های بعدی">←</button>
+            <button type="button" data-journal-scroll="prev" aria-label="پست‌های قبلی">→</button>
           </div>
         </div>
         <div class="cara-journal__rail" id="caraJournalRail" tabindex="0" aria-label="پست‌های وبلاگ؛ پیمایش افقی">
           <a class="cara-journal__card cara-journal__card--peach" href="/blog/wrist-size.html" data-cara-post>
             <span class="cara-journal__meta"><span>راهنمای کاربردی</span><span>01 / 04</span></span>
-            <span class="cara-journal__art cara-journal__art--fit" aria-hidden="true"><i></i><b></b><small>THE PERFECT FIT</small></span>
-            <span class="cara-journal__copy"><small>FIND YOUR FIT</small><strong>چطور اندازه‌ی درست مچت رو پیدا کنی؟</strong><span>باز کردن پست <b>↙</b></span></span>
+            <span class="cara-journal__art cara-journal__art--fit" aria-hidden="true"><i></i><b></b><small>اندازه‌ی درست</small></span>
+            <span class="cara-journal__copy"><small>اندازه‌ات رو پیدا کن</small><strong>چطور اندازه‌ی درست مچت رو پیدا کنی؟</strong><span>باز کردن پست <b>↙</b></span></span>
           </a>
           <a class="cara-journal__card cara-journal__card--lilac" href="/blog/color-meanings.html" data-cara-post>
             <span class="cara-journal__meta"><span>الهام رنگی</span><span>02 / 04</span></span>
-            <span class="cara-journal__art cara-journal__art--color" aria-hidden="true"><i></i><b></b><small>COLOR STORIES</small></span>
-            <span class="cara-journal__copy"><small>PLAY WITH COLORS</small><strong>چطور رنگ‌ها رو کنار هم بچینیم؟</strong><span>باز کردن پست <b>↙</b></span></span>
+            <span class="cara-journal__art cara-journal__art--color" aria-hidden="true"><i></i><b></b><small>داستان رنگ‌ها</small></span>
+            <span class="cara-journal__copy"><small>با رنگ‌ها بازی کن</small><strong>چطور رنگ‌ها رو کنار هم بچینیم؟</strong><span>باز کردن پست <b>↙</b></span></span>
           </a>
           <a class="cara-journal__card cara-journal__card--sage" href="/blog/miyuki-delica.html" data-cara-post>
             <span class="cara-journal__meta"><span>دنیای منجوق</span><span>03 / 04</span></span>
-            <span class="cara-journal__art cara-journal__art--bead" aria-hidden="true"><i></i><b></b><small>MIYUKI DELICA</small></span>
-            <span class="cara-journal__copy"><small>A LITTLE DETAIL</small><strong>قصه‌ی منجوق‌های میوکی دلیکا</strong><span>باز کردن پست <b>↙</b></span></span>
+            <span class="cara-journal__art cara-journal__art--bead" aria-hidden="true"><i></i><b></b><small>میوکی دلیکا</small></span>
+            <span class="cara-journal__copy"><small>یه جزئیات کوچیک</small><strong>قصه‌ی منجوق‌های میوکی دلیکا</strong><span>باز کردن پست <b>↙</b></span></span>
           </a>
           <a class="cara-journal__card cara-journal__card--butter" href="/blog/bracelet-care.html" data-cara-post>
             <span class="cara-journal__meta"><span>مراقبت و نگهداری</span><span>04 / 04</span></span>
-            <span class="cara-journal__art cara-journal__art--care" aria-hidden="true"><i></i><b></b><small>MADE TO LAST</small></span>
-            <span class="cara-journal__copy"><small>LOVE YOUR BRACELET</small><strong>چطور از دستبندت مراقبت کنی؟</strong><span>باز کردن پست <b>↙</b></span></span>
+            <span class="cara-journal__art cara-journal__art--care" aria-hidden="true"><i></i><b></b><small>ماندگار</small></span>
+            <span class="cara-journal__copy"><small>عاشق دستبندت باش</small><strong>چطور از دستبندت مراقبت کنی؟</strong><span>باز کردن پست <b>↙</b></span></span>
           </a>
         </div>
-        <p class="cara-journal__hint">← برای دیدن همه‌ی پست‌ها، افقی اسکرول کن →</p>
+        <p class="cara-journal__hint">برای دیدن همه‌ی پست‌ها، افقی اسکرول کن.</p>
         <div class="cara-journal__reader" id="caraJournalReader" hidden aria-live="polite" aria-busy="false">
-          <div class="cara-journal__reader-top"><span>CARA JOURNAL / POST</span><button type="button" id="caraJournalClose">× بستن پست</button></div>
+          <div class="cara-journal__reader-top"><span>دفتر کارا / پست</span><button type="button" id="caraJournalClose">× بستن پست</button></div>
           <div class="cara-journal__reader-content" id="caraJournalContent"></div>
         </div>
       </section>
 
 <section class="sec" id="beads">
-        <p class="section-kicker">MEET THE MIYUKI DELICA BEADS</p>
+        <p class="section-kicker">با منجوق‌های میوکی دلیکا آشنا شو</p>
         <h2>منجوق‌هایی که باهاشون می‌بافم</h2>
         <p class="lead">روی عکس یا کد هر رنگ بزن تا کدش کپی بشه.</p>
         <ul class="chips" id="chips"></ul>
@@ -562,7 +560,7 @@
   <div class="sf__in">
     <div class="sf__brand">
       <a class="sf__logo" href="/" aria-label="کارا، صفحه‌ی اصلی">
-        <img src="/img/cara-logo-fa-light.webp?v=2" width="395" height="176" alt="کارا" loading="lazy" decoding="async">
+        <img src="img/cara-logo-fa-light.webp?v=2" width="395" height="176" alt="کارا" loading="lazy" decoding="async">
       </a>
       <p>اینجا هر طرح با حوصله و دست بافته می‌شه؛ تو ایده‌ات رو انتخاب کن، من منجوق‌به‌منجوق جانش می‌دم.</p>
       <p class="sf__note">ساخته‌شده با دست، در ایران.</p>
@@ -596,7 +594,7 @@
       <a class="btn accent" href="builder.html" tabindex="-1">طراحی دستبند</a>
     </div>
     <script src="js/palette.js?v=34"></script>
-    <script src="js/works.js?v=mwq92lge"></script>
+    <script src="js/works.js?v=mwqgflip"></script>
     <script src="js/beads.js"></script>
     <script src="js/home.js?v=12"></script>
     <script src="js/featured-work.js?v=1" defer></script>

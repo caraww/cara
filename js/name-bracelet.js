@@ -71,6 +71,8 @@
     const span = document.createElement("span");
     span.append(document.createTextNode(label + ": "));
     const strong = document.createElement("b");
+    strong.dir = "ltr";
+    strong.style.unicodeBidi = "isolate";
     strong.textContent = value;
     span.append(strong);
     $("info").append(span);

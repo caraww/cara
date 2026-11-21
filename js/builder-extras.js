@@ -40,12 +40,12 @@
     g.fillRect(0, 0, printCanvas.width, printCanvas.height);
     C.drawPattern(g, snap.data, cw, ch, 1, 1);
     if (printMeta) {
-      printMeta.textContent = `${fa(snap.w)} × ${fa(snap.h)} · ${fa(described.total)} منجوق · ${fa(described.colors.length)} رنگ`;
+      printMeta.innerHTML = `<bdi dir="ltr">${fa(snap.w)} × ${fa(snap.h)}</bdi> · ${fa(described.total)} منجوق · ${fa(described.colors.length)} رنگ`;
     }
     if (printList) {
       printList.innerHTML = described.colors.map((color) => {
         const item = C.byCode(color.code);
-        return `<li><i style="background:${item ? item.hex : "#999"}"></i><b dir="ltr">${color.code}</b> ${color.name} <span>×${fa(color.count)}</span></li>`;
+        return `<li><i style="background:${item ? item.hex : "#999"}"></i><b dir="ltr">${color.code}</b> ${color.name} <span>${fa(color.count)} دونه</span></li>`;
       }).join("");
     }
   }

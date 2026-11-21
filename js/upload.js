@@ -317,7 +317,7 @@
       o.fillStyle = "#EFECF4"; o.fillRect(0, 0, w * cw, h * ch); C.drawPattern(o, data, cw, ch);
       out.hidden = false; msg.hidden = true;
       const used = new Set(data.flat()).size, info = $("info");
-      info.hidden = false; info.textContent = `${fa(w)} × ${fa(h)} · ${fa(w * h)} منجوق · ${fa(used)} رنگ`;
+      info.hidden = false; info.innerHTML = `<bdi dir="ltr">${fa(w)} × ${fa(h)}</bdi> · ${fa(w * h)} منجوق · ${fa(used)} رنگ`;
       if (!C.savePattern(w, h, data)) {
         msg.hidden = false;
         msg.textContent = "الگو ساخته شد، اما در مرورگر ذخیره نشد؛ فضای ذخیره‌سازی را آزاد کن و دوباره امتحان کن.";

@@ -271,7 +271,7 @@ try {
       const list = document.createElement("ul"); list.className = "checkout-cart-lines";
       data.items.forEach((item) => {
         const line = document.createElement("li");
-        const name = document.createElement("span"); name.textContent = item.title + " × " + C.faNum(item.quantity);
+        const name = document.createElement("span"); name.textContent = item.title + " — " + C.faNum(item.quantity) + " عدد";
         const price = document.createElement("strong"); price.textContent = C.faNum(item.lineTotal) + " تومان";
         line.append(name, price); list.append(line);
       });
@@ -285,17 +285,29 @@ try {
     });
   } else if (workMode) {
     /* خلاصه‌ی سفارش رو checkout-work.js پر می‌کنه */
-  } else if (p) {
+  } else if (p && p.data.flat().some(Boolean)) {
     total = p.data.flat().filter(Boolean).length;
     const cw = Math.max(4, Math.min(10, Math.floor(160 / p.width))), ch = Math.round(cw / C.L.BEAD_ASPECT);
-    $("sum").innerHTML = `<canvas id="mini"></canvas><dl><dt>ابعاد</dt><dd>${C.faNum(p.width)} × ${C.faNum(p.height)}</dd><dt>تعداد منجوق</dt><dd>${C.faNum(total)}</dd><dt>هزینه</dt><dd id="price">…</dd></dl>`;
-    const mini = $("mini"); mini.width = p.width * cw; mini.height = p.height * ch;
-    C.drawPattern(mini.getContext("2d"), p.data, cw, ch);
+    $("sum").innerHTML = `<canvas id="mini"></canvas><dl><dt>ابعاد</dt><dd dir="ltr">${C.faNum(p.width)} × ${C.faNum(p.height)}</dd><dt>تعداد منجوق</dt><dd>${C.faNum(total)}</dd><dt>هزینه</dt><dd id="price">…</dd></dl>`;
+    const mini = $("mini");
+    const portrait = p.height > p.width;
+    if (portrait) {
+      /* الگوی عمودی رو ۹۰ درجه می‌چرخونیم تا مثل یه دستبند افقی دیده بشه */
+      const cell = Math.max(3, Math.min(8, Math.floor(160 / p.height)));
+      mini.width = p.height * cell; mini.height = p.width * cell;
+      const g = mini.getContext("2d");
+      g.translate(mini.width, 0); g.rotate(Math.PI / 2);
+      C.drawPattern(g, p.data, cell, cell);
+    } else {
+      mini.width = p.width * cw; mini.height = p.height * ch;
+      C.drawPattern(mini.getContext("2d"), p.data, cw, ch);
+    }
     fetch("/api/config").then((r) => r.json()).then((cfg) => {
       $("price").textContent = cfg.pricePerBead ? `${C.faNum(Math.round(cfg.baseFee + total * cfg.pricePerBead))} تومان` : "بعد از بررسی بهت خبر می‌دم";
     }).catch(() => { $("price").textContent = "—"; });
   } else {
-    $("sum").innerHTML = `<p>هنوز الگویی نساختی. <a class="btn sm dark" href="builder.html">ساخت الگو</a></p>`;
+    $("sum").innerHTML = `<div class="sum-empty"><p>هنوز الگویی نساختی. یه دستبند از گالری انتخاب کن یا خودت توی استودیو بکش.</p><div class="sum-empty__actions"><a class="btn sm dark" href="builder.html">ساخت الگو</a><a class="btn sm line" href="gallery.html">دیدن گالری</a></div></div>`;
+    $("pay").disabled = true;
   }
 
   $("form").addEventListener("submit", async (e) => {
