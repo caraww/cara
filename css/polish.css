@@ -880,3 +880,175 @@ nav.seo-links a { display: inline-flex; align-items: center; min-height: 40px; }
   text-align: center;
 }
 html[data-theme="dark"] .preview .msg { background: rgba(32, 29, 52, .82); color: #cfc7dd; }
+
+/* ======================================================================
+   حراج بلک فریدی (۳۰ آبان تا ۱۳ آذر): قیمت خط‌خورده + قیمت قرمز + نوار حراج
+   کلاس is-sale را js/sale.js روی <html> می‌گذارد؛ بیرون از بازه هیچ‌چیز دیده نمی‌شود.
+   ====================================================================== */
+:root { --sale: #c8102e; --sale-soft: #fdecee; }
+:root[data-theme="dark"], html.dark { --sale: #ff8291; --sale-soft: #3a1b22; }
+
+/* دو کلاس تا از قواعد عمومیِ span توی کارت‌ها (display:block / line-clamp) قوی‌تر باشه */
+.price.price {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  column-gap: 8px;
+  max-width: 100%;
+  line-height: 1.9;
+  padding-block: 2px;
+  overflow: visible;
+  white-space: nowrap;
+}
+.price-list {
+  font-size: 0.88em;
+  font-weight: 700;
+  color: var(--muted, #6c6478);
+  text-decoration: line-through;
+  text-decoration-color: var(--sale);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 2px;
+}
+.price-now { display: none; }
+html.is-sale .price .price-now {
+  display: inline;
+  font-size: 1.1em;
+  font-weight: 900;
+  color: var(--sale);
+  letter-spacing: 0;
+}
+html:not(.is-sale) .price .price-list {
+  font-size: 1em;
+  font-weight: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* نوار حراج: پیش‌فرض پنهان، فقط توی بازه‌ی حراج دیده می‌شه */
+.bf { display: none; --cara-heading: #fff; }
+html.is-sale .bf {
+  display: block;
+  margin: 8px auto 0;
+  max-width: 1180px;
+  padding: 0 18px;
+}
+.bf__in {
+  display: grid;
+  grid-template-columns: minmax(0, 380px) minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(18px, 3vw, 40px);
+  padding: clamp(18px, 3vw, 32px);
+  color: #fdf8ff;
+  background: radial-gradient(120% 140% at 12% 0%, #3b2456 0%, #241a35 45%, #1a1426 100%);
+  border: 1px solid rgba(184, 151, 90, 0.45);
+  border-radius: 26px;
+  box-shadow: 0 22px 50px rgba(24, 16, 36, 0.28);
+}
+.bf__gif {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 18px;
+  background: #000;
+}
+.bf__copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  text-align: start;
+  direction: rtl;
+}
+.bf__kicker {
+  margin: 0 0 8px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #f2c879;
+  letter-spacing: 0;
+}
+.bf h2 {
+  margin: 0 0 10px;
+  font-size: clamp(22px, 3.4vw, 34px);
+  line-height: 1.45;
+  color: #fff;
+}
+.bf__lead {
+  margin: 0 0 18px;
+  font-size: clamp(15px, 1.6vw, 17px);
+  line-height: 2;
+  color: #e8def6;
+}
+.bf__lead b { color: #f2c879; font-size: 1.15em; }
+.bf__cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 24px;
+  font-weight: 800;
+  color: #241a35;
+  background: linear-gradient(180deg, #f6d79b, #e0b978);
+  border-radius: 999px;
+  box-shadow: 0 10px 24px rgba(184, 151, 90, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.bf__cta:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(184, 151, 90, 0.38); }
+.bf__cta:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+
+/* نسخه‌ی باریک برای بالای گالری */
+.bf--slim { margin-top: 0; }
+.bf--slim .bf__in {
+  grid-template-columns: minmax(0, 108px) minmax(0, 1fr) auto;
+  gap: 16px;
+  padding: 12px 18px;
+  border-radius: 20px;
+}
+.bf--slim .bf__gif { border-radius: 12px; }
+.bf--slim h2 { margin: 0; font-size: clamp(16px, 2.2vw, 21px); }
+.bf--slim .bf__lead { margin: 2px 0 0; font-size: 14px; line-height: 1.9; }
+.bf--slim .bf__cta { min-height: 44px; padding: 0 18px; font-size: 15px; }
+
+@media (max-width: 760px) {
+  .bf__in { grid-template-columns: minmax(0, 1fr); text-align: center; }
+  .bf__copy { align-items: center; }
+  .bf__gif { max-width: 360px; margin-inline: auto; }
+  .bf--slim .bf__in { grid-template-columns: 84px minmax(0, 1fr); text-align: start; }
+  .bf--slim .bf__cta { grid-column: 1 / -1; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .bf__cta { transition: none; }
+}
+
+
+/* نشان حراج بالای تیتر هیرو */
+.hx__sale { display: none; }
+html.is-sale .hx__sale {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 40px;
+  margin: 0 0 14px;
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #7d1024;
+  background: #fdeff1;
+  border: 1px solid rgba(200, 16, 46, 0.28);
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+html.is-sale .hx__sale:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(200, 16, 46, 0.14); }
+html.is-sale .hx__sale:focus-visible { outline: 3px solid #7d1024; outline-offset: 3px; }
+html.dark .hx__sale, :root[data-theme="dark"] .hx__sale { color: #ffd7dd; background: rgba(200, 16, 46, 0.18); border-color: rgba(255, 130, 145, 0.45); }
+
+/* ظرف قیمت توی کارت‌ها: اندازه و ارتفاع درست، بدون بریدگی */
+.wk-grid .wk-card figcaption .wk-price,
+.wk-grid figcaption .wk-price {
+  display: inline-block;
+  height: auto;
+  padding: 0;
+  overflow: visible;
+  line-height: 1.9;
+  font-size: 15px;
+}
