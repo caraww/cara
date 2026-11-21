@@ -191,13 +191,13 @@ try {
   }
   function layout() {
     const base = clamp(Math.floor((wrap.clientWidth - 28 - M) / w), 12, 30);
-    cw = clamp(Math.round(base * zoom), 6, 60); ch = Math.round(cw / L.BEAD_ASPECT);
+    cw = clamp(Math.round(base * zoom), 3, 60); ch = Math.round(cw / L.BEAD_ASPECT);
     const d = devicePixelRatio || 1, W = M + w * cw + 4, H = T + h * ch + 4;
     canvas.width = W * d; canvas.height = H * d; canvas.style.width = W + "px"; canvas.style.height = H + "px";
     ctx.setTransform(d, 0, 0, d, 0, 0); paintGrid(ctx, cw, ch, M, T); updateSelBox();
   }
   function setZoom(z) {
-    zoom = clamp(Math.round(z * 100) / 100, 0.5, 2.5);
+    zoom = clamp(Math.round(z * 100) / 100, 0.2, 2.5);
     if ($("zoom")) $("zoom").value = Math.round(zoom * 100);
     if ($("zoomOut")) $("zoomOut").textContent = C.faNum(Math.round(zoom * 100)) + "٪";
     layout();
