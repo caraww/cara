@@ -4,7 +4,7 @@
 .cara-journal__heading h2{margin:0;color:#343b64;font-size:clamp(24px,3vw,36px);line-height:1.5}
 .cara-journal__heading p:not(.cara-journal__eyebrow){margin:6px 0 0;color:#77758a;font-size:13px}
 .cara-journal__arrows{display:flex;gap:8px;flex:none}
-.cara-journal__arrows button{width:40px;height:40px;border:1px solid #ded6d2;border-radius:50%;background:transparent;color:#343b64;font-size:20px;cursor:pointer;transition:background .2s,color .2s}
+.cara-journal__arrows button{width:44px;height:44px;border:1px solid #ded6d2;border-radius:50%;background:transparent;color:#343b64;font-size:20px;cursor:pointer;transition:background .2s,color .2s;direction:ltr;unicode-bidi:bidi-override}
 .cara-journal__arrows button:hover{background:#343b64;color:#fff}
 .cara-journal__rail{display:flex;gap:16px;overflow-x:auto;overflow-y:hidden;padding:5px 3px 20px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#cbb8b1 transparent;overscroll-behavior-inline:contain}
 .cara-journal__rail::-webkit-scrollbar{height:5px}
@@ -29,7 +29,11 @@
 .cara-journal__copy strong{font-size:19px;line-height:1.65;font-weight:800}
 .cara-journal__copy>span{display:flex;justify-content:space-between;align-items:center;border-top:1px solid currentColor;padding-top:8px;margin-top:4px;font-size:11px;font-weight:700}
 .cara-journal__copy>span b{font-size:17px}
+.cara-journal__foot{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px 18px;margin-top:6px}
 .cara-journal__hint{text-align:center;color:#858094;font-size:11px;margin:0}
+.cara-journal__more{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 2px;color:#343b64;font-size:13px;font-weight:800;text-decoration:none;border-bottom:1.5px solid transparent;transition:border-color .2s,color .2s}
+.cara-journal__more span{font-size:15px;line-height:1}
+.cara-journal__more:hover,.cara-journal__more:focus-visible{color:#6b4f8a;border-bottom-color:#c8a96a}
 .cara-journal__reader{margin-top:28px;padding:clamp(18px,4vw,38px);background:#fff;border:1px solid #e9e2dc;border-radius:22px;box-shadow:0 14px 40px #3027420c;scroll-margin-top:20px}
 .cara-journal__reader[hidden]{display:none}
 .cara-journal__reader-top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-bottom:14px;border-bottom:1px solid #e9e2dc;margin-bottom:22px;color:#a47d75;font-size:12px;}
