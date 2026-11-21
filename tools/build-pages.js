@@ -60,10 +60,8 @@ const write = (rel, txt) => {
   fs.writeFileSync(f, txt);
 };
 
-/* اگه tools/self-host-fonts.js اجرا شده باشه فونت از خود سایت لود می‌شه */
-const FONT = fs.existsSync(path.join(ROOT, "css/fonts.css"))
-  ? '<link rel="stylesheet" href="/css/fonts.css">'
-  : '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&family=Lalezar&display=swap">';
+/* فونت‌ها self-host شده‌اند؛ هیچ صفحه‌ای به Google Fonts وابسته نیست. */
+const FONT = '<link rel="stylesheet" href="/css/fonts.css">';
 const { HEAD, FOOT } = require(path.join(ROOT, "lib/generated-page-layout.js"))(
   { SITE, FONT, esc },
 );

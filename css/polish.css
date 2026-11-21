@@ -17,7 +17,7 @@
   --cara-shadow-card: 0 20px 55px rgba(38, 23, 50, .09);
 }
 html { scroll-padding-top: 92px; }
-body { font-family: "Baloo Bhaijaan 2", Tahoma, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"; text-rendering: optimizeLegibility; }
+body { font-family: "Vazir", Tahoma, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji"; text-rendering: optimizeLegibility; }
 button, input, select, textarea { font-family: inherit; }
 a, button { -webkit-tap-highlight-color: transparent; }
 ::selection { background: rgba(196,164,106,.28); color: var(--cara-ink); }
@@ -838,16 +838,21 @@ header.top.solid nav a[href*="account.html"] {
 
 
 /* ---- فونت نمایشی (Lalezar) برای تیترها ----
-   Lalezar فقط وزن ۴۰۰ دارد و خودش سنگین است؛ برای همین وزن را ۴۰۰ می‌گذاریم
-   تا مرورگر بولد مصنوعی نسازد. متن بدنه و دکمه‌ها با Baloo Bhaijaan 2 می‌ماند. */
+   Lalezar یک وزن دارد؛ برای این‌که همه‌ی تیترها یک‌دست و بولد دیده شوند، وزن را
+   روی همه‌ی تیترها قفل می‌کنیم. بدون !important قواعد صفحه‌ای (۸۵۰/۹۰۰/۴۰۰)
+   دوباره پراکنده می‌شدند و تیترها یکی‌درمیان بولد دیده می‌شدند.
+   متن بدنه و دکمه‌ها با Vazir می‌ماند. */
 h1,
 h2,
 h3,
+h4,
+h5,
+h6,
 .page-title,
 .hx__copy h1,
 .section-head h2 {
-  font-family: var(--cara-font-display, "Lalezar", "Baloo Bhaijaan 2", Tahoma, sans-serif);
-  font-weight: 400;
+  font-family: var(--cara-font-display, "Lalezar", "Vazir", Tahoma, sans-serif);
+  font-weight: 800 !important;
   letter-spacing: 0;
   text-transform: none;
 }

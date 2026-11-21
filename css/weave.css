@@ -134,7 +134,7 @@
 .wv-actions button.btn {
   min-height: 46px;
   cursor: pointer;
-  font-family: var(--font, "Baloo Bhaijaan 2", Tahoma, system-ui, sans-serif) !important;
+  font-family: var(--font, "Vazir", Tahoma, system-ui, sans-serif) !important;
   font-size: 17px !important;
   font-weight: 700 !important;
   line-height: 1.5 !important;

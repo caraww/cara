@@ -29,7 +29,7 @@
 
   /* Render the entered name as a bead mask, resized to the selected bracelet width. */
   function mask(name, th) {
-    const fs = 160, big = document.createElement("canvas"), c = big.getContext("2d"), font = `900 ${fs}px "Baloo Bhaijaan 2", Tahoma, sans-serif`;
+    const fs = 160, big = document.createElement("canvas"), c = big.getContext("2d"), font = `900 ${fs}px "Vazir", Tahoma, sans-serif`;
     c.font = font; big.width = Math.ceil(c.measureText(name).width) + 60; big.height = fs * 2;
     c.font = font; c.fillStyle = "#000"; c.fillText(name, 30, fs * 1.4);
     const d = c.getImageData(0, 0, big.width, big.height).data;
@@ -52,7 +52,7 @@
     if (!name) return fail("یه اسم بنویس تا بافتنش شروع بشه.");
     if (!fontWaited) {
       fontWaited = true;
-      try { await Promise.race([document.fonts.load('900 40px "Baloo Bhaijaan 2"', name), new Promise((r) => setTimeout(r, 1500))]); } catch (e) {}
+      try { await Promise.race([document.fonts.load('900 40px "Vazir"', name), new Promise((r) => setTimeout(r, 1500))]); } catch (e) {}
     }
     if (my !== seq) return null;
     const m = mask(name, across - 2);

@@ -60,7 +60,7 @@ test("weaving styles include mobile layout and reduced-motion handling", () => {
   assert.match(css, /width: 104px/);
   assert.match(css, /radial-gradient\(circle, var\(--gold\)/);
   assert.match(css, /direction: rtl/);
-  assert.match(css, /font-family: var\(--font, "Baloo Bhaijaan 2"/);
+  assert.match(css, /font-family: var\(--font, "Vazir"/);
   assert.match(css, /font-size: 17px !important/);
   assert.match(css, /font-weight: 700 !important/);
   assert.match(css, /font-weight: 700/);

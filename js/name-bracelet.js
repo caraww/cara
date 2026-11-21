@@ -29,12 +29,12 @@
     const big = document.createElement("canvas");
     const context = big.getContext("2d", { willReadFrequently: true });
     if (!context) return null;
-    context.font = `900 ${fontSize}px "Baloo Bhaijaan 2", Tahoma, sans-serif`;
+    context.font = `900 ${fontSize}px "Vazir", Tahoma, sans-serif`;
     const measured = Math.ceil(context.measureText(name).width) + 60;
     if (!measured || measured > 6000) return null;
     big.width = measured;
     big.height = fontSize * 2;
-    context.font = `900 ${fontSize}px "Baloo Bhaijaan 2", Tahoma, sans-serif`;
+    context.font = `900 ${fontSize}px "Vazir", Tahoma, sans-serif`;
     context.textBaseline = "alphabetic";
     context.fillStyle = "#000";
     context.fillText(name, 30, fontSize * 1.4);
@@ -101,7 +101,7 @@
       return;
     }
     try {
-      if (document.fonts && document.fonts.load) await document.fonts.load('900 40px "Baloo Bhaijaan 2"', name);
+      if (document.fonts && document.fonts.load) await document.fonts.load('900 40px "Vazir"', name);
       const mask = textMask(name, across - 2);
       if (!mask) { grid = null; return msg("این اسم رو نتونستم بکشم؛ حروف ساده‌تری امتحان کن."); }
       rows = mask.width + 4;
