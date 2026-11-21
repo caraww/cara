@@ -39,6 +39,8 @@
   box-shadow: 0 10px 26px rgba(0, 0, 0, .28);
 }
 .sf__seal img { display: block; width: 72px; height: 72px; object-fit: contain; }
+/* اگر نماد اعتماد لود نشد (ادبلاک یا شبکه)، قاب سفید خالی نماند. */
+.sf__seal[hidden] { display: none; }
 
 /* Link columns */
 .sf__col { display: grid; align-content: start; gap: 2px; min-width: 0; }
@@ -87,8 +89,10 @@
   .sf__brand { grid-column: 1 / -1; }
 }
 @media (max-width: 760px) {
-  /* صفحه‌های دارای نوار ثابت پایین (m-cta) نباید آخرین خط فوتر را زیر نوار گم کنند. */
-  body:has(.m-cta) .sf__bottom { padding-block-end: calc(96px + env(safe-area-inset-bottom, 0px)); }
+  /* صفحه‌های دارای نوار ثابت پایین (m-cta) نباید آخرین خط فوتر را زیر نوار گم کنند.
+     ۱۱۰px اضافه، ارتفاع دو دکمه‌ی شناور تماس/اینستاگرام است که روی «بازگشت به بالا» می‌افتادند. */
+  body:has(.m-cta) .sf__bottom { padding-block-end: calc(206px + env(safe-area-inset-bottom, 0px)); }
+  body:has(.m-cta) .sf__bottom a { position: relative; z-index: 41; }
 }
 @media (max-width: 640px) {
   .sf { margin-block-start: 48px; padding: 32px 18px 16px; }
