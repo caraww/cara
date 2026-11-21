@@ -3,9 +3,9 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
-const { selfHostFonts } = require("../tools/self-host-fonts.js");
+const { selfHostFonts, FAMILIES } = require("../tools/self-host-fonts.js");
 
-const css = "/* latin */ @font-face { font-family: Estedad; font-style: normal; font-weight: 400; src: url(https://fonts.example/font.woff2) format('woff2'); }";
+const css = "/* latin */ @font-face { font-family: 'Baloo Bhaijaan 2'; font-style: normal; font-weight: 400; src: url(https://fonts.example/font.woff2) format('woff2'); }";
 const ok = (body) => ({
   ok: true, status: 200,
   text: async () => body,
@@ -34,11 +34,13 @@ test("writes verified font files and rewrites Google Fonts links only after all 
     const html = '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com"><link href="https://fonts.googleapis.com/css2?family=Vazirmatn" rel="stylesheet">';
     fs.writeFileSync(path.join(root, "index.html"), html);
     const font = Buffer.concat([Buffer.from("wOF2"), Buffer.alloc(256)]);
-    let calls = 0;
-    const result = await selfHostFonts({ root, fetchImpl: async () => (++calls === 1 ? ok(css) : ok(font)) });
-    assert.deepEqual(result, { fontFiles: 1, pages: 1 });
-    assert.equal(fs.readFileSync(path.join(root, "fonts/estedad-latin.woff2")).subarray(0, 4).toString(), "wOF2");
-    assert.match(fs.readFileSync(path.join(root, "css/fonts.css"), "utf8"), /\/fonts\/estedad-latin.woff2/);
+    const result = await selfHostFonts({
+      root,
+      fetchImpl: async (url) => (String(url).includes("googleapis") ? ok(css) : ok(font)),
+    });
+    assert.deepEqual(result, { fontFiles: FAMILIES.length, pages: 1 });
+    assert.equal(fs.readFileSync(path.join(root, "fonts/baloo-bhaijaan-2-latin.woff2")).subarray(0, 4).toString(), "wOF2");
+    assert.match(fs.readFileSync(path.join(root, "css/fonts.css"), "utf8"), /\/fonts\/baloo-bhaijaan-2-latin.woff2/);
     const updated = fs.readFileSync(path.join(root, "index.html"), "utf8");
     assert.match(updated, /\/css\/fonts.css/);
     assert.doesNotMatch(updated, /fonts\.(googleapis|gstatic)\.com/);
@@ -48,7 +50,7 @@ test("writes verified font files and rewrites Google Fonts links only after all 
 test("primary Persian font is preloaded on all main customer pages", () => {
   for (const page of ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html"]) {
     const html = fs.readFileSync(path.join(__dirname, "..", page), "utf8");
-    assert.match(html, /<link\b(?=[^>]*\brel="preload")(?=[^>]*\bas="font")(?=[^>]*\bhref="\/fonts\/estedad-arabic\.woff2")[^>]*>/s, page + " font preload");
+    assert.match(html, /<link\b(?=[^>]*\brel="preload")(?=[^>]*\bas="font")(?=[^>]*\bhref="\/fonts\/baloo-bhaijaan-2-arabic\.woff2")[^>]*>/s, page + " font preload");
     assert.match(html, /href="\/?css\/fonts\.css(?:\?[^"]*)?"/, page + " local font stylesheet");
   }
 });

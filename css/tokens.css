@@ -45,8 +45,8 @@
    Page styles keep their own values where they are deliberate; new rules and
    the shared footer/nav layers build from these tokens. */
 :root {
-  --cara-font: "Estedad", Tahoma, system-ui, sans-serif;
-  --cara-font-display: "Estedad", Tahoma, system-ui, sans-serif;
+  --cara-font: "Baloo Bhaijaan 2", Tahoma, system-ui, sans-serif;
+  --cara-font-display: "Lalezar", "Baloo Bhaijaan 2", Tahoma, system-ui, sans-serif;
 
   --cara-text-xs: 12px;
   --cara-text-sm: 14px;

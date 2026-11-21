@@ -22,8 +22,8 @@ test("service worker precaches offline styles, retry script, and local font weig
     "/css/fonts.css",
     "/css/offline.css",
     "/js/offline.js",
-    "/fonts/estedad-arabic.woff2",
-    "/fonts/estedad-latin.woff2",
+    "/fonts/baloo-bhaijaan-2-arabic.woff2",
+    "/fonts/baloo-bhaijaan-2-latin.woff2",
   ]) assert.ok(sw.includes('"' + asset + '"'), asset);
 });
 
