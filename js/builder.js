@@ -1094,7 +1094,7 @@ try {
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") setOpen(false); });
   /* انتخاب رنگ (از پالت یا رنگ‌های اخیر) پنل رو می‌بنده تا بشه سریع کشید */
   aside.addEventListener("click", function (e) {
-    if (mq.matches && e.target.closest(".swatch, .sp-rc")) setTimeout(function () { syncDot(); if (!pinned) setOpen(false); }, 120);
+    if (e.target.closest(".swatch, .sp-rc")) setTimeout(function () { syncDot(); if (!pinned) setOpen(false); }, 120);
   });
   new MutationObserver(syncDot).observe(pal, { subtree: true, attributes: true, attributeFilter: ["aria-pressed"] });
   mq.addEventListener && mq.addEventListener("change", function () { setOpen(false); });

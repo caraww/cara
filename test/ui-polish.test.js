@@ -25,7 +25,7 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     const polishPath = polishMatch[0];
     const sharedLayerIndex = html.indexOf(polishPath);
     const pageStyles = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+>/g)]
-      .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("premium.css") && !tag.includes("hero-signature.css") && !tag.includes("hero-wow.css") && !tag.includes("site-nav.css") && !tag.includes("nav-hero.css") && !tag.includes("site-footer.css") && !tag.includes("theme.css"))
+      .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("premium.css") && !tag.includes("hero-signature.css") && !tag.includes("hero-wow.css") && !tag.includes("site-nav.css") && !tag.includes("nav-hero.css") && !tag.includes("site-footer.css") && !tag.includes("theme.css") && !tag.includes("builder-app.css"))
       .map(([tag]) => html.indexOf(tag));
     assert.ok(
       sharedLayerIndex > Math.max(-1, ...pageStyles),
@@ -36,6 +36,9 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     }
     if (html.includes("/css/premium.css?v=2")) {
       assert.ok(html.indexOf("/css/premium.css?v=2") > sharedLayerIndex, file + " should load the final premium layer after polish.css");
+    }
+    if (html.includes("css/builder-app.css")) {
+      assert.ok(html.indexOf("css/builder-app.css") > html.indexOf("/css/theme.css"), file + " should load the builder app layer last");
     }
   }
 });
