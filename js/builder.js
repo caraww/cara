@@ -91,6 +91,9 @@ try {
   let w = L.DEF_W, h = L.DEF_H, data = empty(w, h), sel = C.palette[0].code, tool = "brush";
   let panning = null, space = false, mirror = false, erasing = false, painting = false, last = null, history = [], redo = [], cw = 24, ch = 20, saveT, sumQ = false;
   let zoom = 1, fillShapes = false, drag = null, snap = null, track = null, selRect = null, selDrag = null, clip = null, hover = null, recent = [];
+  /* روی نمایشگر عریض، طول دستبند افقی کشیده می‌شود تا کل الگو در یک نگاه جا شود */
+  let horizontal = window.matchMedia("(min-width: 1100px)").matches;
+  document.body.dataset.gridAxis = horizontal ? "h" : "v";
 
   /* الگوی اشتراکی در fragment لینک قرار دارد؛ داده‌ای به سرور فرستاده نمی‌شود. */
   const shared = window.CARA_PATTERN_SHARE
@@ -167,32 +170,65 @@ try {
     canvas.style.cursor = t === "pan" ? "grab" : t === "select" ? "cell" : "crosshair";
   }
   document.querySelectorAll("[data-tool]").forEach((b) => (b.onclick = () => setTool(b.dataset.tool)));
+  document.addEventListener("builder:flip", () => {
+    horizontal = !horizontal;
+    document.body.dataset.gridAxis = horizontal ? "h" : "v";
+    layout();
+    document.dispatchEvent(new CustomEvent("builder:flipped", { detail: { horizontal } }));
+  });
   $("mirror").onclick = (e) => { mirror = !mirror; e.currentTarget.setAttribute("aria-pressed", mirror); };
   if ($("shapeFill")) $("shapeFill").onclick = (e) => { fillShapes = !fillShapes; e.currentTarget.setAttribute("aria-pressed", fillShapes); };
 
   /* رسم */
+  function cellRect(r, c) {
+    return horizontal
+      ? { x: M + r * cw, y: T + c * ch, w: cw, h: ch }
+      : { x: M + c * cw, y: T + r * ch, w: cw, h: ch };
+  }
+  function spanRect(r0, c0, r1, c1) {
+    const a = cellRect(r0, c0), b = cellRect(r1, c1);
+    return {
+      x: Math.min(a.x, b.x), y: Math.min(a.y, b.y),
+      w: Math.abs(b.x - a.x) + cw, h: Math.abs(b.y - a.y) + ch,
+    };
+  }
   function drawCell(g, r, c, cw, ch, ox, oy) {
-    const x = ox + c * cw, y = oy + r * ch, code = data[r][c];
+    const x = ox + (horizontal ? r : c) * cw, y = oy + (horizontal ? c : r) * ch, code = data[r][c];
     g.fillStyle = "#EFECF4"; g.fillRect(x + 1, y + 1, cw - 1, ch - 1);
     if (code) C.drawBead(g, x + 1, y + 1, cw - 1, ch - 1, C.byCode(code).hex);
   }
   function paintGrid(g, cw, ch, ox, oy) {
-    g.fillStyle = "#D3CCDD"; g.fillRect(ox, oy, w * cw + 1, h * ch + 1);
+    const W = (horizontal ? h : w) * cw, H = (horizontal ? w : h) * ch;
+    g.fillStyle = "#D3CCDD"; g.fillRect(ox, oy, W + 1, H + 1);
     for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) drawCell(g, r, c, cw, ch, ox, oy);
     /* خط راهنما هر ۵ خونه (پررنگ‌تر هر ۱۰) تا شمردن راحت باشه */
-    for (let c = 5; c < w; c += 5) { g.fillStyle = c % 10 ? "#A99BC0" : "#7E6A9C"; g.fillRect(ox + c * cw, oy, 1, h * ch + 1); }
-    for (let r = 5; r < h; r += 5) { g.fillStyle = r % 10 ? "#A99BC0" : "#7E6A9C"; g.fillRect(ox, oy + r * ch, w * cw + 1, 1); }
-    g.fillStyle = "#6C6478"; g.font = `${clamp(ch * 0.6, 9, 12)}px "Vazir",Tahoma,sans-serif`;
+    const vline = (x, i) => { g.fillStyle = i % 10 ? "#A99BC0" : "#7E6A9C"; g.fillRect(x, oy, 1, H + 1); };
+    const hline = (y, i) => { g.fillStyle = i % 10 ? "#A99BC0" : "#7E6A9C"; g.fillRect(ox, y, W + 1, 1); };
+    for (let r = 5; r < h; r += 5) horizontal ? vline(ox + r * cw, r) : hline(oy + r * ch, r);
+    for (let c = 5; c < w; c += 5) horizontal ? hline(oy + c * ch, c) : vline(ox + c * cw, c);
+    g.fillStyle = "#6C6478"; g.font = `${clamp(Math.min(cw, ch) * 0.6, 9, 12)}px "Vazir",Tahoma,sans-serif`;
     g.textBaseline = "middle";
-    g.textAlign = "right";
-    for (let r = 0; r < h; r++) if (r === 0 || (r + 1) % 5 === 0) g.fillText(C.faNum(r + 1), ox - 6, oy + r * ch + ch / 2);
-    g.textAlign = "center";
-    for (let c = 0; c < w; c++) if (c === 0 || (c + 1) % 5 === 0) g.fillText(C.faNum(c + 1), ox + c * cw + cw / 2, oy - 10);
+    for (let r = 0; r < h; r++) {
+      if (r !== 0 && (r + 1) % 5) continue;
+      g.textAlign = horizontal ? "center" : "right";
+      horizontal
+        ? g.fillText(C.faNum(r + 1), ox + r * cw + cw / 2, oy - 10)
+        : g.fillText(C.faNum(r + 1), ox - 6, oy + r * ch + ch / 2);
+    }
+    for (let c = 0; c < w; c++) {
+      if (c !== 0 && (c + 1) % 5) continue;
+      g.textAlign = horizontal ? "right" : "center";
+      horizontal
+        ? g.fillText(C.faNum(c + 1), ox - 6, oy + c * ch + ch / 2)
+        : g.fillText(C.faNum(c + 1), ox + c * cw + cw / 2, oy - 10);
+    }
   }
   function layout() {
-    const base = clamp(Math.floor((wrap.clientWidth - 28 - M) / w), 12, 30);
+    const span = horizontal ? h : w;
+    const base = clamp(Math.floor((wrap.clientWidth - 28 - M) / span), 6, 30);
     cw = clamp(Math.round(base * zoom), 3, 60); ch = Math.round(cw / L.BEAD_ASPECT);
-    const d = devicePixelRatio || 1, W = M + w * cw + 4, H = T + h * ch + 4;
+    const d = devicePixelRatio || 1;
+    const W = M + (horizontal ? h : w) * cw + 4, H = T + (horizontal ? w : h) * ch + 4;
     canvas.width = W * d; canvas.height = H * d; canvas.style.width = W + "px"; canvas.style.height = H + "px";
     ctx.setTransform(d, 0, 0, d, 0, 0); paintGrid(ctx, cw, ch, M, T); updateSelBox();
   }
@@ -208,7 +244,9 @@ try {
   /* ویرایش */
   const cellFrom = (e, clampIt) => {
     const b = canvas.getBoundingClientRect();
-    let c = Math.floor((e.clientX - b.left - M) / cw), r = Math.floor((e.clientY - b.top - T) / ch);
+    const dx = e.clientX - b.left - M, dy = e.clientY - b.top - T;
+    let r = Math.floor((horizontal ? dx : dy) / (horizontal ? cw : ch));
+    let c = Math.floor((horizontal ? dy : dx) / (horizontal ? ch : cw));
     if (clampIt) return [clamp(r, 0, h - 1), clamp(c, 0, w - 1)];
     return r >= 0 && r < h && c >= 0 && c < w ? [r, c] : null;
   };
@@ -279,7 +317,8 @@ try {
     if (!selRect) { selBox.hidden = true; return; }
     const r0 = Math.min(selRect.r0, selRect.r1), r1 = Math.max(selRect.r0, selRect.r1), c0 = Math.min(selRect.c0, selRect.c1), c1 = Math.max(selRect.c0, selRect.c1);
     selBox.hidden = false;
-    selBox.style.cssText = `left:${canvas.offsetLeft + M + c0 * cw}px;top:${canvas.offsetTop + T + r0 * ch}px;width:${(c1 - c0 + 1) * cw}px;height:${(r1 - r0 + 1) * ch}px`;
+    const box = spanRect(r0, c0, r1, c1);
+    selBox.style.cssText = `left:${canvas.offsetLeft + box.x}px;top:${canvas.offsetTop + box.y}px;width:${box.w}px;height:${box.h}px`;
   }
   const selBounds = () => selRect && ({ r0: Math.min(selRect.r0, selRect.r1), r1: Math.max(selRect.r0, selRect.r1), c0: Math.min(selRect.c0, selRect.c1), c1: Math.max(selRect.c0, selRect.c1) });
   function copySel(cut) {
@@ -569,7 +608,8 @@ try {
     hover = cell;
     if (!cell || tool === "select") { ghost.hidden = true; $("pos").textContent = cell ? `ردیف ${C.faNum(cell[0] + 1)} · ستون ${C.faNum(cell[1] + 1)}` : "—"; return; }
     ghost.hidden = false;
-    ghost.style.cssText = `left:${canvas.offsetLeft + M + cell[1] * cw}px;top:${canvas.offsetTop + T + cell[0] * ch}px;width:${cw}px;height:${ch}px`;
+    const gr = cellRect(cell[0], cell[1]);
+    ghost.style.cssText = `left:${canvas.offsetLeft + gr.x}px;top:${canvas.offsetTop + gr.y}px;width:${cw}px;height:${ch}px`;
     ghost.style.setProperty("--c", tool === "eraser" ? "transparent" : C.byCode(sel).hex);
     $("pos").textContent = `ردیف ${C.faNum(cell[0] + 1)} · ستون ${C.faNum(cell[1] + 1)}`;
   });
