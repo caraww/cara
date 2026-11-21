@@ -5,5 +5,16 @@
 #cara-contact svg{width:24px;height:24px}
 #cara-contact .cara-contact-instagram{background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)}
 #cara-contact .cara-contact-phone{background:#2e9b5a}
-@media(max-width:820px){#cara-contact{bottom:84px}}
+@media(max-width:820px){
+  #cara-contact{bottom:calc(14px + env(safe-area-inset-bottom, 0px))}
+  /* هر نوار ثابت پایین صفحه، دکمه‌ها را به همان اندازه بالا می‌برد تا روی هم نیفتند */
+  body:has(.recovery) #cara-contact,
+  body:has(.m-cta.on) #cara-contact{bottom:calc(88px + env(safe-area-inset-bottom, 0px))}
+  body:has(.recovery):has(.m-cta.on) #cara-contact{bottom:calc(160px + env(safe-area-inset-bottom, 0px))}
+}
+/* بالای ۵۶۰ پیکسل یادآور دو خطی می‌شود و بلندتر است */
+@media(min-width:561px) and (max-width:820px){
+  body:has(.recovery) #cara-contact{bottom:calc(106px + env(safe-area-inset-bottom, 0px))}
+  body:has(.recovery):has(.m-cta.on) #cara-contact{bottom:calc(178px + env(safe-area-inset-bottom, 0px))}
+}
 @media(prefers-reduced-motion:reduce){#cara-contact a{transition:none}}

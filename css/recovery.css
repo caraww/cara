@@ -48,6 +48,10 @@
   cursor: pointer;
 }
 .recovery[hidden] { display: none; }
+/* نوار «طراحی دستبند» که با اسکرول می‌آید، نباید یادآور را بپوشاند */
+@media (max-width: 760px) {
+  body:has(.m-cta.on) .recovery { bottom: calc(78px + env(safe-area-inset-bottom, 0px)); }
+}
 @media (max-width: 560px) {
   .recovery {
     inset-inline: 10px;
