@@ -132,4 +132,4 @@ a{color:inherit}
 }
 
 /* تیترهای وبلاگ با فونت نمایشی */
-h1, h2, h3 { font-family: var(--cara-font-display, "Lalezar", "Vazir", Tahoma, sans-serif); font-weight: 400; letter-spacing: 0; text-transform: none; }
+h1, h2, h3 { font-family: var(--cara-font-display, "Baloo", "Vazir", Tahoma, sans-serif); font-weight: 800; letter-spacing: 0; text-transform: none; }

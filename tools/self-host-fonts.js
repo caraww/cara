@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* فونت تیتر سایت (Lalezar) رو از Google Fonts می‌گیره و بعد از اعتبارسنجی کامل،
+/* فونت تیتر سایت (Baloo Bhaijaan 2، وزن ۸۰۰) رو از Google Fonts می‌گیره و بعد از اعتبارسنجی کامل،
    به‌صورت محلی ذخیره می‌کنه و HTMLها رو به‌روز می‌کنه.
    فونت متن (Vazirmatn) روی Google Fonts نیست؛ فایل متغیرش دستی از انتشار رسمی
    rastikerdar/vazirmatn در fonts/vazirmatn-var.woff2 گذاشته شده و این ابزار بهش دست نمی‌زنه.
@@ -9,12 +9,24 @@ const ROOT = path.resolve(__dirname, "..");
 const SUBSETS = new Set(["arabic", "latin"]);
 const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36";
 
+/* فونت متن (Vazir) دستی نگه داشته می‌شه؛ این بلوک همیشه اول fonts.css نوشته می‌شه
+   تا اجرای ابزار، فونت متن رو پاک نکنه. */
+const TEXT_FACE = `@font-face {
+  font-family: 'Vazir';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(/fonts/vazirmatn-var.woff2) format('woff2-variations'),
+       url(/fonts/vazirmatn-var.woff2) format('woff2');
+}
+`;
+
 /* slug → پیشوند نام فایل؛ weight → بازه‌ای که در @font-face نوشته می‌شه */
 const FAMILIES = [
   {
-    slug: "lalezar",
-    weight: "400",
-    url: "https://fonts.googleapis.com/css2?family=Lalezar&display=swap",
+    slug: "baloo",
+    weight: "800",
+    url: "https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@800&display=swap",
   },
 ];
 
@@ -62,7 +74,7 @@ async function selfHostFonts({ root = ROOT, fetchImpl = fetch } = {}) {
     }
     const cssTemp = path.join(cssDir, ".fonts.css.tmp-" + process.pid);
     const header = "/* خودکار با tools/self-host-fonts.js ساخته شده — مجوزها در fonts/OFL-*.txt */\n";
-    const cssOut = header + downloads.map((item) => item.css).join("\n") + "\n";
+    const cssOut = header + TEXT_FACE + downloads.map((item) => item.css).join("\n") + "\n";
     fs.writeFileSync(cssTemp, cssOut, { flag: "wx" });
     staged.push([cssTemp, path.join(cssDir, "fonts.css")]);
     for (const [temp, target] of staged) fs.renameSync(temp, target);

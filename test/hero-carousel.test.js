@@ -6,53 +6,32 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 const read = (file) => fs.readFileSync(path.join(root, file), "utf8");
 
-test("homepage hero renders the three selected bracelets with the original rotating 3D Delica engine and swipe controls", () => {
+test("hero stage rotates three real bracelet photos with arrows, dots, keyboard, and swipe", () => {
   const html = read("index.html");
-  const script = read("js/hero-lineup.js");
-  const css = read("css/cn-top.css");
-  assert.match(html, /id="caraBraceletLineup"/);
-  assert.doesNotMatch(html, /برای دیدن طرح بعدی/);
-  const lineupStart = html.indexOf('class="cara-bracelet-lineup"');
-  const lineup = html.slice(lineupStart, html.indexOf("</section>", lineupStart));
-  assert.doesNotMatch(lineup, /data-bracelet="peacock"|طاووس/);
-  assert.doesNotMatch(script, /peacock/);
-  for (const id of ["thousand-eyes", "waterfall", "chain"]) assert.match(html, new RegExp('data-bracelet="' + id + '"'));
-  assert.match(html, /hero-lineup\.js\?v=\d+/);
-  assert.match(script, /const palettes=\{/);
-  assert.match(script, /const models=\{/);
-  assert.match(script, /"#DF2A1B"/);
-  assert.match(script, /"#251A82"/);
-  assert.match(script, /"#F1E00A"/);
-  assert.match(css, /\.cn-hero \.cara-bracelet-card__art/);
-  assert.match(css, /top: 50%;/);
-  assert.match(css, /left: 50%;/);
-  assert.match(css, /transform: translate\(-50%, -50%\)/);
-  assert.match(css, /\.cn-hero \.cara-bracelet-lineup__viewport::before/);
-  assert.match(css, /\.cn-hero \.cara-bracelet-lineup__slides[\s\S]*?inset: 0/);
-  assert.match(css, /cara-bracelet-lineup__viewport::before/);
-  assert.match(css, /aspect-ratio: 1 \/ 1/);
-  assert.match(css, /\.cn-hero \.cara-bracelet-card figcaption/);
-  assert.match(script, /function sprite\(/);
-  assert.match(script, /Miyuki Delica thread opening/);
-  assert.match(script, /const rot=.*t\*\.00011/s);
-  assert.match(script, /Math\.sin\(theta\)/);
-  assert.match(script, /requestAnimationFrame/);
-  assert.match(script, /IntersectionObserver/);
+  const script = read("js/hero-stage.js");
+  const css = read("css/nav-hero.css");
+
+  assert.match(html, /hero-stage\.js\?v=\d+/);
+  assert.doesNotMatch(html, /hero-lineup\.js/);
+  assert.equal((html.match(/class="hx__card/g) || []).length, 3);
+  assert.match(html, /hx__arrow--prev/);
+  assert.match(html, /hx__arrow--next/);
+  assert.match(html, /aria-label="دستبند ۱: آبشار رنگی"/);
+  assert.match(html, /aria-current="true"/);
+
+  assert.match(script, /getElementById\("heroStage"\)/);
   assert.match(script, /prefers-reduced-motion/);
-  assert.match(html, /cara-bracelet-lineup__arrow--prev/);
-  assert.match(html, /cara-bracelet-lineup__arrow--next/);
-  // در متن راست‌به‌چپ، U+2039/U+203A توسط bidi آینه می‌شوند: «‹» به‌صورت «›»
-  // و «›» به‌صورت «‹» دیده می‌شود. پس همان چیزی که در HTML نوشته شده،
-  // روی صفحه برعکسش دیده می‌شود؛ «قبلی» = ‹ (که راست دیده می‌شود).
-  assert.match(html, /aria-label="دستبند قبلی"[\s\S]*?>\s*‹\s*</);
-  assert.match(html, /aria-label="دستبند بعدی"[\s\S]*?>\s*›\s*</);
-  assert.doesNotMatch(html, /cara-bracelet-lineup__title|cara-bracelet-lineup__dots/);
-  assert.match(css, /justify-content: center/);
-  assert.doesNotMatch(script, /cara-bracelet-lineup__dots|cara-bracelet-lineup__title/);
-  assert.match(script, /pointerdown/);
-  assert.match(script, /pointerup/);
-  assert.match(script, /function show\(next\)/);
-  assert.match(css, /\.cn-hero \.cara-bracelet-lineup__slides[\s\S]*?inset: 0/);
-  assert.match(css, /\.cara-bracelet-card\.is-active/);
+  assert.match(script, /ArrowLeft/);
+  assert.match(script, /ArrowRight/);
+  assert.match(script, /touchstart/);
+  assert.match(script, /touchend/);
+  assert.match(script, /setInterval/);
+  assert.match(script, /clearInterval/);
+  assert.match(script, /pointerenter/);
+
+  assert.match(css, /\.hx__card\.is-active/);
+  assert.match(css, /\.hx__card\.is-next/);
+  assert.match(css, /\.hx__card\.is-prev/);
+  assert.match(css, /aspect-ratio: 1 \/ 1\.04/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
 });

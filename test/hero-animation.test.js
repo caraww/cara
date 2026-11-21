@@ -3,13 +3,15 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const vm = require("node:vm");
 
-test("hero bracelet animation pauses outside viewport and while tab is hidden", () => {
-  const source = fs.readFileSync("js/hero-bracelet.js", "utf8");
+test("hero stage rotation pauses on hover, on focus, and while the tab is hidden", () => {
+  const source = fs.readFileSync("js/hero-stage.js", "utf8");
   assert.doesNotThrow(() => new vm.Script(source));
-  assert.match(source, /new IntersectionObserver/);
-  assert.match(source, /document\.addEventListener\("visibilitychange",\s*syncAnimation\)/);
-  assert.match(source, /cancelAnimationFrame\(frame\)/);
-  assert.match(source, /inViewport\s*&&\s*!document\.hidden\s*&&\s*!RM/);
   assert.match(source, /prefers-reduced-motion/);
-  assert.doesNotMatch(source, /requestAnimationFrame\(draw\)/);
+  assert.match(source, /document\.hidden/);
+  assert.match(source, /clearInterval\(timer\)/);
+  assert.match(source, /pointerenter/);
+  assert.match(source, /pointerleave/);
+  assert.match(source, /focusin/);
+  assert.match(source, /focusout/);
+  assert.doesNotMatch(source, /requestAnimationFrame\(frame\)/);
 });
