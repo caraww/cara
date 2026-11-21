@@ -8,6 +8,7 @@
   if (!section || !wrap || !canvas || !zoomIn) return;
 
   const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const narrow = window.matchMedia("(max-width: 760px)");
   const tools = Array.from(section.querySelectorAll("[data-tool]"));
   const toolName = document.getElementById("toolName");
   const dimW = document.getElementById("w");
@@ -248,9 +249,26 @@
   if (dimH) dimH.addEventListener("change", () => { if (fitMode) setTimeout(fitToView, 40); });
 
   /* خوشه‌ی زوم بالای نوار ابزار شناور می‌شود؛ ارتفاع نوار را از DOM می‌گیریم */
+  /* روی گوشی خوشه‌ی زوم از بومِ اسکرول‌شو بیرون می‌آید تا با اسکرول گم نشود */
+  const zoomCluster = document.querySelector(".bs-zoom");
+  const placeCluster = () => {
+    if (!zoomCluster) return;
+    if (narrow.matches) {
+      if (zoomCluster.parentElement !== section) section.insertBefore(zoomCluster, section.firstChild);
+    } else if (zoomCluster.parentElement !== wrap) {
+      wrap.appendChild(zoomCluster);
+    }
+  };
+  placeCluster();
+  window.addEventListener("resize", placeCluster);
   const toolsRow = section.querySelector(".tools");
+  const hdr = document.querySelector("header.sh, .sh");
+  const mbBar = document.getElementById("mbBar");
   const syncToolsH = () => {
     if (toolsRow) document.documentElement.style.setProperty("--bs-tools-h", toolsRow.offsetHeight + "px");
+    document.documentElement.style.setProperty("--bs-hdr", (hdr ? hdr.offsetHeight : 0) + "px");
+    const mbH = mbBar && getComputedStyle(mbBar).display !== "none" ? mbBar.offsetHeight : 0;
+    document.documentElement.style.setProperty("--bs-mb", mbH + "px");
   };
   syncToolsH();
   addEventListener("resize", syncToolsH);
@@ -267,9 +285,11 @@
   syncFlip();
   document.addEventListener("builder:flipped", syncFlip);
 
-  /* از همان اول کل الگو در دید است */
-  fitMode = true;
-  setTimeout(fitToView, 120);
+  /* دسکتاپ: از همان اول کل الگو در دید. موبایل: خانه‌های درشت و اسکرول طول، مثل اپ */
+  if (!narrow.matches) {
+    fitMode = true;
+    setTimeout(fitToView, 120);
+  }
 
   updateTip();
 })();
