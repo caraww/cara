@@ -101,7 +101,7 @@
       return { w, score };
     }).sort((a, b) => b.score - a.score || a.w.price - b.w.price);
     const top = scored.slice(0, 3).map((x) => x.w);
-    document.getElementById("quizCards").innerHTML = top.map((w) => `<a class="quiz__work" href="/bracelet/${encodeURIComponent(slug(w.id))}.html"><img src="/${w.thumb || w.src}" alt="دستبند منجوقی ${w.title || w.id}" loading="lazy"><b>${w.title || w.id}</b><span>${fa(w.price)} تومان</span><small>${w.note || ""}</small></a>`).join("");
+    document.getElementById("quizCards").innerHTML = top.map((w) => `<a class="quiz__work" href="/bracelet/${encodeURIComponent(slug(w.id))}.html"><img src="/${w.thumb || w.src}" alt="دستبند منجوقی ${w.title || w.id}" loading="lazy"><b>${w.title || w.id}</b><span>${window.CARA_SALE ? CARA_SALE.priceHTML(w.price) : fa(w.price) + " تومان"}</span><small>${w.note || ""}</small></a>`).join("");
     document.getElementById("quizSummary").innerHTML = answers.style === "name"
       ? 'نزدیک‌ترین‌ها به سلیقه‌ات این‌ها هستن. چون اسم و طرح شخصی رو دوست داری، <a href="/name-bracelet.html">ابزار دستبند اسم</a> هم دقیقاً برای همینه.'
       : "این سه طرح بر اساس سبک، مناسبت، رنگ و بودجه‌ات نزدیک‌ترین بودن. اگه هیچ‌کدوم رو دوست نداشتی، توی استودیو طرح خودت رو بساز.";

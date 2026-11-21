@@ -222,6 +222,7 @@ try {
   const $ = (id) => document.getElementById(id);
   const fa = (n) => Number(n).toLocaleString("fa-IR");
   const prices = {};
+  const listPrices = {};   /* قیمت بدون تخفیف، برای خط‌خوردن قیمت قبلی توی حراج */
   let loaded = false;
 
   function cards() {
@@ -230,7 +231,11 @@ try {
       if (!p || !cap || cap.querySelector(".wk-price")) return;
       const s = document.createElement("span");
       s.className = "wk-price";
-      s.textContent = fa(p) + " تومان";
+      const sale = window.CARA_SALE;
+      const before = Number(listPrices[String(c.dataset.id).trim()]) || p;
+      s.innerHTML = sale && sale.active() && before > p
+        ? sale.priceHTML(before)
+        : fa(p) + " تومان";
       cap.appendChild(s);
     });
   }
@@ -238,7 +243,8 @@ try {
     let id = "";
     try { id = decodeURIComponent(location.hash.slice(1)); } catch {}
     const p = prices[id], o = $("lbOrder"), add = $("lbAddCart");
-    $("lbPrice").textContent = p ? fa(p) + " تومان" : "";
+    const sale = window.CARA_SALE, before = Number(listPrices[id]) || p;
+    $("lbPrice").innerHTML = !p ? "" : sale && sale.active() && before > p ? sale.priceHTML(before) : fa(p) + " تومان";
     o.href = id ? "checkout.html?work=" + encodeURIComponent(id) : "checkout.html";
     add.href = id ? "/cart.html?add=work&id=" + encodeURIComponent(id) : "/cart.html";
     add.style.display = loaded && !p ? "none" : "";
@@ -272,6 +278,14 @@ try {
     .then((r) => (r.ok ? r.json() : Promise.reject()))
     .then((list) => {
       list.forEach((w) => { prices[String(w.id).trim()] = w.price; });
+      /* قیمت پایه از کاتالوگ محلی و با همان قاعده‌ی سرور حساب می‌شه */
+      try {
+        const P = window.CARA_WORK_PRICING, local = (window.CARA && CARA.works) || [];
+        if (P && P.baseMap && local.length) {
+          const base = P.baseMap(local);
+          for (const id in base) listPrices[String(id).trim()] = base[id];
+        }
+      } catch (e) { /* بدون قیمت پایه هم قیمت روز نشون داده می‌شه */ }
       loaded = true;
       cards(); lightbox(); /* JSON-LD محصول‌ها ثابت توی gallery.html و صفحه‌ی هر محصوله؛ نسخه‌ی پویا دوبار تعریفشون می‌کرد */
     })

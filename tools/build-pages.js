@@ -15,6 +15,17 @@ const works = JSON.parse(
 );
 require(path.join(ROOT, "lib/works-pricing.js"));
 const prices = globalThis.CARA_WORK_PRICING.priceMap(works);
+const listPrices = globalThis.CARA_WORK_PRICING.baseMap(works);
+const SALE = globalThis.CARA_WORK_PRICING.sale;
+/* قیمت با احتساب حراج: قیمت قبلی خط‌خورده + قیمت روز. خارج از بازه‌ی حراج، JS کلاس is-sale را نمی‌گذارد و فقط قیمت عادی دیده می‌شود. */
+function priceHTML(id, withToman) {
+  const now = Number(prices[String(id)]) || 0;
+  const before = Number(listPrices[String(id)]) || now;
+  if (!now) return "";
+  const unit = withToman ? " تومان" : "";
+  if (!SALE.active() || before <= now) return `<span class="price" data-price="${now}">${fa(now)}${unit}</span>`;
+  return `<span class="price" data-price="${now}" data-price-list="${before}"><s class="price-list">${fa(before)}</s><b class="price-now">${fa(now)}${unit}</b></span>`;
+}
 let beadFiles = {};
 try {
   const beadSource = fs.readFileSync(path.join(ROOT, "js/beads.js"), "utf8");
@@ -159,7 +170,7 @@ ${
 ${(w.tags || []).length ? `<div class="tags">${w.tags.map((g) => `<span>${esc(g)}</span>`).join("")}</div>` : ""}
 ${
   orderable
-    ? `<div class="pg-price">${fa(price)} تومان</div><div class="btns"><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a><a class="btn" href="/builder.html">همین طرح با رنگ‌های خودم</a><a class="btn" href="/upload.html?src=${encodeURIComponent(w.source || w.src)}">از روی این عکس الگو بساز</a><button class="btn" type="button" data-share-work data-share-title="دستبند منجوقی ${esc(t)} | کارا">اشتراک‌گذاری</button></div>`
+    ? `<div class="pg-price">${priceHTML(w.id, true)}</div><div class="btns"><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a><a class="btn" href="/builder.html">همین طرح با رنگ‌های خودم</a><a class="btn" href="/upload.html?src=${encodeURIComponent(w.source || w.src)}">از روی این عکس الگو بساز</a><button class="btn" type="button" data-share-work data-share-title="دستبند منجوقی ${esc(t)} | کارا">اشتراک‌گذاری</button></div>`
     : `<div class="btns"><a class="btn dark" href="/upload.html">عکس خودت رو به الگو تبدیل کن</a><a class="btn" href="/builder.html">طراحی دستی</a><button class="btn" type="button" data-share-work data-share-title="دستبند منجوقی ${esc(t)} | کارا">اشتراک‌گذاری</button></div>`
 }
 <section class="trust-strip" aria-label="چرا خرید از کارا مطمئن است">
@@ -211,7 +222,7 @@ const starter = list
   const cards = starter.length
     ? starter.map((w) => {
         const price = Number(prices[String(w.id)]);
-        return `<a class="starter-card" href="${urlOf(w)}"><img src="${esc(abs(w.thumb || w.src))}" alt="دستبند منجوقی ${esc(titleOf(w))}" loading="lazy"><b>${esc(titleOf(w))}</b><span>${fa(price)} تومان</span><small>${esc((w.note || "").slice(0, 80))}</small></a>`;
+        return `<a class="starter-card" href="${urlOf(w)}"><img src="${esc(abs(w.thumb || w.src))}" alt="دستبند منجوقی ${esc(titleOf(w))}" loading="lazy"><b>${esc(titleOf(w))}</b><span>${priceHTML(w.id, true)}</span><small>${esc((w.note || "").slice(0, 80))}</small></a>`;
       }).join("")
     : `<p class="cp__note">فعلاً دستبند آماده‌ای زیر سقف قیمت شروع نداریم. می‌تونی توی استودیو یه طرح ساده بسازی و قیمت رو همون‌جا ببینی.</p>`;
   const body = `<div class="crumb"><a href="/">خانه</a> › <a href="/gallery.html">گالری</a> › شروع کم‌خطر</div>
@@ -388,6 +399,11 @@ function inject(file, block) {
     h = h.replace(
       "</body>",
       '<script src="/js/contact.js" defer></script>\n</body>',
+    );
+  if (!/js\/sale\.js/.test(h))
+    h = h.replace(
+      "</body>",
+      '<script src="/lib/works-pricing.js?v=1"></script><script src="/js/sale.js?v=1" defer></script>\n</body>',
     );
   fs.writeFileSync(f, crlf ? h.replace(/\n/g, "\r\n") : h);
 }
