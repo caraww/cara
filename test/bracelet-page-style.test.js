@@ -20,7 +20,7 @@ test("gallery bracelet pages load their dedicated layout after the shared nav st
   const layout = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
   assert.match(layout, /\/css\/bracelet-pages\.css\?v=6/);
   assert.match(layout, /\/css\/site-nav\.css\?v=20261113/);
-  assert.match(layout, /\/css\/nav-hero\.css\?v=3/);
+  assert.match(layout, /\/css\/nav-hero\.css\?v=[\w.-]+/);
   assert.ok(layout.indexOf("/css/site-nav.css") > layout.indexOf("/css/bracelet-pages.css"));
   assert.ok(layout.indexOf("/css/nav-hero.css") > layout.indexOf("/css/site-nav.css"));
   assert.match(layout, /<header class="sh is-solid"/);

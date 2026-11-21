@@ -531,7 +531,8 @@
 
 /* گوشی و تبلت: پیش‌نمایش بالا می‌چسبه، تنظیمات زیرش اسکرول می‌شن */
 @media (max-width: 860px) {
-  .ws { display: flex; flex-direction: column; gap: 0; }
+  /* ستون‌ها روی موبایل تمام‌عرض باشند (align-items:start ستون پیش‌نمایش را جمع می‌کرد). */
+  .ws { display: flex; flex-direction: column; gap: 0; align-items: stretch; }
   .ws-view { display: contents; }
   .ws-sticky {
     order: -1;

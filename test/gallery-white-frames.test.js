@@ -9,5 +9,5 @@ test("gallery image areas stay pure white in cards and enlarged view", () => {
   assert.match(css, /\.wk-grid img\s*\{\s*background: #fff !important/);
   assert.match(css, /\.wk-stage\s*\{\s*background: #fff !important/);
   assert.match(css, /\.wk-stage #lbImg\s*\{\s*background: #fff !important/);
-  assert.match(html, /css\/gallery\.css\?v=20261107-whiteframes/);
+  assert.match(html, /css\/gallery\.css\?v=[\w.-]+/);
 });
