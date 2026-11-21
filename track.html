@@ -33,20 +33,41 @@
       .track-step { text-align: center; padding: 10px 6px; border-radius: 14px; background: rgba(128,128,128,.1); font-size: 14px; opacity: .55; }
       .track-step.on { background: rgba(184,151,90,.28); opacity: 1; font-weight: 800; }
       .track-msg { min-height: 1.6em; line-height: 1.9; }
-      @media (max-width: 520px) { .track-steps { grid-template-columns: 1fr; } }
+      .track-form .btn { flex: none; min-height: 46px; padding: 0 22px; border-radius: 12px; font-size: 15px; }
+      @media (max-width: 520px) {
+        .track-wrap { padding-top: 92px; }
+        .track-steps { grid-template-columns: 1fr; }
+        .track-form { display: grid; grid-template-columns: 1fr; }
+        .track-form input { min-width: 0; width: 100%; }
+        .track-form .btn { justify-self: start; min-height: 44px; padding: 0 18px; }
+      }
     </style>
   </head>
   <body>
     <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
-    <header class="top solid">
-      <a href="/" class="logo" aria-label="cara — صفحه‌ی اصلی"><img src="/img/cara-logo.webp?v=1" alt="cara" style="height:44px;width:auto;display:block" /></a>
-      <nav aria-label="منوی اصلی">
-        <a href="/gallery.html">گالری</a>
-        <a href="/builder.html">طراحی دستبند</a>
-        <a href="/cart.html">سبد خرید</a>
-        <a href="/account.html">حساب کاربری</a>
-        <a class="cta" href="/checkout.html">سفارش</a>
-      </nav>
+    <header class="sh is-solid" data-sh="solid">
+      <div class="sh__in">
+        <a href="/" class="sh__logo" aria-label="cara، صفحه‌ی اصلی"
+          ><img class="is-dark" src="/img/cara-logo.webp?v=1" alt="cara"
+        /></a>
+        <button
+          class="sh__toggle"
+          type="button"
+          aria-controls="shNav"
+          aria-expanded="false"
+          aria-label="باز کردن منو"
+        >
+          <span aria-hidden="true">☰</span>
+        </button>
+        <nav class="sh__nav" id="shNav" aria-label="منوی اصلی">
+          <a href="/builder.html">طراحی دستبند</a
+          ><a href="/upload.html">عکس به الگو</a
+          ><a href="/gallery.html">گالری</a><a href="/challenge.html">چالش</a><a href="/game.html">بازی</a
+          ><a href="/account.html">حساب کاربری</a
+          ><a href="/cart.html">سبد خرید</a
+          ><a class="sh__cta" href="/checkout.html">سفارش</a>
+        </nav>
+      </div>
     </header>
     <main class="track-wrap" id="main-content" tabindex="-1">
       <h1>سفارشت کجاست؟</h1>
@@ -77,7 +98,6 @@
     </main>
     <script src="/js/track.js?v=1"></script>
     <script src="/js/contact.js" defer></script>
-    <script src="/js/mobile-nav.js?v=20261113" defer></script>
     <script src="/js/nav-hero.js?v=1" defer></script>
     <script src="/js/pwa.js" defer></script>
   </body>
