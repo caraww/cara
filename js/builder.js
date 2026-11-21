@@ -96,17 +96,29 @@ try {
   const shared = window.CARA_PATTERN_SHARE
     ? window.CARA_PATTERN_SHARE.parseHash(location.hash, C.palette, L)
     : null;
-  if (shared) history.replaceState(null, "", location.pathname + location.search);
+  if (shared) window.history.replaceState(null, "", location.pathname + location.search);
   const saved = C.loadPattern();
+  /* لینک راهنمای اندازه‌ی مچ: /builder.html?w=15&h=111 — طول دستبند همان تعداد منجوق محاسبه‌شده است */
+  const qp = new URLSearchParams(location.search);
+  const qw = Math.round(Number(qp.get("w"))), qh = Math.round(Number(qp.get("h")));
+  const sizeLink = qp.has("w") && qp.has("h") && qw >= 1 && qw <= L.MAX_W && qh >= 1 && qh <= L.MAX_H;
   if (shared) { data = shared.data; w = shared.width; h = shared.height; }
-  else if (saved) { data = saved.data; w = saved.width; h = saved.height; }
-  else {
-    /* Deep link from the wrist-size helper: /builder.html?w=15&h=114 */
-    const qp = new URLSearchParams(location.search);
-    const qw = Math.round(Number(qp.get("w"))), qh = Math.round(Number(qp.get("h")));
-    if (qw >= 1 && qw <= L.MAX_W && qh >= 1 && qh <= L.MAX_H) { w = qw; h = qh; data = empty(w, h); }
+  else if (sizeLink) {
+    /* ابعاد لینک بر طرح ذخیره‌شده اولویت دارد؛ نقش قبلی تا جای ممکن حفظ می‌شود */
+    w = qw; h = qh;
+    const nd = empty(w, h);
+    if (saved) {
+      for (let r = 0; r < Math.min(saved.height, h); r++)
+        for (let c = 0; c < Math.min(saved.width, w); c++) nd[r][c] = saved.data[r][c];
+    }
+    data = nd;
   }
+  else if (saved) { data = saved.data; w = saved.width; h = saved.height; }
   wIn.value = w; hIn.value = h;
+  if (sizeLink) {
+    window.history.replaceState(null, "", location.pathname);
+    $("saved").textContent = `ابعاد اندازه‌ی مچ اعمال شد: ${C.faNum(w)} × ${C.faNum(h)}`;
+  }
   try { recent = (JSON.parse(localStorage.getItem("cara-recent")) || []).filter((c) => C.byCode(c)).slice(0, 8); } catch {}
 
   /* پالت */

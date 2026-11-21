@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
   <head>
+<script>try{var t=localStorage.getItem("cara-theme")||"auto",d=t==="dark"||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches),e=document.documentElement;e.setAttribute("data-theme",d?"dark":"light");e.setAttribute("data-theme-mode",t)}catch(n){}</script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/png" sizes="192x192" href="/img/cara-favicon.png?v=2" />
@@ -57,8 +58,23 @@
       .size-table th, .size-table td { border-bottom: 1px solid rgba(128,128,128,.22); padding: 9px 6px; text-align: right; }
       .size-table th { font-weight: 800; }
       .btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+      .size-wrap .btn { min-height: 48px; padding-inline: 22px; font-size: 16px; line-height: 1.6; }
       .err { color: #c93a2b; }
-      @media (max-width: 560px) { .size-grid { grid-template-columns: 1fr; } }
+      @media (max-width: 560px) {
+        body { font-size: 16px; }
+        .size-wrap { padding: 96px 14px 44px; }
+        .size-wrap h1 { font-size: 24px; }
+        .size-card { padding: 18px 16px; border-radius: 18px; }
+        .size-card h2 { font-size: 18px; }
+        .size-grid { grid-template-columns: 1fr; gap: 8px; }
+        .size-grid > div { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 10px 14px; text-align: start; }
+        .size-grid small { margin: 0; }
+        .size-grid strong { font-size: 16px; }
+        .btns { display: grid; grid-template-columns: 1fr; gap: 8px; }
+        .size-wrap .btn { width: 100%; min-height: 48px; padding-inline: 16px; font-size: 15.5px; }
+        .size-table { font-size: 13.5px; }
+        .size-table th, .size-table td { padding: 8px 4px; }
+      }
     </style>
     <script type="application/ld+json">
       {
@@ -74,6 +90,7 @@
         ]
       }
     </script>
+<link rel="stylesheet" href="/css/theme.css?v=1"><script src="/js/theme.js?v=1" defer></script>
 </head>
   <body>
     <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
@@ -133,7 +150,7 @@
       </section>
     </main>
 
-    <script src="/js/size.js?v=1"></script>
+    <script src="/js/size.js?v=2"></script>
     <script>window.CARA_SIZE && window.CARA_SIZE.init();</script>
     <script src="/js/contact.js?v=20261121-seal" defer></script>
     <script src="/js/nav-hero.js?v=1" defer></script>
