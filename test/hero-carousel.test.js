@@ -41,9 +41,11 @@ test("homepage hero renders the three selected bracelets with the original rotat
   assert.match(script, /prefers-reduced-motion/);
   assert.match(html, /cara-bracelet-lineup__arrow--prev/);
   assert.match(html, /cara-bracelet-lineup__arrow--next/);
-  // در چیدمان راست‌به‌چپ، «قبلی» به سمت راست (›) و «بعدی» به سمت چپ (‹) اشاره می‌کند.
-  assert.match(html, /aria-label="دستبند قبلی"[\s\S]*?>\s*›\s*</);
-  assert.match(html, /aria-label="دستبند بعدی"[\s\S]*?>\s*‹\s*</);
+  // در متن راست‌به‌چپ، U+2039/U+203A توسط bidi آینه می‌شوند: «‹» به‌صورت «›»
+  // و «›» به‌صورت «‹» دیده می‌شود. پس همان چیزی که در HTML نوشته شده،
+  // روی صفحه برعکسش دیده می‌شود؛ «قبلی» = ‹ (که راست دیده می‌شود).
+  assert.match(html, /aria-label="دستبند قبلی"[\s\S]*?>\s*‹\s*</);
+  assert.match(html, /aria-label="دستبند بعدی"[\s\S]*?>\s*›\s*</);
   assert.doesNotMatch(html, /cara-bracelet-lineup__title|cara-bracelet-lineup__dots/);
   assert.match(css, /justify-content: center/);
   assert.doesNotMatch(script, /cara-bracelet-lineup__dots|cara-bracelet-lineup__title/);
