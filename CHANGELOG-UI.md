@@ -145,6 +145,34 @@ JSON-LD، پیام‌های خطا و متن فوتر بازخوانی شد.
 
 ---
 
+## ۵٫۱) آلرت تکراری «طرح ذخیره‌شده» در موبایل
+
+روی گوشی، وقتی الگوی نیمه‌کاره در مرورگر ذخیره بود، **دو** یادآور پایین صفحه
+هم‌زمان بالا می‌آمدند:
+
+| منبع | متن | رفتار |
+|---|---|---|
+| `js/contact.js` → `#cara-remind` (قدیمی) | «الگوی نیمه‌کاره‌ت هنوز ذخیره‌ست (N منجوق) ادامه بده» | بعد از ۲٫۵ ثانیه، بستن با `sessionStorage`، بدون آنالیتیکس |
+| `js/recovery.js` → `.recovery` (جدید) | «طرحت هنوز منتظره · N منجوق ذخیره شده» | بستن هفت‌روزه با `localStorage`، `aria-live`، رویداد `recovery_view` |
+
+آلرت قدیمی حذف شد تا فقط یک یادآور بماند:
+
+- `js/contact.js`: کل بلوک `#cara-remind` پاک شد؛ این فایل حالا فقط دکمه‌های
+  تماس/اینستاگرام را می‌سازد.
+- `css/contact.css`: قواعد `#cara-remind` حذف شد و `prefers-reduced-motion`
+  برای دکمه‌های تماس اضافه شد.
+- `css/recovery.css`: ناحیه‌ی لمس دکمه‌ی بستن و «ادامه طراحی» در موبایل به
+  ۴۴ پیکسل رسید و فاصله‌ی پایین با `env(safe-area-inset-bottom)` برای آیفون
+  اصلاح شد. نسخه‌ی فایل به `?v=2` ارتقا یافت.
+- `test/contact-styles.test.js`: تست جدید تضمین می‌کند `contact.js` هیچ
+  یادآوری رندر نمی‌کند و `#cara-remind` فقط در `recovery.css` نباشد.
+
+بررسی روی `index`، `gallery`، `about` و `checkout` با الگوی ذخیره‌شده در
+عرض ۳۶۰ و ۳۹۰: دقیقاً یک یادآور، صفر خطای کنسول، بدون هم‌پوشانی با دکمه‌های
+شناور و بدون اسکرول افقی.
+
+---
+
 ## ۶) ایرادهایی که عمداً دست نخوردند
 
 | مورد | چرا |
@@ -195,6 +223,7 @@ JSON-LD، پیام‌های خطا و متن فوتر بازخوانی شد.
 | اسکرول افقی در ۵ عرض × ۱۰ صفحه | ✅ صفر |
 | خطای کنسول | ✅ صفر (به‌جز ۴۰۴های `/api/*` در محیط لوکال) |
 | منوی موبایل روی ۶ صفحه | ✅ |
+| فقط یک یادآور طرح/سبد در موبایل | ✅ (آلرت قدیمی `#cara-remind` حذف شد) |
 | فرم‌ها (لیبل، فوکوس، ناحیه‌ی لمس ۴۴px) | ✅ |
 | دکمه‌های ویرایش عکس در `upload.html` | ✅ |
 | جریان `builder`: انتخاب رنگ + کشیدن منجوق + شمارش | ✅ (۰ → ۲ منجوق) |
@@ -222,5 +251,6 @@ fix(copy): Persian labels, half-spaces and RTL arrows across pages
 chore(content): regenerate works, bracelet and color pages
 test: align expectations with Estedad fonts, RTL arrows and new copy
 chore: ignore local UI audit artifacts
+fix(reminder): remove the duplicate saved-pattern alert
 docs: add UI changelog
 ```
