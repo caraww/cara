@@ -410,8 +410,7 @@ html[data-theme="dark"] .bs-zoom button:hover { background: rgba(255, 255, 255, 
 }
 
 
-/* ================= ظاهر اپ‌مانند (الهام از Loomerly) ================= */
-/* بوم سفید و تمیز، بدون قاب خاکستری؛ منجوق‌ها روی کاغذ */
+/* ================= بوم سفید و تمیز ================= */
 .builder #gridWrap,
 .builder > section.panel .grid-wrap {
   background: #fff;
@@ -419,50 +418,7 @@ html[data-theme="dark"] .bs-zoom button:hover { background: rgba(255, 255, 255, 
   box-shadow: none;
 }
 
-@media (max-width: 760px) {
-  /* پالت همیشه پایینِ بوم می‌ماند، مثل اپ؛ دیگر کشویی نیست */
-  .builder > aside:first-child {
-    position: static;
-    inset: auto;
-    transform: none;
-    visibility: visible;
-    z-index: auto;
-    order: 2;
-    flex: none;
-    max-height: 32svh;
-    overflow-y: auto;
-    padding: 8px 10px 10px;
-    border-radius: 16px;
-    box-shadow: none;
-    background: var(--cara-surface, #fff);
-  }
-
-  .builder > aside:first-child h2,
-  .builder > aside:first-child .current,
-  .builder > aside:first-child .sp-recent {
-    display: none;
-  }
-
-  .builder > aside:first-child .palette {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 7px;
-    max-height: none;
-    padding: 0;
-    overflow: visible;
-  }
-
-  .builder > aside:first-child .palette .swatch {
-    width: auto;
-    min-height: 42px;
-    border-radius: 12px;
-  }
-
-  /* راهنمای بالای بوم و پرده‌ی پالت روی گوشی لازم نیست */
-  .builder .bs-tip { display: none; }
-  .mb-scrim { display: none !important; }
-}
-
+.builder .bs-tip { display: none; }
 
 /* ================= چیدمان ثابتِ موبایل: بوم بالا، پالت پایین ================= */
 @media (max-width: 760px) {
@@ -508,64 +464,33 @@ html[data-theme="dark"] .bs-zoom button:hover { background: rgba(255, 255, 255, 
     flex: none;
   }
 
-  body.builder-page .builder > aside:first-child {
-    order: 2;
-    flex: 0 0 auto;
-    max-height: 30svh;
-  }
 
   body.builder-page .builder > .summary { display: none; }
 }
 
 
-@media (max-width: 760px) {
-  /* سرتیتر کشویی پالت لازم نیست؛ پالت همیشه باز است */
-  .builder-page .mb-hd { display: none !important; }
-
-  body.builder-page .builder > aside:first-child {
-    max-height: 27svh;
-    padding: 8px 10px;
-  }
-
-  body.builder-page .builder > aside:first-child .palette .swatch {
-    min-height: 38px;
-  }
-
-  /* نوار «متن / تبدیل‌ها / فایل» فشرده‌تر تا بوم جا باز کند */
-  body.builder-page .sp-dock {
-    padding: 4px 2px;
-    gap: 6px;
-  }
-
-  body.builder-page .sp-dock .sp-tab {
-    min-height: 38px;
-    padding: 0 10px;
-    font-size: 13px;
-  }
-}
-
-
-.builder > section.panel { position: relative; }
-
-
 /* نوار زوم بالای بوم (به‌جای شناور) تا روی منجوق‌ها نیفتد */
 @media (max-width: 760px) {
   body.builder-page .builder > section.panel > .head { order: 0; }
+  /* نوار زوم شناور بالای نوار ابزار؛ روی حاشیه‌ی سفید بوم می‌نشیند */
   body.builder-page .builder > section.panel > .bs-zoom {
-    position: static;
-    order: 1;
-    inset: auto;
+    position: absolute;
+    top: calc(var(--bs-head-h, 48px) + 16px);
+    bottom: auto;
+    inset-inline-start: 10px;
+    inset-inline-end: auto;
+    z-index: 6;
     display: flex;
     align-items: center;
     gap: 6px;
-    width: auto;
+    width: max-content;
+    height: auto;
     margin: 0;
-    padding: 0;
-    background: none;
-    border: 0;
-    box-shadow: none;
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.92);
+    border: 1px solid #e8e3f0;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(34, 26, 44, 0.1);
   }
 
   body.builder-page .builder > section.panel > .bs-zoom > button {
@@ -587,6 +512,6 @@ html[data-theme="dark"] .bs-zoom button:hover { background: rgba(255, 255, 255, 
     border-color: #ddd2f0;
   }
 
-  body.builder-page .builder > section.panel > .grid-wrap { order: 2; }
-  body.builder-page .builder > section.panel > .tools { order: 3; }
+  body.builder-page .builder > section.panel > .grid-wrap { order: 1; }
+  body.builder-page .builder > section.panel > .tools { order: 2; }
 }
