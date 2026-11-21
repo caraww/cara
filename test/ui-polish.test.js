@@ -20,11 +20,12 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     "customers.html",
   ]) {
     const html = read(file);
-    assert.ok(html.includes("/css/polish.css?v=7"), file + " should load polish.css");
-    const polishPath = "/css/polish.css?v=7";
+    const polishMatch = html.match(/\/css\/polish\.css\?v=\d+/);
+    assert.ok(polishMatch, file + " should load polish.css");
+    const polishPath = polishMatch[0];
     const sharedLayerIndex = html.indexOf(polishPath);
     const pageStyles = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+>/g)]
-      .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("hero-signature.css") && !tag.includes("cn-top.css") && !tag.includes("hero-wow.css") && !tag.includes("site-nav.css") && !tag.includes("nav-hero.css"))
+      .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("premium.css") && !tag.includes("hero-signature.css") && !tag.includes("cn-top.css") && !tag.includes("hero-wow.css") && !tag.includes("site-nav.css") && !tag.includes("nav-hero.css"))
       .map(([tag]) => html.indexOf(tag));
     assert.ok(
       sharedLayerIndex > Math.max(-1, ...pageStyles),
@@ -32,6 +33,9 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     );
     if (html.includes("/css/nav-hero.css?v=1")) {
       assert.ok(html.indexOf("/css/nav-hero.css?v=1") > sharedLayerIndex, file + " should load the current header/hero layer after polish.css");
+    }
+    if (html.includes("/css/premium.css?v=1")) {
+      assert.ok(html.indexOf("/css/premium.css?v=1") > sharedLayerIndex, file + " should load the final premium layer after polish.css");
     }
   }
 });
@@ -42,6 +46,7 @@ test("generated bracelet and color pages share the same navigation and visual sy
   assert.ok(layout.includes("/css/site-nav.css?v=20261113"));
   assert.ok(layout.includes("/css/bracelet-pages.css?v=1"));
   assert.ok(layout.includes("/css/polish.css?v=7"));
+  assert.ok(layout.includes("/css/premium.css?v=1"));
   assert.ok(layout.includes("/js/contact.js?v=20261112-release"));
   assert.ok(layout.includes("/js/mobile-nav.js?v=20261111-release"));
 });
