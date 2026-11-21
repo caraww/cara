@@ -30,6 +30,7 @@
   }
 
   function render(cart) {
+    try { localStorage.setItem("cara-cart-count", String(cart.totalItems || 0)); } catch {}
     const root = $("cartItems");
     const active = document.activeElement;
     const activeCard = active && root.contains(active) && typeof active.closest === "function"

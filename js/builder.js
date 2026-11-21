@@ -136,6 +136,17 @@ try {
   }
   if ($("recent")) $("recent").addEventListener("click", (e) => { const b = e.target.closest("[data-code]"); if (b) selectColor(b.dataset.code); });
 
+  /* Deep link from a bead color page: /builder.html?color=DB1832 */
+  const wanted = new URLSearchParams(location.search).get("color");
+  if (wanted && C.byCode(wanted)) {
+    selectColor(wanted);
+    const sw = pal.querySelector(`[data-code="${wanted.replace(/"/g, '\\"')}"]`);
+    if (sw) {
+      sw.scrollIntoView({ block: "center", behavior: "smooth" });
+      sw.focus({ preventScroll: true });
+    }
+  }
+
   /* ابزارها */
   function setTool(t) {
     tool = t; $("toolName").textContent = TOOL_NAME[t] || t;

@@ -63,6 +63,11 @@ try {
   dpHint.textContent = "با کیف پول یا اعتبار دیجی‌پی";
   dp.append(dpTitle, dpHint);
   actions.appendChild(dp);
+  /* Hide the wallet option when the Worker has no DigiPay credentials. */
+  fetch("/api/config", { cache: "no-store" })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((cfg) => { if (cfg && cfg.digipay === false) dp.remove(); })
+    .catch(() => {});
   pay.addEventListener("click", () => { window.CARA_GATEWAY = "zibal"; });
   dp.addEventListener("click", () => { window.CARA_GATEWAY = "digipay"; });
   const sync = () => { dp.disabled = pay.disabled; };
@@ -237,7 +242,7 @@ try {
           $("formCard").hidden = true;
           $("sumCard").hidden = true;
           try {
-            localStorage.removeItem("cara-pattern");
+            localStorage.removeItem("cara-pattern"); localStorage.removeItem("cara-cart-count");
             localStorage.removeItem("cara-discount");
           } catch {}
           burst();

@@ -866,7 +866,7 @@ export default {
       }
       if (p === "/api/config" && request.method === "GET") {
         const C = cfg(env);
-        return json({ pricePerBead: C.price, baseFee: C.base });
+        return json({ pricePerBead: C.price, baseFee: C.base, digipay: digipayConfigured(env) });
       }
       if (p === "/api/works" && request.method === "GET") return await worksInfo(env);
       if (p === "/api/work" && request.method === "GET") return await workInfo(env, url);

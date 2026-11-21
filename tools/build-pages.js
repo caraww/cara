@@ -136,9 +136,16 @@ for (const w of list) {
       ]),
     ],
   };
-  const body = `<div class="crumb"><a href="/">خانه</a> › <a href="/gallery.html">گالری</a> › ${esc(t)}</div>
+  const galleryImages = (w.images && w.images.length ? w.images : [w.src]).map((s) => abs(bare(s)));
+  const wristImage = galleryImages[1] || "";
+  const body = `<div class="crumb"><a href="/">خانه</a> › <a href="/category/beaded-bracelet.html">دستبند منجوقی</a> › <a href="/gallery.html">گالری</a> › ${esc(t)}</div>
 <h1>دستبند منجوقی ${esc(t)}</h1>
-<div class="pg-grid"><div class="pg-img"><img src="${esc(abs(w.src))}" alt="دستبند منجوقی ${esc(t)} دست‌باف"${w.w ? ` width="${w.w}" height="${w.h}"` : ""} fetchpriority="high">
+<div class="pg-grid"><div class="pg-img"><img id="pgMainImage" src="${esc(abs(w.src))}" alt="دستبند منجوقی ${esc(t)} دست‌باف"${w.w ? ` width="${w.w}" height="${w.h}"` : ""} fetchpriority="high">
+${
+  wristImage
+    ? `<div class="pg-view-toggle" role="group" aria-label="نوع پیش‌نمایش"><button type="button" class="is-on" data-pg-view="flat">تصویر دستبند</button><button type="button" data-pg-view="wrist">پیش‌نمایش روی مچ</button></div><p class="pg-view-note" id="pgViewNote" hidden>تصویر دوم این طرح، حالت روی مچ را نشان می‌دهد. رنگ واقعی روی مانیتورهای مختلف کمی فرق می‌کند.</p>`
+    : ""
+}
 ${
   w.images && w.images.length > 1
     ? `<div class="pg-thumbs">${w.images
@@ -154,17 +161,79 @@ ${
 ${(w.tags || []).length ? `<div class="tags">${w.tags.map((g) => `<span>${esc(g)}</span>`).join("")}</div>` : ""}
 ${
   orderable
-    ? `<div class="pg-price">${fa(price)} تومان</div><div class="btns"><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a><a class="btn" href="/upload.html?src=${encodeURIComponent(w.source || w.src)}">از روی این عکس الگو بساز</a><button class="btn" type="button" data-share-work data-share-title="دستبند منجوقی ${esc(t)} | کارا">اشتراک‌گذاری</button></div>`
+    ? `<div class="pg-price">${fa(price)} تومان</div><div class="btns"><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a><a class="btn" href="/builder.html">همین طرح با رنگ‌های خودم</a><a class="btn" href="/upload.html?src=${encodeURIComponent(w.source || w.src)}">از روی این عکس الگو بساز</a><button class="btn" type="button" data-share-work data-share-title="دستبند منجوقی ${esc(t)} | کارا">اشتراک‌گذاری</button></div>`
     : `<div class="btns"><a class="btn dark" href="/upload.html">عکس خودت رو به الگو تبدیل کن</a><a class="btn" href="/builder.html">طراحی دستی</a><button class="btn" type="button" data-share-work data-share-title="دستبند منجوقی ${esc(t)} | کارا">اشتراک‌گذاری</button></div>`
 }
-<p style="margin-top:16px;color:var(--muted);font-size:16px">دست‌باف با منجوق دلیکای میوکی ژاپنی. حداکثر تا یک هفته بعد از سفارش آماده و برات پست می‌شه. می‌تونی همین طرح رو توی <a href="/builder.html" style="text-decoration:underline">استودیو</a> عوض کنی یا طرح خودت رو بسازی.</p></div></div>
+<section class="trust-strip" aria-label="چرا خرید از کارا مطمئن است">
+  <div class="trust-strip__item"><b>دست‌باف</b><span>با منجوق دلیکای میوکی ژاپنی</span></div>
+  <div class="trust-strip__item"><b>آماده تا ۱ هفته</b><span>بافت و بسته‌بندی با دست</span></div>
+  <div class="trust-strip__item"><b>پرداخت امن</b><span>درگاه بانکی زیبال / دیجی‌پی</span></div>
+  <div class="trust-strip__item"><b>پیگیری سفارش</b><span><a href="/track.html">لینک اختصاصی</a></span></div>
+</section>
+<div class="pg-help"><a href="/size.html">سایز مچم رو نمی‌دونم</a><span>·</span><a href="https://wa.me/989352528201" target="_blank" rel="noopener">سفارش از طریق واتساپ</a><span>·</span><a href="https://instagram.com/_.caraw" target="_blank" rel="noopener">اینستاگرام</a></div>
+<p style="margin-top:16px;color:var(--muted);font-size:16px">دست‌باف با منجوق دلیکای میوکی ژاپنی. حداکثر تا یک هفته بعد از سفارش آماده و برات پست می‌شه. می‌تونی همین طرح رو توی <a href="/builder.html" style="text-decoration:underline">استودیو</a> عوض کنی یا طرح خودت رو بسازی. اگر دنبال یک شروع کم‌خطرتر هستی، <a href="/starter.html" style="text-decoration:underline">دستبندهای شروع</a> رو ببین.</p></div></div>
 <h2>دستبندهای دیگه</h2><div class="rel">${rel.map((x) => `<a href="${urlOf(x)}"><img src="${esc(abs(x.thumb || x.src))}" alt="دستبند منجوقی ${esc(titleOf(x))}" loading="lazy">${esc(titleOf(x))}</a>`).join("")}</div>
-<h2>نظر خریداران</h2><div class="reviews" data-reviews data-work="${esc(w.id)}"></div>`;
+<h2 id="reviews">نظر خریداران</h2><div class="reviews" data-reviews data-work="${esc(w.id)}"></div>`;
   write(
     `bracelet/${slug(w.id)}.html`,
     HEAD({ title, desc, path: urlOf(w), image: imgs[0], ld }) + body + FOOT,
   );
   urls.push(urlOf(w));
+}
+/* ---------- صفحه‌ی شروع کم‌خطر ---------- */
+const STARTER_MAX = 1200000;
+const starter = list
+  .filter((w) => !w.noOrder && Number(prices[String(w.id)]) > 0 && Number(prices[String(w.id)]) <= STARTER_MAX)
+  .sort((a, b) => Number(prices[String(a.id)]) - Number(prices[String(b.id)]));
+{
+  const title = "دستبند منجوقی شروع کم‌خطر | انتخاب ساده و قیمت واقعی | کارا";
+  const desc = "اگر اولین خریدت است، از دستبندهای ساده‌تر و کم‌هزینه‌تر کارا شروع کن. قیمت‌ها از گالری واقعی می‌آید و دستبند با منجوق دلیکای میوکی دست‌باف می‌شود.";
+  const starterLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        name: title,
+        description: desc,
+        url: SITE + "/starter.html",
+        inLanguage: "fa-IR",
+      },
+      {
+        "@type": "ItemList",
+        itemListElement: starter.map((w, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          url: SITE + urlOf(w),
+          name: `دستبند منجوقی ${titleOf(w)}`,
+        })),
+      },
+      crumbLd([["خانه", "/"], ["شروع کم‌خطر", "/starter.html"]]),
+    ],
+  };
+  const cards = starter.length
+    ? starter.map((w) => {
+        const price = Number(prices[String(w.id)]);
+        return `<a class="starter-card" href="${urlOf(w)}"><img src="${esc(abs(w.thumb || w.src))}" alt="دستبند منجوقی ${esc(titleOf(w))}" loading="lazy"><b>${esc(titleOf(w))}</b><span>${fa(price)} تومان</span><small>${esc((w.note || "").slice(0, 80))}</small></a>`;
+      }).join("")
+    : `<p class="cp__note">فعلاً دستبند آماده‌ای زیر سقف قیمت شروع نداریم. می‌توانی در استودیو یک طرح ساده بسازی و قیمت را همان‌جا ببینی.</p>`;
+  const body = `<div class="crumb"><a href="/">خانه</a> › <a href="/gallery.html">گالری</a> › شروع کم‌خطر</div>
+<h1>اولین دستبندت را با ریسک کم شروع کن</h1>
+<p class="cp__lead">اگر هنوز مطمئن نیستی دستبند منجوقی برایت مناسب است یا نه، لازم نیست با یک سفارش بزرگ شروع کنی. این صفحه طرح‌های ساده‌تر و کم‌هزینه‌تر کارا را نشان می‌دهد؛ همان دستبندهای واقعی گالری، با قیمت واقعی و بدون عددسازی.</p>
+<div class="starter-grid">${cards}</div>
+<h2>چرا شروع کم‌خطر مهم است؟</h2>
+<p>خرید اول همیشه یک ریسک احساسی دارد: نکند رنگش آن‌طور نباشد که در عکس دیدم، نکند اندازه‌اش به مچم نخورد، نکند کیفیت بافت آن‌قدری نباشد که انتظار داشتم. برای همین، شروع با یک طرح ساده‌تر منطقی است. هم هزینه‌ی اولیه کمتر می‌شود، هم می‌توانی بافت، رنگ و فیت را در عمل امتحان کنی و بعد سراغ طرح‌های بزرگ‌تر بروی.</p>
+<p>همه‌ی این دستبندها با همان منجوق دلیکای میوکی ژاپنی بافته می‌شوند که در بقیه‌ی گالری استفاده می‌شود. تفاوت در پیچیدگی طرح و تعداد منجوق است، نه در جنس مواد. اگر بعد از خرید اول خواستی طرح بزرگ‌تری سفارش بدهی، می‌توانی همان رنگ‌های موردعلاقه‌ات را در استودیو نگه داری.</p>
+<h2>اگر سایز مچم را ندانم چه می‌شود؟</h2>
+<p>قبل از سفارش، <a href="/size.html">راهنمای اندازه‌ی مچ</a> را ببین. با یک متر خیاطی یا نوار کاغذی، دور مچ را اندازه بگیر و عدد را برای ما بنویس. دستبندهای کارا با گره قابل تنظیم هستند، اما دانستن دور مچ کمک می‌کند طول مناسب‌تری انتخاب شود. اگر بین دو اندازه بودی، اندازه‌ی بزرگ‌تر را انتخاب کن.</p>
+<h2>سفارش با رنگ‌های خودم</h2>
+<p>هیچ‌کدام از این طرح‌ها را دوست نداشتی؟ در <a href="/builder.html">استودیوی طراحی</a> می‌توانی یک طرح ساده بسازی و رنگ‌ها را خودت انتخاب کنی. قیمت هم بر اساس تعداد منجوق و هزینه‌ی بافت همان‌جا حساب می‌شود. اگر ترجیح می‌دهی قبل از پرداخت آنلاین با من حرف بزنی، از <a href="https://wa.me/989352528201" target="_blank" rel="noopener">واتساپ</a> یا <a href="https://instagram.com/_.caraw" target="_blank" rel="noopener">اینستاگرام</a> پیام بده.</p>
+<div class="cp__note"><p><b>یک نکته‌ی صادقانه:</b> این صفحه فقط طرح‌هایی را نشان می‌دهد که قیمتشان از قبل در گالری ثبت شده است. اگر طرحی قیمت نداشته باشد، اینجا نمایش داده نمی‌شود؛ چون قیمت‌سازی حدسی به نفع هیچ‌کدام از ما نیست.</p></div>`;
+  write(
+    "starter.html",
+    HEAD({ title, desc, path: "/starter.html", ld: starterLd }) + body + FOOT,
+  );
+  urls.push("/starter.html");
+  console.log(`✓ صفحه‌ی شروع کم‌خطر (${starter.length} طرح)`);
 }
 /* ---------- JSON-LD گالری: همیشه از داده و قیمت‌گذاری مشترک ساخته می‌شود ---------- */
 const galleryLd = {
@@ -264,10 +333,10 @@ for (const p of PAL) {
     : "";
   const body = `<div class="crumb"><a href="/">خانه</a> › <a href="/colors/">رنگ منجوق‌ها</a> › ${esc(p.name)}</div>
 <h1>منجوق دلیکا میوکی <span dir="ltr">${p.code}</span> · ${esc(p.name)}</h1>
-<div class="pg-grid"><div><div class="pg-sw" style="background:${p.hex}"></div>${photo}</div>
+<div class="pg-grid"><div><a class="pg-sw" href="/builder.html?color=${encodeURIComponent(p.code)}" style="background:${p.hex}" aria-label="امتحان کردن رنگ ${esc(p.name)} در استودیو"></a>${photo}</div>
 <div><p>این رنگ توی ${fa(PAL.length)} رنگ منجوق‌های دلیکای میوکی cara، با کد <b dir="ltr">${p.code}</b> و اسم «${esc(p.name)}» ثبت شده. رنگ ظاهری‌اش ${tone(p.hex)} و کد رنگ تقریبی‌اش <b dir="ltr">${p.hex}</b> ـه (رنگ واقعی روی مانیتورهای مختلف کمی فرق می‌کنه).</p>
 <p>می‌تونی همین رنگ رو توی استودیوی طراحی دستبند برداری و خونه‌به‌خونه الگوت رو بچینی؛ تعداد منجوق هر رنگ و قیمت هم همون موقع حساب می‌شه.</p>
-<div class="btns"><a class="btn dark" href="/builder.html">طراحی دستبند با این رنگ</a><a class="btn" href="/upload.html">تبدیل عکس به الگو</a></div></div></div>
+<div class="btns"><a class="btn dark" href="/builder.html?color=${encodeURIComponent(p.code)}">طراحی دستبند با این رنگ</a><a class="btn" href="/upload.html">تبدیل عکس به الگو</a></div></div></div>
 <h2>رنگ‌های نزدیک</h2><div class="rel">${near.map(swatchCard).join("")}</div>`;
   write(
     `colors/${p.code}.html`,
@@ -337,7 +406,7 @@ inject(
 );
 inject(
   "index.html",
-  `${css}<details class="seo-links"><summary>همه‌ی دستبندها و رنگ‌ها</summary><nav aria-label="لینک‌های مفید"><h2>دستبندها</h2>${wl}<h2>رنگ منجوق‌ها (<a href="/colors/">همه</a>)</h2>${cl}<h2>بیشتر</h2><a href="/name-bracelet.html">دستبند منجوقی اسم</a><a href="/upload.html">تبدیل عکس به الگوی منجوق‌کاری</a><a href="/game.html">بازی و کد تخفیف</a></nav></details>`,
+  `${css}<nav class="seo-links" aria-label="لینک‌های مفید"><h2>دستبندها</h2><a href="/gallery.html">همه‌ی دستبندهای منجوقی</a><a href="/starter.html">شروع کم‌خطر</a><a href="/name-bracelet.html">دستبند منجوقی اسم</a><h2>راهنما</h2><a href="/size.html">اندازه‌ی مچ</a><a href="/faq.html">سوال‌های پرتکرار</a><a href="/about.html">درباره کارا</a><a href="/blog/">دفتر کارا</a><h2>رنگ‌ها</h2><a href="/colors/">همه‌ی رنگ‌های دلیکای میوکی</a></nav>`,
 );
 for (const f of [
   "builder.html",
@@ -350,7 +419,9 @@ for (const f of [
 console.log("✓ لینک‌های داخلی و contact.js گذاشته شد");
 
 /* ---------- صفحات ثابت وبلاگ ---------- */
-urls.push("/blog/", "/blog/wrist-size.html", "/blog/color-meanings.html", "/blog/miyuki-delica.html", "/blog/bracelet-care.html");
+urls.push("/blog/", "/blog/wrist-size.html", "/blog/color-meanings.html", "/blog/miyuki-delica.html", "/blog/bracelet-care.html", "/blog/miyuki-vs-chinese.html", "/blog/gift-ideas.html", "/blog/free-patterns.html", "/blog/bead-size-guide.html", "/blog/order-guide.html", "/blog/bracelet-styles.html");
+urls.push("/about.html", "/faq.html", "/quiz.html");
+urls.push("/category/", "/category/beaded-bracelet.html", "/category/name-bracelet.html", "/category/gift-birthday.html", "/category/gift-valentine.html", "/category/gift-anniversary.html");
 
 /* ---------- sitemap و robots ---------- */
 const prio = (u) =>

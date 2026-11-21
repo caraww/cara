@@ -105,7 +105,8 @@ test("PWA shortcuts, RSS feed, and crawl directives cover the new surfaces", () 
   assert.ok(manifest.shortcuts.some((item) => item.url.startsWith("/track.html")));
   const feed = read("feed.xml");
   assert.match(feed, /<rss version="2.0"/);
-  assert.equal((feed.match(/<item>/g) || []).length, 4);
+  assert.equal((feed.match(/<item>/g) || []).length, 10);
+  assert.match(feed, /blog\/order-guide\.html/);
   assert.match(read("blog/index.html"), /href="\/feed\.xml"/);
   const robots = read("robots.txt");
   assert.match(robots, /Disallow: \/track\.html/);

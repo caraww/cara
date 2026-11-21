@@ -1,0 +1,27 @@
+/* order-message.css — low-friction "order via message" option on checkout. */
+.order-message {
+  display: grid;
+  gap: 12px;
+  margin: 0 0 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(184, 151, 90, .28);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .72);
+}
+.order-message b { color: #2d2440; font-size: 16px; }
+.order-message p { margin: 4px 0 0; color: #6c6478; font-size: 14px; line-height: 1.9; }
+.order-message__links { display: flex; flex-wrap: wrap; gap: 8px; }
+.order-message__links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: 1px solid rgba(184, 151, 90, .45);
+  border-radius: 999px;
+  color: #4a3a20;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.order-message__links a:first-child { background: #343b64; border-color: #343b64; color: #fff; }

@@ -92,7 +92,7 @@
     const list = Array.isArray(data.reviews) ? data.reviews : [];
     const head = summary.count
       ? `<div class="review-summary"><b>${summary.average.toLocaleString("fa-IR", { maximumFractionDigits: 1 })}</b><span class="review-stars" aria-hidden="true">${stars(Math.round(summary.average))}</span><small>${fa(summary.count)} نظر تأییدشده</small></div>`
-      : '<p class="review-empty">هنوز نظری برای این دستبند ثبت نشده. اولین خریدار باش!</p>';
+      : '<p class="review-empty">هنوز نظری برای این دستبند ثبت نشده. <a href="/gallery.html">اولین خریدار باش!</a></p>';
     const items = list.map((review) => `
       <article class="review-item">
         <div class="review-top"><b>${esc(review.author)}</b><span class="review-stars" aria-label="امتیاز ${fa(review.rating)} از ۵">${stars(review.rating)}</span></div>

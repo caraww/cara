@@ -9,8 +9,11 @@
     "build:beads": "node tools/build-beads.js",
     "build:works": "node -e \"process.env.CARA_REQUIRE_SHARP='1'; require('./tools/build-works.js')\"",
     "build:pages": "node tools/build-pages.js",
-    "build": "npm run build:beads && npm run build:works && npm run build:pages",
-    "check:palette": "node tools/sync-valid.js index.js --check"
+    "build": "npm run build:beads && npm run build:works && npm run build:categories && npm run build:blog && npm run build:pages && npm run check:seo",
+    "check:palette": "node tools/sync-valid.js index.js --check",
+    "build:categories": "node tools/build-categories.js",
+    "build:blog": "node tools/build-blog-extra.js",
+    "check:seo": "node tools/seo-audit.js"
   },
   "engines": {
     "node": ">=18"

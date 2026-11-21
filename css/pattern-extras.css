@@ -30,7 +30,7 @@
     color: #111;
     font-family: Vazirmatn, Tahoma, sans-serif;
   }
-  .print-sheet h1 {
+  .print-sheet h1, .print-sheet .print-title {
     font-size: 20pt;
     margin: 0 0 4mm;
   }

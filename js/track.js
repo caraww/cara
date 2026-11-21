@@ -44,6 +44,18 @@
     else if (order.fulfillment === "shipped") note.textContent = "سفارشت تحویل پست شده. با کد رهگیری می‌توانی وضعیت مرسوله را از سایت پست بگیری.";
     else if (order.fulfillment === "weaving") note.textContent = "سفارشت در حال بافت است؛ حداکثر تا یک هفته آماده و ارسال می‌شود.";
     else note.textContent = "سفارشت ثبت شده و به‌زودی وارد مرحله‌ی بافت می‌شود.";
+    const oldReview = document.getElementById("trackReview");
+    if (oldReview) oldReview.remove();
+    if (order.fulfillment === "shipped") {
+      const slug = String(order.workId || "").trim().replace(/[\s\u200c]+/g, "-").replace(/[\/\\?#%.]+/g, "");
+      const box = document.createElement("p");
+      box.id = "trackReview";
+      box.className = "track-review";
+      box.innerHTML = slug
+        ? `دستبندت رسیده؟ <a href="/bracelet/${encodeURIComponent(slug)}.html#reviews">نظرت را ثبت کن</a> تا بقیه با خیال راحت‌تری انتخاب کنند.`
+        : `دستبندت رسیده؟ از <a href="/account.html">حساب کاربری</a> سفارش‌هایت را ببین و نظرت را ثبت کن.`;
+      $("trackNote").after(box);
+    }
   }
 
   async function load(token) {
