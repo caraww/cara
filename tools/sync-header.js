@@ -32,7 +32,7 @@ function header(current) {
   }).join("\n");
   return [
     '<header class="top solid">',
-    '  <a href="/" class="logo" aria-label="cara — صفحه‌ی اصلی"><img src="/img/cara-logo.png?v=2" alt="cara" style="height:44px;width:auto;display:block"></a>',
+    '  <a href="/" class="logo" aria-label="cara — صفحه‌ی اصلی"><img src="/img/cara-logo.webp?v=1" alt="cara" style="height:44px;width:auto;display:block"></a>',
     '  <nav aria-label="منوی اصلی">',
     links,
     "  </nav>",

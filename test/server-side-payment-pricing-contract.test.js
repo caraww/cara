@@ -5,7 +5,7 @@ const path = require("node:path");
 
 const root = path.join(__dirname, "..");
 const worker = fs.readFileSync(path.join(root, "index.js"), "utf8");
-const start = worker.indexOf("async function createPayment(request, env) {");
+const start = worker.search(/async function createPayment\(request, env(?:, ctx)?\) \{/);
 const end = worker.indexOf("/* تأیید پرداخت با زیبال.", start);
 assert.ok(start >= 0 && end > start, "Worker createPayment boundary must remain identifiable");
 const createPayment = worker.slice(start, end);

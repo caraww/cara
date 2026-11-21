@@ -49,6 +49,6 @@ test("primary Persian font is preloaded on all main customer pages", () => {
   for (const page of ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html"]) {
     const html = fs.readFileSync(path.join(__dirname, "..", page), "utf8");
     assert.match(html, /<link\b(?=[^>]*\brel="preload")(?=[^>]*\bas="font")(?=[^>]*\bhref="\/fonts\/vazirmatn-arabic-400\.woff2")[^>]*>/s, page + " font preload");
-    assert.match(html, /href="\/?css\/fonts\.css"/, page + " local font stylesheet");
+    assert.match(html, /href="\/?css\/fonts\.css(?:\?[^"]*)?"/, page + " local font stylesheet");
   }
 });

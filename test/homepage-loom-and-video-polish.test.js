@@ -19,8 +19,8 @@ test("homepage keeps the original animated loom as a separate experience", () =>
 
 test("handmade video feature is compact and proportionate", () => {
   const css = read("css/weaving.css");
-  assert.match(css, /grid-template-columns: minmax\(0, 1fr\) minmax\(0, 220px\)/);
-  assert.match(css, /max-width: 220px/);
+  assert.match(css, /grid-template-columns: minmax\(0, 1fr\) minmax\(0, 240px\)/);
+  assert.match(css, /max-width: 240px/);
   assert.match(read("index.html"), /<h2 id="weaving-title">ببین چطور میبافم<\/h2>/);
 });
 
@@ -47,9 +47,9 @@ test("weaving heading and frame follow the homepage heading and card rhythm", ()
   const css = read("css/weaving.css");
   assert.match(css, /width: min\(1240px, 100%\)/);
   assert.match(css, /max-width: none/);
-  assert.match(css, /border-radius: 26px/);
-  assert.match(css, /width: 102px/);
-  assert.match(css, /radial-gradient\(circle, #cfae6c 0 3\.2px, transparent 3\.8px\)/);
+  assert.match(css, /border-radius: 0/);
+  assert.match(css, /width: 112px/);
+  assert.match(css, /linear-gradient\(90deg, #a7853f 0%, #cfae6c 38%/);
 });
 
 

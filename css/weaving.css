@@ -10,6 +10,7 @@
   align-items: center;
   gap: clamp(28px, 5vw, 64px);
   width: 100%;
+  max-width: none;
   margin: 0;
   padding: 0;
   color: var(--ink, #343b64);

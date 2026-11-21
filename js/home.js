@@ -127,12 +127,13 @@ try {
     }
 
     /* هیرو: زمین مهره؛ با اسکرول، مهره‌ها از وسط به دو طرف کنار می‌روند */
-    const cv = document.getElementById("heroCanvas"),
-      g = cv.getContext("2d"),
-      hero = cv.parentElement;
-    /* افزایش وضوح بافت منجوق‌ها؛ تغییر قبلی زیر لایه‌های هیرو خیلی کم‌رنگ دیده می‌شد. */
-    cv.style.opacity = "0.82";
+    const cv = document.getElementById("heroCanvas");
     const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (cv) {
+      const g = cv.getContext("2d"),
+        hero = cv.parentElement;
+      /* افزایش وضوح بافت منجوق‌ها؛ تغییر قبلی زیر لایه‌های هیرو خیلی کم‌رنگ دیده می‌شد. */
+      cv.style.opacity = "0.82";
     /* پالت آرام و تک‌رنگ: طیف بنفش‌های خاکستری و فقط یک مهره‌ی طلایی در مرکز هر لوزی */
     const SET = [
         "#E7D9F7",
@@ -334,14 +335,37 @@ try {
     });
     size();
 
+    /* نشانگر روی هیرو */
+    let pq = false;
+    hero.addEventListener("pointermove", (e) => {
+      if (reduce || !heroVisible) return;
+      const r = hero.getBoundingClientRect();
+      mx = e.clientX - r.left;
+      my = e.clientY - r.top;
+      if (!pq) {
+        pq = true;
+        requestAnimationFrame(() => {
+          draw();
+          pq = false;
+        });
+      }
+    });
+    hero.addEventListener("pointerleave", () => {
+      mx = -1;
+      draw();
+    });
+    }
+
     /* نخ مهره‌ای بالای صفحه = میزان اسکرول */
     const bar = document.getElementById("threadBar");
-    const prog = () => {
-      const m = document.documentElement.scrollHeight - innerHeight;
-      bar.style.setProperty("--p", (m > 0 ? (scrollY / m) * 100 : 0) + "%");
-    };
-    addEventListener("scroll", prog, { passive: true });
-    prog();
+    if (bar) {
+      const prog = () => {
+        const m = document.documentElement.scrollHeight - innerHeight;
+        bar.style.setProperty("--p", (m > 0 ? (scrollY / m) * 100 : 0) + "%");
+      };
+      addEventListener("scroll", prog, { passive: true });
+      prog();
+    }
 
     /* ورود نرم بخش‌ها هنگام اسکرول */
     if (!reduce && "IntersectionObserver" in window) {
@@ -365,26 +389,6 @@ try {
           io.observe(el);
         });
     }
-
-    /* نشانگر روی هیرو */
-    let pq = false;
-    hero.addEventListener("pointermove", (e) => {
-      if (reduce || !heroVisible) return;
-      const r = hero.getBoundingClientRect();
-      mx = e.clientX - r.left;
-      my = e.clientY - r.top;
-      if (!pq) {
-        pq = true;
-        requestAnimationFrame(() => {
-          draw();
-          pq = false;
-        });
-      }
-    });
-    hero.addEventListener("pointerleave", () => {
-      mx = -1;
-      draw();
-    });
 
     /* کلیک روی هر رنگ = کپی کد */
     const toast = document.createElement("div");

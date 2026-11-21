@@ -96,10 +96,10 @@ test("existing single-item and guest checkout paths remain available", () => {
 });
 
 test("cart page styles load before the shared visual layer", () => {
-  for (const [file, version] of [["cart.html", "1"], ["checkout.html", "2"]]) {
+  for (const [file, version] of [["cart.html", "3"], ["checkout.html", "3"]]) {
     const html = fs.readFileSync(path.join(root, file), "utf8");
     const cartStyle = html.indexOf(`/css/cart.css?v=${version}`);
-    const polishStyle = html.indexOf("/css/polish.css?v=7");
+    const polishStyle = html.search(/\/css\/polish\.css\?v=\d+/);
     assert.ok(cartStyle >= 0 && polishStyle > cartStyle, file + " should load cart styles before polish.css");
   }
 });

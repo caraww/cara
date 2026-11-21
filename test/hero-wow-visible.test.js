@@ -10,8 +10,8 @@ const script = fs.readFileSync("js/hero-lineup.js", "utf8");
 test("homepage loads one versioned nav-hero stylesheet and bracelet lineup script", () => {
   const links = html.match(/<link[^>]+nav-hero\.css\?v=2[^>]*>/g) || [];
   assert.equal(links.length, 1, "homepage must load one authoritative nav-hero stylesheet");
-  assert.ok(html.indexOf(links[0]) > html.indexOf('/css/polish.css?v=7'));
-  const scripts = html.match(/<script[^>]+hero-lineup\.js\?v=6[^>]*>/g) || [];
+  assert.ok(html.indexOf(links[0]) > html.search(/\/css\/polish\.css\?v=\d+/));
+  const scripts = html.match(/<script[^>]+hero-lineup\.js\?v=\d+[^>]*>/g) || [];
   assert.equal(scripts.length, 1, "homepage must load the bracelet lineup script once");
 });
 

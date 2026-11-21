@@ -30,7 +30,7 @@ test("current hero exposes three named bracelet canvases and keyboard controls",
   const braceletCanvases = [...hero.matchAll(/<canvas\b[^>]*>/gs)]
     .filter(([tag]) => tag.includes('class="cara-bracelet-card__art"'));
   assert.equal(braceletCanvases.length, 3);
-  for (const id of ["thousand-eyes", "waterfall", "duck"]) {
+  for (const id of ["thousand-eyes", "waterfall", "chain"]) {
     assert.match(hero, new RegExp('data-bracelet="' + id + '"'));
   }
   assert.match(hero, /aria-label="دستبند قبلی"/);
