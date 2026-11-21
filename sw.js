@@ -1,4 +1,4 @@
-const CACHE_NAME = "cara-pwa-v9";
+const CACHE_NAME = "cara-pwa-v10";
 const CORE_ASSETS = [
   "/",
   "/offline.html",
@@ -8,9 +8,8 @@ const CORE_ASSETS = [
   "/css/fonts.css",
   "/css/offline.css",
   "/js/offline.js",
-  "/fonts/vazirmatn-arabic-400.woff2",
-  "/fonts/vazirmatn-arabic-700.woff2",
-  "/fonts/vazirmatn-arabic-900.woff2"
+  "/fonts/estedad-arabic.woff2",
+  "/fonts/estedad-latin.woff2"
 ];
 
 self.addEventListener("install", (event) => {

@@ -63,7 +63,7 @@ const write = (rel, txt) => {
 /* اگه tools/self-host-fonts.js اجرا شده باشه فونت از خود سایت لود می‌شه */
 const FONT = fs.existsSync(path.join(ROOT, "css/fonts.css"))
   ? '<link rel="stylesheet" href="/css/fonts.css">'
-  : '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap">';
+  : '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Estedad:wght@400;500;600;700;800;900&display=swap">';
 const { HEAD, FOOT } = require(path.join(ROOT, "lib/generated-page-layout.js"))(
   { SITE, FONT, esc },
 );

@@ -5,7 +5,7 @@ const os = require("node:os");
 const path = require("node:path");
 const { selfHostFonts } = require("../tools/self-host-fonts.js");
 
-const css = "/* latin */ @font-face { font-family: Vazirmatn; font-style: normal; font-weight: 400; src: url(https://fonts.example/font.woff2) format('woff2'); }";
+const css = "/* latin */ @font-face { font-family: Estedad; font-style: normal; font-weight: 400; src: url(https://fonts.example/font.woff2) format('woff2'); }";
 const ok = (body) => ({
   ok: true, status: 200,
   text: async () => body,
@@ -37,8 +37,8 @@ test("writes verified font files and rewrites Google Fonts links only after all 
     let calls = 0;
     const result = await selfHostFonts({ root, fetchImpl: async () => (++calls === 1 ? ok(css) : ok(font)) });
     assert.deepEqual(result, { fontFiles: 1, pages: 1 });
-    assert.equal(fs.readFileSync(path.join(root, "fonts/vazirmatn-latin-400.woff2")).subarray(0, 4).toString(), "wOF2");
-    assert.match(fs.readFileSync(path.join(root, "css/fonts.css"), "utf8"), /\/fonts\/vazirmatn-latin-400.woff2/);
+    assert.equal(fs.readFileSync(path.join(root, "fonts/estedad-latin.woff2")).subarray(0, 4).toString(), "wOF2");
+    assert.match(fs.readFileSync(path.join(root, "css/fonts.css"), "utf8"), /\/fonts\/estedad-latin.woff2/);
     const updated = fs.readFileSync(path.join(root, "index.html"), "utf8");
     assert.match(updated, /\/css\/fonts.css/);
     assert.doesNotMatch(updated, /fonts\.(googleapis|gstatic)\.com/);
@@ -48,7 +48,7 @@ test("writes verified font files and rewrites Google Fonts links only after all 
 test("primary Persian font is preloaded on all main customer pages", () => {
   for (const page of ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html"]) {
     const html = fs.readFileSync(path.join(__dirname, "..", page), "utf8");
-    assert.match(html, /<link\b(?=[^>]*\brel="preload")(?=[^>]*\bas="font")(?=[^>]*\bhref="\/fonts\/vazirmatn-arabic-400\.woff2")[^>]*>/s, page + " font preload");
+    assert.match(html, /<link\b(?=[^>]*\brel="preload")(?=[^>]*\bas="font")(?=[^>]*\bhref="\/fonts\/estedad-arabic\.woff2")[^>]*>/s, page + " font preload");
     assert.match(html, /href="\/?css\/fonts\.css(?:\?[^"]*)?"/, page + " local font stylesheet");
   }
 });

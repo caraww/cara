@@ -1,8 +1,7 @@
-@font-face{font-family:Vazirmatn;src:url('/fonts/vazirmatn-arabic-400.woff2') format('woff2');font-weight:400;font-display:swap}
 :root{--ink:#343b64;--muted:#77758a;--paper:#fbf8f4;--line:#e9e2dc;--peach:#edb7a4;--plum:#8d718f;--sage:#aab7a1;--butter:#e8d79e}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:24px}
-body{margin:0;background:var(--paper);color:var(--ink);font-family:Vazirmatn, sans-serif;line-height:1.8}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:"Estedad", Tahoma, system-ui, sans-serif;line-height:1.8}
 button,a{font:inherit}
 a{color:inherit}
 .blog-feed{width:min(1160px,100%);margin:auto;padding:26px 34px 34px}

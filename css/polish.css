@@ -17,7 +17,7 @@
   --cara-shadow-card: 0 20px 55px rgba(38, 23, 50, .09);
 }
 html { scroll-padding-top: 92px; }
-body { font-family: "Vazirmatn", Tahoma, system-ui, sans-serif; text-rendering: optimizeLegibility; }
+body { font-family: "Estedad", Tahoma, system-ui, sans-serif; text-rendering: optimizeLegibility; }
 button, input, select, textarea { font-family: inherit; }
 a, button { -webkit-tap-highlight-color: transparent; }
 ::selection { background: rgba(196,164,106,.28); color: var(--cara-ink); }

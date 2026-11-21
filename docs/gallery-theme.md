@@ -36,7 +36,7 @@ Generated bracelet/color pages load the shared `polish.css?v=3` from `lib/genera
 
 - No changes to checkout, order creation, payment, pricing, Worker logic, gateway, or secrets.
 - No changes to `js/palette.js`; all 33 physical bead colors remain the source of truth.
-- Existing Vazirmatn fonts and RTL/Persian copy are retained.
+- Persian copy stays RTL; the UI font is Estedad (SIL OFL 1.1, self-hosted variable WOFF2).
 - Reduced-motion preferences and visible keyboard focus remain supported.
 - This is a stylesheet-only visual layer plus stylesheet wiring; no new dependencies.
 - Browser screenshots/interactive visual audit were not available in the working environment, so responsive visual verification remains a follow-up before production release.
