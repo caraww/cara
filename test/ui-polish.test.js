@@ -44,11 +44,12 @@ test("generated bracelet and color pages share the same navigation and visual sy
   const layout = read("lib/generated-page-layout.js");
   assert.ok(layout.includes("/css/accessibility.css"));
   assert.ok(layout.includes("/css/site-nav.css?v=20261113"));
-  assert.ok(layout.includes("/css/bracelet-pages.css?v=1"));
+  assert.ok(layout.includes("/css/bracelet-pages.css?v=2"));
   assert.ok(layout.includes("/css/polish.css?v=7"));
   assert.ok(layout.includes("/css/premium.css?v=1"));
   assert.ok(layout.includes("/js/contact.js?v=20261112-release"));
-  assert.ok(layout.includes("/js/mobile-nav.js?v=20261111-release"));
+  assert.ok(layout.includes("/css/nav-hero.css?v=1"));
+  assert.ok(layout.includes("/js/nav-hero.js?v=1"));
 });
 
 test("navigation places account first and the designer CTA at the opposite edge", () => {
