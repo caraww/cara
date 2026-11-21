@@ -15,7 +15,7 @@ test("public HTML pages contain no unsupported messaging links", () => {
   const files = walk(root).filter((file) => file.endsWith(".html"));
   const offenders = files.flatMap((file) => {
     const source = fs.readFileSync(file, "utf8");
-    return /wa\\.me|whats.?app|واتساپ/i.test(source) ? [path.relative(root, file)] : [];
+    return /wa\.me|whats.?app|واتساپ/i.test(source) ? [path.relative(root, file)] : [];
   });
   assert.deepEqual(offenders, [], "remove unsupported messaging links from every public page");
 });
@@ -29,11 +29,11 @@ test("shared page generators and floating contact offer Instagram and phone only
     "tools/build-blog-extra.js",
     "js/contact.js",
   ]) {
-    assert.doesNotMatch(read(file), /wa\\.me|whats.?app|واتساپ/i, file);
+    assert.doesNotMatch(read(file), /wa\.me|whats.?app|واتساپ/i, file);
   }
   const footer = read("lib/site-footer.js");
-  assert.match(footer, /instagram\\.com\\/\\_\\.caraw/);
-  assert.match(footer, /tel:\\+989352528201/);
+  assert.match(footer, /instagram\.com\/\_\.caraw/);
+  assert.match(footer, /tel:\+989352528201/);
 });
 
 test("bracelet matcher respects the budget ranges shown to visitors", () => {
@@ -41,14 +41,14 @@ test("bracelet matcher respects the budget ranges shown to visitors", () => {
   const js = read("js/quiz.js");
   assert.match(html, /تا ۸۰۰ هزار تومان/);
   assert.match(html, /تا ۱٫۵ میلیون تومان/);
-  assert.match(js, /answers\\.budget === "low" \\? 800000 : answers\\.budget === "mid" \\? 1500000 : Infinity/);
+  assert.match(js, /answers\.budget === "low" \? 800000 : answers\.budget === "mid" \? 1500000 : Infinity/);
 });
 
 test("quiz and content-page buttons share consistent shape, states, and focus treatment", () => {
   const css = read("css/premium.css");
-  assert.match(css, /\\.quiz__btn[\\s\\S]*?border-radius: 999px/);
-  assert.match(css, /\\.quiz__btn--primary/);
-  assert.match(css, /\\.quiz__btn:disabled/);
-  assert.match(css, /:where\\(a, button, input, select, textarea, summary, \\[tabindex\\]\\):focus-visible/);
-  assert.match(css, /\\.quiz__opt\\[aria-pressed="true"\\]/);
+  assert.match(css, /\.quiz__btn[\s\S]*?border-radius: 999px/);
+  assert.match(css, /\.quiz__btn--primary/);
+  assert.match(css, /\.quiz__btn:disabled/);
+  assert.match(css, /:where\(a, button, input, select, textarea, summary, \[tabindex\]\):focus-visible/);
+  assert.match(css, /\.quiz__opt\[aria-pressed="true"\]/);
 });
