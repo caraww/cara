@@ -177,10 +177,18 @@
       const r = canvas.getBoundingClientRect();
       if (!r.width || !r.height) return;
       const ratio = Math.min(availW / r.width, avail / r.height);
-      if (Math.abs(ratio - 1) < 0.015) return;
+      if (Math.abs(ratio - 1) < 0.015) break;
       const next = clamp((Number(zoomIn.value) || 100) * ratio, 20, 250);
-      if (Math.abs(next - Number(zoomIn.value)) < 1) return;
+      if (Math.abs(next - Number(zoomIn.value)) < 1) break;
       setZoomTo(next);
+    }
+    /* خانه‌ها گِرد می‌شوند؛ اگر بوم چند پیکسل از کادر زد بیرون، یک پله عقب برمی‌گردیم */
+    for (let i = 0; i < 4; i++) {
+      const r = canvas.getBoundingClientRect();
+      if (r.width <= wrap.clientWidth - 8 && r.height <= wrap.clientHeight - 8) return;
+      const z = Number(zoomIn.value) || 100;
+      if (z <= 20) return;
+      setZoomTo(z - 5);
     }
   }
 
