@@ -131,7 +131,7 @@
     color: var(--nh-ink);
     box-shadow: 0 20px 54px rgba(27, 29, 52, .18);
   }
-  .sh.is-open .sh__nav { display: flex; animation: nh-menu .16s ease-out both; }
+  .sh.is-open .sh__nav { display: flex; z-index: 90; animation: nh-menu .16s ease-out both; }
   .sh__nav a { display: flex; align-items: center; min-height: 44px; padding: 10px 13px; border-radius: 12px; opacity: 1; }
   .sh__nav a::after { content: none; }
   .sh__nav a:hover { background: var(--cara-accent-soft, #eeeef5); }
