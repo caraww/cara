@@ -170,7 +170,7 @@ try {
     /* خط راهنما هر ۵ خونه (پررنگ‌تر هر ۱۰) تا شمردن راحت باشه */
     for (let c = 5; c < w; c += 5) { g.fillStyle = c % 10 ? "#A99BC0" : "#7E6A9C"; g.fillRect(ox + c * cw, oy, 1, h * ch + 1); }
     for (let r = 5; r < h; r += 5) { g.fillStyle = r % 10 ? "#A99BC0" : "#7E6A9C"; g.fillRect(ox, oy + r * ch, w * cw + 1, 1); }
-    g.fillStyle = "#6C6478"; g.font = `${clamp(ch * 0.6, 9, 12)}px Estedad,Tahoma,sans-serif`;
+    g.fillStyle = "#6C6478"; g.font = `${clamp(ch * 0.6, 9, 12)}px "Baloo Bhaijaan 2",Tahoma,sans-serif`;
     g.textBaseline = "middle";
     g.textAlign = "right";
     for (let r = 0; r < h; r++) if (r === 0 || (r + 1) % 5 === 0) g.fillText(C.faNum(r + 1), ox - 6, oy + r * ch + ch / 2);
@@ -351,7 +351,7 @@ try {
   function summary() {
     const counts = {}; let total = 0;
     data.forEach((row) => row.forEach((c) => { if (c) { total++; counts[c] = (counts[c] || 0) + 1; } }));
-    $("total").textContent = C.faNum(total); $("dimText").innerHTML = `<bdi dir="ltr">${C.faNum(w)} × ${C.faNum(h)}</bdi>`;
+    $("total").textContent = total ? `${C.faNum(total)} دونه` : "—"; $("dimText").innerHTML = `<bdi dir="ltr">${C.faNum(w)} × ${C.faNum(h)}</bdi>`;
     $("warn").hidden = w <= L.WARN_W;
     $("colors").innerHTML = Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([code, n]) => {
       const p = C.byCode(code); return `<div class="color-row" data-code="${code}" role="button" tabindex="0" title="انتخاب این رنگ"><i class="dot" style="--c:${p.hex}"></i><small>${p.code} · ${p.name}</small><b>${C.faNum(n)}</b></div>`;
@@ -414,7 +414,7 @@ try {
     const c = document.createElement("canvas"); c.width = W; c.height = H;
     const g = c.getContext("2d"); g.fillStyle = "#fff"; g.fillRect(0, 0, W, H);
     paintGrid(g, cw2, ch2, M, T);
-    g.font = "14px Estedad,Tahoma,sans-serif"; g.textAlign = "left"; g.textBaseline = "middle";
+    g.font = "14px 'Baloo Bhaijaan 2',Tahoma,sans-serif"; g.textAlign = "left"; g.textBaseline = "middle";
     rows.forEach(([code, n], i) => {
       const p = C.byCode(code), y = 30 + i * 30;
       C.drawBead(g, gw + 24, y - 10, 26, 20, p.hex); g.fillStyle = "#1B1226"; g.fillText(`${p.code}  ${p.name}  ${C.faNum(n)} دونه`, gw + 60, y);

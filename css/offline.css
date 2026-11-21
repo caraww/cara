@@ -8,7 +8,7 @@ body {
   padding: 24px;
   background: #1d1527;
   color: #f3edf8;
-  font: 16px/2 Estedad, Tahoma, sans-serif;
+  font: 16px/2 "Baloo Bhaijaan 2", Tahoma, sans-serif;
   text-align: center;
 }
 main {
@@ -28,7 +28,7 @@ button {
   background: #c5a46a;
   color: #20172a;
   padding: 12px 26px;
-  font: 700 15px/1.7 Estedad, Tahoma, sans-serif;
+  font: 700 15px/1.7 "Baloo Bhaijaan 2", Tahoma, sans-serif;
   cursor: pointer;
 }
 button:focus-visible { outline: 3px solid #f3e2b4; outline-offset: 4px; }

@@ -64,7 +64,7 @@
     const spokenRows = rows.slice(0, maxRows);
     const summary = total
       ? `الگوی ${width.toLocaleString("fa-IR")} در ${height.toLocaleString("fa-IR")} با ${total.toLocaleString("fa-IR")} منجوق و ${colors.length.toLocaleString("fa-IR")} رنگ.`
-      : `الگوی ${width.toLocaleString("fa-IR")} در ${height.toLocaleString("fa-IR")} هنوز خالی است.`;
+      : `الگوی ${width.toLocaleString("fa-IR")} در ${height.toLocaleString("fa-IR")} هنوز خالیه؛ یه رنگ انتخاب کن و روی خونه‌ها بکش.`;
     return {
       width,
       height,

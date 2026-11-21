@@ -66,7 +66,7 @@
       g.fillRect(0, 0, widthCm * scale, 76);
       g.strokeStyle = "rgba(246,233,214,.75)";
       g.fillStyle = "rgba(246,233,214,.9)";
-      g.font = "12px Estedad, Tahoma, sans-serif";
+      g.font = "12px 'Baloo Bhaijaan 2', Tahoma, sans-serif";
       g.textAlign = "center";
       for (let cm = 0; cm <= widthCm; cm++) {
         const x = cm * scale;
@@ -77,7 +77,7 @@
         if (cm % 5 === 0 && cm > 0) g.fillText(String(cm), x, 42);
       }
       g.fillStyle = "rgba(246,233,214,.55)";
-      g.font = "11px Estedad, Tahoma, sans-serif";
+      g.font = "11px 'Baloo Bhaijaan 2', Tahoma, sans-serif";
       g.fillText("سانتی‌متر", widthCm * scale - 24, 64);
     }
 

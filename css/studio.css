@@ -16,7 +16,7 @@
   --accent-2: #7a34c4;
   --hot: #e24a2b;
   --r: 20px;
-  --font: "Estedad", Tahoma, system-ui, sans-serif;
+  --font: "Baloo Bhaijaan 2", Tahoma, system-ui, sans-serif;
 }
 
 *{
@@ -631,7 +631,7 @@ button, input, select, textarea{
 .drop .drop__icon{display:grid;place-items:center;width:58px;height:58px;border-radius:18px;background:#f4edfb;color:var(--accent)}
 .drop .drop__icon svg{width:28px;height:28px}
 .drop .muted{max-width:38ch;line-height:1.8}
-.drop .drop__formats{font-size:12px;font-weight:600;color:#8a8092;letter-spacing:.08em}
+.drop .drop__formats{font-size:12px;font-weight:600;color:#6b6273;letter-spacing:0}
 
 .drop.over{animation:pulse .9s ease-in-out infinite}
 

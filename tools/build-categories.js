@@ -43,7 +43,7 @@ function head({ title, desc, p, ld }) {
   <link rel="stylesheet" href="/css/accessibility.css">
   <link rel="stylesheet" href="/css/content-pages.css?v=1">
   ${footerCSS}
-  <link rel="stylesheet" href="/css/polish.css?v=7">
+  <link rel="stylesheet" href="/css/polish.css?v=9">
   <link rel="stylesheet" href="/css/site-nav.css?v=20261113">
   <link rel="stylesheet" href="/css/nav-hero.css?v=1">
   <link rel="stylesheet" href="/css/premium.css?v=2">

@@ -11,7 +11,7 @@
   color: var(--sf-ink);
   background: linear-gradient(118deg, #17192e 0%, #22243b 58%, #191b31 100%);
   border-block-start: 1px solid rgba(207, 174, 108, .28);
-  font-family: var(--cara-font, "Estedad", Tahoma, system-ui, sans-serif);
+  font-family: var(--cara-font, "Baloo Bhaijaan 2", Tahoma, system-ui, sans-serif);
   line-height: 1.9;
   text-align: start;
 }
