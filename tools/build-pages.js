@@ -24,8 +24,12 @@ function priceHTML(id, withToman) {
   const before = Number(listPrices[String(id)]) || now;
   if (!now) return "";
   const unit = withToman ? " تومان" : "";
-  const list = SALE.active() && before > now ? ` data-price-list="${before}"` : "";
-  return `<span class="price" data-price="${now}"${list}>${fa(now)}${unit}</span>`;
+  const onSale = SALE.active() && before > now;
+  const list = onSale ? ` data-price-list="${before}"` : "";
+  const strike = onSale
+    ? `<s class="price-list">${fa(before)}</s><b class="price-now">${fa(now)}${unit}</b>`
+    : `${fa(now)}${unit}`;
+  return `<span class="price" data-price="${now}"${list}>${strike}</span>`;
 }
 let beadFiles = {};
 try {

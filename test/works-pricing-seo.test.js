@@ -121,9 +121,10 @@ test("build-pages generates gallery JSON-LD and bracelet pages from the same cat
     assert.ok(albumPage.includes("<title>نمونه دستبند منجوقی آلبوم | کارا</title>"));
     const duckPage = fs.readFileSync(path.join(temp, "bracelet", "اردک-تک-تک.html"), "utf8");
     assert.ok(duckPage.includes("سفارش این دستبند"));
-    /* در حراج فقط مبلغ کم‌شده دیده می‌شود؛ مبلغ قبلی فقط در data-price-list می‌ماند. */
-    assert.ok(duckPage.includes('data-price="1489000" data-price-list="2127000">۱٬۴۸۹٬۰۰۰ تومان</span>'));
-    assert.ok(!duckPage.includes('<s class="price-list">'));
+    /* در حراج مبلغ قبلی خط می‌خورد و مبلغ کم‌شده قرمز و بزرگ‌تر جایش می‌نشیند. */
+    assert.ok(duckPage.includes('data-price="1489000" data-price-list="2127000"'));
+    assert.ok(duckPage.includes('<s class="price-list">۲٬۱۲۷٬۰۰۰</s>'));
+    assert.ok(duckPage.includes('<b class="price-now">۱٬۴۸۹٬۰۰۰ تومان</b>'));
   } finally {
     fs.rmSync(temp, { recursive: true, force: true });
   }
