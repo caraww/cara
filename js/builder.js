@@ -91,8 +91,8 @@ try {
   let w = L.DEF_W, h = L.DEF_H, data = empty(w, h), sel = C.palette[0].code, tool = "brush";
   let panning = null, space = false, mirror = false, erasing = false, painting = false, last = null, history = [], redo = [], cw = 24, ch = 20, saveT, sumQ = false;
   let zoom = 1, fillShapes = false, drag = null, snap = null, track = null, selRect = null, selDrag = null, clip = null, hover = null, recent = [];
-  /* روی نمایشگر عریض، طول دستبند افقی کشیده می‌شود تا کل الگو در یک نگاه جا شود */
-  let horizontal = window.matchMedia("(min-width: 1100px)").matches;
+  /* طول دستبند افقی کشیده می‌شود تا کل الگو در یک نگاه جا شود */
+  let horizontal = true;
   document.body.dataset.gridAxis = horizontal ? "h" : "v";
 
   /* الگوی اشتراکی در fragment لینک قرار دارد؛ داده‌ای به سرور فرستاده نمی‌شود. */
@@ -356,6 +356,7 @@ try {
     pinchPan = {
       x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2,
       l: wrap.scrollLeft, t: wrap.scrollTop,
+      d: Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y),
     };
     if (painting && strokeCells <= 2) { const p = history.pop(); if (p) applyState(JSON.parse(p)); }
     painting = false; drag = null; selDrag = null; snap = null; panning = null;
@@ -386,6 +387,12 @@ try {
     if (activePointers.has(e.pointerId)) activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pinchPan && activePointers.size >= 2) {
       const pts = [...activePointers.values()];
+      /* فاصله‌ی دو انگشت = بزرگ‌نمایی، جابه‌جایی مرکز = لغزش */
+      const d = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+      if (pinchPan.d > 24 && d > 24) {
+        const next = clamp(Math.round(zoom * (d / pinchPan.d) * 100) / 100, 0.2, 2.5);
+        if (Math.abs(next - zoom) >= 0.02) { setZoom(next); pinchPan.d = d; }
+      }
       wrap.scrollLeft = pinchPan.l - ((pts[0].x + pts[1].x) / 2 - pinchPan.x);
       wrap.scrollTop = pinchPan.t - ((pts[0].y + pts[1].y) / 2 - pinchPan.y);
       return;
@@ -1017,7 +1024,7 @@ try {
   if (!sec) return;
   var hint = document.createElement("div");
   hint.className = "mb-hint";
-  hint.textContent = "با دو انگشت بوم رو جابه‌جا کن";
+  hint.textContent = "با دو انگشت زوم کن و بوم رو جابه‌جا کن";
   sec.appendChild(hint);
   var hide = function () { hint.classList.add("is-out"); };
   hint.addEventListener("click", hide);

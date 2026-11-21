@@ -363,3 +363,48 @@ html[data-theme="dark"] .bs-fs-btn {
 
 html[data-theme="dark"] .bs-zoom button { color: #efe9f8; }
 html[data-theme="dark"] .bs-zoom button:hover { background: rgba(255, 255, 255, .1); }
+
+
+/* ================= موبایل و تبلت ================= */
+@media (max-width: 1099px) {
+  .builder > section.panel:not(.sp-card) {
+    position: relative;
+  }
+
+  /* خوشه‌ی زوم شناور، گوشه‌ی پایین بوم */
+  .builder .bs-zoom {
+    display: flex;
+    position: absolute;
+    top: 10px;
+    inset-inline-start: 10px;
+    z-index: 6;
+    gap: 2px;
+    padding: 4px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .94);
+    border: 1px solid rgba(184, 151, 90, .3);
+    box-shadow: 0 6px 18px rgba(27, 18, 38, .14);
+    backdrop-filter: blur(6px);
+  }
+
+  .builder .bs-zoom button {
+    min-width: 38px;
+    min-height: 38px;
+    padding: 0 8px;
+    font-size: 12.5px;
+    border-radius: 10px;
+  }
+
+  .builder .bs-zoom__fit {
+    padding: 0 10px;
+  }
+
+  /* بوم در مرکز کادر، و در حالت بزرگ‌نمایی از گوشه قابل اسکرول */
+  .builder #gridWrap {
+    display: flex;
+  }
+
+  .builder #grid {
+    margin: auto;
+  }
+}

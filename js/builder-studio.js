@@ -239,6 +239,15 @@
   if (dimW) dimW.addEventListener("change", () => { if (fitMode) setTimeout(fitToView, 40); });
   if (dimH) dimH.addEventListener("change", () => { if (fitMode) setTimeout(fitToView, 40); });
 
+  /* خوشه‌ی زوم بالای نوار ابزار شناور می‌شود؛ ارتفاع نوار را از DOM می‌گیریم */
+  const toolsRow = section.querySelector(".tools");
+  const syncToolsH = () => {
+    if (toolsRow) document.documentElement.style.setProperty("--bs-tools-h", toolsRow.offsetHeight + "px");
+  };
+  syncToolsH();
+  addEventListener("resize", syncToolsH);
+  setTimeout(syncToolsH, 400);
+
   const flipBtn = zoomBox.querySelector("[data-zoom='flip']");
   const syncFlip = () => {
     const h = document.body.dataset.gridAxis === "h";
@@ -250,11 +259,9 @@
   syncFlip();
   document.addEventListener("builder:flipped", syncFlip);
 
-  /* روی نمایشگر عریض از همان اول کل الگو در دید است */
-  if (wide.matches) {
-    fitMode = true;
-    setTimeout(fitToView, 120);
-  }
+  /* از همان اول کل الگو در دید است */
+  fitMode = true;
+  setTimeout(fitToView, 120);
 
   updateTip();
 })();
