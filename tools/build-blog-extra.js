@@ -56,7 +56,7 @@ function article({ slug, title, desc, h1, kicker, date, body, faqs }) {
 </head>
 <body>
 <main class="blog-article">
-  <p><a href="/blog/">وبلاگ cara</a> ← <a href="/">خانه</a></p>
+  <p><a href="/">خانه</a> › <a href="/blog/">وبلاگ cara</a></p>
   <p class="meta">${esc(kicker)} · ${date}</p>
   <h1>${esc(h1)}</h1>
   ${body}
