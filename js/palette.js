@@ -139,6 +139,13 @@ if (typeof module !== "undefined") {
     g.beginPath();
     g.roundRect(x, y, w, h, r);
     g.fill();
+    /* منجوق روشن روی بوم سفید محو می‌شود؛ یک خط دور نازک می‌گیرد */
+    const n = parseInt(hex.replace("#", ""), 16);
+    if ((n >> 16 & 255) * 0.299 + (n >> 8 & 255) * 0.587 + (n & 255) * 0.114 > 228) {
+      g.strokeStyle = "rgba(74, 58, 90, .3)";
+      g.lineWidth = 1;
+      g.stroke();
+    }
     g.fillStyle = "rgba(255,255,255,.38)";
     g.beginPath();
     g.roundRect(x + w * 0.12, y + h * 0.1, w * 0.76, h * 0.26, r);
