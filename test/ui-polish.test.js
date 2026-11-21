@@ -25,7 +25,7 @@ test("shared cara visual system is loaded after page styles on primary pages", (
     const polishPath = polishMatch[0];
     const sharedLayerIndex = html.indexOf(polishPath);
     const pageStyles = [...html.matchAll(/<link[^>]+rel="stylesheet"[^>]+>/g)]
-      .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("premium.css") && !tag.includes("hero-signature.css") && !tag.includes("cn-top.css") && !tag.includes("hero-wow.css") && !tag.includes("site-nav.css") && !tag.includes("nav-hero.css") && !tag.includes("site-footer.css"))
+      .filter(([tag]) => !tag.includes("polish.css") && !tag.includes("premium.css") && !tag.includes("hero-signature.css") && !tag.includes("cn-top.css") && !tag.includes("hero-wow.css") && !tag.includes("site-nav.css") && !tag.includes("nav-hero.css") && !tag.includes("site-footer.css") && !tag.includes("theme.css"))
       .map(([tag]) => html.indexOf(tag));
     assert.ok(
       sharedLayerIndex > Math.max(-1, ...pageStyles),

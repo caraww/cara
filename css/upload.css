@@ -37,7 +37,7 @@
   font-size: 17px;
   font-weight: 400;
   color: var(--ink, #221a2c);
-  background: #fff;
+  background: var(--panel, #fff);
   border: 1px solid var(--line, #ddd6e6);
   border-radius: 12px;
   transition: border-color 0.2s, box-shadow 0.2s;
@@ -57,7 +57,7 @@
   padding: 0 16px;
   font-size: 16px;
   line-height: 1.6;
-  background: #fff;
+  background: var(--panel, #fff);
   border: 1px solid var(--line, #ddd6e6);
   border-radius: 12px;
   cursor: pointer;
@@ -160,7 +160,7 @@
   line-height: 1;
   white-space: nowrap;
   color: var(--ink, #1b1226);
-  background: #fff;
+  background: var(--panel, #fff);
   border: 1px solid var(--line);
   border-radius: 11px;
   cursor: pointer;
@@ -216,7 +216,7 @@
   margin-inline-start: auto;
   font-size: 16px;
   line-height: 1.6;
-  background: #fff;
+  background: var(--panel, #fff);
   border: 1px solid var(--line);
   border-radius: 11px;
   cursor: pointer;

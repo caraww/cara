@@ -13,7 +13,7 @@
 .cp__hero img, .cp__hero video { display: block; width: 100%; height: auto; border-radius: 24px; background: #ece6f2; box-shadow: 0 22px 60px rgba(42, 28, 60, .14); }
 .cp__hero figcaption { margin-top: 8px; color: #7a7288; font-size: 13px; line-height: 1.8; }
 .cp__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 22px 0; }
-.cp__card { padding: 18px; border: 1px solid rgba(184, 151, 90, .22); border-radius: 20px; background: rgba(255, 255, 255, .72); }
+.cp__card { padding: 18px; border: 1px solid rgba(184, 151, 90, .22); border-radius: 20px; background: var(--panel, #fff); }
 .cp__card b { display: block; margin-bottom: 6px; color: #2d2440; font-size: 16px; }
 .cp__card span { color: #6c6478; font-size: 14px; line-height: 1.9; }
 .cp__note { padding: 16px 18px; border-inline-start: 3px solid #b8975a; border-radius: 0 16px 16px 0; background: rgba(184, 151, 90, .09); }
@@ -22,7 +22,7 @@
 .cp__actions a:first-child { background: #343b64; border-color: #343b64; color: #fff; }
 .cp__actions a:hover { transform: translateY(-1px); }
 .cp__faq { display: grid; gap: 10px; margin: 18px 0; }
-.cp__faq details { border: 1px solid rgba(184, 151, 90, .22); border-radius: 16px; background: rgba(255, 255, 255, .72); }
+.cp__faq details { border: 1px solid rgba(184, 151, 90, .22); border-radius: 16px; background: var(--panel, #fff); }
 .cp__faq summary { cursor: pointer; padding: 14px 16px; color: #2d2440; font-size: 16px; font-weight: 800; }
 .cp__faq details > div { padding: 0 16px 14px; }
 .cp__faq details > div p:last-child { margin-bottom: 0; }

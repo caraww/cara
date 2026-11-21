@@ -11,7 +11,7 @@
    ۱) پایه (قبلاً works.css)
    ====================================================================== */
 .wk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;margin-top:26px}
-.wk-card{position:relative;margin:0;cursor:pointer;border:1px solid var(--line);border-radius:18px;background:#fff;overflow:hidden}
+.wk-card{position:relative;margin:0;cursor:pointer;border:1px solid var(--line);border-radius:18px;background:var(--panel,#fff);overflow:hidden}
 .wk-card:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
 .wk-card img{display:block;width:100%;height:auto;opacity:0;transition:opacity .4s}
 .wk-card img.in{opacity:1}
@@ -610,7 +610,7 @@
   margin:0 22px !important;padding:14px 0 20px !important;
   border-top:1px solid var(--hair);
 }
-.wk-grid figcaption b{font-size:17px;font-weight:900}
+.wk-grid figcaption b{font-size:17px;font-weight:900;color:var(--ink,#2b2035)}
 .wk-grid figcaption span:not(.wk-price){font-size:13.5px;color:var(--muted);line-height:1.9}
 .wk-grid figcaption .wk-price{
   background:none;border:0;padding:0;margin-top:6px;
@@ -922,7 +922,7 @@
   text-align: right !important;
 }
 .wk-grid > .wk-card figcaption b {
-  color: #2b2035;
+  color: var(--ink, #2b2035);
   font-size: 16px;
   text-align: right;
 }
@@ -1108,11 +1108,11 @@
   border: 0 !important;
   border-radius: 0 !important;
   background: transparent !important;
-  color: #29242f;
+  color: var(--ink, #29242f);
   text-align: center;
 }
 .wk-grid > .wk-card figcaption b {
-  color: #29242f;
+  color: var(--ink, #29242f);
   font-size: 15px;
   font-weight: 900;
   line-height: 1.65;
@@ -1136,7 +1136,7 @@
   border-top: 1px solid rgba(80,65,90,.12) !important;
   border-radius: 0 !important;
   background: transparent !important;
-  color: #29242f !important;
+  color: var(--ink, #29242f) !important;
   font-size: 14px;
   font-weight: 800;
   letter-spacing: 0;
@@ -1188,8 +1188,8 @@
 html body main.wrap #wkGrid > .wk-card,
 html body main.wrap #wkGrid > .wk-card:hover,
 html body main.wrap #wkGrid > .wk-card:focus-within {
-  background: #fff !important;
-  background-color: #fff !important;
+  background: var(--panel, #fff) !important;
+  background-color: var(--panel, #fff) !important;
   background-image: none !important;
 }
 html body main.wrap #wkGrid > .wk-card > img,
@@ -1201,8 +1201,8 @@ html body main.wrap #wkGrid > .wk-card:focus-within > img {
 }
 html body main.wrap #wkGrid > .wk-card > figcaption,
 html body main.wrap #wkGrid > .wk-card > figcaption .wk-price {
-  background: #fff !important;
-  background-color: #fff !important;
+  background: var(--panel, #fff) !important;
+  background-color: var(--panel, #fff) !important;
   background-image: none !important;
 }
 
