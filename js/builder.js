@@ -83,6 +83,19 @@ try {
 (() => {
   const C = CARA, L = C.L, $ = (id) => document.getElementById(id);
   const canvas = $("grid"), ctx = canvas.getContext("2d"), wrap = $("gridWrap"), wIn = $("w"), hIn = $("h");
+
+  /* فاصله‌ی دو انگشت = بزرگ‌نمایی، جابه‌جایی مرکز = لغزش */
+  function pinchMove() {
+    const pts = [...activePointers.values()];
+    if (!pinchPan || pts.length < 2) return;
+    const d = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+    if (pinchPan.d > 24 && d > 24) {
+      const next = clamp(Math.round(zoom * (d / pinchPan.d) * 100) / 100, 0.2, 2.5);
+      if (Math.abs(next - zoom) >= 0.02) { setZoom(next); pinchPan.d = d; }
+    }
+    wrap.scrollLeft = pinchPan.l - ((pts[0].x + pts[1].x) / 2 - pinchPan.x);
+    wrap.scrollTop = pinchPan.t - ((pts[0].y + pts[1].y) / 2 - pinchPan.y);
+  }
   const M = 30, T = 22;
   const SHAPES = new Set(["line", "rect", "ellipse"]);
   const TOOL_NAME = { brush: "قلم", eraser: "پاک‌کن", fill: "سطل", pan: "جابه‌جایی", pick: "قطره‌چکان", line: "خط", rect: "مستطیل", ellipse: "بیضی", select: "انتخاب" };
@@ -442,18 +455,7 @@ try {
   });
   canvas.addEventListener("pointermove", (e) => {
     if (activePointers.has(e.pointerId)) activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-    if (pinchPan && activePointers.size >= 2) {
-      const pts = [...activePointers.values()];
-      /* فاصله‌ی دو انگشت = بزرگ‌نمایی، جابه‌جایی مرکز = لغزش */
-      const d = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
-      if (pinchPan.d > 24 && d > 24) {
-        const next = clamp(Math.round(zoom * (d / pinchPan.d) * 100) / 100, 0.2, 2.5);
-        if (Math.abs(next - zoom) >= 0.02) { setZoom(next); pinchPan.d = d; }
-      }
-      wrap.scrollLeft = pinchPan.l - ((pts[0].x + pts[1].x) / 2 - pinchPan.x);
-      wrap.scrollTop = pinchPan.t - ((pts[0].y + pts[1].y) / 2 - pinchPan.y);
-      return;
-    }
+    if (pinchPan && activePointers.size >= 2) { pinchMove(); return; }
     if (panning) { wrap.scrollLeft = panning.l - (e.clientX - panning.x); wrap.scrollTop = panning.t - (e.clientY - panning.y); return; }
     if (selDrag) { const cell = cellFrom(e, true); selRect.r1 = cell[0]; selRect.c1 = cell[1]; updateSelBox(); return; }
     if (drag) { const cell = cellFrom(e, true); if (cell[0] !== drag.b[0] || cell[1] !== drag.b[1] || drag.sh !== e.shiftKey) { drag.b = cell; drag.sh = e.shiftKey; redrawShape(e.shiftKey); queueSummary(); } return; }
@@ -492,6 +494,31 @@ try {
     if (drag) { drag = null; track = null; snap = null; changed(); }
     if (painting) { painting = false; changed(); }
   };
+  /* پینچ روی هر جای بوم، حتی حاشیه‌ی سفید کنار منجوق‌ها */
+  wrap.addEventListener("pointerdown", (e) => {
+    if (e.target === canvas) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (activePointers.size === 2) {
+      e.preventDefault();
+      try { wrap.setPointerCapture(e.pointerId); } catch {}
+      beginPinchPan();
+    }
+  });
+  wrap.addEventListener("pointermove", (e) => {
+    if (!activePointers.has(e.pointerId)) return;
+    activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pinchPan && activePointers.size >= 2) { e.preventDefault(); pinchMove(); }
+  });
+  const wrapRelease = (e) => {
+    if (!activePointers.has(e.pointerId)) return;
+    activePointers.delete(e.pointerId);
+    if (activePointers.size < 2) pinchPan = null;
+  };
+  wrap.addEventListener("pointerup", wrapRelease);
+  wrap.addEventListener("pointercancel", wrapRelease);
+  window.addEventListener("pointerup", wrapRelease);
+
   canvas.addEventListener("pointerup", stop); canvas.addEventListener("pointercancel", stop);
   canvas.addEventListener("contextmenu", (e) => e.preventDefault());
 

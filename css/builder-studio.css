@@ -208,7 +208,10 @@
   }
 
   /* بوم: تمام فضای باقی‌مانده، فقط خودش اسکرول می‌شود */
-  .builder > section.panel .grid-wrap {
+  /* پینچ روی حاشیه‌ی سفید هم کار کند؛ اسکرول عمودی صفحه حفظ می‌شود */
+.builder > section.panel .grid-wrap { touch-action: pan-y; }
+
+.builder > section.panel .grid-wrap {
     flex: 1 1 auto;
     min-height: 0;
     max-height: none;
