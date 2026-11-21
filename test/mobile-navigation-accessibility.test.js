@@ -36,7 +36,7 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   const pages = ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html", "account.html"];
   for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), "utf8");
-    const navCssVersion = page === "index.html" ? 2 : 1;
+    const navCssVersion = 3;
     const navCss = html.indexOf("/css/nav-hero.css?v=" + navCssVersion);
     const navScript = html.indexOf("js/nav-hero.js?v=1");
     const polishCss = html.search(/\/css\/polish\.css\?v=\d+/);
@@ -52,10 +52,10 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   // Primary pages now load nav-hero directly; generated pages keep their own shared-nav template checks below.
   const template = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
   assert.ok(template.includes("/css/site-nav.css?v=20261113"));
-  assert.ok(template.includes("/css/nav-hero.css?v=1"));
+  assert.ok(template.includes("/css/nav-hero.css?v=3"));
   assert.ok(template.includes("/js/nav-hero.js?v=1"));
-  assert.ok(template.includes("/js/contact.js?v=20261112-release"));
-  const templateBraceletCss = template.indexOf("/css/bracelet-pages.css?v=5");
+  assert.ok(template.includes("/js/contact.js?v=20261121-seal"));
+  const templateBraceletCss = template.indexOf("/css/bracelet-pages.css?v=6");
   const templateSiteNavCss = template.indexOf("/css/site-nav.css?v=20261113");
   assert.ok(templateSiteNavCss > templateBraceletCss, "generated pages load the shared navigation as the final visual layer");
 });
@@ -68,10 +68,10 @@ test("all generated bracelet and color pages load current shared navigation asse
     for (const name of names) {
       const page = path.join(folder, name);
       const html = fs.readFileSync(path.join(root, page), "utf8");
-      const braceletCss = html.indexOf("/css/bracelet-pages.css?v=5");
+      const braceletCss = html.indexOf("/css/bracelet-pages.css?v=6");
       const navCss = html.indexOf("/css/site-nav.css?v=20261113");
       assert.ok(braceletCss >= 0 && navCss > braceletCss, page + " loads shared navigation after the bracelet page styles");
-      assert.ok(html.includes("/js/contact.js?v=20261112-release"), page + " uses the fresh contact fallback URL");
+      assert.ok(html.includes("/js/contact.js?v=20261121-seal"), page + " uses the fresh contact fallback URL");
       assert.ok(html.includes("/js/nav-hero.js?v=1"), page + " loads the shared menu behavior");
     }
   }

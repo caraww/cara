@@ -8,7 +8,7 @@ const css = fs.readFileSync("css/nav-hero.css", "utf8");
 const script = fs.readFileSync("js/hero-lineup.js", "utf8");
 
 test("homepage loads one versioned nav-hero stylesheet and bracelet lineup script", () => {
-  const links = html.match(/<link[^>]+nav-hero\.css\?v=2[^>]*>/g) || [];
+  const links = html.match(/<link[^>]+nav-hero\.css\?v=3[^>]*>/g) || [];
   assert.equal(links.length, 1, "homepage must load one authoritative nav-hero stylesheet");
   assert.ok(html.indexOf(links[0]) > html.search(/\/css\/polish\.css\?v=\d+/));
   const scripts = html.match(/<script[^>]+hero-lineup\.js\?v=\d+[^>]*>/g) || [];

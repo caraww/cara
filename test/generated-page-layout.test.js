@@ -55,8 +55,8 @@ test("generated page shell preserves accessible main landmark and shared navigat
   assert.match(html, /href="\/checkout\.html">سفارش<\/a>/);
   assert.match(html, /\/js\/nav-hero\.js/);
   assert.match(html, /\/js\/contact\.js/);
-  assert.match(html, /\/css\/bracelet-pages\.css\?v=5/);
+  assert.match(html, /\/css\/bracelet-pages\.css\?v=6/);
   assert.match(html, /\/css\/site-nav\.css\?v=20261113/);
-  assert.match(html, /\/css\/nav-hero\.css\?v=1/);
+  assert.match(html, /\/css\/nav-hero\.css\?v=3/);
   assert.ok(html.indexOf("/css/site-nav.css") > html.indexOf("/css/bracelet-pages.css"));
 });
