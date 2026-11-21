@@ -24,7 +24,7 @@ a{color:inherit}
 .section-top{display:flex;justify-content:space-between;align-items:end;margin-bottom:20px}
 .section-top h2{font-size:29px;margin:0;line-height:1.4}
 .rail-controls{display:flex;gap:8px}
-.rail-arrow{width:42px;height:42px;border:1px solid #ded6d2;border-radius:50%;background:transparent;color:var(--ink);font-size:20px;cursor:pointer;transition:.2s}
+.rail-arrow{width:44px;height:44px;border:1px solid #ded6d2;border-radius:50%;background:transparent;color:var(--ink);font-size:20px;cursor:pointer;transition:.2s}
 .rail-arrow:hover{background:var(--ink);color:#fff;border-color:var(--ink)}
 .post-rail{display:flex;gap:18px;overflow-x:auto;overflow-y:hidden;padding:5px 2px 22px;scroll-snap-type:x mandatory;scrollbar-width:thin;scrollbar-color:#cbb8b1 transparent;overscroll-behavior-inline:contain}
 .post-rail::-webkit-scrollbar{height:6px}

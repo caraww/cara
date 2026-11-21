@@ -822,7 +822,8 @@
 }
 @media (max-width: 760px) {
   .tools { justify-content: space-between; }
-  .tools .tool.ib { width: 35px; min-width: 35px; flex: 1 1 35px; max-width: 42px; }
+  /* حداقل ۴۴px ناحیه‌ی لمس؛ flex اجازه نده کوچک‌تر شود */
+  .tools .tool.ib { width: 44px; min-width: 44px; height: 44px; min-height: 44px; flex: 1 1 44px; max-width: 52px; }
 }
 
 /* ===== تمام‌صفحه (موبایل): بوم کل صفحه رو می‌گیره ===== */
