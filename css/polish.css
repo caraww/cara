@@ -944,32 +944,13 @@ html.is-sale .bf {
   border-radius: 26px;
   box-shadow: 0 22px 50px rgba(24, 16, 36, 0.28);
 }
-/* نشان حراج: قبلاً یک GIF انگلیسی بود؛ حالا با CSS و متن فارسی ساخته می‌شود */
-.bf__badge {
-  display: grid;
-  place-content: center;
-  justify-items: center;
-  gap: 2px;
-  aspect-ratio: 4 / 3;
-  padding: 12px;
-  text-align: center;
-  color: #f6d79b;
-  background:
-    radial-gradient(120% 120% at 30% 15%, rgba(246, 215, 155, .22), transparent 60%),
-    linear-gradient(160deg, #3b2a58, #221932 60%, #191226);
-  border: 1px solid rgba(184, 151, 90, .5);
+.bf__gif {
+  display: block;
+  width: 100%;
+  height: auto;
   border-radius: 18px;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .05);
+  background: #000;
 }
-.bf__badge b {
-  font-family: var(--cara-font-display, inherit);
-  font-size: clamp(46px, 7vw, 86px);
-  line-height: 1;
-  letter-spacing: normal;
-  text-shadow: 0 6px 18px rgba(246, 215, 155, .35);
-}
-.bf__badge span { font-size: clamp(15px, 1.7vw, 20px); font-weight: 800; color: #fff; }
-.bf__badge small { margin-top: 4px; font-size: 12px; color: #cbbfe6; }
 .bf__copy {
   display: flex;
   flex-direction: column;
@@ -1022,10 +1003,7 @@ html.is-sale .bf {
   padding: 12px 18px;
   border-radius: 20px;
 }
-.bf--slim .bf__badge { aspect-ratio: 1; border-radius: 14px; padding: 6px; }
-.bf--slim .bf__badge b { font-size: 26px; }
-.bf--slim .bf__badge span { font-size: 11px; }
-.bf--slim .bf__badge small { display: none; }
+.bf--slim .bf__gif { border-radius: 12px; }
 .bf--slim h2 { margin: 0; font-size: clamp(16px, 2.2vw, 21px); }
 .bf--slim .bf__lead { margin: 2px 0 0; font-size: 14px; line-height: 1.9; }
 .bf--slim .bf__cta { min-height: 44px; padding: 0 18px; font-size: 15px; }
@@ -1033,7 +1011,7 @@ html.is-sale .bf {
 @media (max-width: 760px) {
   .bf__in { grid-template-columns: minmax(0, 1fr); text-align: center; }
   .bf__copy { align-items: center; }
-  .bf__badge { max-width: 300px; margin-inline: auto; }
+  .bf__gif { max-width: 360px; margin-inline: auto; }
   .bf--slim .bf__in { grid-template-columns: 84px minmax(0, 1fr); text-align: start; }
   .bf--slim .bf__cta { grid-column: 1 / -1; width: 100%; }
 }

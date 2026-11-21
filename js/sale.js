@@ -18,9 +18,10 @@
     var unit = opts && opts.unit === false ? "" : " تومان";
     var now = sale.final(o);
     if (!onSale || now >= o) return '<span class="price">' + faNum(o) + unit + "</span>";
-    /* در حراج فقط قیمت روز نشان داده می‌شود؛ مبلغ قبلی در data-price-list می‌ماند. */
+    /* قیمت قبلی با خط قرمز خط می‌خورد و قیمت حراج جایش می‌نشیند. */
     return '<span class="price" data-price="' + now + '" data-price-list="' + o + '">' +
-      faNum(now) + unit + "</span>";
+      '<s class="price-list">' + faNum(o) + "</s>" +
+      '<b class="price-now">' + faNum(now) + unit + "</b></span>";
   }
 
   globalThis.CARA_SALE = Object.freeze({
