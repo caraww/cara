@@ -44,6 +44,13 @@ test("bracelet matcher respects the budget ranges shown to visitors", () => {
   assert.match(js, /answers\.budget === "low" \? 800000 : answers\.budget === "mid" \? 1500000 : Infinity/);
 });
 
+test("recovery reminder initialization is idempotent across duplicate script loads", () => {
+  const js = read("js/recovery.js");
+  assert.match(js, /if \(window\.__CARA_RECOVERY_INITIALIZED__\) return;/);
+  assert.match(js, /window\.__CARA_RECOVERY_INITIALIZED__ = true;/);
+  assert.match(js, /box\.dataset\.caraRecovery = "1"/);
+});
+
 test("quiz and content-page buttons share consistent shape, states, and focus treatment", () => {
   const css = read("css/premium.css");
   assert.match(css, /\.quiz__btn[\s\S]*?border-radius: 999px/);
