@@ -25,8 +25,7 @@
   display: inline-block;
   margin-bottom: 12px;
   color: #8d718f;
-  font: 700 11px/1.5 Arial, sans-serif;
-  letter-spacing: .2em;
+  font-weight: 700;
   direction: ltr;
 }
 .cara-weaving__copy h2 {

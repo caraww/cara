@@ -40,3 +40,48 @@
   --cara-line: #D4D4DF;
   --cara-gold: var(--cara-detail);
 }
+
+/* Typography, spacing, radius, elevation and motion scale.
+   Page styles keep their own values where they are deliberate; new rules and
+   the shared footer/nav layers build from these tokens. */
+:root {
+  --cara-font: "Estedad", Tahoma, system-ui, sans-serif;
+  --cara-font-display: "Estedad", Tahoma, system-ui, sans-serif;
+
+  --cara-text-xs: 12px;
+  --cara-text-sm: 14px;
+  --cara-text-md: 16px;
+  --cara-text-lg: 20px;
+  --cara-text-xl: clamp(24px, 3vw, 32px);
+  --cara-text-2xl: clamp(30px, 4vw, 44px);
+  --cara-leading: 1.9;
+  --cara-leading-tight: 1.45;
+
+  --cara-space-1: 4px;
+  --cara-space-2: 8px;
+  --cara-space-3: 12px;
+  --cara-space-4: 16px;
+  --cara-space-5: 24px;
+  --cara-space-6: 32px;
+  --cara-space-7: 48px;
+  --cara-space-8: 64px;
+
+  --cara-radius-pill: 999px;
+  --cara-radius-control: 14px;
+  --cara-radius-card: 22px;
+
+  --cara-shadow-sm: 0 2px 10px rgba(32, 23, 45, .06);
+  --cara-shadow-md: 0 14px 34px rgba(32, 23, 45, .10);
+  --cara-shadow-lg: 0 28px 64px rgba(32, 23, 45, .16);
+
+  --cara-gold-brand: #b8975a;
+  --cara-focus-ring: 0 0 0 3px rgba(184, 151, 90, .45);
+
+  --cara-dur-fast: .16s;
+  --cara-dur: .24s;
+  --cara-ease: cubic-bezier(.22, .61, .36, 1);
+
+  --cara-tap: 44px;
+  --cara-content-max: 1120px;
+  --cara-gutter: max(18px, 5vw);
+}

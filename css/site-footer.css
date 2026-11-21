@@ -99,6 +99,8 @@
   .sf__bottom-note { display: none; }
 }
 @media (max-width: 380px) {
-  .sf__in { grid-template-columns: minmax(0, 1fr); }
-  .sf__brand, .sf__contact { grid-column: auto; }
+  .sf__in { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 14px; }
+  .sf__brand, .sf__contact { grid-column: 1 / -1; }
+  .sf a { font-size: 13.5px; gap: 6px; }
+  .sf__title { font-size: 14px; }
 }

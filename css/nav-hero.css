@@ -180,7 +180,6 @@
   font-size: clamp(38px, 5vw, 70px);
   font-weight: 850;
   line-height: 1.34;
-  letter-spacing: -.04em;
   text-wrap: balance;
 }
 .hx__copy h1 .gilt { color: var(--nh-gold); }
