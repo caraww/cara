@@ -48,7 +48,7 @@
 .cara-journal__reader-content .blog-cta{padding:20px;background:#f8f0eb;border-radius:16px;margin:24px 0}
 .cara-journal__loading{text-align:center;color:#77758a;padding:24px}
 @media(max-width:700px){.cara-journal{width:calc(100% - 28px);margin:44px auto}.cara-journal__heading{align-items:center}.cara-journal__heading h2{font-size:23px}.cara-journal__heading p:not(.cara-journal__eyebrow){font-size:11px;max-width:280px}.cara-journal__arrows button{width:34px;height:34px}.cara-journal__rail{gap:12px;margin-inline:-14px;padding:5px 14px 18px}.cara-journal__card{flex-basis:76vw;min-height:390px;max-width:300px;padding:16px}.cara-journal__copy strong{font-size:20px}.cara-journal__reader{padding:17px 14px}.cara-journal__reader-content p{font-size:13px}}
-@media(prefers-reduced-motion:reduce){.cara-journal__card,.cara-journal__arrows button{transition:none}}
+@media(prefers-reduced-motion:reduce){.cara-journal__card,.cara-journal__arrows button,.cara-journal__more{transition:none}}
 
 /* Match the journal title to the other homepage section headings. */
 .cara-journal__heading h2 {
