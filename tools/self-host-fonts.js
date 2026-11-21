@@ -1,6 +1,8 @@
 #!/usr/bin/env node
-/* فونت‌های سایت (Baloo Bhaijaan 2 برای متن و رابط، Lalezar برای تیتر) رو از Google Fonts
-   می‌گیره و بعد از اعتبارسنجی کامل، به‌صورت محلی ذخیره می‌کنه و HTMLها رو به‌روز می‌کنه.
+/* فونت تیتر سایت (Lalezar) رو از Google Fonts می‌گیره و بعد از اعتبارسنجی کامل،
+   به‌صورت محلی ذخیره می‌کنه و HTMLها رو به‌روز می‌کنه.
+   فونت متن (Vazirmatn) روی Google Fonts نیست؛ فایل متغیرش دستی از انتشار رسمی
+   rastikerdar/vazirmatn در fonts/vazirmatn-var.woff2 گذاشته شده و این ابزار بهش دست نمی‌زنه.
    فقط زیرمجموعه‌های arabic و latin ذخیره می‌شن؛ بقیه در متن‌های سایت استفاده نمی‌شن. */
 const fs = require("fs"), path = require("path");
 const ROOT = path.resolve(__dirname, "..");
@@ -9,11 +11,6 @@ const UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/
 
 /* slug → پیشوند نام فایل؛ weight → بازه‌ای که در @font-face نوشته می‌شه */
 const FAMILIES = [
-  {
-    slug: "baloo-bhaijaan-2",
-    weight: "400 800",
-    url: "https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400..800&display=swap",
-  },
   {
     slug: "lalezar",
     weight: "400",

@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="/css/fonts.css?v=20261118-restore" />
     <link
       rel="preload"
-      href="/fonts/baloo-bhaijaan-2-arabic.woff2"
+      href="/fonts/vazirmatn-var.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -510,9 +510,9 @@
             <h2 id="caraJournalTitle">یه کم الهام، قبل از انتخابت</h2>
             <p>پست‌ها رو ورق بزن؛ هر کدوم رو باز کنی، داستان کاملش همین‌جا برات نمایش داده می‌شه.</p>
           </div>
-          <div class="cara-journal__arrows" aria-label="کنترل پست‌ها">
-            <button type="button" data-journal-scroll="next" aria-label="پست‌های بعدی">→</button>
-            <button type="button" data-journal-scroll="prev" aria-label="پست‌های قبلی">←</button>
+          <div class="cara-journal__arrows" role="group" aria-label="کنترل پست‌ها">
+            <button type="button" data-journal-scroll="prev" aria-label="پست‌های قبلی">→</button>
+            <button type="button" data-journal-scroll="next" aria-label="پست‌های بعدی">←</button>
           </div>
         </div>
         <div class="cara-journal__rail" id="caraJournalRail" tabindex="0" aria-label="پست‌های وبلاگ؛ پیمایش افقی">
@@ -537,7 +537,10 @@
             <span class="cara-journal__copy"><small>عاشق دستبندت باش</small><strong>چطور از دستبندت مراقبت کنی؟</strong><span>باز کردن پست <b>↙</b></span></span>
           </a>
         </div>
-        <p class="cara-journal__hint">برای دیدن همه‌ی پست‌ها، افقی اسکرول کن.</p>
+        <div class="cara-journal__foot">
+          <p class="cara-journal__hint">برای دیدن همه‌ی پست‌ها، افقی اسکرول کن.</p>
+          <a class="cara-journal__more" href="/blog/">ادامه‌ی پست‌های دفتر کارا <span aria-hidden="true">←</span></a>
+        </div>
         <div class="cara-journal__reader" id="caraJournalReader" hidden aria-live="polite" aria-busy="false">
           <div class="cara-journal__reader-top"><span>دفتر کارا / پست</span><button type="button" id="caraJournalClose">× بستن پست</button></div>
           <div class="cara-journal__reader-content" id="caraJournalContent"></div>

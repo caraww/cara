@@ -39,8 +39,8 @@ test("writes verified font files and rewrites Google Fonts links only after all 
       fetchImpl: async (url) => (String(url).includes("googleapis") ? ok(css) : ok(font)),
     });
     assert.deepEqual(result, { fontFiles: FAMILIES.length, pages: 1 });
-    assert.equal(fs.readFileSync(path.join(root, "fonts/baloo-bhaijaan-2-latin.woff2")).subarray(0, 4).toString(), "wOF2");
-    assert.match(fs.readFileSync(path.join(root, "css/fonts.css"), "utf8"), /\/fonts\/baloo-bhaijaan-2-latin.woff2/);
+    assert.equal(fs.readFileSync(path.join(root, "fonts/lalezar-latin.woff2")).subarray(0, 4).toString(), "wOF2");
+    assert.match(fs.readFileSync(path.join(root, "css/fonts.css"), "utf8"), /\/fonts\/lalezar-latin.woff2/);
     const updated = fs.readFileSync(path.join(root, "index.html"), "utf8");
     assert.match(updated, /\/css\/fonts.css/);
     assert.doesNotMatch(updated, /fonts\.(googleapis|gstatic)\.com/);
@@ -50,7 +50,7 @@ test("writes verified font files and rewrites Google Fonts links only after all 
 test("primary Persian font is preloaded on all main customer pages", () => {
   for (const page of ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html"]) {
     const html = fs.readFileSync(path.join(__dirname, "..", page), "utf8");
-    assert.match(html, /<link\b(?=[^>]*\brel="preload")(?=[^>]*\bas="font")(?=[^>]*\bhref="\/fonts\/baloo-bhaijaan-2-arabic\.woff2")[^>]*>/s, page + " font preload");
+    assert.match(html, /<link\b(?=[^>]*\brel="preload")(?=[^>]*\bas="font")(?=[^>]*\bhref="\/fonts\/vazirmatn-var\.woff2")[^>]*>/s, page + " font preload");
     assert.match(html, /href="\/?css\/fonts\.css(?:\?[^"]*)?"/, page + " local font stylesheet");
   }
 });
