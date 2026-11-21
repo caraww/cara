@@ -323,9 +323,21 @@
   .hx__btn--gold:hover { transform: none; }
 }
 
-/* موبایل: دکمه‌های شناور تماس گوشه‌ی پایین-چپ‌اند؛ فلش‌های اسلایدر کمی
-   به داخل می‌آیند تا ناحیه‌ی لمسشان با هم هم‌پوشانی نکند. */
+/* موبایل: روی حلقه‌ی دستبند جا نیست، پس فلش‌ها زیر دستبند و دو طرف
+   شمارنده‌ی «۱ از ۳» می‌نشینند تا روی منجوق‌ها نیفتند. */
 @media (max-width: 820px) {
-  .cara-bracelet-lineup__arrow--prev { right: 72px; }
-  .cara-bracelet-lineup__arrow--next { left: 72px; }
+  .cara-bracelet-lineup__arrow {
+    top: calc(100% + 4px);
+    bottom: auto;
+    right: auto;
+    left: auto;
+    width: 44px;
+    height: 44px;
+    font-size: 30px;
+    transform: none;
+  }
+  .cara-bracelet-lineup__arrow--prev { right: calc(50% - 72px); }
+  .cara-bracelet-lineup__arrow--next { left: calc(50% - 72px); }
+  .cara-bracelet-lineup__arrow--prev:hover,
+  .cara-bracelet-lineup__arrow--next:hover { transform: none; }
 }
