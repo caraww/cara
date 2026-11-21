@@ -79,6 +79,7 @@
   const wrap = (i) => ((i % cards.length) + cards.length) % cards.length;
   let active = 0;
   let paused = false;
+  let stageVisible = true;
   let timer = 0;
 
   function render() {
@@ -97,20 +98,32 @@
       btn.classList.toggle("is-active", i === active);
       if (i === active) {
         btn.setAttribute("aria-current", "true");
-        if (btn.scrollIntoView) {
-          btn.scrollIntoView({
-            block: "nearest",
-            inline: "center",
-            behavior: calm.matches ? "auto" : "smooth",
-          });
-        }
+        centerThumb(btn);
       } else btn.removeAttribute("aria-current");
     });
   }
 
+  /* نوار بندانگشتی را افقی می‌لغزاند و هیچ‌وقت صفحه را جابه‌جا نمی‌کند.
+     scrollIntoView وقتی نوار بیرون از دید بود، کل صفحه را تا هیرو برمی‌گرداند. */
+  function centerThumb(btn) {
+    const strip = btn.parentElement;
+    if (!strip) return;
+    const box = strip.getBoundingClientRect();
+    if (!box.width) return;
+    const inView = box.top >= 0 && box.bottom <= window.innerHeight;
+    if (!inView) return;
+    const target = btn.getBoundingClientRect();
+    const delta = target.left + target.width / 2 - (box.left + box.width / 2);
+    if (Math.abs(delta) < 4) return;
+    /* در RTL مقدار scrollLeft منفی است؛ جمع جبری delta در هر دو حالت جهتش درست است */
+    const start = strip.scrollLeft;
+    strip.scrollLeft = start + delta;
+    if (Math.abs(strip.scrollLeft - start) < 1) strip.scrollLeft = start - delta;
+  }
+
   function restart() {
     clearInterval(timer);
-    if (calm.matches || paused) return;
+    if (calm.matches || paused || !stageVisible) return;
     timer = setInterval(() => {
       if (!paused && !document.hidden) {
         active = wrap(active + 1);
@@ -184,6 +197,17 @@
   stage.addEventListener("focusin", hold);
   stage.addEventListener("focusout", release);
   calm.addEventListener("change", restart);
+
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(
+      (entries) => {
+        stageVisible = entries[0].isIntersecting;
+        if (stageVisible) restart();
+        else clearInterval(timer);
+      },
+      { threshold: 0.12 },
+    ).observe(stage);
+  }
 
   render();
   restart();
