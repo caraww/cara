@@ -18,7 +18,7 @@ test("gallery bracelet pages load their dedicated layout after the shared nav st
   assert.match(css, /\.pg-price/);
   assert.match(css, /\.rel/);
   const layout = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
-  assert.match(layout, /\/css\/bracelet-pages\.css\?v=3/);
+  assert.match(layout, /\/css\/bracelet-pages\.css\?v=5/);
   assert.match(layout, /\/css\/site-nav\.css\?v=20261113/);
   assert.match(layout, /\/css\/nav-hero\.css\?v=1/);
   assert.ok(layout.indexOf("/css/site-nav.css") > layout.indexOf("/css/bracelet-pages.css"));
@@ -29,4 +29,6 @@ test("gallery bracelet pages load their dedicated layout after the shared nav st
   assert.match(css, /\.pg \.btns \.btn/);
   assert.match(css, /flex:\s*1 1 180px/);
   assert.match(css, /flex:\s*1 1 100%/);
+  assert.match(css, /\.pg \.rel a \{[^}]*border:\s*0/);
+  assert.match(css, /\.pg \.rel img,[\s\S]*?border:\s*0/);
 });

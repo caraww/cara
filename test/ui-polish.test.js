@@ -44,7 +44,7 @@ test("generated bracelet and color pages share the same navigation and visual sy
   const layout = read("lib/generated-page-layout.js");
   assert.ok(layout.includes("/css/accessibility.css"));
   assert.ok(layout.includes("/css/site-nav.css?v=20261113"));
-  assert.ok(layout.includes("/css/bracelet-pages.css?v=3"));
+  assert.ok(layout.includes("/css/bracelet-pages.css?v=5"));
   assert.ok(layout.includes("/css/polish.css?v=7"));
   assert.ok(layout.includes("/css/premium.css?v=1"));
   assert.ok(layout.includes("/js/contact.js?v=20261112-release"));

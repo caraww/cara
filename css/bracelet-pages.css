@@ -110,7 +110,7 @@ html body .pg .rel a {
   color: #4e3b60;
   text-decoration: none;
   padding: 10px;
-  border: 1px solid #e9e0ec;
+  border: 0;
   border-radius: 16px;
   background: #fff;
   transition: transform .2s, box-shadow .2s;
@@ -124,6 +124,7 @@ html body .pg .rel i {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
+  border: 0;
   border-radius: 11px;
   margin-bottom: 8px;
 }
