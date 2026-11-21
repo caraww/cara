@@ -57,7 +57,7 @@ body:has(.builder) .page-title::before,
 body:has(#game) .page-title::before {
   display: block;
   margin-bottom: 8px;
-  color: #9b7a48;
+  color: var(--cara-gold-ink, #7d5f26);
   font-size: 12px;
   font-weight: 800;
   line-height: 1.5;
@@ -78,7 +78,7 @@ body:has(#game) .page-title::before { content: "یه بازی کوچیک"; }
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #9b7a48;
+  color: var(--cara-gold-ink, #7d5f26);
   font-size: 12px;
 }
 .section-kicker::before {
@@ -586,7 +586,7 @@ textarea:focus {
   color: #241d12;
   box-shadow: 0 8px 20px rgba(198, 161, 95, .24);
 }
-.account-eyebrow { color: #9b7a48; }
+.account-eyebrow { color: var(--cara-gold-ink, #7d5f26); }
 
 /* ---------- Cart and checkout ---------- */
 .cart-heading h1 { font-size: clamp(30px, 4.2vw, 46px); }
@@ -682,7 +682,7 @@ main.blog-article > p:first-child {
 main.blog-article > p:first-child a { color: #6a4d20; text-decoration: none; }
 main.blog-article .meta {
   margin: 0 0 10px;
-  color: #9b7a48;
+  color: var(--cara-gold-ink, #7d5f26);
   font-size: 12px;
   font-weight: 800;
 }

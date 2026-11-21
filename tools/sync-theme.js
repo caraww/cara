@@ -8,7 +8,7 @@ const path = require("path");
 
 const root = path.resolve(__dirname, "..");
 const dry = process.argv.includes("--dry");
-const V = "1";
+const V = "3";
 
 const BOOT =
   '<script>try{var t=localStorage.getItem("cara-theme")||"auto",d=t==="dark"||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches),e=document.documentElement;e.setAttribute("data-theme",d?"dark":"light");e.setAttribute("data-theme-mode",t)}catch(n){}</script>';
@@ -35,6 +35,8 @@ for (const file of walk(root)) {
   if (!html.includes("/css/theme.css")) {
     html = html.replace("</head>", LINK + SCRIPT + "\n</head>");
   }
+  html = html.replace(/\/css\/theme\.css\?v=\d+/g, `/css/theme.css?v=${V}`);
+  html = html.replace(/\/js\/theme\.js\?v=\d+/g, `/js/theme.js?v=${V}`);
   if (html !== before) {
     changed++;
     if (!dry) fs.writeFileSync(file, html);

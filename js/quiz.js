@@ -43,7 +43,7 @@
 
   function paint() {
     steps.forEach((el, i) => el.classList.toggle("is-on", i === step));
-    count.textContent = fa(step + 1) + " / " + fa(steps.length);
+    count.textContent = "سؤال " + fa(step + 1) + " از " + fa(steps.length);
     bar.style.width = Math.round(((step + 1) / steps.length) * 100) + "%";
     back.hidden = step === 0;
     next.textContent = step === steps.length - 1 ? "دیدن نتیجه" : "بعدی";

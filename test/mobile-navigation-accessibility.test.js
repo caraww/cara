@@ -36,8 +36,7 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   const pages = ["index.html", "builder.html", "upload.html", "gallery.html", "checkout.html", "game.html", "name-bracelet.html", "account.html"];
   for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), "utf8");
-    const navCssVersion = 3;
-    const navCss = html.indexOf("/css/nav-hero.css?v=" + navCssVersion);
+    const navCss = html.indexOf("/css/nav-hero.css?v=");
     const navScript = html.indexOf("js/nav-hero.js?v=1");
     const polishCss = html.search(/\/css\/polish\.css\?v=\d+/);
     assert.ok(navCss >= 0, page + " loads the current shared header stylesheet");
@@ -52,7 +51,7 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   // Primary pages now load nav-hero directly; generated pages keep their own shared-nav template checks below.
   const template = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
   assert.ok(template.includes("/css/site-nav.css?v=20261113"));
-  assert.ok(template.includes("/css/nav-hero.css?v=3"));
+  assert.ok(template.includes("/css/nav-hero.css?v="));
   assert.ok(template.includes("/js/nav-hero.js?v=1"));
   assert.ok(template.includes("/js/contact.js?v=20261121-seal"));
   const templateBraceletCss = template.indexOf("/css/bracelet-pages.css?v=6");

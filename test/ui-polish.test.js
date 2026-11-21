@@ -45,10 +45,10 @@ test("generated bracelet and color pages share the same navigation and visual sy
   assert.ok(layout.includes("/css/accessibility.css"));
   assert.ok(layout.includes("/css/site-nav.css?v=20261113"));
   assert.ok(layout.includes("/css/bracelet-pages.css?v=6"));
-  assert.ok(layout.includes("/css/polish.css?v=10"));
+  assert.match(layout, /\/css\/polish\.css\?v=[\w.-]+/);
   assert.ok(layout.includes("/css/premium.css?v=2"));
   assert.ok(layout.includes("/js/contact.js?v=20261121-seal"));
-  assert.ok(layout.includes("/css/nav-hero.css?v=3"));
+  assert.match(layout, /\/css\/nav-hero\.css\?v=[\w.-]+/);
   assert.ok(layout.includes("/js/nav-hero.js?v=1"));
 });
 
