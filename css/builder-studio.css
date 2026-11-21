@@ -1,0 +1,365 @@
+/* استودیوی تمام‌صفحه‌ی طراحی: بوم بزرگ، ابزارهای برچسب‌دار، پیشنهاد مرحله‌ی بعد.
+   فقط روی نمایشگرهای عریض فعال است؛ چیدمان موبایل دست‌نخورده می‌ماند. */
+
+.bs-only { display: none; }
+
+/* پایه: در موبایل و تبلت فقط نوار راهنما می‌ماند؛ زوم و تمام‌صفحه مخصوص دسکتاپ‌اند */
+.bs-zoom,
+.bs-fs-btn { display: none; }
+
+.bs-tip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(184, 151, 90, .34);
+  border-radius: 14px;
+  background: rgba(184, 151, 90, .1);
+  color: var(--cara-ink, #221a2c);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.bs-tip__ico {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(184, 151, 90, .2);
+  font-size: 13px;
+}
+
+.bs-tip__txt { margin: 0; }
+.bs-tip__txt b { font-weight: 800; }
+
+.bs-tip__next {
+  flex: none;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid rgba(184, 151, 90, .5);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--cara-ink, #221a2c);
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.bs-tip__next:hover { background: rgba(184, 151, 90, .16); }
+.bs-cta { display: none; }
+
+@media (min-width: 1100px) {
+  body:has(.builder) .wrap {
+    max-width: 1600px;
+    padding-top: calc(var(--nh-h, 74px) + 10px);
+    padding-bottom: 10px;
+  }
+
+  .builder {
+    display: grid;
+    grid-template-columns: 224px minmax(0, 1fr) 268px;
+    gap: 12px;
+    align-items: stretch;
+    height: calc(100dvh - var(--nh-h, 74px) - 20px);
+    min-height: 560px;
+    max-height: 1080px;
+  }
+
+  .builder > .panel {
+    height: 100%;
+    min-height: 0;
+    padding: 14px 14px 10px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* ستون میانی: سرتیتر جمع‌وجور + نوار ابزار + بوم کشسان + نوار وضعیت */
+  .builder > section.panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+    overflow: hidden;
+  }
+
+  .builder > section.panel .head {
+    flex: none;
+    align-items: center;
+    gap: 12px;
+    margin: 0;
+  }
+
+  .builder > section.panel .head .page-title {
+    margin: 0;
+    font-size: clamp(17px, 1.5vw, 21px);
+    line-height: 1.35;
+  }
+
+  .builder > section.panel .head .page-title::before { display: none; }
+  .builder > section.panel .head .sub { display: none; }
+
+  .builder > section.panel .dims {
+    flex: none;
+    gap: 6px;
+    font-size: 13px;
+  }
+
+  .builder > section.panel .dims input {
+    width: 62px;
+    min-height: 38px;
+    padding: 0 8px;
+    font-size: 15px;
+  }
+
+  .builder > section.panel .tools {
+    flex: none;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 0;
+    padding: 2px;
+  }
+
+  .builder > section.panel .tools > * { flex: none; }
+  .builder > section.panel .tools > .grow { display: none; }
+  .builder > section.panel .tools .grp.bare {
+    margin-inline-start: auto;
+    gap: 6px;
+    padding-inline-start: 10px;
+    border-inline-start: 1px solid var(--cara-line, #e2dced);
+  }
+
+  .builder > section.panel .tools .grp {
+    flex-wrap: wrap;
+    gap: 2px;
+    padding: 3px;
+    background: var(--cara-surface-3, #efeaf7);
+    border-radius: 14px;
+  }
+
+  .builder > section.panel .tools .grp.bare { background: none; }
+
+  /* دکمه‌ی ابزار: آیکن + اسم زیرش، همیشه دیده می‌شود */
+  .builder > section.panel .tools .tool.ib {
+    width: auto;
+    min-width: 48px;
+    height: auto;
+    min-height: 52px;
+    padding: 5px 5px 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    border-radius: 11px;
+    border-color: transparent;
+    background: transparent;
+  }
+
+  .builder > section.panel .tools .tool.ib .ic {
+    width: 19px;
+    height: 19px;
+  }
+
+  .builder > section.panel .tools .tool.ib::after {
+    content: attr(data-label);
+    position: static;
+    inset: auto;
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    color: inherit;
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.25;
+    text-align: center;
+    white-space: normal;
+    max-width: 60px;
+    opacity: 1;
+    transform: none;
+    transition: none;
+    pointer-events: none;
+  }
+
+  .builder > section.panel .tools .tool.ib:hover {
+    background: var(--cara-surface, #fff);
+    border-color: var(--cara-line, #e2dced);
+  }
+
+  .builder > section.panel .tools .tool.ib[aria-pressed="true"] {
+    background: var(--ink, #221a2c);
+    border-color: var(--ink, #221a2c);
+    color: #fff;
+  }
+
+  .builder > section.panel .tools .btn.sm {
+    min-height: 44px;
+    padding-inline: 14px;
+    font-size: 13.5px;
+  }
+
+  /* بوم: تمام فضای باقی‌مانده، فقط خودش اسکرول می‌شود */
+  .builder > section.panel .grid-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+    display: grid;
+    place-items: center;
+    padding: 12px;
+    border-radius: 16px;
+    background:
+      radial-gradient(circle at 50% 0%, rgba(184, 151, 90, .12), transparent 62%),
+      var(--cara-surface-3, #e7e4ef);
+    box-shadow: inset 0 2px 10px rgba(36, 36, 49, .09);
+  }
+
+  .builder > section.panel .statusbar {
+    flex: none;
+    margin: 0;
+    padding: 6px 4px 0;
+  }
+
+  /* راهنمای مرحله‌ی بعد، زیر نوار ابزار */
+  .bs-tip {
+    gap: 10px;
+    flex: none;
+    margin: 0;
+    padding: 9px 12px;
+    background: linear-gradient(100deg, rgba(184, 151, 90, .12), rgba(184, 151, 90, .03));
+  }
+
+  .bs-tip__ico {
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+  }
+
+  .bs-tip .bs-cta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-inline-start: auto;
+    flex: none;
+  }
+
+  .bs-tip .bs-cta .btn {
+    min-height: 40px;
+    padding-inline: 16px;
+    font-size: 13.5px;
+    white-space: nowrap;
+  }
+
+  /* شناور: بزرگ‌نمایی و تمام‌صفحه */
+  .bs-zoom {
+    display: flex;
+    position: absolute;
+    inset-inline-start: 22px;
+    bottom: 22px;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px;
+    border: 1px solid var(--cara-line, #e2dced);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .94);
+    box-shadow: 0 10px 24px -14px rgba(24, 16, 42, .6);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+  }
+
+  .bs-zoom button {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--cara-ink, #221a2c);
+    font: inherit;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .bs-zoom button:hover { background: rgba(184, 151, 90, .18); }
+
+  .bs-zoom__fit {
+    width: auto !important;
+    padding: 0 12px !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
+  }
+
+  .bs-fs-btn {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 38px;
+    padding: 0 14px;
+    border: 1px solid var(--cara-line, #e2dced);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, .94);
+    color: var(--cara-ink, #221a2c);
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .bs-fs-btn:hover { background: #fff; border-color: rgba(184, 151, 90, .55); }
+
+  /* حالت تمام‌صفحه: هدر سایت کنار می‌رود و استودیو کل صفحه را می‌گیرد */
+  body.bs-fs header.sh,
+  body.bs-fs header.top,
+  body.bs-fs .cara-contact,
+  body.bs-fs #cara-contact { display: none !important; }
+
+  body.bs-fs .wrap {
+    padding: 8px !important;
+    max-width: none !important;
+  }
+
+  body.bs-fs .builder {
+    height: calc(100dvh - 16px);
+    max-height: none;
+  }
+
+  body.bs-fs .seo-text,
+  body.bs-fs .faq { display: none; }
+}
+
+html[data-theme="dark"] .bs-tip {
+  border-color: rgba(184, 151, 90, .38);
+  background: linear-gradient(100deg, rgba(184, 151, 90, .16), rgba(184, 151, 90, .04));
+  color: #efe9f8;
+}
+
+html[data-theme="dark"] .bs-tip__next {
+  background: rgba(255, 255, 255, .08);
+  border-color: rgba(184, 151, 90, .5);
+  color: #f6efe0;
+}
+
+html[data-theme="dark"] .bs-zoom,
+html[data-theme="dark"] .bs-fs-btn {
+  background: rgba(38, 32, 56, .94);
+  border-color: rgba(255, 255, 255, .12);
+  color: #efe9f8;
+}
+
+html[data-theme="dark"] .bs-zoom button { color: #efe9f8; }
+html[data-theme="dark"] .bs-zoom button:hover { background: rgba(255, 255, 255, .1); }
