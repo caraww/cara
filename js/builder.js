@@ -351,7 +351,7 @@ try {
   function summary() {
     const counts = {}; let total = 0;
     data.forEach((row) => row.forEach((c) => { if (c) { total++; counts[c] = (counts[c] || 0) + 1; } }));
-    $("total").textContent = C.faNum(total); $("dimText").innerHTML = `<bdi dir="ltr">${C.faNum(w)} × ${C.faNum(h)}</bdi>`;
+    $("total").textContent = total ? `${C.faNum(total)} دونه` : "—"; $("dimText").innerHTML = `<bdi dir="ltr">${C.faNum(w)} × ${C.faNum(h)}</bdi>`;
     $("warn").hidden = w <= L.WARN_W;
     $("colors").innerHTML = Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([code, n]) => {
       const p = C.byCode(code); return `<div class="color-row" data-code="${code}" role="button" tabindex="0" title="انتخاب این رنگ"><i class="dot" style="--c:${p.hex}"></i><small>${p.code} · ${p.name}</small><b>${C.faNum(n)}</b></div>`;
