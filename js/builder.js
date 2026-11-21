@@ -218,7 +218,7 @@ try {
     data[r][c] = v; drawCell(ctx, r, c, cw, ch, M, T);
   }
   function setCell(r, c, v) {
-    put(r, c, v);
+    put(r, c, v); strokeCells++;
     if (mirror && w - 1 - c !== c) put(r, w - 1 - c, v);
   }
   const val = () => (tool === "eraser" || erasing ? null : sel);
@@ -307,7 +307,24 @@ try {
 
   const snapshot = () => JSON.stringify({ w, h, data });
   const pushHistory = () => { redo.length = 0; history.push(snapshot()); if (history.length > 80) history.shift(); };
+
+  /* لمس دو انگشتی = جابه‌جایی بوم، بدون عوض کردن ابزار. انگشت اول اگه یه منجوق گذاشته باشه، برمی‌گرده. */
+  const activePointers = new Map();
+  let pinchPan = null, strokeCells = 0;
+  function beginPinchPan() {
+    const pts = [...activePointers.values()];
+    if (pts.length < 2) return;
+    pinchPan = {
+      x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2,
+      l: wrap.scrollLeft, t: wrap.scrollTop,
+    };
+    if (painting && strokeCells <= 2) { const p = history.pop(); if (p) applyState(JSON.parse(p)); }
+    painting = false; drag = null; selDrag = null; snap = null; panning = null;
+  }
   canvas.addEventListener("pointerdown", (e) => {
+    activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (activePointers.size === 2) { e.preventDefault(); canvas.setPointerCapture(e.pointerId); beginPinchPan(); return; }
+    if (activePointers.size > 2) return;
     if (tool === "pan" || e.button === 1 || space) { /* جابه‌جایی: کشیدن با موس/لمس، دکمه‌ی وسط یا نگه داشتن Space */
       e.preventDefault(); panning = { x: e.clientX, y: e.clientY, l: wrap.scrollLeft, t: wrap.scrollTop };
       canvas.setPointerCapture(e.pointerId); canvas.style.cursor = "grabbing"; return;
@@ -321,19 +338,52 @@ try {
     if (tool === "select") {
       selDrag = cell; selRect = { r0: cell[0], c0: cell[1], r1: cell[0], c1: cell[1] }; updateSelBox(); canvas.setPointerCapture(e.pointerId); return;
     }
-    erasing = e.button === 2; pushHistory(); canvas.setPointerCapture(e.pointerId);
+    erasing = e.button === 2; pushHistory(); strokeCells = 0; canvas.setPointerCapture(e.pointerId);
     if (tool === "fill") { fill(cell); changed(); return; }
     if (SHAPES.has(tool)) { snap = data.map((r) => r.slice()); drag = { a: cell, b: cell }; track = new Set(); drawShape(e.shiftKey); return; }
     painting = true; last = cell; setCell(cell[0], cell[1], val()); queueSummary();
   });
   canvas.addEventListener("pointermove", (e) => {
+    if (activePointers.has(e.pointerId)) activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pinchPan && activePointers.size >= 2) {
+      const pts = [...activePointers.values()];
+      wrap.scrollLeft = pinchPan.l - ((pts[0].x + pts[1].x) / 2 - pinchPan.x);
+      wrap.scrollTop = pinchPan.t - ((pts[0].y + pts[1].y) / 2 - pinchPan.y);
+      return;
+    }
     if (panning) { wrap.scrollLeft = panning.l - (e.clientX - panning.x); wrap.scrollTop = panning.t - (e.clientY - panning.y); return; }
     if (selDrag) { const cell = cellFrom(e, true); selRect.r1 = cell[0]; selRect.c1 = cell[1]; updateSelBox(); return; }
     if (drag) { const cell = cellFrom(e, true); if (cell[0] !== drag.b[0] || cell[1] !== drag.b[1] || drag.sh !== e.shiftKey) { drag.b = cell; drag.sh = e.shiftKey; redrawShape(e.shiftKey); queueSummary(); } return; }
-    if (!painting) return; const cell = cellFrom(e);
+    if (!painting) return;
+    lastPt = { x: e.clientX, y: e.clientY };
+    if (!edgeRAF) edgeRAF = requestAnimationFrame(edgeTick);
+    const cell = cellFrom(e);
     if (cell && (cell[0] !== last[0] || cell[1] !== last[1])) { line(last, cell); last = cell; queueSummary(); }
   });
-  const stop = () => {
+
+  /* نزدیک لبه‌ی بالا/پایین بوم، خودکار اسکرول می‌شه تا خط‌های بلند یک‌نفس کشیده بشن */
+  let edgeRAF = 0, lastPt = null;
+  function edgeTick() {
+    edgeRAF = 0;
+    if (!painting || !lastPt) return;
+    const r = wrap.getBoundingClientRect(), pad = 56, maxStep = 12;
+    let dy = 0;
+    if (lastPt.y > r.bottom - pad) dy = Math.min(maxStep, 3 + (lastPt.y - (r.bottom - pad)) / 4);
+    else if (lastPt.y < r.top + pad) dy = -Math.min(maxStep, 3 + ((r.top + pad) - lastPt.y) / 4);
+    if (dy) {
+      const before = wrap.scrollTop;
+      wrap.scrollTop = before + dy;
+      if (wrap.scrollTop !== before) {
+        const cell = cellFrom(lastPt);
+        if (cell && (cell[0] !== last[0] || cell[1] !== last[1])) { line(last, cell); last = cell; queueSummary(); }
+      }
+    }
+    edgeRAF = requestAnimationFrame(edgeTick);
+  }
+  const stop = (e) => {
+    if (e && e.pointerId != null) { activePointers.delete(e.pointerId); if (activePointers.size < 2) pinchPan = null; }
+    if (edgeRAF) { cancelAnimationFrame(edgeRAF); edgeRAF = 0; }
+    lastPt = null;
     if (panning) { panning = null; setTool(tool); }
     if (selDrag) selDrag = null;
     if (drag) { drag = null; track = null; snap = null; changed(); }
@@ -918,6 +968,20 @@ try {
   new MutationObserver(syncDot).observe(pal, { subtree: true, attributes: true, attributeFilter: ["aria-pressed"] });
   mq.addEventListener && mq.addEventListener("change", function () { setOpen(false); });
   syncDot();
+})();
+
+/* راهنمای کوتاه: دو انگشت = جابه‌جایی بوم */
+(function () {
+  if (!window.matchMedia("(max-width: 760px)").matches) return;
+  var sec = document.querySelector(".builder > section.panel");
+  if (!sec) return;
+  var hint = document.createElement("div");
+  hint.className = "mb-hint";
+  hint.textContent = "با دو انگشت بوم رو جابه‌جا کن";
+  sec.appendChild(hint);
+  var hide = function () { hint.classList.add("is-out"); };
+  hint.addEventListener("click", hide);
+  setTimeout(hide, 5000);
 })();
 
 /* تمام‌صفحه‌ی موبایل: دکمه توی نوار ابزار. روی آیفون Fullscreen API نیست، پس حالت «تمرکز» با CSS ساخته می‌شه. */

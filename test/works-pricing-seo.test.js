@@ -7,13 +7,14 @@ const { spawnSync } = require("node:child_process");
 
 const root = path.join(__dirname, "..");
 require(path.join(root, "lib/works-pricing.js"));
-const { priceMap } = globalThis.CARA_WORK_PRICING;
+const { priceMap, baseMap, sale } = globalThis.CARA_WORK_PRICING;
 const works = JSON.parse(fs.readFileSync(path.join(root, "data/works.json"), "utf8"));
 const vm = require("node:vm");
 const browserContext = { window: { CARA: {} } };
 vm.runInNewContext(fs.readFileSync(path.join(root, "js/works.js"), "utf8"), browserContext);
 const browserWorks = JSON.parse(JSON.stringify(browserContext.window.CARA.works));
-const prices = priceMap(works);
+const prices = priceMap(works); /* قیمت روز: توی بازه‌ی حراج با ۳۰٪ تخفیف */
+const listPrices = baseMap(works); /* قیمت بدون تخفیف */
 
 test("Worker and static SEO builder use the same shared pricing module", () => {
   const worker = fs.readFileSync(path.join(root, "index.js"), "utf8");
@@ -26,13 +27,31 @@ test("Worker and static SEO builder use the same shared pricing module", () => {
 });
 
 test("shared pricing preserves the current fixed, auto, and noOrder rules", () => {
-  assert.equal(prices["خطر"], 900000);
-  assert.equal(prices["ریک اند مورتی"], 4000000);
-  assert.equal(prices["آلبوم"], undefined);
-  assert.equal(prices["اردک تک تک"], 2127000);
-  assert.equal(prices["اردک تک تک"], priceMap(works)["اردک تک تک"]);
+  assert.equal(listPrices["خطر"], 900000);
+  assert.equal(listPrices["ریک اند مورتی"], 4000000);
+  assert.equal(listPrices["آلبوم"], undefined);
+  assert.equal(listPrices["اردک تک تک"], 2127000);
+  assert.equal(listPrices["اردک تک تک"], baseMap(works)["اردک تک تک"]);
   assert.deepEqual(priceMap(browserWorks), prices, "Worker browser catalog and SEO source catalog must resolve identical prices");
   assert.equal(Object.keys(prices).length, works.filter((w) => !w.noOrder).length);
+});
+
+test("حراج بلک فریدی: ۳۰٪ تخفیف فقط بین ۳۰ آبان و ۱۳ آذر", () => {
+  const at = (iso) => Date.parse(iso);
+  assert.equal(sale.active(at("2026-11-20T23:59:00+03:30")), false, "قبل از ۳۰ آبان تخفیف نداریم");
+  assert.equal(sale.active(at("2026-11-21T00:00:00+03:30")), true, "۳۰ آبان شروع حراج");
+  assert.equal(sale.active(at("2026-12-03T23:59:00+03:30")), true, "شب آخر حراج");
+  assert.equal(sale.active(at("2026-12-04T00:00:00+03:30")), false, "۱۳ آذر قیمت‌ها برمی‌گرده");
+
+  assert.equal(sale.final(2200000, at("2026-11-25T12:00:00+03:30")), 1540000);
+  assert.equal(sale.final(2200000, at("2026-12-10T12:00:00+03:30")), 2200000);
+  assert.equal(sale.final(0), 0);
+
+  /* قیمت روز همون ۷۰٪ قیمت پایه‌ست و از قیمت پایه بیشتر نمی‌شه */
+  for (const id of Object.keys(listPrices)) {
+    assert.ok(prices[id] <= listPrices[id], id + " نباید گرون‌تر از قیمت پایه بشه");
+    assert.ok(prices[id] >= Math.round(listPrices[id] * 0.7) - 1000, id + " تخفیفش کمتر از ۳۰٪ نشه");
+  }
 });
 
 test("build-pages generates gallery JSON-LD and bracelet pages from the same catalog and prices", () => {
@@ -102,7 +121,9 @@ test("build-pages generates gallery JSON-LD and bracelet pages from the same cat
     assert.ok(albumPage.includes("<title>نمونه دستبند منجوقی آلبوم | کارا</title>"));
     const duckPage = fs.readFileSync(path.join(temp, "bracelet", "اردک-تک-تک.html"), "utf8");
     assert.ok(duckPage.includes("سفارش این دستبند"));
-    assert.ok(duckPage.includes("۲٬۱۲۷٬۰۰۰ تومان"));
+    /* قیمت قبلی خط‌خورده + قیمت حراج، هر دو توی صفحه */
+    assert.ok(duckPage.includes('<s class="price-list">۲٬۱۲۷٬۰۰۰</s>'));
+    assert.ok(duckPage.includes('<b class="price-now">۱٬۴۸۹٬۰۰۰ تومان</b>'));
   } finally {
     fs.rmSync(temp, { recursive: true, force: true });
   }
