@@ -1031,3 +1031,185 @@
     padding-bottom: calc(205px + env(safe-area-inset-bottom, 0px));
   }
 }
+
+/* ======================================================================
+   استودیوی موبایل (بازطراحی): بوم تقریباً تمام صفحه، ابزار و پالت در داک پایین
+   این بلوک آخر می‌آید و روی قواعد موبایلِ بالاتر می‌نشیند.
+   ====================================================================== */
+@media (max-width: 760px) {
+  body:has(.builder) .wrap {
+    padding: 64px 10px calc(76px + env(safe-area-inset-bottom, 0px));
+    max-width: none;
+  }
+
+  .builder {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+    height: auto;
+  }
+
+  /* پنل بوم: کل ارتفاع دیده‌شده منهای هدر و نوار سفارش */
+  .builder > section.panel:not(.sp-card) {
+    order: 1;
+    flex: none;
+    height: calc(100svh - 64px - 76px - 10px);
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+    overflow: hidden;
+    border-radius: 20px;
+  }
+  .builder > section.panel .head {
+    flex: none;
+    margin: 0;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .builder > section.panel .head .dims { flex: none; }
+  .builder > section.panel .grid-wrap {
+    order: 1;
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none;
+    padding: 10px;
+    border-radius: 14px;
+    background: var(--cara-surface-3, #e7e4ef);
+    box-shadow: inset 0 2px 6px rgba(36, 36, 49, 0.08);
+  }
+
+  /* نوار ابزار: یک ردیف افقی، ۴۴px، نزدیک شست */
+  .builder > section.panel .tools {
+    order: 2;
+    flex: none;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 8px;
+    margin: 0;
+    padding: 2px 2px 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .builder > section.panel .tools::-webkit-scrollbar { display: none; }
+  .builder > section.panel .tools > * { flex: none; }
+  .builder > section.panel .tools .tool.ib {
+    width: 44px;
+    min-width: 44px;
+    height: 44px;
+    min-height: 44px;
+    flex: none;
+    border-radius: 14px;
+  }
+  .builder > section.panel .tools .btn.sm { min-height: 44px; }
+
+  /* ابعاد: فشرده و خوانا */
+  .dims { gap: 6px; font-size: 14px; align-items: center; }
+  .dims label { flex-direction: row; align-items: center; gap: 5px; font-size: 13px; color: var(--cara-muted, #6c6478); }
+  .dims input { width: 52px; height: 36px; padding: 0 4px; font-size: 16px; border-radius: 10px; }
+  /* پیام‌های شادباش روی بوم، بالای نوار ابزار تا ابعاد رو نپوشونن */
+  body:has(.builder) .dl-toast {
+    top: auto;
+    bottom: calc(150px + env(safe-area-inset-bottom, 0px));
+    font-size: 15px;
+    padding: 8px 18px;
+  }
+
+  /* خلاصه و پنل‌های بیشتر زیر بوم می‌آیند و با اسکرول صفحه در دسترس‌اند */
+  .builder > .summary { order: 2; }
+  .builder + .sp-wrap { margin-top: 12px; }
+
+  /* نوار پایین: یک ردیف، بدون شکستن */
+  .mb-bar {
+    flex-wrap: nowrap;
+    gap: 8px;
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+  }
+  .mb-bar .mb-info { min-width: 0; }
+  .mb-bar .mb-info b { font-size: 15px; }
+  .mb-bar a.btn { display: none; }          /* «افزودن به سبد» در نوار ابزار بوم هست */
+  .mb-bar #mbNext { flex: 1 1 auto; max-width: none; min-height: 46px; padding-inline: 12px; }
+  .mb-bar .mb-color { min-height: 46px; padding: 0 12px; }
+}
+
+@media (max-width: 430px) {
+  body:has(.builder) .wrap { padding-top: 60px; }
+  .builder > section.panel:not(.sp-card) { height: calc(100svh - 60px - 76px - 10px); }
+  .mb-bar .mb-info small { display: none; }
+  .builder > section.panel .tools { gap: 6px; }
+}
+
+/* راهنمای یک‌باره‌ی موبایل: جابه‌جایی بوم با دو انگشت */
+.mb-hint { display: none; }
+@media (max-width: 760px) {
+  .builder > section.panel:not(.sp-card) { position: relative; }
+  .mb-hint {
+    display: block;
+    position: absolute;
+    inset-inline: 0;
+    bottom: 74px;
+    z-index: 6;
+    width: max-content;
+    max-width: 84%;
+    margin-inline: auto;
+    padding: 8px 14px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #fff;
+    background: rgba(34, 26, 44, 0.88);
+    border-radius: 999px;
+    box-shadow: 0 8px 20px rgba(27, 18, 38, 0.28);
+    transition: opacity 0.3s, transform 0.3s;
+  }
+  .mb-hint.is-out { opacity: 0; transform: translateY(6px); pointer-events: none; }
+}
+
+/* ===== Pass 6 — نوار سفارش موبایل: چیدمان سه‌تایی و خوانا ===== */
+@media (max-width: 760px) {
+  .mb-bar {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+    border-start-start-radius: 18px;
+    border-start-end-radius: 18px;
+  }
+  .mb-bar .mb-color { order: 1; min-height: 46px; padding: 0 12px; }
+  .mb-bar .mb-info {
+    order: 2;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .mb-bar .mb-info b { font-size: 17px; }
+  .mb-bar .mb-info small { display: none; }
+  .mb-bar #mbNext { order: 3; min-height: 46px; padding-inline: 16px; }
+  .mb-bar a.btn { display: none; }
+}
+
+@media (max-width: 380px) {
+  .mb-bar .mb-color span { display: none; }
+  .mb-bar .mb-color { padding: 0 10px; }
+  .mb-bar .mb-info { font-size: 13px; }
+  .mb-bar .mb-info b { font-size: 16px; }
+}
+
+/* راهنمای اسکرول افقی نوار ابزار روی موبایل */
+@media (max-width: 760px) {
+  .builder > section.panel .tools {
+    -webkit-mask-image: linear-gradient(to left, #000 88%, transparent 100%);
+    mask-image: linear-gradient(to left, #000 88%, transparent 100%);
+  }
+}
