@@ -211,6 +211,9 @@ try {
   function drawCell(g, r, c, cw, ch, ox, oy, G) {
     const [gx, gy] = cellXY(r, c, cw, ch, G || geomMain());
     const x = ox + gx, y = oy + gy, code = data[r][c];
+    /* پاک‌کردن خانه پیش از هر نقاشی؛ وگرنه منجوقِ پاک‌شده روی بوم می‌ماند */
+    g.fillStyle = "#FFFFFF";
+    g.fillRect(x, y, cw + 0.5, ch + 0.5);
     if (code) { C.drawBead(g, x + 1, y + 1, cw - 1, ch - 1, C.byCode(code).hex); return; }
     /* خانه‌ی خالی: نقطه‌ی محو روی بوم سفید، مثل دفتر الگو */
     const rad = clamp(Math.min(cw, ch) * 0.1, 0.7, 1.6);

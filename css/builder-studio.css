@@ -420,98 +420,80 @@ html[data-theme="dark"] .bs-zoom button:hover { background: rgba(255, 255, 255, 
 
 .builder .bs-tip { display: none; }
 
-/* ================= چیدمان ثابتِ موبایل: بوم بالا، پالت پایین ================= */
+/* ================= چیدمان موبایل: صفحه اسکرول می‌شود، بوم تمام‌صفحه ================= */
 @media (max-width: 760px) {
-  html:has(.builder-page), body.builder-page { height: 100dvh; overflow: hidden; }
-  body.builder-page { position: fixed; inset: 0; width: 100%; }
+  html:has(.builder-page),
+  body.builder-page {
+    height: auto;
+    overflow: visible;
+  }
 
+  body.builder-page {
+    position: static;
+    width: auto;
+  }
+
+  /* سربرگ و ردیف ابعاد با اسکرول کنار می‌روند تا بوم تمام صفحه شود */
+  body.builder-page header.sh { position: static; }
+
+  /* ارتفاع صفحه دقیقاً به‌اندازه‌ی «سربرگ + ردیف ابعاد» بیشتر از صفحه است،
+     پس یک اسکرول کوتاه همین دو تا را کنار می‌زند و بوم تمام‌صفحه می‌ماند */
   body.builder-page .wrap {
-    height: 100dvh;
-    padding: calc(var(--bs-hdr, 64px) + 6px) 10px calc(var(--bs-mb, 64px) + 8px);
-    box-sizing: border-box;
+    height: calc(100dvh + 48px);
+    min-height: 0;
     max-width: none;
+    padding: 8px 10px calc(var(--bs-mb, 63px) + 12px);
+    box-sizing: border-box;
     overflow: hidden;
   }
 
   body.builder-page .builder {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    overflow: hidden;
+    display: block;
+    height: auto;
+    overflow: visible;
   }
 
   body.builder-page .builder > section.panel:not(.sp-card) {
-    height: auto;
-    flex: 1 1 auto;
-    min-height: 0;
     display: flex;
     flex-direction: column;
     gap: 8px;
-    padding: 8px;
-    overflow: hidden;
+    height: auto;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    overflow: visible;
   }
+
+  body.builder-page .builder > section.panel > .head { order: 0; }
 
   body.builder-page .builder > section.panel .grid-wrap {
     order: 1;
-    flex: 1 1 auto;
-    min-height: 0;
+    height: calc(100dvh - 165px);
+    min-height: 320px;
     max-height: none;
+    padding: 6px;
+    border-radius: 18px;
   }
 
   body.builder-page .builder > section.panel .tools {
     order: 2;
     flex: none;
+    position: relative;
+    z-index: 4;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(34, 26, 44, 0.1);
   }
 
+  /* نوار تنظیمات شناور حذف شد: زوم با دو انگشت، «نمای کامل» خودکار */
+  body.builder-page .bs-zoom { display: none !important; }
 
   body.builder-page .builder > .summary { display: none; }
-}
 
-
-/* نوار زوم بالای بوم (به‌جای شناور) تا روی منجوق‌ها نیفتد */
-@media (max-width: 760px) {
-  body.builder-page .builder > section.panel > .head { order: 0; }
-  /* نوار زوم شناور بالای نوار ابزار؛ روی حاشیه‌ی سفید بوم می‌نشیند */
-  body.builder-page .builder > section.panel > .bs-zoom {
-    position: absolute;
-    top: calc(var(--bs-head-h, 48px) + 16px);
-    bottom: auto;
-    inset-inline-start: 10px;
-    inset-inline-end: auto;
-    z-index: 6;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    width: max-content;
-    height: auto;
-    margin: 0;
-    padding: 4px;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid #e8e3f0;
-    border-radius: 14px;
-    box-shadow: 0 6px 18px rgba(34, 26, 44, 0.1);
-  }
-
-  body.builder-page .builder > section.panel > .bs-zoom > button {
-    height: 34px;
-    min-height: 34px;
-    padding: 0 11px;
-    font-size: 12.5px;
-    font-weight: 700;
-    color: #221a2c;
-    background: #f6f3fb;
-    border: 1px solid #e8e3f0;
-    border-radius: 10px;
-    box-shadow: none;
-  }
-
-  body.builder-page .builder > section.panel > .bs-zoom > button[data-zoom="fit"] {
-    color: #6b4fa0;
-    background: #f0eafa;
-    border-color: #ddd2f0;
-  }
-
-  body.builder-page .builder > section.panel > .grid-wrap { order: 1; }
-  body.builder-page .builder > section.panel > .tools { order: 2; }
+  /* فقط بوم و ابزارها بمانند؛ فوتر و متن سئو با اسکرول نیایند */
+  body.builder-page footer.sf,
+  body.builder-page section.seo-text,
+  body.builder-page .sp-wrap,
+  body.builder-page .print-sheet { display: none; }
 }

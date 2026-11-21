@@ -23,10 +23,17 @@
     if (!sound.on) return;
     try {
       ac = ac || new (window.AudioContext || window.webkitAudioContext)();
-      const t = ac.currentTime, o = ac.createOscillator(), v = ac.createGain();
-      o.type = "triangle"; o.frequency.setValueAtTime(rnd(1500, 2300), t); o.frequency.exponentialRampToValueAtTime(700, t + 0.05);
-      v.gain.setValueAtTime(0.05, t); v.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
-      o.connect(v).connect(ac.destination); o.start(t); o.stop(t + 0.08);
+      if (ac.state === "suspended") ac.resume();
+      /* صدای نرم و بمِ «تِق» منجوق، مثل نشستن دونه روی پارچه */
+      const t = ac.currentTime, o = ac.createOscillator(), v = ac.createGain(), f = ac.createBiquadFilter();
+      o.type = "sine";
+      o.frequency.setValueAtTime(rnd(420, 500), t);
+      o.frequency.exponentialRampToValueAtTime(rnd(300, 350), t + 0.09);
+      f.type = "lowpass"; f.frequency.value = 1600;
+      v.gain.setValueAtTime(0.0001, t);
+      v.gain.exponentialRampToValueAtTime(0.03, t + 0.006);
+      v.gain.exponentialRampToValueAtTime(0.0001, t + 0.11);
+      o.connect(f).connect(v).connect(ac.destination); o.start(t); o.stop(t + 0.12);
     } catch {}
   }
   let toastEl, tt;
@@ -152,7 +159,7 @@
       let moved = false;
       while (placed < Math.min(N, na + 1)) { const [r, c] = steps[placed++]; fresh.push({ r, c, t: now }); moved = true; }
       if (moved) {
-        if (opt.tick && now - lastTick > 48) { opt.tick(); lastTick = now; }
+        if (opt.tick && now - lastTick > 110) { opt.tick(); lastTick = now; }
         api.onProgress && api.onProgress(placed, N);
       }
       while (fresh.length && now - fresh[0].t > 240) commit(fresh.shift());
