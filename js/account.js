@@ -41,15 +41,18 @@
     } catch (error) { message("loginMessage", error.message); }
   }
 
+  /* خانه‌های طرح کد رنگ‌اند (مثل DB0010)؛ CARA.palette شیء {code,name,hex} است نه آرایه */
+  const beadHex = (code) => window.CARA?.byCode?.(code)?.hex || "#8b72a4";
+
   function renderPattern(canvas, design) {
     const rows = design?.data;
     if (!Array.isArray(rows) || !rows.length) return;
     const width = rows[0].length, height = rows.length, cell = Math.max(5, Math.min(12, 220 / width));
     canvas.width = width * cell; canvas.height = height * cell;
     const ctx = canvas.getContext("2d");
-    rows.forEach((row, y) => row.forEach((color, x) => {
-      if (!color) return;
-      ctx.fillStyle = window.CARA?.palette?.find((p) => p[0] === color)?.[2] || "#8b72a4";
+    rows.forEach((row, y) => row.forEach((code, x) => {
+      if (!code) return;
+      ctx.fillStyle = beadHex(code);
       ctx.fillRect(x * cell, y * cell, cell - 1, cell - 1);
     }));
   }

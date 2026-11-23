@@ -245,6 +245,18 @@ html[data-theme="dark"] .btn[disabled] {
   border-color: var(--cara-line);
   color: #b7b1c9;
 }
+/* در تم روز، دکمه‌ی تیره‌ی غیرفعال زمینه‌ی گرادیانی‌اش را از دست می‌دهد
+   (decor.css فقط راه‌راه روشن می‌گذارد) و متن سفیدش روی کارت سفید گم می‌شود */
+html:not([data-theme="dark"]) .btn.dark:disabled,
+html:not([data-theme="dark"]) .btn.dark[disabled],
+html:not([data-theme="dark"]) .btn.accent:disabled,
+html:not([data-theme="dark"]) .btn.accent[disabled] {
+  background-color: #d7d2e4;
+  border-color: #c5bfd7;
+  color: #3f3956;
+  opacity: 1;
+  box-shadow: none;
+}
 
 /* ---------- متن‌هایی که رنگ ثابت دارند ---------- */
 html[data-theme="dark"] .sub,
