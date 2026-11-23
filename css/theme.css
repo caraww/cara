@@ -515,13 +515,12 @@ html[data-theme="dark"] .chl-msg.is-error { color: #f2a08d; }
 html[data-theme="dark"] figcaption { color: var(--cara-muted); }
 /* کارت‌های صحنه‌ی هیرو همیشه روی سطح کرم‌اند، پس متنشان در هر دو تم تیره می‌ماند */
 html[data-theme="dark"] .hx__card figcaption { color: #352a4a; }
-html[data-theme="dark"] .hx__card figcaption small { color: #8b7f6d; }
+html[data-theme="dark"] .hx__card figcaption small { color: #6d6047; }
 html[data-theme="dark"] :is(.pill, .cp-note, .note-pill, .premium-pill) {
   background: var(--cara-surface-2);
   border-color: var(--cara-line);
   color: #e0c48f;
 }
-html[data-theme="dark"] .wk-grid .wk-card button.wk-fav { color: #5f5468 !important; }
 
 /* شب: هر کارت پست رنگ خودش را نگه می‌دارد، فقط تیره و کم‌نور */
 html[data-theme="dark"] .post-card { border: 1px solid rgba(255, 255, 255, .07); }
@@ -729,7 +728,12 @@ html[data-theme="dark"] .btn.accent:hover {
 .checkout-payment-choice--digipay:disabled {
   background: #eef9fc !important;
   border-color: #cfe7ee !important;
-  color: #4a8496 !important;
+  color: #2f6575 !important;
+}
+html[data-theme="dark"] .checkout-payment-choice--digipay:disabled {
+  background: #0f2b33 !important;
+  border-color: #1d5b6b !important;
+  color: #d6f3fb !important;
 }
 html[data-theme="dark"] .checkout-payment-choice--digipay {
   background: #0f2b33 !important;
@@ -825,3 +829,33 @@ html[data-theme="dark"] .order-message__links a:first-child {
   border-color: #c9a86b;
   color: #231b31;
 }
+
+/* ---------- لایت‌باکس گالری در حالت شب ---------- */
+/* دکمه‌های بستن/قبلی/بعدی و علاقه‌مندی/اشتراک‌گذاری پس‌زمینه‌ی سفید ثابت داشتند
+   و در تم تیره متن روشن روی سفید می‌افتاد (عملاً نامرئی). */
+html[data-theme="dark"] :is(.wk-x, .wk-nav, .wk-info #lbFav, .wk-info #lbShare) {
+  background: var(--cara-surface-2);
+  border-color: var(--cara-line);
+  color: var(--cara-text);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .35);
+}
+html[data-theme="dark"] :is(.wk-x, .wk-nav, .wk-info #lbFav, .wk-info #lbShare):hover {
+  background: var(--cara-surface-3);
+  color: var(--cara-text);
+}
+html[data-theme="dark"] .wk-info #lbFav[aria-pressed="true"] {
+  background: var(--cara-accent);
+  border-color: var(--cara-accent);
+  color: #fff;
+}
+html[data-theme="dark"] .wk-info .tags > * {
+  background: var(--cara-surface-2);
+  border-color: var(--cara-line);
+  color: var(--cara-text);
+}
+html[data-theme="dark"] .wk-info #lbPrice { color: var(--cara-detail); }
+
+/* کاراکترهای ‹ › در متن راست‌به‌چپ آینه می‌شوند و «قبلی» را با فلش اشتباه نشان
+   می‌دادند. با direction: ltr روی خود دکمه، هم گلیف درست می‌ماند و هم آفست‌های
+   inset-inline-* برعکس می‌شوند؛ یعنی «قبلی» می‌رود سمت راست. */
+:is(.hx__arrow, .wk-nav) { direction: ltr; }
