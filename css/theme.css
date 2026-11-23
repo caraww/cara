@@ -728,7 +728,12 @@ html[data-theme="dark"] .btn.accent:hover {
 .checkout-payment-choice--digipay:disabled {
   background: #eef9fc !important;
   border-color: #cfe7ee !important;
-  color: #4a8496 !important;
+  color: #2f6575 !important;
+}
+html[data-theme="dark"] .checkout-payment-choice--digipay:disabled {
+  background: #0f2b33 !important;
+  border-color: #1d5b6b !important;
+  color: #d6f3fb !important;
 }
 html[data-theme="dark"] .checkout-payment-choice--digipay {
   background: #0f2b33 !important;
@@ -849,3 +854,8 @@ html[data-theme="dark"] .wk-info .tags > * {
   color: var(--cara-text);
 }
 html[data-theme="dark"] .wk-info #lbPrice { color: var(--cara-detail); }
+
+/* کاراکترهای ‹ › در متن راست‌به‌چپ آینه می‌شوند و «قبلی» را با فلش اشتباه نشان
+   می‌دادند. با direction: ltr روی خود دکمه، هم گلیف درست می‌ماند و هم آفست‌های
+   inset-inline-* برعکس می‌شوند؛ یعنی «قبلی» می‌رود سمت راست. */
+:is(.hx__arrow, .wk-nav) { direction: ltr; }
