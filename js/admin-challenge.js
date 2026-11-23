@@ -22,9 +22,21 @@
 
   function draw(canvas, design) {
     const rows = design && design.data; if (!Array.isArray(rows) || !rows.length) return;
-    const w = rows[0].length, cell = Math.max(4, Math.min(10, Math.floor(220 / w)));
-    canvas.width = w * cell; canvas.height = rows.length * cell; const ctx = canvas.getContext("2d"), r = cell / 2;
-    rows.forEach((row, y) => row.forEach((c, x) => { if (!c) return; ctx.fillStyle = hexOf(c); ctx.beginPath(); ctx.arc(x * cell + r, y * cell + r, Math.max(r - .6, 1), 0, 7); ctx.fill(); }));
+    const w = rows[0].length, h = rows.length;
+    const cell = Math.max(6, Math.min(14, Math.floor(Math.min(320 / Math.max(h, 1), 240 / Math.max(w, 1)))));
+    canvas.width = w * cell; canvas.height = h * cell;
+    const ctx = canvas.getContext("2d"), bead = cell >= 10 && window.CARA && window.CARA.drawBead;
+    rows.forEach((row, y) => row.forEach((c, x) => {
+      if (!c) return;
+      const hex = hexOf(c);
+      if (bead) { bead(ctx, x * cell, y * cell, cell, cell, hex); return; }
+      ctx.fillStyle = hex; ctx.fillRect(x * cell, y * cell, cell, cell);
+      const n = parseInt(hex.replace("#", ""), 16);
+      if ((n >> 16 & 255) * 0.299 + (n >> 8 & 255) * 0.587 + (n & 255) * 0.114 > 228) {
+        ctx.strokeStyle = "rgba(74, 58, 90, .45)"; ctx.lineWidth = 1;
+        ctx.strokeRect(x * cell + .5, y * cell + .5, cell - 1, cell - 1);
+      }
+    }));
   }
 
   // فقط رنگ‌هایی که در موجودی فعلی منجوق‌ها ثبت شده‌اند؛ کد و ظاهر از پالت خود استودیو می‌آید.
@@ -82,9 +94,19 @@
     if (!shown.length) wrap.append(el("p", "muted", "طرحی نیست."));
     shown.forEach((e) => {
       const card = el("div", "entry"), cv = el("canvas"); draw(cv, e.design);
-      const contact = e.contact.username ? "@" + e.contact.username : (e.contact.displayName || "—");
-      card.append(cv, el("strong", "", e.title), el("div", "muted", "نام مستعار: " + e.nickname + " · رأی: " + fa(e.votes)),
-        el("div", "muted", "تماس: " + contact + (e.contact.telegramId ? " · شناسه‌ی تلگرام " + e.contact.telegramId : "")), el("span", "tag " + e.status, { pending: "در انتظار", approved: "تأییدشده", winner: "برنده", rejected: "ردشده" }[e.status]));
+      const thumb = el("div", "thumb"); thumb.append(cv);
+      const info = e.contact || {};
+      card.append(thumb, el("strong", "", e.title), el("div", "muted", "نام مستعار: " + e.nickname + " · رأی: " + fa(e.votes)));
+      const contactLine = el("div", "muted", "تماس: ");
+      const handle = el("bdi", "", info.username ? "@" + info.username : (info.displayName || "—")); handle.dir = "ltr";
+      contactLine.append(handle); card.append(contactLine);
+      if (info.telegramId) {
+        const idLine = el("div", "muted", "شناسه‌ی تلگرام: ");
+        /* شناسه عدد است؛ جداکننده‌ی هزارگان نمی‌خواهد */
+        const tid = el("bdi", "", String(info.telegramId).replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[d])); tid.dir = "ltr";
+        idLine.append(tid); card.append(idLine);
+      }
+      card.append(el("span", "tag " + e.status, { pending: "در انتظار", approved: "تأییدشده", winner: "برنده", rejected: "ردشده" }[e.status]));
       const acts = el("div", "bar");
       [["approved", "تأیید"], ["rejected", "رد"], ["winner", "برنده"]].filter(([s]) => s !== e.status).forEach(([s, label]) => {
         const b = el("button", "btn sm" + (s === "approved" ? " dark" : ""), label);
