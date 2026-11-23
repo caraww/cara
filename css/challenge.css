@@ -18,7 +18,7 @@
 .chl-form label { display: grid; gap: 6px; font-size: 14px; font-weight: 700; }
 .chl-form input { min-height: 46px; padding: 0 14px; border: 1px solid var(--cara-line, #d4d4df); border-radius: 12px; font: inherit; font-weight: 400; background: #fff; }
 .chl-form input:focus-visible { outline: 3px solid var(--cara-detail, #9b8fc1); outline-offset: 2px; }
-.chl-preview { display: block; max-width: 100%; max-height: 260px; width: auto; height: auto; margin: 4px 0 8px; border-radius: 12px; background: #ece9f2; }
+.chl-preview { display: block; max-width: 100%; max-height: 260px; width: auto; height: auto; margin: 4px auto 8px; border-radius: 12px; background: #e2dcef; }
 .chl-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 0 22px; border: 1px solid var(--cara-accent, #343b64); border-radius: 999px; background: #fff; color: var(--cara-accent, #343b64); font: inherit; font-size: 15px; font-weight: 800; text-decoration: none; cursor: pointer; }
 .chl-btn:hover { background: var(--cara-accent-soft, #eeeef5); }
 .chl-btn--primary { background: var(--cara-accent, #343b64); color: #fff; }
@@ -28,7 +28,9 @@
 .chl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 16px; margin-top: 14px; }
 .chl-card { padding: 14px; display: flex; flex-direction: column; gap: 8px; scroll-margin-top: calc(var(--nh-h, 72px) + 16px); }
 .chl-card.is-target { outline: 3px solid var(--cara-detail, #9b8fc1); }
-.chl-card canvas { display: block; width: 100%; height: 240px; object-fit: contain; border-radius: 12px; background: #ece9f2; }
+.chl-thumb { position: relative; height: 260px; border-radius: 14px; background: #e2dcef; }
+.chl-thumb canvas { position: absolute; inset: 0; margin: auto; width: auto; height: auto; max-width: calc(100% - 20px); max-height: calc(100% - 20px); border-radius: 8px; }
+@media (max-width: 560px) { .chl-thumb canvas { max-width: calc(100% - 16px); max-height: calc(100% - 16px); } }
 .chl-card h3 { margin: 0; font-size: 16px; font-weight: 800; line-height: 1.6; }
 .chl-by { margin: 0; color: var(--cara-muted, #626273); font-size: 13px; }
 .chl-badge { align-self: flex-start; padding: 2px 12px; border-radius: 999px; background: #f3e2b4; color: #5b4310; font-size: 12px; font-weight: 800; }
@@ -39,7 +41,7 @@
 .chl-how { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 10px; }
 .chl-how li { counter-increment: s; position: relative; padding-inline-start: 42px; line-height: 2; }
 .chl-how li::before { content: counter(s, persian); position: absolute; inset-inline-start: 0; top: 4px; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--cara-accent-soft, #eeeef5); color: var(--cara-accent, #343b64); font-weight: 900; line-height: 1; }
-@media (max-width: 560px) { .chl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .chl-card { padding: 10px; } .chl-card canvas { height: 190px; } .chl-actions .chl-btn { flex: 1 1 100%; } }
+@media (max-width: 560px) { .chl-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; } .chl-card { padding: 10px; } .chl-thumb { height: 200px; } .chl-actions .chl-btn { flex: 1 1 100%; } }
 
 
 /* Match the subtle bead-dot page background used across Cara pages. */
@@ -55,3 +57,14 @@ body:has(.chl)::before {
   -webkit-mask-image: linear-gradient(#000, transparent 65%);
   mask-image: linear-gradient(#000, transparent 65%);
 }
+
+/* پیش‌نمایش طرح در تم شب روی زمینه‌ی تیره */
+html[data-theme="dark"] .chl-thumb,
+html[data-theme="dark"] .chl-preview { background: #241f31; }
+
+/* دکمه‌های روشن چالش در تم شب */
+html[data-theme="dark"] .chl-btn { background: #2b2740; border-color: rgba(236, 233, 246, .22); color: #ece9f6; }
+html[data-theme="dark"] .chl-btn:hover { background: #342f4d; }
+html[data-theme="dark"] .chl-btn--primary { background: var(--cara-accent, #5b66ab); border-color: transparent; color: #fff; }
+html[data-theme="dark"] .chl-btn--primary:hover { background: #6d78bd; }
+html[data-theme="dark"] .chl-vote[aria-pressed="true"] { background: var(--cara-accent, #5b66ab); color: #fff; }
