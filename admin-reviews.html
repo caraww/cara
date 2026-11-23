@@ -11,14 +11,14 @@
     <style>
       :root { color-scheme: light dark; --line: rgba(128,128,128,.28); --gold: #b8975a; }
       * { box-sizing: border-box; }
-      body { margin: 0; font-family: "Vazir", system-ui, sans-serif; background: #f4f1f7; color: #262033; }
-      @media (prefers-color-scheme: dark) { body { background: #17151c; color: #eee; } }
+      body { margin: 0; font-family: "Vazir", system-ui, sans-serif; background: var(--cara-bg, #f4f1f7); color: var(--cara-text, #262033); }
       header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
       header h1 { font-size: 20px; margin: 0; }
       a { color: inherit; }
       .wrap { max-width: 900px; margin: 0 auto; padding: 22px 16px 60px; }
-      .panel { border: 1px solid var(--line); border-radius: 18px; padding: 18px; margin: 0 0 14px; background: rgba(255,255,255,.5); }
-      @media (prefers-color-scheme: dark) { .panel { background: rgba(255,255,255,.04); } }
+      .panel { border: 1px solid var(--cara-line, rgba(128,128,128,.28)); border-radius: 18px; padding: 18px; margin: 0 0 14px; background: var(--cara-surface, rgba(255,255,255,.5)); }
+      html[data-theme="dark"] { color-scheme: dark; }
+      html[data-theme="dark"] button.primary { background: #6a74b8; border-color: #6a74b8; color: #fff; }
       .bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
       input, select, textarea, button { font: inherit; }
       input, select { padding: 10px; border-radius: 12px; border: 1px solid var(--line); background: transparent; color: inherit; }
@@ -34,6 +34,7 @@
       .review small { opacity: .7; }
       .msg { min-height: 1.6em; line-height: 1.8; }
       .err { color: #c93a2b; }
+      html[data-theme="dark"] .err { color: #f2a49a; }
       .empty { opacity: .7; text-align: center; padding: 24px; }
     </style>
   <link rel="stylesheet" href="/css/theme.css?v=20261121-pass6"><script src="/js/theme.js?v=3" defer></script>
