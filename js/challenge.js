@@ -19,13 +19,27 @@
 
   function drawPattern(canvas, design) {
     const rows = design && design.data; if (!Array.isArray(rows) || !rows.length) return;
-    const w = rows[0].length, h = rows.length, cell = Math.max(4, Math.min(12, Math.floor(240 / Math.max(w, 1))));
+    const w = rows[0].length, h = rows.length;
+    /* بوم را بزرگ‌تر از اندازه‌ی نمایش می‌کشیم تا در کارت کوچک، منجوق‌ها تیز بمانند */
+    const cell = Math.max(6, Math.min(14, Math.floor(Math.min(320 / Math.max(h, 1), 240 / Math.max(w, 1)))));
     canvas.width = w * cell; canvas.height = h * cell;
-    const ctx = canvas.getContext("2d"), r = cell / 2;
+    const ctx = canvas.getContext("2d");
+    /* در اندازه‌ی کوچک، براقی و سایه‌ی منجوق رنگ را خاکستری می‌کند؛ آن‌جا خانه‌ی تخت با خط دور می‌کشیم */
+    const bead = cell >= 10 && window.CARA && window.CARA.drawBead;
     rows.forEach((row, y) => row.forEach((c, x) => {
-      if (!c) return; ctx.fillStyle = colorOf(c); ctx.beginPath(); ctx.arc(x * cell + r, y * cell + r, Math.max(r - .6, 1), 0, Math.PI * 2); ctx.fill();
+      if (!c) return;
+      const hex = colorOf(c);
+      if (bead) { bead(ctx, x * cell, y * cell, cell, cell, hex); return; }
+      ctx.fillStyle = hex; ctx.fillRect(x * cell, y * cell, cell, cell);
+      const n = parseInt(hex.replace("#", ""), 16);
+      if ((n >> 16 & 255) * 0.299 + (n >> 8 & 255) * 0.587 + (n & 255) * 0.114 > 228) {
+        ctx.strokeStyle = "rgba(74, 58, 90, .45)"; ctx.lineWidth = 1;
+        ctx.strokeRect(x * cell + .5, y * cell + .5, cell - 1, cell - 1);
+      }
     }));
   }
+  /* کادر ثابت با پس‌زمینه‌ی مات، تا طرح‌های بلند و باریک کشیده نشوند */
+  const thumbFrame = (canvas) => { const box = el("div", "chl-thumb"); box.append(canvas); return box; };
   const codesOf = (design) => { const s = new Set(); (design && design.data || []).forEach((row) => row.forEach((c) => c && s.add(c))); return [...s]; };
   const studioDesign = () => { try { const d = JSON.parse(localStorage.getItem("cara-pattern") || "null"); return d && Array.isArray(d.data) && d.data.length ? d : null; } catch { return null; } };
 
@@ -108,7 +122,7 @@
   function entryCard(e, open) {
     const card = el("article", "chl-card"); card.id = "e-" + e.id;
     const canvas = el("canvas"); canvas.setAttribute("role", "img"); canvas.setAttribute("aria-label", "طرح " + e.title); drawPattern(canvas, e.design);
-    card.append(canvas);
+    card.append(thumbFrame(canvas));
     if (e.winner) card.append(el("span", "chl-badge", "برنده 🏆"));
     else if (e.mine) card.append(el("span", "chl-badge is-mine", { pending: "طرح تو · در انتظار تأیید", approved: "طرح تو", rejected: "طرح تو · تأیید نشد" }[e.status] || "طرح تو"));
     card.append(el("h3", "", e.title), el("p", "chl-by", "از " + e.nickname));
@@ -145,7 +159,7 @@
     $("chlEntriesNote").textContent = state.entries.length ? "هر نفر به هر طرح یک رأی می‌ده و به طرح خودش نمی‌تونه." : "هنوز طرحی تأیید نشده؛ اولین نفر باش!";
     state.entries.forEach((e) => grid.append(entryCard(e, c.open)));
     const win = $("chlWinGrid"); win.replaceChildren();
-    state.winners.forEach((w) => { const card = el("article", "chl-card"); const cv = el("canvas"); drawPattern(cv, w.design); card.append(cv, el("span", "chl-badge", "برنده 🏆"), el("h3", "", w.title), el("p", "chl-by", "از " + w.nickname + " · " + w.challengeTitle)); win.append(card); });
+    state.winners.forEach((w) => { const card = el("article", "chl-card"); const cv = el("canvas"); drawPattern(cv, w.design); card.append(thumbFrame(cv), el("span", "chl-badge", "برنده 🏆"), el("h3", "", w.title), el("p", "chl-by", "از " + w.nickname + (w.challengeTitle ? " · " + w.challengeTitle : ""))); win.append(card); });
     $("chlWinBox").hidden = !state.winners.length;
     const target = location.hash.startsWith("#e-") ? document.getElementById(location.hash.slice(1)) : null;
     if (target) { target.classList.add("is-target"); target.scrollIntoView({ block: "center" }); }
