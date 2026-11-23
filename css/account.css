@@ -14,7 +14,8 @@
 .account-section-head h2{margin:0;font-size:25px}
 .account-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
 .account-design,.account-order{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px}
-.account-design canvas{display:block;width:100%;height:auto;max-height:220px;object-fit:contain;background:#eee9f3;border-radius:12px;margin-bottom:10px}
+.account-design canvas{display:block;width:100%;height:auto;max-height:220px;object-fit:contain;background:#eee9f3;border-radius:12px;margin-bottom:10px;image-rendering:pixelated}
+html[data-theme="dark"] .account-design canvas{background:#241f31}
 .account-design h3{font-size:15px;margin:6px 0}
 .account-design button{margin-top:10px}
 .account-orders{display:grid;gap:10px}
