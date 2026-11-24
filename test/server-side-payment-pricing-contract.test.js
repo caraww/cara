@@ -11,10 +11,12 @@ assert.ok(start >= 0 && end > start, "Worker createPayment boundary must remain 
 const createPayment = worker.slice(start, end);
 
 test("pattern and gallery payment amounts are calculated from server-owned data", () => {
-  assert.match(createPayment, /priceToman = Math\.round\(C\.base \+ pattern\.total \* C\.price\)/);
-  assert.match(createPayment, /const \{ list, prices \} = await pricedWorks\(env\)/);
+  assert.match(createPayment, /listPriceToman = Math\.round\(C\.base \+ pattern\.total \* C\.price\)/);
+  assert.match(createPayment, /priceToman = globalThis\.CARA_WORK_PRICING\.sale\.final\(listPriceToman\)/);
+  assert.match(createPayment, /const \{ list, prices, basePrices \} = await pricedWorks\(env\)/);
   assert.match(createPayment, /priceToman = prices\[String\(work\.id\)\]/);
-  assert.match(createPayment, /priceToman,\s*customer,/);
+  assert.match(createPayment, /priceToman,/);
+  assert.match(createPayment, /siteDiscountToman > 0 \? \{ listPriceToman, siteDiscountToman \}/);
 });
 
 test("client-supplied price or amount fields cannot determine the payment total", () => {
@@ -24,7 +26,7 @@ test("client-supplied price or amount fields cannot determine the payment total"
 });
 
 test("discount is validated and applied by the Worker after the authoritative base price", () => {
-  const basePrice = createPayment.indexOf("priceToman = Math.round(C.base + pattern.total * C.price)");
+  const basePrice = createPayment.indexOf("listPriceToman = Math.round(C.base + pattern.total * C.price)");
   const validateCode = createPayment.indexOf("dc = await checkCode(env, body.discountCode)");
   const applyDiscount = createPayment.indexOf("priceToman = Math.round(priceToman * (1 - ((await codeDiscount(env, dc)) || DISCOUNT)))");
   const createOrder = createPayment.indexOf("const order = {");

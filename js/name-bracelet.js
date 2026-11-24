@@ -83,9 +83,26 @@
     if (!el) return;
     el.replaceChildren(document.createTextNode("قیمت: "));
     const strong = document.createElement("b");
-    strong.textContent = cfg && cfg.pricePerBead
-      ? fa(Math.round(cfg.baseFee + total * cfg.pricePerBead)) + " تومان"
-      : "بعد از بررسی اعلام می‌شه";
+    if (!cfg || !cfg.pricePerBead) {
+      strong.textContent = "بعد از بررسی اعلام می‌شه";
+    } else {
+      const listPrice = Math.round(cfg.baseFee + total * cfg.pricePerBead);
+      const sale = window.CARA_SALE, now = sale ? sale.final(listPrice) : listPrice;
+      if (sale && now < listPrice) {
+        const wrap = document.createElement("span");
+        wrap.className = "price";
+        const was = document.createElement("s");
+        was.className = "price-list";
+        was.textContent = fa(listPrice);
+        const current = document.createElement("b");
+        current.className = "price-now";
+        current.textContent = fa(now) + " تومان";
+        wrap.append(was, current);
+        strong.append(wrap);
+      } else {
+        strong.textContent = fa(listPrice) + " تومان";
+      }
+    }
     el.append(strong);
   }
 

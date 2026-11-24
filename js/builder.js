@@ -1008,12 +1008,16 @@ try {
   if (mbTotal && mbNext && realTotal) {
     /* قیمت تقریبی از /api/config (همون فرمول سرور: BASE_FEE + تعداد × PRICE_PER_BEAD؛ کد تخفیف توی پرداخت اعمال می‌شه) */
     let cfg = null; const sub = $("mbSub"), subDef = sub ? sub.textContent : "", pRow = $("priceRow"), pTxt = $("priceText");
+    const priceHTML = (toman) => {
+      const S = window.CARA_SALE, now = S ? S.final(toman) : toman;
+      return S && now < toman ? S.priceHTML(toman) : Number(toman).toLocaleString("fa-IR") + " تومان";
+    };
     const sync = () => {
       mbTotal.textContent = realTotal.textContent.replace(/\s*دونه\s*$/, "");
       const n = S.data.reduce((a, r) => a + r.filter(Boolean).length, 0);
       if (cfg && n) {
-        const t = Math.round(cfg.baseFee + n * cfg.pricePerBead).toLocaleString("fa-IR") + " تومان";
-        if (sub) sub.textContent = "حدود " + t; if (pTxt) pTxt.textContent = "حدود " + t; if (pRow) pRow.hidden = false;
+        const html = "حدود " + priceHTML(Math.round(cfg.baseFee + n * cfg.pricePerBead));
+        if (sub) sub.innerHTML = html; if (pTxt) pTxt.innerHTML = html; if (pRow) pRow.hidden = false;
       } else { if (sub) sub.textContent = subDef; if (pRow) pRow.hidden = true; }
     };
     fetch("/api/config").then((r) => r.json()).then((c) => { if (c && Number(c.pricePerBead) > 0) { cfg = { baseFee: Number(c.baseFee) || 0, pricePerBead: Number(c.pricePerBead) }; sync(); } }).catch(() => {});

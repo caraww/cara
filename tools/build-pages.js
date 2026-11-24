@@ -405,10 +405,14 @@ function inject(file, block) {
       "</body>",
       '<script src="/js/contact.js" defer></script>\n</body>',
     );
+  h = h.replace(
+    /<script src="\/lib\/works-pricing\.js\?v=4"><\/script><script src="\/js\/sale\.js\?v=4" defer><\/script>\s*/g,
+    "",
+  );
   if (!/js\/sale\.js/.test(h))
     h = h.replace(
-      "</body>",
-      '<script src="/lib/works-pricing.js?v=1"></script><script src="/js/sale.js?v=1" defer></script>\n</body>',
+      "<head>",
+      '<head>\n<script src="/lib/works-pricing.js?v=4"></script><script src="/js/sale.js?v=4"></script>',
     );
   fs.writeFileSync(f, crlf ? h.replace(/\n/g, "\r\n") : h);
 }

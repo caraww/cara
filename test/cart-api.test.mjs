@@ -35,7 +35,13 @@ test("GET /api/cart creates an anonymous server cart and sets a protected guest 
     options,
   );
   assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { items: [], totalItems: 0, totalToman: 0 });
+  const body = await response.json();
+  assert.deepEqual(body.items, []);
+  assert.equal(body.totalItems, 0);
+  assert.equal(body.totalToman, 0);
+  assert.equal(body.originalTotalToman, 0);
+  assert.equal(body.siteDiscountToman, 0);
+  assert.ok(body.promo);
   const cookie = response.headers.get("Set-Cookie") || "";
   assert.match(cookie, /^__Host-cara_guest=[a-f0-9]{64};/);
   assert.match(cookie, /HttpOnly/);

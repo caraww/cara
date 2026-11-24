@@ -36,16 +36,18 @@ test("shared pricing preserves the current fixed, auto, and noOrder rules", () =
   assert.equal(Object.keys(prices).length, works.filter((w) => !w.noOrder).length);
 });
 
-test("حراج بلک فرایدی: ۳۰٪ تخفیف فقط بین ۳۰ آبان و ۱۳ آذر", () => {
+test("حراج بلک فرایدی: ۳۰٪ تخفیف از ۳۰ آبان تا پایان ۱۳ آذر", () => {
   const at = (iso) => Date.parse(iso);
   assert.equal(sale.active(at("2026-11-20T23:59:00+03:30")), false, "قبل از ۳۰ آبان تخفیف نداریم");
   assert.equal(sale.active(at("2026-11-21T00:00:00+03:30")), true, "۳۰ آبان شروع حراج");
-  assert.equal(sale.active(at("2026-12-03T23:59:00+03:30")), true, "شب آخر حراج");
-  assert.equal(sale.active(at("2026-12-04T00:00:00+03:30")), false, "۱۳ آذر قیمت‌ها برمی‌گرده");
+  assert.equal(sale.active(at("2026-12-04T23:59:00+03:30")), true, "آخرین ساعت ۱۳ آذر هنوز حراج است");
+  assert.equal(sale.active(at("2026-12-05T00:00:00+03:30")), false, "بعد از ۱۳ آذر قیمت‌ها برمی‌گرده");
 
   assert.equal(sale.final(2200000, at("2026-11-25T12:00:00+03:30")), 1540000);
   assert.equal(sale.final(2200000, at("2026-12-10T12:00:00+03:30")), 2200000);
   assert.equal(sale.final(0), 0);
+  assert.equal(sale.info(at("2026-11-25T12:00:00+03:30")).active, true);
+  assert.equal(sale.info(at("2026-12-10T12:00:00+03:30")).active, false);
 
   /* قیمت روز همون ۷۰٪ قیمت پایه‌ست و از قیمت پایه بیشتر نمی‌شه */
   for (const id of Object.keys(listPrices)) {

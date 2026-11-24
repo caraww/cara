@@ -57,7 +57,8 @@ test("guest-to-account merge is transactional and idempotent by cart item key", 
 
 test("cart checkout totals are server-calculated and purchased rows clear only after verified payment", () => {
   assert.match(worker, /body\.cart === true/);
-  assert.match(worker, /cart\.items\.reduce\(\(sum, item\) => sum \+ item\.lineTotal, 0\)/);
+  assert.match(worker, /priceToman = cart\.totalToman/);
+  assert.match(worker, /listPriceToman = cart\.originalTotalToman/);
   assert.match(worker, /cartSnapshot:/);
   const paidBlock = worker.slice(worker.indexOf("if (paid) {"), worker.indexOf("if (markFailed)", worker.indexOf("if (paid) {")));
   assert.match(paidBlock, /clearPurchasedCartItems\(env, order\.cartSnapshot\)/);
@@ -120,5 +121,5 @@ test("cart quantity and removal changes are announced through the live status re
   assert.ok(page.includes('id="cartMessage" role="status" aria-live="polite"'));
   assert.ok(client.includes('message(updatedItem ? `تعداد ${updatedItem.title} به ${fa(updatedItem.quantity)} تغییر کرد.` : "سبد خرید به‌روزرسانی شد.");'));
   assert.ok(client.includes('message("کالا از سبد خرید حذف شد.");'));
-  assert.ok(page.includes("/js/cart.js?v=3"));
+  assert.ok(page.includes("/js/cart.js?v=4"));
 });

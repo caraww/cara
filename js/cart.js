@@ -2,6 +2,10 @@
   const $ = (id) => document.getElementById(id);
   const fa = (n) => Number(n || 0).toLocaleString("fa-IR");
   const money = (n) => fa(n) + " تومان";
+  const saleHTML = (original, current) => {
+    const S = window.CARA_SALE, before = Number(original) || Number(current) || 0;
+    return S && before > Number(current) ? S.priceHTML(before) : money(current);
+  };
   const message = (value) => { $("cartMessage").textContent = value || ""; };
   let busy = false, addError = "";
   $("checkoutButton").addEventListener("click", (event) => { if ($("checkoutButton").getAttribute("aria-disabled") === "true") event.preventDefault(); });
@@ -48,7 +52,7 @@
       return;
     }
     $("cartCount").textContent = fa(cart.totalItems);
-    $("cartTotal").textContent = money(cart.totalToman);
+    $("cartTotal").innerHTML = saleHTML(cart.originalTotalToman, cart.totalToman);
     $("checkoutButton").href = cart.items.every((item) => item.available) ? "/checkout.html?cart=1" : "#";
     $("checkoutButton").setAttribute("aria-disabled", String(!cart.items.every((item) => item.available)));
     $("checkoutButton").style.opacity = cart.items.every((item) => item.available) ? "1" : ".45";
@@ -71,10 +75,12 @@
       const detail = document.createElement("p");
       detail.textContent = item.type === "design" ? "طرح اختصاصی تو" : "دستبند از گالری cara";
       const price = document.createElement("strong"); price.className = item.available ? "cart-price" : "cart-price cart-unavailable";
-      price.textContent = item.available ? money(item.unitPrice) : "فعلاً قابل سفارش نیست";
+      price.innerHTML = item.available ? saleHTML(item.originalUnitPrice, item.unitPrice) : "فعلاً قابل سفارش نیست";
       info.append(title, detail, price);
       if (item.available) {
-        const line = document.createElement("small"); line.className = "cart-line-total"; line.textContent = "جمع این ردیف: " + money(item.lineTotal); info.append(line);
+        const line = document.createElement("small"); line.className = "cart-line-total";
+        line.innerHTML = "جمع این ردیف: " + saleHTML(item.originalLineTotal, item.lineTotal);
+        info.append(line);
       }
       card.append(info);
       const actions = document.createElement("div"); actions.className = "cart-item-end";

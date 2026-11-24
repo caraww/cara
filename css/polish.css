@@ -903,10 +903,10 @@ html[data-theme="dark"] .preview .msg { background: rgba(32, 29, 52, .82); color
 .price-list {
   font-size: 0.88em;
   font-weight: 700;
-  color: var(--muted, #6c6478);
+  color: var(--sale);
   text-decoration: line-through;
   text-decoration-color: var(--sale);
-  text-decoration-thickness: 1.5px;
+  text-decoration-thickness: 2px;
   text-underline-offset: 2px;
 }
 .price-now { display: none; }

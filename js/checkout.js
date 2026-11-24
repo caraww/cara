@@ -121,6 +121,10 @@ try {
   const form = $("#form"), err = $("#err"), pay = $("#pay");
   if (!form) return;
   const fa = (n) => Number(n).toLocaleString("fa-IR");
+  const saleHTML = (original, current) => {
+    const S = window.CARA_SALE, before = Number(original) || Number(current) || 0;
+    return S && before > Number(current) ? S.priceHTML(before) : fa(current) + " تومان";
+  };
   const esc = (s) => String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const NUM = /^[\s0-9۰-۹.\-_)]+$/; /* عنوان‌های فقط‌عددی نشون داده نمی‌شن */
   const showErr = (m) => { err.textContent = m; err.hidden = false; err.scrollIntoView({ block: "center", behavior: "smooth" }); };
@@ -138,9 +142,10 @@ try {
         `<div style="display:flex;gap:18px;align-items:center;margin-bottom:12px">` +
         `<img src="/${esc(work.src)}" alt="" style="width:130px;height:130px;object-fit:contain;border-radius:14px;background:#ece6f2;padding:8px">` +
         `<div>${work.title && !NUM.test(work.title) ? `<b>${esc(work.title)}</b>` : ""}<div class="muted" style="font-size:16px">دقیقاً همین دستبند برات بافته می‌شه.</div></div></div>` +
-        `<div class="stat"><span>قیمت</span><strong>${fa(work.price)} تومان</strong></div>`;
+        `<div class="stat"><span>قیمت</span><strong>${saleHTML(work.listPrice, work.price)}</strong></div>`;
     }
-    if (pay) pay.querySelector(".checkout-payment-choice__title").textContent = `پرداخت ${fa(work.price)} تومان با زیبال`;
+    if (pay) pay.querySelector(".checkout-payment-choice__title").innerHTML =
+      `پرداخت ${saleHTML(work.listPrice, work.price)} با زیبال`;
   }
 
   form.addEventListener("submit", async (e) => {
@@ -272,11 +277,12 @@ try {
       data.items.forEach((item) => {
         const line = document.createElement("li");
         const name = document.createElement("span"); name.textContent = item.title + " — " + C.faNum(item.quantity) + " عدد";
-        const price = document.createElement("strong"); price.textContent = C.faNum(item.lineTotal) + " تومان";
+        const price = document.createElement("strong");
+        price.innerHTML = saleHTML(item.originalLineTotal, item.lineTotal);
         line.append(name, price); list.append(line);
       });
       const totalLine = document.createElement("p"); totalLine.className = "checkout-cart-total";
-      totalLine.textContent = "جمع کل: " + C.faNum(data.totalToman) + " تومان";
+      totalLine.innerHTML = "جمع کل: " + saleHTML(data.originalTotalToman, data.totalToman);
       wrap.append(list, totalLine); $("sum").replaceChildren(wrap);
       cartReady = true; $("pay").disabled = false;
     }).catch((error) => {
@@ -303,7 +309,9 @@ try {
       C.drawPattern(mini.getContext("2d"), p.data, cw, ch);
     }
     fetch("/api/config").then((r) => r.json()).then((cfg) => {
-      $("price").textContent = cfg.pricePerBead ? `${C.faNum(Math.round(cfg.baseFee + total * cfg.pricePerBead))} تومان` : "بعد از بررسی بهت خبر می‌دم";
+      if (!cfg.pricePerBead) { $("price").textContent = "بعد از بررسی بهت خبر می‌دم"; return; }
+      const listPrice = Math.round(cfg.baseFee + total * cfg.pricePerBead);
+      $("price").innerHTML = saleHTML(listPrice, window.CARA_SALE ? CARA_SALE.final(listPrice) : listPrice);
     }).catch(() => { $("price").textContent = "—"; });
   } else {
     $("sum").innerHTML = `<div class="sum-empty"><p>هنوز الگویی نساختی. یه دستبند از گالری انتخاب کن یا خودت توی استودیو بکش.</p><div class="sum-empty__actions"><a class="btn sm dark" href="builder.html">ساخت الگو</a><a class="btn sm line" href="gallery.html">دیدن گالری</a></div></div>`;

@@ -35,7 +35,7 @@
   if (!onSale) return;
   document.documentElement.classList.add("is-sale");
 
-  var days = Math.max(1, Math.ceil((sale.end - Date.now()) / 86400000));
+  var days = Math.max(1, Math.ceil((sale.end - Date.now()) / 86400000) - 1);
   var boot = function () {
     var nodes = document.querySelectorAll("[data-sale-days]");
     for (var i = 0; i < nodes.length; i++) nodes[i].textContent = faNum(days);

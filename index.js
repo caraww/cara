@@ -204,30 +204,42 @@ const TEST_WORK = { id: "cara-test-digipay-10000", title: "تست پرداخت �
 async function pricedWorks(env) {
   const list = await loadWorks(cfg(env));
   if (String(env.TEST_MODE) === "1") list.push({ ...TEST_WORK });
-  return { list, prices: priceMap(list) };
+  return { list, prices: priceMap(list), basePrices: globalThis.CARA_WORK_PRICING.baseMap(list) };
 }
 
 function cartWorkResolver(env) {
   let catalogPromise;
   return async (id) => {
     catalogPromise ||= pricedWorks(env);
-    const { list, prices } = await catalogPromise;
+    const { list, prices, basePrices } = await catalogPromise;
     const work = list.find((item) => String(item.id) === String(id));
-    return work ? { ...work, price: prices[String(work.id)] } : null;
+    return work ? { ...work, price: prices[String(work.id)], listPrice: basePrices[String(work.id)] } : null;
   };
 }
 
 /* قیمت همه‌ی کارها برای نمایش توی گالری (فقط نمایشه؛ مبلغ پرداخت همیشه دوباره سمت سرور حساب می‌شه) */
 async function worksInfo(env) {
-  const { list, prices } = await pricedWorks(env);
-  return json(list.map((w) => ({ id: String(w.id), title: w.title || "", price: prices[String(w.id)] })));
+  const { list, prices, basePrices } = await pricedWorks(env);
+  return json(list.map((w) => ({
+    id: String(w.id),
+    title: w.title || "",
+    price: prices[String(w.id)],
+    listPrice: basePrices[String(w.id)],
+  })));
 }
 
 async function workInfo(env, url) {
-  const { list, prices } = await pricedWorks(env);
+  const { list, prices, basePrices } = await pricedWorks(env);
   const w = list.find((x) => String(x.id) === String(url.searchParams.get("id")));
   if (!w || w.noOrder) return json({ error: "not found" }, 404);
-  return json({ id: String(w.id), title: w.title || "", src: w.src, price: prices[String(w.id)] });
+  return json({
+    id: String(w.id),
+    title: w.title || "",
+    src: w.src,
+    price: prices[String(w.id)],
+    listPrice: basePrices[String(w.id)],
+    promo: globalThis.CARA_WORK_PRICING.sale.info(),
+  });
 }
 
 async function createPayment(request, env, ctx) {
@@ -252,14 +264,16 @@ async function createPayment(request, env, ctx) {
   if (!/^09\d{9}$/.test(customer.phone)) return json({ error: "شماره موبایل باید شبیه 09123456789 باشه." }, 400);
   const gift = cleanGift(body.gift);
 
-  let priceToman, extra;
+  let priceToman, listPriceToman = 0, siteDiscountToman = 0, extra;
   if (body.workId != null && body.workId !== "") {
     /* سفارش مستقیم از گالری؛ قیمت همیشه سمت سرور تعیین می‌شه */
-    const { list, prices } = await pricedWorks(env);
+    const { list, prices, basePrices } = await pricedWorks(env);
     const work = list.find((x) => String(x.id) === String(body.workId));
     if (!work) return json({ error: "این دستبند پیدا نشد؛ از گالری دوباره انتخابش کن." }, 404);
     if (work.noOrder || !prices[String(work.id)]) return json({ error: "این نمونه قابل سفارش مستقیم نیست؛ از «عکس به الگو» یا «طراحی دستی» سفارش بده." }, 400);
+    listPriceToman = basePrices[String(work.id)];
     priceToman = prices[String(work.id)];
+    siteDiscountToman = listPriceToman - priceToman;
     extra = { kind: "work", work: { id: String(work.id), title: work.title || "", src: work.src } };
   } else if (body.cart === true) {
     const cart = await loadCartForRequest(request, env, {
@@ -269,7 +283,9 @@ async function createPayment(request, env, ctx) {
     if (!cart.cartId || !cart.items.length) return json({ error: "سبد خریدت خالیه." }, 400);
     if (cart.items.some((item) => !item.available || !Number.isSafeInteger(item.unitPrice) || item.unitPrice <= 0))
       return json({ error: "یکی از کالاهای سبد دیگه قابل سفارش نیست؛ سبد رو بررسی و به‌روزرسانی کن." }, 400);
-    priceToman = cart.items.reduce((sum, item) => sum + item.lineTotal, 0);
+    priceToman = cart.totalToman;
+    listPriceToman = cart.originalTotalToman;
+    siteDiscountToman = cart.siteDiscountToman;
     extra = {
       kind: "cart",
       items: cart.items.map((item) => ({
@@ -287,7 +303,9 @@ async function createPayment(request, env, ctx) {
     if (!C.price) return json({ error: "قیمت هنوز تنظیم نشده، بعداً امتحان کن." }, 503);
     const pattern = cleanPattern(body.pattern);
     if (!pattern) return json({ error: "الگو معتبر نیست. دوباره توی استودیو بازش کن." }, 400);
-    priceToman = Math.round(C.base + pattern.total * C.price);
+    listPriceToman = Math.round(C.base + pattern.total * C.price);
+    priceToman = globalThis.CARA_WORK_PRICING.sale.final(listPriceToman);
+    siteDiscountToman = listPriceToman - priceToman;
     extra = { kind: "pattern", pattern };
   }
 
@@ -319,6 +337,7 @@ async function createPayment(request, env, ctx) {
     sandbox: (provider === "digipay" ? /uat\.|\.info/i.test(String(env.DIGIPAY_BASE || "")) : C.sandbox) || !!(extra.work && extra.work.id === TEST_WORK.id),
     provider,
     priceToman,
+    ...(siteDiscountToman > 0 ? { listPriceToman, siteDiscountToman } : {}),
     customer,
     ...(account ? { userId: account.id } : {}),
     ...(dc ? { discountCode: dc } : {}),
@@ -866,7 +885,12 @@ export default {
       }
       if (p === "/api/config" && request.method === "GET") {
         const C = cfg(env);
-        return json({ pricePerBead: C.price, baseFee: C.base, digipay: digipayConfigured(env) });
+        return json({
+          pricePerBead: C.price,
+          baseFee: C.base,
+          digipay: digipayConfigured(env),
+          promo: globalThis.CARA_WORK_PRICING.sale.info(),
+        });
       }
       if (p === "/api/works" && request.method === "GET") return await worksInfo(env);
       if (p === "/api/work" && request.method === "GET") return await workInfo(env, url);

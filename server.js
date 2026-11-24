@@ -4,6 +4,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const crypto = require("crypto");
+require("./lib/works-pricing.js");
 
 /* خواندن .env (یا _env اگه اسمش رو عوض نکردی) */
 for (const name of [".env", "_env"]) {
@@ -198,7 +199,7 @@ function sendFile(res, file) {
 }
 /* فقط css/ js/ img/ و صفحه‌های html عمومی‌اند؛ server.js و orders/ و .env بیرون نمی‌آیند */
 function serveStatic(p, res) {
-  const m = p.match(/^\/(css|js|img)\/(.+)$/);
+  const m = p.match(/^\/(css|js|img|lib)\/(.+)$/);
   if (!m) return false;
   const rel = path.normalize(m[2]);
   if (rel.startsWith("..") || path.isAbsolute(rel)) return false;
@@ -241,23 +242,29 @@ async function createPayment(req, res) {
         error: "شماره موبایل باید شبیه 09123456789 باشه.",
       });
     /* قیمت همیشه روی سرور حساب می‌شود؛ سپال مبلغ را به ریال می‌گیرد */
+    const sale = globalThis.CARA_WORK_PRICING.sale;
     let pattern = null,
       work = null,
-      priceToman;
+      priceToman,
+      listPriceToman = 0,
+      siteDiscountToman = 0;
     if (body.workId) {
       /* سفارش مستقیم یه دستبند گالری، بدون استودیو و پالت */
       const w = findWork(body.workId);
       if (!w) return json(res, 400, { error: "این دستبند پیدا نشد." });
       if (w.noOrder) return json(res, 400, { error: "این نمونه قابل سفارش مستقیم نیست." });
-      priceToman = Math.round(w.price || WORK_PRICE);
-      if (!priceToman)
+      listPriceToman = Math.round(w.price || WORK_PRICE);
+      if (!listPriceToman)
         return json(res, 503, { error: "قیمت این دستبند هنوز تعیین نشده." });
+      priceToman = sale.final(listPriceToman);
+      siteDiscountToman = listPriceToman - priceToman;
       work = {
         id: w.id,
         file: w.file,
         title: w.title,
         src: w.src,
         price: priceToman,
+        listPrice: listPriceToman,
       };
     } else {
       if (!PRICE_PER_BEAD)
@@ -273,7 +280,9 @@ async function createPayment(req, res) {
         return json(res, 400, {
           error: "الگو معتبر نیست. دوباره توی استودیو بازش کن.",
         });
-      priceToman = Math.round(BASE_FEE + pattern.total * PRICE_PER_BEAD);
+      listPriceToman = Math.round(BASE_FEE + pattern.total * PRICE_PER_BEAD);
+      priceToman = sale.final(listPriceToman);
+      siteDiscountToman = listPriceToman - priceToman;
     }
     const order = {
       id: crypto.randomUUID(),
@@ -281,6 +290,7 @@ async function createPayment(req, res) {
       createdAt: new Date().toISOString(),
       sandbox: SANDBOX,
       priceToman,
+      ...(siteDiscountToman > 0 ? { listPriceToman, siteDiscountToman } : {}),
       customer,
       ...(work ? { work } : { pattern }),
     };
@@ -380,24 +390,32 @@ http
         return json(res, 200, {
           pricePerBead: PRICE_PER_BEAD,
           baseFee: BASE_FEE,
+          promo: globalThis.CARA_WORK_PRICING.sale.info(),
         });
       if (p === "/api/works" && req.method === "GET")
         return json(
           res,
           200,
-          loadWorks().map((w) => ({
-            id: String(w.id).trim(),
-            price: w.noOrder ? 0 : Math.round(w.price || WORK_PRICE) || 0,
-          })),
+          loadWorks().map((w) => {
+            const listPrice = w.noOrder ? 0 : Math.round(w.price || WORK_PRICE) || 0;
+            return {
+              id: String(w.id).trim(),
+              price: globalThis.CARA_WORK_PRICING.sale.final(listPrice),
+              listPrice,
+            };
+          }),
         );
       if (p === "/api/work" && req.method === "GET") {
         const w = findWork(url.searchParams.get("id"));
         if (!w || w.noOrder) return json(res, 404, { error: "not found" });
+        const listPrice = Math.round(w.price || WORK_PRICE) || 0;
         return json(res, 200, {
           id: w.id,
           title: w.title,
           src: w.src,
-          price: Math.round(w.price || WORK_PRICE) || 0,
+          price: globalThis.CARA_WORK_PRICING.sale.final(listPrice),
+          listPrice,
+          promo: globalThis.CARA_WORK_PRICING.sale.info(),
         });
       }
       if (p === "/api/create-payment" && req.method === "POST")
