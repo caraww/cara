@@ -903,7 +903,7 @@ html[data-theme="dark"] .preview .msg { background: rgba(32, 29, 52, .82); color
 .price-list {
   font-size: 0.88em;
   font-weight: 700;
-  color: var(--sale);
+  color: var(--cara-text);
   text-decoration: line-through;
   text-decoration-color: var(--sale);
   text-decoration-thickness: 2px;
