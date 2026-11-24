@@ -1,5 +1,5 @@
 /* cara Gallery design tokens — loaded through polish.css after each page's base styles.
-   Order: page stylesheet(s) → decor/accessibility/mobile-nav → polish.css → tokens.css (imported first by polish.css).
+   Order: page stylesheet(s) → decor/accessibility/mobile-nav → polish.css (tokens inlined at its top).
    Product bead colors remain exclusively defined in js/palette.js. */
 :root {
   color-scheme: light;

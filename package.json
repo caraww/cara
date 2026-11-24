@@ -9,18 +9,22 @@
     "build:beads": "node tools/build-beads.js",
     "build:works": "node -e \"process.env.CARA_REQUIRE_SHARP='1'; require('./tools/build-works.js')\"",
     "build:pages": "node tools/build-pages.js",
-    "build": "npm run build:beads && npm run build:works && npm run build:categories && npm run build:blog && npm run build:pages && npm run check:seo",
+    "build": "npm run build:beads && npm run build:works && npm run build:categories && npm run build:blog && npm run build:pages && npm run build:home-css && npm run build:home-js && npm run check:seo",
     "check:palette": "node tools/sync-valid.js index.js --check",
     "build:categories": "node tools/build-categories.js",
     "build:blog": "node tools/build-blog-extra.js",
-    "check:seo": "node tools/seo-audit.js"
+    "check:seo": "node tools/seo-audit.js",
+    "build:home-css": "node tools/build-home-css.js",
+    "build:home-js": "node tools/build-home-js.js"
   },
   "engines": {
     "node": ">=18"
   },
   "devDependencies": {
     "@imgly/background-removal-node": "^1.4.5",
-    "sharp": "^0.35.5"
+    "lightningcss": "^1.33.0",
+    "sharp": "^0.35.5",
+    "terser": "^5.51.4"
   },
   "allowScripts": {
     "sharp@0.32.6": true,

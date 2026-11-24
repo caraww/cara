@@ -1,4 +1,93 @@
-@import url("/css/tokens.css");
+/* cara Gallery design tokens — loaded through polish.css after each page's base styles.
+   Order: page stylesheet(s) → decor/accessibility/mobile-nav → polish.css → tokens.css (imported first by polish.css).
+   Product bead colors remain exclusively defined in js/palette.js. */
+:root {
+  color-scheme: light;
+  --cara-bg: #E9E9ED;
+  --cara-surface: #FFFFFF;
+  --cara-text: #242431;
+  --cara-muted: #544f60;
+  --cara-line: #D4D4DF;
+  --cara-accent: #343B64;
+  --cara-detail: #9B8FC1;
+  --cara-detail-ink: #6A5AA0;
+  --cara-gold-ink: #7D5F26;
+  --cara-accent-soft: #EEEEF5;
+  --cara-radius-sm: 12px;
+  --cara-radius-md: 18px;
+  --cara-radius-lg: 26px;
+  --cara-shadow-soft: 0 8px 24px rgba(36, 36, 49, .055);
+  --cara-shadow-card: 0 18px 42px rgba(36, 36, 49, .10);
+
+  /* Legacy aliases used by the existing page styles. */
+  --bg: var(--cara-bg);
+  --paper: var(--cara-bg);
+  --panel: var(--cara-surface);
+  --ink: var(--cara-text);
+  --muted: var(--cara-muted);
+  --line: var(--cara-line);
+  --tint: var(--cara-accent-soft);
+  --plum: var(--cara-accent);
+  --night: #22243B;
+  --gold: var(--cara-detail);
+  --accent: var(--cara-accent);
+  --accent-2: var(--cara-accent);
+  --hot: var(--cara-accent);
+  --cara-ink: var(--cara-text);
+  --cara-plum: var(--cara-accent);
+  --cara-plum-deep: #22243B;
+  --cara-lilac: var(--cara-accent-soft);
+  --cara-paper: var(--cara-bg);
+  --cara-muted: #544f60;
+  --cara-line: #D4D4DF;
+  --cara-gold: var(--cara-detail);
+}
+
+/* Typography, spacing, radius, elevation and motion scale.
+   Page styles keep their own values where they are deliberate; new rules and
+   the shared footer/nav layers build from these tokens. */
+:root {
+  --cara-font: "Vazir", Tahoma, system-ui, sans-serif;
+  --cara-font-display: "Baloo", "Vazir", Tahoma, system-ui, sans-serif;
+
+  --cara-text-xs: 12px;
+  --cara-text-sm: 14px;
+  --cara-text-md: 16px;
+  --cara-text-lg: 20px;
+  --cara-text-xl: clamp(24px, 3vw, 32px);
+  --cara-text-2xl: clamp(30px, 4vw, 44px);
+  --cara-leading: 1.9;
+  --cara-leading-tight: 1.45;
+
+  --cara-space-1: 4px;
+  --cara-space-2: 8px;
+  --cara-space-3: 12px;
+  --cara-space-4: 16px;
+  --cara-space-5: 24px;
+  --cara-space-6: 32px;
+  --cara-space-7: 48px;
+  --cara-space-8: 64px;
+
+  --cara-radius-pill: 999px;
+  --cara-radius-control: 14px;
+  --cara-radius-card: 22px;
+
+  --cara-shadow-sm: 0 2px 10px rgba(32, 23, 45, .06);
+  --cara-shadow-md: 0 14px 34px rgba(32, 23, 45, .10);
+  --cara-shadow-lg: 0 28px 64px rgba(32, 23, 45, .16);
+
+  --cara-gold-brand: #b8975a;
+  --cara-focus-ring: 0 0 0 3px rgba(184, 151, 90, .45);
+
+  --cara-dur-fast: .16s;
+  --cara-dur: .24s;
+  --cara-ease: cubic-bezier(.22, .61, .36, 1);
+
+  --cara-tap: 44px;
+  --cara-content-max: 1120px;
+  --cara-gutter: max(18px, 5vw);
+}
+
 
 /* cara visual system — shared layer, loaded after each page's own styles. */
 :root {
@@ -951,6 +1040,12 @@ html.is-sale .bf {
   border-radius: 18px;
   background: #000;
 }
+.bf__gif img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit;
+}
 .bf__copy {
   display: flex;
   flex-direction: column;
@@ -1051,4 +1146,12 @@ html.dark .hx__sale, :root[data-theme="dark"] .hx__sale { color: #ffd7dd; backgr
   overflow: visible;
   line-height: 1.9;
   font-size: 15px;
+}
+
+/* بخش‌های پایین صفحه تا نزدیک دیده‌شدن رندر نمی‌شن تا اولین نمایش سبک‌تر بشه. */
+.cara-journal,
+.home-blog-feed,
+.cara-weaving {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 700px;
 }

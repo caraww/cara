@@ -1,4 +1,4 @@
-const CACHE_NAME = "cara-pwa-v12";
+const CACHE_NAME = "cara-pwa-v15";
 const CORE_ASSETS = [
   "/",
   "/offline.html",
@@ -8,7 +8,7 @@ const CORE_ASSETS = [
   "/css/fonts.css",
   "/css/offline.css",
   "/js/offline.js",
-  "/fonts/vazirmatn-var.woff2"
+  "/fonts/vazirmatn-var.woff2?v=subset1"
 ];
 
 self.addEventListener("install", (event) => {
@@ -62,14 +62,31 @@ self.addEventListener("fetch", (event) => {
   if (request.mode === "navigate") {
     event.respondWith((async () => {
       const cache = await caches.open(CACHE_NAME);
+      const cached = await cache.match(request);
+      if (!cached) {
+        try {
+          const response = await fetch(request);
+          if (response && response.ok) cache.put(request, response.clone());
+          return response;
+        } catch {
+          return (await cache.match("/")) || (await cache.match("/offline.html"));
+        }
+      }
+      /* Return a cached page instead of a white screen when the Iranian
+         network stalls for more than four seconds. */
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 4000);
       try {
-        const response = await fetch(request);
-        if (response && response.ok) cache.put(request, response.clone());
-        return response;
+        const response = await fetch(request, { signal: controller.signal });
+        if (response && response.ok) {
+          cache.put(request, response.clone());
+          return response;
+        }
+        return cached;
       } catch {
-        return (await cache.match(request))
-          || (await cache.match("/"))
-          || (await cache.match("/offline.html"));
+        return cached;
+      } finally {
+        clearTimeout(timer);
       }
     })());
     return;
@@ -82,12 +99,15 @@ self.addEventListener("fetch", (event) => {
       /* فایل‌های نسخه‌دار (?v=) تغییرناپذیرند؛ بقیه stale-while-revalidate می‌مانند
          تا قیمت و حراج بعد از انتشار، حتی روی موبایل، به‌روز دیده شود. */
       if (url.searchParams.has("v")) {
+        /* Versioned assets never change under the same URL, so a cached copy is
+           always correct and avoids a slow network round-trip on every visit. */
+        if (cached) return cached;
         try {
           const fresh = await fetch(request);
           if (fresh && fresh.ok) cache.put(request, fresh.clone());
           return fresh;
         } catch {
-          return cached || Response.error();
+          return Response.error();
         }
       }
       const network = fetch(request).then((response) => {

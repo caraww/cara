@@ -179,10 +179,11 @@ const MIME = {
   ".jpg": "image/jpeg",
   ".jpeg": "image/jpeg",
   ".webp": "image/webp",
+  ".avif": "image/avif",
   ".svg": "image/svg+xml",
   ".ico": "image/x-icon",
 };
-const PAGES = new Set(["index", "builder", "upload", "gallery", "checkout", "game"]);
+const PAGES = new Set(["index", "builder", "upload", "gallery", "checkout", "game", "quiz"]);
 /* فایل‌های سمت سرور که نباید از طریق مسیر جایگزین ریشه سرو بشن */
 const PRIVATE = new Set(["server.js", "index.js", "game-worker.js", "zibal-relay.js", "sync-valid.js"]);
 

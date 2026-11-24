@@ -20,12 +20,20 @@
       img.height = 560;
       img.loading = i < 3 ? "eager" : "lazy";
       img.decoding = "async";
+      const picture = document.createElement("picture");
+      if (work.thumbAvif) {
+        const source = document.createElement("source");
+        source.type = "image/avif";
+        source.srcset = work.thumbAvif;
+        picture.appendChild(source);
+      }
+      picture.appendChild(img);
       const cap = document.createElement("figcaption");
       cap.textContent = work.id;
       const sub = document.createElement("small");
       sub.textContent = "بافته‌شده با دست";
       cap.appendChild(sub);
-      fig.append(img, cap);
+      fig.append(picture, cap);
       frag.appendChild(fig);
     });
     ring.replaceChildren(frag);

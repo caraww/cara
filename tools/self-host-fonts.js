@@ -16,8 +16,8 @@ const TEXT_FACE = `@font-face {
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
-  src: url(/fonts/vazirmatn-var.woff2) format('woff2-variations'),
-       url(/fonts/vazirmatn-var.woff2) format('woff2');
+  src: url(/fonts/vazirmatn-var.woff2?v=subset1) format('woff2-variations'),
+       url(/fonts/vazirmatn-var.woff2?v=subset1) format('woff2');
 }
 `;
 

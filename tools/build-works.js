@@ -123,11 +123,13 @@ async function derive(files) {
   if (!sharp) return m;
   for (const d of [THUMB_DIR, VIEW_DIR]) fs.mkdirSync(d, { recursive: true }); /* پوشه‌ها ممکن است فایل دستی هم داشته باشند؛ فقط خروجی‌های هم‌نام بازتولید می‌شوند و هیچ فایل دیگری حذف نمی‌شود. */
   for (const f of files) {
-    const name = f.replace(EXT, "") + ".webp", src = path.join(DIR, f);
+    const base = f.replace(EXT, ""), name = base + ".webp", avif = base + ".avif", src = path.join(DIR, f);
     try {
-      await sharp(src).rotate().resize({ width: 700, height: 700, fit: "inside", withoutEnlargement: true }).webp({ quality: 82 }).toFile(path.join(THUMB_DIR, name));
+      const thumb = sharp(src).rotate().resize({ width: 700, height: 700, fit: "inside", withoutEnlargement: true });
+      await thumb.clone().webp({ quality: 82 }).toFile(path.join(THUMB_DIR, name));
+      await thumb.clone().avif({ quality: 52, effort: 5 }).toFile(path.join(THUMB_DIR, avif));
       await sharp(src).rotate().resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true }).webp({ quality: 88 }).toFile(path.join(VIEW_DIR, name));
-      m.set(f, { thumb: "img/works-thumbs/" + name, view: "img/works-view/" + name });
+      m.set(f, { thumb: "img/works-thumbs/" + name, thumbAvif: "img/works-thumbs/" + avif, view: "img/works-view/" + name });
     } catch (e) { console.warn("⚠ عکس سبک ساخته نشد:", f, e.message); }
   }
   return m;
@@ -184,8 +186,10 @@ const works = [...groups].map(([base, items]) => {
   const original = enc("img/works-cutouts/" + file) + ver(file);
   const images = items.map((it) => { const d = derived.get(it.file); return d ? enc(d.view) + "?v=" + STAMP : enc("img/works-cutouts/" + it.file) + ver(it.file); });
   const d0 = derived.get(items[0].file), thumb = d0 ? enc(d0.thumb) + "?v=" + STAMP : images[0];
+  const thumbAvif = d0 && d0.thumbAvif ? enc(d0.thumbAvif) + "?v=" + STAMP : "";
   console.log("✓", file, `(${images.length} عکس)`, "→ عنوان:", title || "(بدون عنوان)");
   const w = { id, src: images[0], thumb, source: original };
+  if (thumbAvif) w.thumbAvif = thumbAvif;
   if (images.length > 1) w.images = images;
   const d = dims(fs.readFileSync(path.join(DIR, file)));
   if (d) {

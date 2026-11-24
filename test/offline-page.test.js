@@ -22,7 +22,7 @@ test("service worker precaches offline styles, retry script, and local font weig
     "/css/fonts.css",
     "/css/offline.css",
     "/js/offline.js",
-    "/fonts/vazirmatn-var.woff2",
+    "/fonts/vazirmatn-var.woff2?v=subset1",
   ]) assert.ok(sw.includes('"' + asset + '"'), asset);
 });
 

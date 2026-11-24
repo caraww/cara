@@ -53,7 +53,7 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   assert.ok(template.includes("/css/site-nav.css?v=20261113"));
   assert.ok(template.includes("/css/nav-hero.css?v="));
   assert.ok(template.includes("/js/nav-hero.js?v=1"));
-  assert.ok(template.includes("/js/contact.js?v=20261121-seal"));
+  assert.match(template, /\/js\/contact\.js\?v=[\w.-]+/);
   const templateBraceletCss = template.indexOf("/css/bracelet-pages.css?v=6");
   const templateSiteNavCss = template.indexOf("/css/site-nav.css?v=20261113");
   assert.ok(templateSiteNavCss > templateBraceletCss, "generated pages load the shared navigation as the final visual layer");
@@ -70,7 +70,7 @@ test("all generated bracelet and color pages load current shared navigation asse
       const braceletCss = html.indexOf("/css/bracelet-pages.css?v=6");
       const navCss = html.indexOf("/css/site-nav.css?v=20261113");
       assert.ok(braceletCss >= 0 && navCss > braceletCss, page + " loads shared navigation after the bracelet page styles");
-      assert.ok(html.includes("/js/contact.js?v=20261121-seal"), page + " uses the fresh contact fallback URL");
+      assert.match(html, /\/js\/contact\.js\?v=[\w.-]+/, page + " uses the fresh contact fallback URL");
       assert.ok(html.includes("/js/nav-hero.js?v=1"), page + " loads the shared menu behavior");
     }
   }

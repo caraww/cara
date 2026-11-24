@@ -36,9 +36,28 @@
   document.documentElement.classList.add("is-sale");
 
   var days = Math.max(1, Math.ceil((sale.end - Date.now()) / 86400000) - 1);
+  function countdownText(ms) {
+    var d = Math.floor(ms / 86400000);
+    var h = Math.floor(ms / 3600000) % 24;
+    var m = Math.floor(ms / 60000) % 60;
+    if (d > 0) return faNum(d) + " روز و " + faNum(h) + " ساعت";
+    if (h > 0) return faNum(h) + " ساعت و " + faNum(m) + " دقیقه";
+    return faNum(Math.max(1, m)) + " دقیقه";
+  }
   var boot = function () {
     var nodes = document.querySelectorAll("[data-sale-days]");
     for (var i = 0; i < nodes.length; i++) nodes[i].textContent = faNum(days);
+    var tick = function () {
+      var left = sale.end - Date.now();
+      var labels = document.querySelectorAll("[data-sale-countdown]");
+      for (var j = 0; j < labels.length; j++) {
+        if (left <= 0) { labels[j].hidden = true; continue; }
+        labels[j].hidden = false;
+        labels[j].textContent = "\u200f" + countdownText(left) + " مونده؛";
+      }
+    };
+    tick();
+    setInterval(tick, 60000);
   };
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
