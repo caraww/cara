@@ -184,7 +184,7 @@
   overflow-wrap: normal;
 }
 @media (min-width: 761px) {
-  .hx__copy h1 .gilt { white-space: nowrap; }
+  .hx__copy h1 .gilt { display: block; white-space: nowrap; }
 }
 .hx__copy h1 .gilt {
   padding-inline: .04em;

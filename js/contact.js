@@ -17,31 +17,15 @@
   // یا خطای خود نماد) جای خالی نماند: همان قاب با نشان محلی و لینک استعلام پر می‌شود.
   const seal = document.querySelector(".sf__seal img");
   if (seal) {
-    const official = seal.dataset.enamadSrc;
     const useFallback = () => {
-      if (seal.dataset.fb) return;
+      if (seal.naturalWidth || seal.dataset.fb) return;
       seal.dataset.fb = "1";
       seal.src = "/img/enamad-fallback.svg?v=1";
       seal.alt = "نماد اعتماد الکترونیکی؛ برای استعلام کلیک کن";
     };
     seal.addEventListener("error", useFallback);
-    if (official) {
-      /* Probe the third-party seal after idle so a blocked/slow Enamad host
-         never delays the page load; the local fallback stays visible until
-         the real image has actually arrived. */
-      const loadOfficial = () => {
-        const probe = new Image();
-        probe.referrerPolicy = "origin";
-        probe.onload = () => { if (!seal.dataset.fb) seal.src = official; };
-        probe.onerror = useFallback;
-        probe.src = official;
-      };
-      if ("requestIdleCallback" in window) requestIdleCallback(loadOfficial, { timeout: 6000 });
-      else setTimeout(loadOfficial, 4000);
-    } else {
-      setTimeout(() => {
-        if (seal.getBoundingClientRect().top < innerHeight * 2) useFallback();
-      }, 8000);
-    }
+    setTimeout(() => {
+      if (seal.getBoundingClientRect().top < innerHeight * 2) useFallback();
+    }, 8000);
   }
 })();
