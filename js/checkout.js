@@ -16,6 +16,10 @@ const giftOf = (f) => {
   const message = String(f.giftMessage || "").replace(/[\u0000-\u001f\u007f]/g, "").trim().slice(0, 200);
   return wrap || hidePrice || message ? { wrap, hidePrice, message } : null;
 };
+const saleHTML = (original, current) => {
+  const S = window.CARA_SALE, before = Number(original) || Number(current) || 0;
+  return S && before > Number(current) ? S.priceHTML(before) : Number(current).toLocaleString("fa-IR") + " تومان";
+};
 
 
 /* ==================================================================
@@ -120,11 +124,6 @@ try {
   const $ = (s) => document.querySelector(s);
   const form = $("#form"), err = $("#err"), pay = $("#pay");
   if (!form) return;
-  const fa = (n) => Number(n).toLocaleString("fa-IR");
-  const saleHTML = (original, current) => {
-    const S = window.CARA_SALE, before = Number(original) || Number(current) || 0;
-    return S && before > Number(current) ? S.priceHTML(before) : fa(current) + " تومان";
-  };
   const esc = (s) => String(s || "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const NUM = /^[\s0-9۰-۹.\-_)]+$/; /* عنوان‌های فقط‌عددی نشون داده نمی‌شن */
   const showErr = (m) => { err.textContent = m; err.hidden = false; err.scrollIntoView({ block: "center", behavior: "smooth" }); };
