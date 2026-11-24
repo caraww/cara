@@ -177,10 +177,14 @@
   margin: 0;
   max-width: 10.5em;
   color: #f7f6fb;
-  font-size: clamp(38px, 5vw, 70px);
+  font-size: clamp(38px, 3.8vw, 56px);
   font-weight: 850;
   line-height: 1.34;
   text-wrap: balance;
+  overflow-wrap: normal;
+}
+@media (min-width: 761px) {
+  .hx__copy h1 .gilt { white-space: nowrap; }
 }
 .hx__copy h1 .gilt {
   padding-inline: .04em;
