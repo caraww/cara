@@ -37,7 +37,15 @@
   border-radius: 14px;
   box-shadow: 0 10px 26px rgba(0, 0, 0, .28);
 }
-.sf__seal img { display: block; width: 72px; height: 72px; object-fit: contain; }
+.sf__seal img {
+  display: block;
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  /* Local badge stays behind the official seal so a slow third-party
+     request never leaves an empty white frame. */
+  background: url("/img/enamad-fallback.svg?v=1") center / contain no-repeat;
+}
 /* اگر نماد اعتماد لود نشد (ادبلاک یا شبکه)، قاب سفید خالی نماند. */
 .sf__seal[hidden] { display: none; }
 
