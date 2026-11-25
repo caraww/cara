@@ -9,3 +9,8 @@ jobs:
         run: curl -sS -I --max-time 20 http://caraw.ir || true
       - name: HTTPS
         run: curl -sS -I --max-time 20 https://caraw.ir || true
+      - name: Ports
+        run: |
+          for p in 21 22 2083 2222; do
+            if timeout 10 bash -c "</dev/tcp/88.135.68.30/$p" 2>/dev/null; then echo "$p open"; else echo "$p closed"; fi
+          done
