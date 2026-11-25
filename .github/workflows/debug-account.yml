@@ -41,4 +41,4 @@ jobs:
       - name: Clean up debug account
         if: always()
         run: |
-          npx --yes wrangler@4 d1 execute cara-accounts-production --remote --command "DELETE FROM sessions WHERE user_id IN (SELECT user_id FROM local_credentials WHERE login_id='$TEST_EMAIL'); DELETE FROM user_profiles WHERE user_id IN (SELECT user_id FROM local_credentials WHERE login_id='$TEST_EMAIL'); DELETE FROM local_credentials WHERE login_id='$TEST_EMAIL'; DELETE FROM users WHERE id NOT IN (SELECT user_id FROM local_credentials) AND id NOT IN (SELECT user_id FROM identity_links);" || true
+          npx --yes wrangler@4 d1 execute cara-accounts-production --remote --command "DELETE FROM users WHERE id IN (SELECT user_id FROM local_credentials WHERE login_id='$TEST_EMAIL');" || true

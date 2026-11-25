@@ -6,7 +6,8 @@ const { hashPassword, verifyPassword, normalizeLoginId, sha256, normalizePhone, 
 test("local passwords are salted, hashed, and verified in constant-time form", async () => {
   const first = await hashPassword("correct horse battery");
   const second = await hashPassword("correct horse battery");
-  assert.match(first, /^pbkdf2-sha256\$210000\$[a-f0-9]{32}\$[a-f0-9]{64}$/);
+  assert.match(first, /^pbkdf2-sha256\$100000\$[a-f0-9]{32}\$[a-f0-9]{64}$/);
+  assert.ok(Number(first.split("$")[1]) <= 100000, "Cloudflare Workers WebCrypto caps PBKDF2 at 100000 iterations");
   assert.notEqual(first, second, "each password gets a fresh salt");
   assert.equal(await verifyPassword("correct horse battery", first), true);
   assert.equal(await verifyPassword("wrong password", first), false);
