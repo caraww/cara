@@ -1,4 +1,4 @@
-const CACHE_NAME = "cara-pwa-v20";
+const CACHE_NAME = "cara-pwa-v21";
 const CORE_ASSETS = [
   "/",
   "/offline.html",

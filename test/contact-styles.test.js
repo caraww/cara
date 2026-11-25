@@ -28,6 +28,7 @@ test("contact FAB exposes an accessible toggle instead of two always-visible but
   const css = fs.readFileSync(path.join(__dirname, "..", "css/contact.css"), "utf8");
   assert.match(js, /aria-expanded="false"/);
   assert.match(js, /aria-controls="cara-contact-menu"/);
+  assert.match(js, /aria-label="تماس با من"/);
   assert.match(js, /menu\.hidden = !open/);
   assert.match(js, /cara-contact-toggle__icon--close/);
   assert.match(js, /toggle\.addEventListener\("click"/);

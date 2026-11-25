@@ -360,27 +360,12 @@
   0%, 55% { background-position: 130% 0; }
   85%, 100% { background-position: -40% 0; }
 }
-.hx__card-bg {
-  position: absolute;
-  inset: -8%;
-  z-index: 0;
-  background-position: center;
-  background-size: cover;
-  filter: blur(22px) saturate(.9);
-  opacity: .2;
-  transform: scale(1.05);
-  pointer-events: none;
-}
-.hx__card.is-wide .hx__card-bg { opacity: .3; }
 .hx__card > picture {
   position: relative;
-  z-index: 1;
   display: block;
   height: 100%;
 }
 .hx__card img {
-  position: relative;
-  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;

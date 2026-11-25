@@ -45,26 +45,6 @@
 
   const cards = Array.from(stage.querySelectorAll(".hx__card"));
 
-  /* برای طرح‌های خیلی عریض، یک نسخه‌ی بلور از خود عکس پشت کارت می‌گذاریم
-     تا فضای خالی قاب با یک زمینه‌ی هم‌رنگ پر شود، نه سفیدیِ خالی. */
-  cards.forEach((card) => {
-    const img = card.querySelector("img");
-    if (!img) return;
-    const apply = () => {
-      if (card.querySelector(".hx__card-bg")) return;
-      const ratio = img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : 0;
-      if (ratio < 1.35) return;
-      const bg = document.createElement("span");
-      bg.className = "hx__card-bg";
-      bg.setAttribute("aria-hidden", "true");
-      bg.style.backgroundImage = `url("${(img.currentSrc || img.src).replace(/"/g, "%22")}")`;
-      card.classList.add("is-wide");
-      card.prepend(bg);
-    };
-    if (img.complete) apply();
-    else img.addEventListener("load", apply, { once: true });
-  });
-
   /* نقطه‌ها جای خود را به نوار بندانگشتی همه‌ی دستبندها می‌دهند */
   const dotsEl = stage.querySelector(".hx__dots");
   let thumbs = [];

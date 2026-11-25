@@ -6,6 +6,8 @@ const path = require("node:path");
 const root = path.resolve(__dirname, "..");
 const worksSource = fs.readFileSync(path.join(root, "js/works.js"), "utf8");
 const index = fs.readFileSync(path.join(root, "index.html"), "utf8");
+const heroCss = fs.readFileSync(path.join(root, "css/nav-hero.css"), "utf8");
+const heroJs = fs.readFileSync(path.join(root, "js/hero-stage.js"), "utf8");
 
 test("every work has a generated AVIF thumbnail", () => {
   const matches = [...worksSource.matchAll(/"thumbAvif":\s*"([^"]+)"/g)];
@@ -29,4 +31,11 @@ test("Black Friday banner stays animated by default", () => {
     index,
     /<source[^>]+media="\(prefers-reduced-motion: reduce\)"[^>]+black-friday\.avif/,
   );
+});
+
+test("hero images blend into the cream card instead of showing a white box", () => {
+  assert.match(heroCss, /\.hx__card img\s*\{[^}]*mix-blend-mode:\s*multiply/);
+  assert.doesNotMatch(heroCss, /\.hx__card > picture\s*\{[^}]*z-index/);
+  assert.doesNotMatch(heroCss, /hx__card-bg/);
+  assert.doesNotMatch(heroJs, /hx__card-bg/);
 });
