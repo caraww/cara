@@ -33,5 +33,6 @@ test("related bracelet cards keep a visible border in day mode", () => {
 });
 
 test("dark mode home bracelet names are black on a white label", () => {
-  assert.match(themeCss, /html\[data-theme="dark"\] \.mini-gal > a b \{[^}]*color: #141019;[^}]*background: #fff;/);
+  assert.match(themeCss, /html\[data-theme="dark"\] \.mini-gal > a \{[^}]*background: #fff !important/);
+  assert.match(themeCss, /html\[data-theme="dark"\] \.mini-gal > a b \{[^}]*color: #141019;[^}]*background: transparent/);
 });

@@ -1454,17 +1454,23 @@ html[data-theme="dark"] body main.wrap #wkGrid > .wk-card:focus-within > img {
   background-color: #fff !important;
   background-image: none !important;
 }
-html[data-theme="dark"] body main.wrap #wkGrid > .wk-card > figcaption .wk-price {
-  display: inline-block !important;
-  width: auto !important;
-  margin-top: 6px !important;
-  padding: 4px 14px !important;
-  border: 1px solid rgba(184, 151, 90, .38) !important;
-  border-radius: 999px !important;
-  background: #fff !important;
+html[data-theme="dark"] body main.wrap #wkGrid > .wk-card > figcaption {
+  background: var(--panel, #1b1a2b) !important;
   background-image: none !important;
-  color: #3a2b1a !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, .14) !important;
+}
+html[data-theme="dark"] body main.wrap #wkGrid > .wk-card > figcaption .wk-price {
+  display: block !important;
+  width: 100% !important;
+  margin: 3px 0 0 !important;
+  padding: 5px 0 0 !important;
+  border: 0 !important;
+  border-top: 1px solid rgba(184, 151, 90, .28) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  color: #e0c48f !important;
+  box-shadow: none !important;
+  text-align: center !important;
 }
 html[data-theme="dark"] body dialog#lb.wk-lb .wk-stage,
 html[data-theme="dark"] body dialog#lb.wk-lb .wk-stage:focus-within,
