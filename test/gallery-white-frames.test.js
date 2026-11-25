@@ -11,5 +11,6 @@ test("gallery image areas stay pure white in cards and enlarged view", () => {
   assert.match(css, /\.wk-stage #lbImg\s*\{\s*background: #fff !important/);
   assert.match(css, /html\[data-theme="dark"\] body main\.wrap #wkGrid > \.wk-card > img[\s\S]*?background: #fff !important/);
   assert.match(css, /html\[data-theme="dark"\] body main\.wrap #wkGrid > \.wk-card > figcaption \.wk-price[\s\S]*?background: #fff !important/);
+  assert.doesNotMatch(css, /html\[data-theme="dark"\][\s\S]*?#lbPrice\s*\{[^}]*background:\s*#fff/);
   assert.match(html, /css\/gallery\.css\?v=[\w.-]+/);
 });
