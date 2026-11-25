@@ -9,7 +9,7 @@ const root = path.resolve(__dirname, "..");
 const dist = path.join(root, "dist");
 const out = path.join(dist, "site");
 
-const dirs = ["blog", "bracelet", "category", "colors", "css", "js", "fonts", "img", "media", "data"];
+const dirs = ["api", "blog", "bracelet", "category", "colors", "css", "js", "fonts", "img", "media", "data"];
 const files = [
   "manifest.webmanifest",
   "sw.js",

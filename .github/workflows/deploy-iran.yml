@@ -6,6 +6,7 @@ on:
     branches: [main]
     paths:
       - "**.html"
+      - "api/**"
       - "css/**"
       - "js/**"
       - "img/**"
@@ -63,6 +64,19 @@ jobs:
             set ftp:passive-mode yes;
             set net:max-retries 3;
             open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
-            mirror -R --parallel=4 --verbose=1 -x .htaccess dist/site/ \"${FTP_DIR:-public_html}\";
+            mirror -R --parallel=4 --verbose=1 dist/site/ \"${FTP_DIR:-public_html}\";
             bye
           "
+      - name: Verify API proxy
+        if: steps.ftp.outputs.configured == 'true'
+        run: |
+          for i in 1 2 3 4 5; do
+            code=$(curl -sS -o /tmp/api.json -w '%{http_code}' --max-time 20 https://caraw.ir/api/config || true)
+            echo "attempt $i: HTTP $code"
+            cat /tmp/api.json || true
+            echo
+            [ "$code" = "200" ] && exit 0
+            sleep 5
+          done
+          echo "::error::The /api proxy on caraw.ir is not returning 200. Check api/.htaccess and mod_proxy on the host."
+          exit 1
