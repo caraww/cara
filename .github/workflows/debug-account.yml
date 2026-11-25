@@ -1,0 +1,44 @@
+name: Debug account registration
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  debug:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+      TEST_EMAIL: debug-signup-20261125@caraw.ir
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Inspect account schema
+        run: |
+          npx --yes wrangler@4 d1 execute cara-accounts-production --remote --command "SELECT name, sql FROM sqlite_master WHERE type='table' AND name IN ('users','local_credentials','user_profiles','sessions');"
+
+      - name: Tail Worker while registering
+        run: |
+          npx --yes wrangler@4 tail cara-payment --format json > /tmp/tail.log 2>&1 &
+          tail_pid=$!
+          sleep 12
+          curl -sS -D /tmp/headers -o /tmp/body -w 'status=%{http_code}\n' --max-time 30 \
+            -X POST https://caraw.ir/api/auth/register \
+            -H 'Origin: https://caraw.ir' -H 'Content-Type: application/json' \
+            --data "{\"name\":\"تست دیباگ\",\"identifier\":\"$TEST_EMAIL\",\"password\":\"debug password 123\"}" || true
+          cat /tmp/headers; echo; cat /tmp/body; echo
+          sleep 8
+          kill "$tail_pid" 2>/dev/null || true
+          cat /tmp/tail.log
+
+      - name: Clean up debug account
+        if: always()
+        run: |
+          npx --yes wrangler@4 d1 execute cara-accounts-production --remote --command "DELETE FROM sessions WHERE user_id IN (SELECT user_id FROM local_credentials WHERE login_id='$TEST_EMAIL'); DELETE FROM user_profiles WHERE user_id IN (SELECT user_id FROM local_credentials WHERE login_id='$TEST_EMAIL'); DELETE FROM local_credentials WHERE login_id='$TEST_EMAIL'; DELETE FROM users WHERE id NOT IN (SELECT user_id FROM local_credentials) AND id NOT IN (SELECT user_id FROM identity_links);" || true
