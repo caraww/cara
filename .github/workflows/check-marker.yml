@@ -1,0 +1,12 @@
+name: Check marker removed
+on:
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch
+        run: |
+          curl -sS --max-time 30 https://caraw.ir/ -o /tmp/live.html
+          echo "bytes: $(wc -c < /tmp/live.html)"
+          if grep -q 'cara-deploy-test' /tmp/live.html; then echo 'MARKER STILL PRESENT'; else echo 'marker removed'; fi
