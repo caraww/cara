@@ -166,9 +166,12 @@ html[data-theme="dark"] :is(.featured-card__img, .wk-card img, .wk-lb img, .gal-
   background: var(--cara-img-plate);
 }
 html[data-theme="dark"] body .featured-card {
-  background: #1c1a18 !important;
+  background: #fff !important;
   border-color: rgba(184, 151, 90, .28) !important;
 }
+html[data-theme="dark"] body .featured-card__body h3 { color: #241d31 !important; }
+html[data-theme="dark"] body .featured-card__body p { color: #5b5368 !important; }
+html[data-theme="dark"] body .featured-card__row b { color: #7b5a24 !important; }
 
 /* ---------- صفحه‌ی محصول ---------- */
 html[data-theme="dark"] body .pg .tags span {
@@ -431,17 +434,11 @@ html[data-theme="dark"] .mini-gal > a {
   box-shadow: var(--cara-panel-shadow);
 }
 html[data-theme="dark"] .mini-gal > a:hover { border-color: rgba(217, 187, 133, .55) !important; }
-html[data-theme="dark"] .mini-gal > a {
-  background: #fff !important;
-  border-color: rgba(184, 151, 90, .32) !important;
-  box-shadow: 0 1px 2px rgba(20, 12, 28, .08), 0 12px 28px rgba(0, 0, 0, .22);
-}
 html[data-theme="dark"] .mini-gal > a b {
-  color: #141019;
+  color: var(--cara-text);
   background: transparent;
   padding: 0 12px;
 }
-html[data-theme="dark"] .mini-gal > a span { color: #6b6377; }
 html[data-theme="dark"] .mini-gal > a span { color: var(--cara-muted); }
 html[data-theme="dark"] .mini-gal img { filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .55)); }
 

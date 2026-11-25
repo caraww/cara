@@ -32,7 +32,11 @@ test("related bracelet cards keep a visible border in day mode", () => {
   assert.match(braceletCss, /html:not\(\[data-theme="dark"\]\) body \.pg \.rel a \{[^}]*border: 1px solid rgba\(184, 151, 90, \.32\)/);
 });
 
-test("dark mode home bracelet names are black on a white label", () => {
-  assert.match(themeCss, /html\[data-theme="dark"\] \.mini-gal > a \{[^}]*background: #fff !important/);
-  assert.match(themeCss, /html\[data-theme="dark"\] \.mini-gal > a b \{[^}]*color: #141019;[^}]*background: transparent/);
+test("dark mode home bracelet names stay light on the dark card", () => {
+  assert.doesNotMatch(themeCss, /html\[data-theme="dark"\] \.mini-gal > a \{[^}]*background: #fff !important/);
+  assert.match(themeCss, /html\[data-theme="dark"\] \.mini-gal > a b \{[^}]*color: var\(--cara-text\);[^}]*background: transparent/);
+});
+
+test("featured card keeps a white surface in dark mode", () => {
+  assert.match(themeCss, /html\[data-theme="dark"\] body \.featured-card \{[^}]*background: #fff !important/);
 });
