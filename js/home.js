@@ -113,7 +113,7 @@ try {
                   .trim()
                   .replace(/[\s\u200c]+/g, "-")
                   .replace(/[\/\\?#%.]+/g, ""),
-              )}.html"><picture>${s.thumbAvif ? `<source type="image/avif" srcset="/${esc(s.thumbAvif)}">` : ""}<img src="${esc(s.thumb)}" alt="${esc(s.title)}"${s.w ? ` width="${s.w}" height="${s.h}"` : ""} loading="lazy" decoding="async"></picture><b>${esc(s.title)}</b></a>`,
+              )}.html"><picture>${s.thumbAvif ? `<source type="image/avif" srcset="/${esc(s.thumbAvif)}">` : ""}<img src="${esc(s.thumb)}"${s.thumb240 ? ` srcset="/${esc(s.thumb240)} 240w, /${esc(s.thumb480)} 480w, /${esc(s.thumb)} 700w" sizes="(max-width:850px) 45vw, 220px"` : ""} alt="${esc(s.title)}"${s.w ? ` width="${s.w}" height="${s.h}"` : ""} loading="lazy" decoding="async"></picture><b>${esc(s.title)}</b></a>`,
           )
           .join("");
         mg.addEventListener(

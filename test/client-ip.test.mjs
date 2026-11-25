@@ -12,6 +12,10 @@ test("clientIp falls back to CF-Connecting-IP for direct Worker requests", () =>
   assert.equal(clientIp(req({ "CF-Connecting-IP": "9.9.9.9" })), "9.9.9.9");
 });
 
+test("clientIp ignores a spoofed X-Real-IP on direct Worker requests", () => {
+  assert.equal(clientIp(req({ "X-Real-IP": "1.2.3.4", "CF-Connecting-IP": "9.9.9.9" })), "9.9.9.9");
+});
+
 test("clientIp falls back to the first X-Forwarded-For address", () => {
   assert.equal(clientIp(req({ "X-Forwarded-For": "1.2.3.4, 10.0.0.1" })), "1.2.3.4");
 });

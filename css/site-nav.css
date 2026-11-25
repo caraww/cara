@@ -66,6 +66,10 @@ html body header.top nav {
   font-size: 17px;
   font-weight: 600;
 }
+@media (min-width: 851px) and (max-width: 1100px) {
+  html body header.top { padding-inline: max(12px, 2vw) !important; }
+  html body header.top nav { gap: 12px; font-size: 15px; }
+}
 
 /* سبد خرید فقط هنگام رفتن روی «حساب کاربری» باز شود؛ در حالت عادی مزاحم ناوبری نیست. */
 @media (min-width: 851px) {
@@ -98,6 +102,9 @@ html body header.top nav {
     pointer-events: auto;
     transform: translateY(0);
   }
+}
+html body header.top nav a {
+  white-space: nowrap;
 }
 html body header.top nav a:not(.btn):not(.cta) {
   position: relative;

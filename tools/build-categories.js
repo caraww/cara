@@ -45,8 +45,8 @@ function head({ title, desc, p, ld }) {
   ${footerCSS}
   <link rel="stylesheet" href="/css/polish.css?v=20261124-perf">
   <link rel="stylesheet" href="/css/site-nav.css?v=20261113">
-  <link rel="stylesheet" href="/css/nav-hero.css?v=1">
-  <link rel="stylesheet" href="/css/premium.css?v=2">
+  <link rel="stylesheet" href="/css/nav-hero.css?v=20261125-wide">
+  <link rel="stylesheet" href="/css/premium.css?v=20261125-empty-art">
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
 </head>
 <body>

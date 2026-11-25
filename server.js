@@ -182,8 +182,14 @@ const MIME = {
   ".avif": "image/avif",
   ".svg": "image/svg+xml",
   ".ico": "image/x-icon",
+  ".gif": "image/gif",
+  ".mp4": "video/mp4",
+  ".webm": "video/webm",
+  ".woff2": "font/woff2",
+  ".woff": "font/woff",
+  ".ttf": "font/ttf",
 };
-const PAGES = new Set(["index", "builder", "upload", "gallery", "checkout", "game", "quiz"]);
+const PAGES = new Set(["index", "builder", "upload", "gallery", "checkout", "game", "quiz", "sale"]);
 /* فایل‌های سمت سرور که نباید از طریق مسیر جایگزین ریشه سرو بشن */
 const PRIVATE = new Set(["server.js", "index.js", "game-worker.js", "zibal-relay.js", "sync-valid.js"]);
 
@@ -200,7 +206,7 @@ function sendFile(res, file) {
 }
 /* فقط css/ js/ img/ و صفحه‌های html عمومی‌اند؛ server.js و orders/ و .env بیرون نمی‌آیند */
 function serveStatic(p, res) {
-  const m = p.match(/^\/(css|js|img|lib)\/(.+)$/);
+  const m = p.match(/^\/(css|js|img|lib|fonts|media)\/(.+)$/);
   if (!m) return false;
   const rel = path.normalize(m[2]);
   if (rel.startsWith("..") || path.isAbsolute(rel)) return false;
@@ -386,6 +392,10 @@ http
         res.writeHead(400);
         return res.end();
       }
+      if (p.includes("\0")) {
+        res.writeHead(400);
+        return res.end();
+      }
 
       if (p === "/api/config" && req.method === "GET")
         return json(res, 200, {
@@ -428,6 +438,12 @@ http
           p === "/" ? "index" : (p.match(/^\/([a-z]+)\.html$/) || [])[1];
         if (page && PAGES.has(page))
           return sendFile(res, path.join(__dirname, page + ".html"));
+        if (p.endsWith(".html")) {
+          const rel = path.normalize(p.replace(/^\/+/, ""));
+          const file = path.join(__dirname, rel);
+          if (!rel.startsWith("..") && !path.isAbsolute(rel) && file.startsWith(__dirname + path.sep) && fs.existsSync(file) && fs.statSync(file).isFile())
+            return sendFile(res, file);
+        }
         if (serveStatic(p, res)) return;
       }
       res.writeHead(404, { "Content-Type": "text/plain; charset=utf-8" });

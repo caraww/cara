@@ -101,7 +101,7 @@
       return { w, score };
     }).sort((a, b) => b.score - a.score || a.w.price - b.w.price);
     const top = scored.slice(0, 3).map((x) => x.w);
-    document.getElementById("quizCards").innerHTML = top.map((w) => `<a class="quiz__work" href="/bracelet/${encodeURIComponent(slug(w.id))}.html"><picture>${w.thumbAvif ? `<source type="image/avif" srcset="/${w.thumbAvif}">` : ""}<img src="/${w.thumb || w.src}" alt="دستبند منجوقی ${w.title || w.id}" loading="lazy"></picture><b>${w.title || w.id}</b><span>${window.CARA_SALE ? CARA_SALE.priceHTML(w.price) : fa(w.price) + " تومان"}</span><small>${w.note || ""}</small></a>`).join("");
+    document.getElementById("quizCards").innerHTML = top.map((w) => `<a class="quiz__work" href="/bracelet/${encodeURIComponent(slug(w.id))}.html"><picture>${w.thumbAvif ? `<source type="image/avif" srcset="/${w.thumbAvif}">` : ""}<img src="/${w.thumb || w.src}"${w.thumb240 ? ` srcset="/${w.thumb240} 240w, /${w.thumb480} 480w, /${w.thumb} 700w" sizes="(max-width:560px) 45vw, 220px"` : ""} alt="دستبند منجوقی ${w.title || w.id}" loading="lazy"></picture><b>${w.title || w.id}</b><span>${window.CARA_SALE ? CARA_SALE.priceHTML(w.price) : fa(w.price) + " تومان"}</span><small>${w.note || ""}</small></a>`).join("");
     document.getElementById("quizSummary").innerHTML = answers.style === "name"
       ? 'نزدیک‌ترین‌ها به سلیقه‌ات این‌ها هستن. چون اسم و طرح شخصی رو دوست داری، <a href="/name-bracelet.html">ابزار دستبند اسم</a> هم دقیقاً برای همینه.'
       : "این سه طرح بر اساس سبک، مناسبت، رنگ و بودجه‌ات نزدیک‌ترین بودن. اگه هیچ‌کدوم رو دوست نداشتی، توی استودیو طرح خودت رو بساز.";

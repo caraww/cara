@@ -8,29 +8,53 @@
   "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
-  "display_override": ["standalone", "minimal-ui"],
+  "display_override": [
+    "standalone",
+    "minimal-ui"
+  ],
   "orientation": "portrait",
   "background_color": "#1d1527",
   "theme_color": "#1d1527",
-  "categories": ["shopping", "lifestyle"],
+  "categories": [
+    "shopping",
+    "lifestyle"
+  ],
   "shortcuts": [
     {
       "name": "طراحی دستبند",
       "short_name": "استودیو",
       "url": "/builder.html?source=pwa",
-      "icons": [{ "src": "/img/cara-favicon.png", "sizes": "192x192", "type": "image/png" }]
+      "icons": [
+        {
+          "src": "/img/cara-favicon.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "گالری دستبندها",
       "short_name": "گالری",
       "url": "/gallery.html?source=pwa",
-      "icons": [{ "src": "/img/cara-favicon.png", "sizes": "192x192", "type": "image/png" }]
+      "icons": [
+        {
+          "src": "/img/cara-favicon.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     },
     {
       "name": "پیگیری سفارش",
       "short_name": "پیگیری",
       "url": "/track.html",
-      "icons": [{ "src": "/img/cara-favicon.png", "sizes": "192x192", "type": "image/png" }]
+      "icons": [
+        {
+          "src": "/img/cara-favicon.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ],
   "share_target": {
@@ -42,7 +66,12 @@
       "text": "text",
       "url": "url",
       "files": [
-        { "name": "image", "accept": ["image/*"] }
+        {
+          "name": "image",
+          "accept": [
+            "image/*"
+          ]
+        }
       ]
     }
   },
@@ -58,6 +87,18 @@
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/img/cara-app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/img/cara-app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

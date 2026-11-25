@@ -86,6 +86,7 @@ h3 {
 }
 .top nav a {
   opacity: 0.8;
+  white-space: nowrap;
   transition: opacity 0.2s;
 }
 .top nav a:hover {
@@ -833,7 +834,14 @@ a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
   box-shadow: 0 8px 28px rgba(29, 21, 39, .045);
 }
 .top nav { gap: clamp(16px, 2.1vw, 34px); }
-.top nav a { transition: opacity .2s ease, color .2s ease; }
+.top nav a { white-space: nowrap; transition: opacity .2s ease, color .2s ease; }
+@media (min-width: 851px) and (max-width: 1150px) {
+  .top { padding-inline: max(12px, 2vw); }
+  .top nav { gap: 10px; font-size: 15px; }
+}
+@media (min-width: 851px) and (max-width: 1000px) {
+  .top nav a[href^="#"] { display: none; }
+}
 .top nav .cta {
   border-radius: 999px;
   padding: 7px 22px;

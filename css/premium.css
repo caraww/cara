@@ -627,6 +627,10 @@ textarea:focus {
   font-size: 14px;
 }
 .sum-empty { padding: 8px 2px; text-align: start; }
+.sum-empty__art { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 0 auto 16px; }
+.sum-empty__art i { width: 14px; height: 14px; border-radius: 50%; background: #b8975a; box-shadow: inset 0 1px rgba(255,255,255,.55), 0 2px 4px rgba(32,23,45,.12); }
+.sum-empty__art i:nth-child(3n+2) { background: #8f7bb5; }
+.sum-empty__art i:nth-child(3n) { background: #d9c8e8; }
 .sum-empty p { margin: 0 0 14px; color: var(--cp-muted, #6b6274); line-height: 1.9; }
 .sum-empty__actions { display: flex; flex-wrap: wrap; gap: 10px; }
 

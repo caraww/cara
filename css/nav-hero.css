@@ -51,6 +51,7 @@
 .sh__nav { display: flex; align-items: center; gap: clamp(16px, 2vw, 30px); }
 .sh__nav a {
   position: relative;
+  white-space: nowrap;
   padding: 8px 2px;
   color: inherit;
   font-size: 15px;
@@ -86,6 +87,11 @@
 .sh.is-solid .sh__nav a.sh__cta { background: var(--nh-accent); color: #fff; }
 .sh.is-solid .sh__nav a.sh__cta:hover { background: #292f54; }
 
+@media (min-width: 851px) and (max-width: 1100px) {
+  .sh__in { padding-inline: 12px; gap: 10px; }
+  .sh__nav { gap: 10px; }
+  .sh__nav a { font-size: 13px; }
+}
 .sh__toggle { display: none; }
 .sh a:focus-visible,
 .sh button:focus-visible { outline: 3px solid #9b8fc1; outline-offset: 3px; border-radius: 10px; }
@@ -354,7 +360,27 @@
   0%, 55% { background-position: 130% 0; }
   85%, 100% { background-position: -40% 0; }
 }
+.hx__card-bg {
+  position: absolute;
+  inset: -8%;
+  z-index: 0;
+  background-position: center;
+  background-size: cover;
+  filter: blur(22px) saturate(.9);
+  opacity: .2;
+  transform: scale(1.05);
+  pointer-events: none;
+}
+.hx__card.is-wide .hx__card-bg { opacity: .3; }
+.hx__card > picture {
+  position: relative;
+  z-index: 1;
+  display: block;
+  height: 100%;
+}
 .hx__card img {
+  position: relative;
+  z-index: 1;
   display: block;
   width: 100%;
   height: 100%;
@@ -501,6 +527,9 @@
 }
 .hx__dot.is-active::before { width: 24px; border-radius: 999px; background: #b8975a; }
 
+@media (min-width: 1400px) {
+  .hx__stage { --hx-card-w: 340px; --hx-card-h: 432px; width: min(100%, 640px); }
+}
 @media (max-width: 1100px) {
   .hx__stage { --hx-card-w: 258px; --hx-card-h: 330px; }
 }

@@ -22,7 +22,7 @@ const DIR = process.env.CARA_USE_TRANSPARENT === "1" && fs.existsSync(TRANSPAREN
 const OUT = path.join(ROOT, "js", "works.js");
 const OUT_JSON = path.join(ROOT, "data", "works.json"); /* server.js و Worker از این می‌خوانند */
 const STAMP = Date.now().toString(36); /* نسخه‌ی این بیلد؛ برای شکستن کش */
-const PAGES = ["index.html", "gallery.html"];
+const PAGES = ["index.html", "gallery.html", "sale.html"];
 const EXT = /\.(jpe?g|png|webp|gif|avif)$/i;
 
 const fixFa = (s) => s.normalize("NFC").replace(/ي/g, "ی").replace(/ك/g, "ک");
@@ -128,8 +128,12 @@ async function derive(files) {
       const thumb = sharp(src).rotate().resize({ width: 700, height: 700, fit: "inside", withoutEnlargement: true });
       await thumb.clone().webp({ quality: 82 }).toFile(path.join(THUMB_DIR, name));
       await thumb.clone().avif({ quality: 52, effort: 5 }).toFile(path.join(THUMB_DIR, avif));
+      /* نسخه‌های کوچک برای srcset؛ موبایل به‌جای ۷۰۰ پیکسل، ۲۴۰/۴۸۰ پیکسل می‌گیرد. */
+      const small240 = base + "-240.webp", small480 = base + "-480.webp";
+      await sharp(src).rotate().resize({ width: 240, height: 240, fit: "inside", withoutEnlargement: true }).webp({ quality: 80 }).toFile(path.join(THUMB_DIR, small240));
+      await sharp(src).rotate().resize({ width: 480, height: 480, fit: "inside", withoutEnlargement: true }).webp({ quality: 82 }).toFile(path.join(THUMB_DIR, small480));
       await sharp(src).rotate().resize({ width: 1600, height: 1600, fit: "inside", withoutEnlargement: true }).webp({ quality: 88 }).toFile(path.join(VIEW_DIR, name));
-      m.set(f, { thumb: "img/works-thumbs/" + name, thumbAvif: "img/works-thumbs/" + avif, view: "img/works-view/" + name });
+      m.set(f, { thumb: "img/works-thumbs/" + name, thumbAvif: "img/works-thumbs/" + avif, thumb240: "img/works-thumbs/" + small240, thumb480: "img/works-thumbs/" + small480, view: "img/works-view/" + name });
     } catch (e) { console.warn("⚠ عکس سبک ساخته نشد:", f, e.message); }
   }
   return m;
@@ -187,9 +191,13 @@ const works = [...groups].map(([base, items]) => {
   const images = items.map((it) => { const d = derived.get(it.file); return d ? enc(d.view) + "?v=" + STAMP : enc("img/works-cutouts/" + it.file) + ver(it.file); });
   const d0 = derived.get(items[0].file), thumb = d0 ? enc(d0.thumb) + "?v=" + STAMP : images[0];
   const thumbAvif = d0 && d0.thumbAvif ? enc(d0.thumbAvif) + "?v=" + STAMP : "";
+  const thumb240 = d0 && d0.thumb240 ? enc(d0.thumb240) + "?v=" + STAMP : "";
+  const thumb480 = d0 && d0.thumb480 ? enc(d0.thumb480) + "?v=" + STAMP : "";
   console.log("✓", file, `(${images.length} عکس)`, "→ عنوان:", title || "(بدون عنوان)");
   const w = { id, src: images[0], thumb, source: original };
   if (thumbAvif) w.thumbAvif = thumbAvif;
+  if (thumb240) w.thumb240 = thumb240;
+  if (thumb480) w.thumb480 = thumb480;
   if (images.length > 1) w.images = images;
   const d = dims(fs.readFileSync(path.join(DIR, file)));
   if (d) {

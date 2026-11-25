@@ -22,5 +22,8 @@
 .trust-strip__item span { color: var(--muted, #6c6478); font-size: 13px; line-height: 1.8; }
 .trust-strip__item a { color: var(--cara-detail, #7b5a24); text-decoration: underline; text-underline-offset: 3px; }
 @media (max-width: 430px) {
-  .trust-strip { grid-template-columns: 1fr; }
+  .trust-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .trust-strip__item { padding: 7px 8px; }
+  .trust-strip__item b { font-size: 14px; }
+  .trust-strip__item span { font-size: 12px; line-height: 1.7; }
 }

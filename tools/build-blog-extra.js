@@ -83,7 +83,7 @@ function article({ slug, title, desc, h1, kicker, date, body, faqs }) {
   <link rel="stylesheet" href="/css/fonts.css?v=20261118-restore">
   <link rel="stylesheet" href="/css/blog.css?v=20261118-restore">
   ${footerCSS}
-  <link rel="stylesheet" href="/css/premium.css?v=2">
+  <link rel="stylesheet" href="/css/premium.css?v=20261125-empty-art">
   <link rel="alternate" type="application/rss+xml" title="دفتر کارا | cara journal" href="/feed.xml">
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
 </head>

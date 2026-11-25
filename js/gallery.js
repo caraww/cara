@@ -52,11 +52,12 @@ try {
       (!q || `${w.title} ${w.note} ${(w.tags || []).join(" ")}`.toLowerCase().includes(q)));
     grid.innerHTML = list.map((w, i) => {
       const ar = w.w && w.h ? ` style="--ar:${(w.w / w.h).toFixed(4)};--i:${i % 8}"` : ` style="--i:${i % 8}"`;
+      const srcset = [w.thumb240 && `${esc(w.thumb240)} 240w`, w.thumb480 && `${esc(w.thumb480)} 480w`, `${esc(w.thumb)} 700w`].filter(Boolean).join(", ");
       return `<figure class="wk-card" data-id="${esc(w.id)}"${ar}>
         <button type="button" class="wk-open" aria-label="${esc(w.title)}"></button>
         <button class="wk-fav" aria-label="علاقه‌مندی" aria-pressed="${favs.has(w.id)}">♥</button>
         <button type="button" class="wk-share" aria-label="اشتراک‌گذاری ${esc(w.title)}">${SHARE_SVG}</button>
-        <img src="${esc(w.thumb)}" data-fb="${esc(w.src)}" alt="دستبند منجوقی ${esc(w.title)}"${w.w ? ` width="${w.w}" height="${w.h}"` : ""} loading="${i < 6 ? "eager" : "lazy"}" decoding="async">
+        <img src="${esc(w.thumb)}"${srcset ? ` srcset="${srcset}" sizes="(max-width:560px) 44vw, (max-width:900px) 30vw, 280px"` : ""} data-fb="${esc(w.src)}" alt="دستبند منجوقی ${esc(w.title)}"${w.w ? ` width="${w.w}" height="${w.h}"` : ""} loading="${i < 6 ? "eager" : "lazy"}" decoding="async">
         <figcaption><b>${esc(w.title)}</b>${w.note ? `<span>${esc(w.note)}</span>` : ""}</figcaption></figure>`;
     }).join("");
     grid.querySelectorAll("img").forEach((im) => { if (im.complete) im.classList.add("in"); });

@@ -313,7 +313,7 @@ try {
       $("price").innerHTML = saleHTML(listPrice, window.CARA_SALE ? CARA_SALE.final(listPrice) : listPrice);
     }).catch(() => { $("price").textContent = "—"; });
   } else {
-    $("sum").innerHTML = `<div class="sum-empty"><p>هنوز الگویی نساختی. یه دستبند از گالری انتخاب کن یا خودت توی استودیو بکش.</p><div class="sum-empty__actions"><a class="btn sm dark" href="builder.html">ساخت الگو</a><a class="btn sm line" href="gallery.html">دیدن گالری</a></div></div>`;
+    $("sum").innerHTML = `<div class="sum-empty"><div class="sum-empty__art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p>هنوز الگویی نساختی. یه دستبند از گالری انتخاب کن یا خودت توی استودیو بکش.</p><div class="sum-empty__actions"><a class="btn sm dark" href="builder.html">ساخت الگو</a><a class="btn sm line" href="gallery.html">دیدن گالری</a></div></div>`;
     $("pay").disabled = true;
   }
 

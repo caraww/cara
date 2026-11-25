@@ -7,8 +7,9 @@ const sitemap = fs.readFileSync(path.join(__dirname, "..", "sitemap.xml"), "utf8
 
 test("sitemap lastmod values reflect the latest committed page regeneration", () => {
   const entries = [...sitemap.matchAll(/<url>\s*<loc>([^<]+)<\/loc>\s*<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/g)];
-  assert.equal(entries.length, 80, "all public bracelet, color, category, blog, starter, and primary pages stay listed");
+  assert.equal(entries.length, 81, "all public bracelet, color, category, blog, starter, sale, and primary pages stay listed");
   assert.match(sitemap, /https:\/\/caraw\.ir\/starter\.html/);
+  assert.match(sitemap, /https:\/\/caraw\.ir\/sale\.html/);
   assert.match(sitemap, /https:\/\/caraw\.ir\/faq\.html/);
   assert.match(sitemap, /https:\/\/caraw\.ir\/category\/gift-birthday\.html/);
   assert.match(sitemap, /https:\/\/caraw\.ir\/blog\/order-guide\.html/);

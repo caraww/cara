@@ -6,7 +6,7 @@ const path = require("node:path");
 test("contact shortcuts load a same-origin stylesheet instead of injecting inline CSS", () => {
   const js = fs.readFileSync(path.join(__dirname, "..", "js/contact.js"), "utf8");
   const css = fs.readFileSync(path.join(__dirname, "..", "css/contact.css"), "utf8");
-  assert.match(js, /stylesheet\.href = "\/css\/contact\.css"/);
+  assert.match(js, /stylesheet\.href = "\/css\/contact\.css\?v=/);
   assert.doesNotMatch(js, /createElement\("style"\)|st\.textContent/);
   assert.doesNotMatch(js, /style="background:/);
   assert.match(js, /class="cara-contact-instagram"/);
@@ -21,4 +21,14 @@ test("only one design reminder is rendered per page", () => {
   const recovery = fs.readFileSync(path.join(__dirname, "..", "js/recovery.js"), "utf8");
   assert.match(recovery, /caraRecovery/);
   assert.doesNotMatch(js, /ادامه بده|ادامه طراحی/);
+});
+
+test("contact FAB exposes an accessible toggle instead of two always-visible buttons", () => {
+  const js = fs.readFileSync(path.join(__dirname, "..", "js/contact.js"), "utf8");
+  const css = fs.readFileSync(path.join(__dirname, "..", "css/contact.css"), "utf8");
+  assert.match(js, /aria-expanded="false"/);
+  assert.match(js, /aria-controls="cara-contact-menu"/);
+  assert.match(js, /menu\.hidden = !open/);
+  assert.match(css, /#cara-contact \.cara-contact__menu\[hidden\]\{display:none\}/);
+  assert.match(css, /#cara-contact \.cara-contact-toggle\{/);
 });

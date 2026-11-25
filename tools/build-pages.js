@@ -55,6 +55,11 @@ const bare = (p) => String(p).split("?")[0];
 const urlOf = (w) => `/bracelet/${encodeURIComponent(slug(w.id))}.html`;
 const NUM = /^[\s0-9۰-۹.\-_)]+$/;
 const titleOf = (w) => (w.title && !NUM.test(w.title) ? w.title : "");
+const clip = (value, max) => {
+  const text = String(value || "").replace(/\s+/g, " ").trim();
+  const chars = [...text];
+  return chars.length <= max ? text : chars.slice(0, max - 1).join("").trimEnd() + "…";
+};
 /* Keep generated result titles concise while retaining the product keyword and full H1/schema name. */
 const seoTitle = (name, sample = false) => {
   const prefix = sample ? "نمونه دستبند منجوقی " : "دستبند منجوقی ";
@@ -120,8 +125,8 @@ for (const w of list) {
     .slice(0, 4);
   const title = seoTitle(t, !orderable);
   const desc = orderable
-    ? `${(w.note || "").slice(0, 120)} دستبند منجوقی ${t} با منجوق دلیکای میوکی، دست‌باف و آماده‌ی ارسال تا یک هفته.`.trim()
-    : `${(w.note || "").slice(0, 120)} این صفحه نمونه‌ای از دستبند منجوقی ${t} است؛ برای سفارش طرح دلخواهت از عکس به الگو یا طراحی دستی استفاده کن.`.trim();
+    ? `${clip(w.note, 88)} | دستبند منجوقی ${t}، دست‌باف با منجوق دلیکای میوکی و آماده‌ی ارسال.`
+    : `${clip(w.note, 88)} | نمونه‌ی دستبند منجوقی ${t}؛ طرح دلخواهت را از عکس یا در استودیو بساز.`;
   const product = {
     "@type": "Product",
     name: `دستبند منجوقی ${t}`,
@@ -166,7 +171,7 @@ ${
         .slice(1)
         .map(
           (s) =>
-            `<img src="${esc(abs(s))}" alt="دستبند منجوقی ${esc(t)}، عکس دیگر" loading="lazy">`,
+            `<img src="${esc(abs(s))}" alt="دستبند منجوقی ${esc(t)}، عکس دیگر"${w.w ? ` width="${w.w}" height="${w.h}"` : ""} loading="lazy">`,
         )
         .join("")}</div>`
     : ""
@@ -186,8 +191,9 @@ ${
 </section>
 <p style="margin-top:16px;color:var(--muted);font-size:16px">دست‌باف با منجوق دلیکای میوکی ژاپنی. حداکثر تا یک هفته بعد از سفارش آماده و برات پست می‌شه. می‌تونی همین طرح رو توی <a href="/builder.html" style="text-decoration:underline">استودیو</a> عوض کنی یا طرح خودت رو بسازی. اگر دنبال یک شروع کم‌خطرتر هستی، <a href="/starter.html" style="text-decoration:underline">دستبندهای شروع</a> رو ببین.</p>
 <div class="pg-help"><a href="/size.html">راهنمای اندازه‌ی مچ</a><a href="https://instagram.com/_.caraw" target="_blank" rel="noopener">پیام در اینستاگرام</a><a href="tel:+989352528201" dir="ltr">تماس تلفنی</a></div></div></div>
-<h2>دستبندهای دیگه</h2><div class="rel">${rel.map((x) => `<a href="${urlOf(x)}"><img src="${esc(abs(x.thumb || x.src))}" alt="دستبند منجوقی ${esc(titleOf(x))}" loading="lazy">${esc(titleOf(x))}</a>`).join("")}</div>
-<h2 id="reviews">نظر خریداران</h2><div class="reviews" data-reviews data-work="${esc(w.id)}"></div>`;
+<h2>دستبندهای دیگه</h2><div class="rel">${rel.map((x) => `<a href="${urlOf(x)}"><img src="${esc(abs(x.thumb || x.src))}"${x.thumb240 ? ` srcset="${esc(abs(x.thumb240))} 240w, ${esc(abs(x.thumb480))} 480w, ${esc(abs(x.thumb))} 700w" sizes="(max-width:560px) 45vw, 150px"` : ""} alt="دستبند منجوقی ${esc(titleOf(x))}"${x.w ? ` width="${x.w}" height="${x.h}"` : ""} loading="lazy">${esc(titleOf(x))}</a>`).join("")}</div>
+<h2 id="reviews">نظر خریداران</h2><div class="reviews" data-reviews data-work="${esc(w.id)}"></div>
+${orderable ? `<div class="pg-cta" role="region" aria-label="سفارش سریع"><div class="pg-cta__info"><b>${esc(t)}</b><span class="pg-cta__price">${priceHTML(w.id, true)}</span></div><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a></div>` : ""}`;
   write(
     `bracelet/${slug(w.id)}.html`,
     HEAD({ title, desc, path: urlOf(w), image: imgs[0], ld }) + body + FOOT,
@@ -227,7 +233,7 @@ const starter = list
   const cards = starter.length
     ? starter.map((w) => {
         const price = Number(prices[String(w.id)]);
-        return `<a class="starter-card" href="${urlOf(w)}"><img src="${esc(abs(w.thumb || w.src))}" alt="دستبند منجوقی ${esc(titleOf(w))}" loading="lazy"><b>${esc(titleOf(w))}</b><span>${priceHTML(w.id, true)}</span><small>${esc((w.note || "").slice(0, 80))}</small></a>`;
+        return `<a class="starter-card" href="${urlOf(w)}"><img src="${esc(abs(w.thumb || w.src))}"${w.thumb240 ? ` srcset="${esc(abs(w.thumb240))} 240w, ${esc(abs(w.thumb480))} 480w, ${esc(abs(w.thumb))} 700w" sizes="(max-width:760px) 90vw, 300px"` : ""} alt="دستبند منجوقی ${esc(titleOf(w))}"${w.w ? ` width="${w.w}" height="${w.h}"` : ""} loading="lazy"><b>${esc(titleOf(w))}</b><span>${priceHTML(w.id, true)}</span><small>${esc((w.note || "").slice(0, 80))}</small></a>`;
       }).join("")
     : `<p class="cp__note">فعلاً دستبند آماده‌ای زیر سقف قیمت شروع نداریم. می‌تونی توی استودیو یه طرح ساده بسازی و قیمت رو همون‌جا ببینی.</p>`;
   const body = `<div class="crumb"><a href="/">خانه</a> › <a href="/gallery.html">گالری</a> › شروع کم‌خطر</div>
@@ -249,6 +255,90 @@ const starter = list
   urls.push("/starter.html");
   console.log(`✓ صفحه‌ی شروع کم‌خطر (${starter.length} طرح)`);
 }
+/* ---------- صفحه‌ی حراج بلک‌فرایدی ---------- */
+{
+  const saleWorks = list
+    .filter((w) => !w.noOrder && Number(prices[String(w.id)]) > 0)
+    .sort((a, b) => {
+      const save = (x) => Number(listPrices[String(x.id)]) - Number(prices[String(x.id)]);
+      return save(b) - save(a);
+    })
+    .slice(0, 9);
+  const title = "حراج بلک فرایدی کارا | ۳۰٪ تخفیف دستبند منجوقی دست‌باف";
+  const desc = "حراج بلک فرایدی کارا تا ۱۳ آذر: ۳۰٪ تخفیف روی دستبندهای منجوقی دست‌باف. طرح‌های تخفیف‌دار، قیمت شفاف و ارسال به سراسر ایران.";
+  const saleLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "CollectionPage",
+        name: title,
+        description: desc,
+        url: SITE + "/sale.html",
+        inLanguage: "fa-IR",
+      },
+      {
+        "@type": "ItemList",
+        itemListElement: saleWorks.map((w, i) => ({
+          "@type": "ListItem",
+          position: i + 1,
+          url: SITE + urlOf(w),
+          name: `دستبند منجوقی ${titleOf(w)}`,
+        })),
+      },
+      {
+        "@type": "FAQPage",
+        mainEntity: [
+          {
+            "@type": "Question",
+            name: "تخفیف بلک فرایدی تا چه زمانی است؟",
+            acceptedAnswer: { "@type": "Answer", text: "تخفیف ۳۰٪ تا پایان ۱۳ آذر ۱۴۰۵ فعال است و بعد از آن قیمت‌ها به حالت قبل برمی‌گردند." },
+          },
+          {
+            "@type": "Question",
+            name: "قیمت‌های صفحه با درگاه پرداخت یکی است؟",
+            acceptedAnswer: { "@type": "Answer", text: "بله. قیمت نمایش‌داده‌شده و مبلغ درگاه از یک منبع مشترک محاسبه می‌شوند." },
+          },
+          {
+            "@type": "Question",
+            name: "سفارش چند روزه آماده می‌شود؟",
+            acceptedAnswer: { "@type": "Answer", text: "بافت و بسته‌بندی با دست انجام می‌شود و حداکثر تا یک هفته آماده است؛ زمان ارسال هم به پست اضافه می‌شود." },
+          },
+        ],
+      },
+      crumbLd([["خانه", "/"], ["حراج بلک فرایدی", "/sale.html"]]),
+    ],
+  };
+  const cards = saleWorks.length
+    ? saleWorks.map((w) => `<a class="starter-card" href="${urlOf(w)}"><img src="${esc(abs(w.thumb || w.src))}"${w.thumb240 ? ` srcset="${esc(abs(w.thumb240))} 240w, ${esc(abs(w.thumb480))} 480w, ${esc(abs(w.thumb))} 700w" sizes="(max-width:760px) 90vw, 300px"` : ""} alt="دستبند منجوقی ${esc(titleOf(w))}"${w.w ? ` width="${w.w}" height="${w.h}"` : ""} loading="lazy"><b>${esc(titleOf(w))}</b><span>${priceHTML(w.id, true)}</span><small>${esc((w.note || "").slice(0, 80))}</small></a>`).join("")
+    : `<p class="cp__note">فعلاً طرح تخفیف‌داری ثبت نشده. از <a href="/gallery.html">گالری</a> دستبندهای موجود را ببین.</p>`;
+  const body = `<div class="crumb"><a href="/">خانه</a> › <a href="/gallery.html">گالری</a> › حراج بلک فرایدی</div>
+<h1>حراج بلک فرایدی کارا</h1>
+<p class="cp__lead">تا ۱۳ آذر، روی دستبندهای منجوقی دست‌باف گالری <b>۳۰٪ تخفیف</b> داریم. طرح‌های زیر از تخفیف‌دارترین کارهای گالری انتخاب شده‌اند؛ قیمت خط‌خورده و قیمت نهایی هر دو شفاف نمایش داده می‌شود.</p>
+<section class="bf" aria-labelledby="saleBfTitle">
+  <div class="bf__in">
+    <picture class="bf__gif">
+      <source media="(prefers-reduced-motion: reduce)" srcset="/img/black-friday.avif?v=4" type="image/avif" />
+      <source srcset="/img/black-friday.webp?v=4" type="image/webp" />
+      <img src="/img/black-friday.gif?v=4" width="620" height="412" alt="حراج بلک فرایدی کارا: سی درصد تخفیف" loading="eager" fetchpriority="high" decoding="async" />
+    </picture>
+    <div class="bf__copy">
+      <p class="bf__kicker">فقط تا ۱۳ آذر</p>
+      <h2 id="saleBfTitle">۳۰٪ تخفیف روی همه‌ی دستبندهای گالری</h2>
+      <p class="bf__lead"><span data-sale-countdown aria-live="polite"><b>۹</b> روز مونده؛</span> بعد از پایان حراج، قیمت‌ها به حالت قبل برمی‌گردند.</p>
+      <a class="bf__cta" href="/gallery.html">دیدن همه‌ی دستبندها</a>
+    </div>
+  </div>
+</section>
+<h2>پیشنهادهای تخفیف‌دار</h2>
+<div class="starter-grid">${cards}</div>
+<h2>سوال‌های پرتکرار حراج</h2>
+<div class="cp__faq"><details><summary>تخفیف تا چه زمانی است؟</summary><div><p>تخفیف ۳۰٪ تا پایان ۱۳ آذر فعال است و بعد از آن قیمت‌ها به حالت قبل برمی‌گردند.</p></div></details><details><summary>قیمت صفحه با درگاه یکی است؟</summary><div><p>بله. قیمت نمایش‌داده‌شده و مبلغ درگاه از یک منبع مشترک محاسبه می‌شوند.</p></div></details><details><summary>سفارش چند روزه آماده می‌شود؟</summary><div><p>بافت و بسته‌بندی با دست انجام می‌شود و حداکثر تا یک هفته آماده است؛ زمان ارسال هم به پست اضافه می‌شود.</p></div></details></div>
+<div class="cp__note"><p><b>هدیه می‌خوای؟</b> از <a href="/quiz.html">کوییز انتخاب دستبند</a> کمک بگیر یا <a href="/starter.html">دستبندهای شروع کم‌خطر</a> رو ببین. برای سفارش شخصی هم <a href="/builder.html">استودیوی طراحی</a> باز است.</p></div>`;
+  write("sale.html", HEAD({ title, desc, path: "/sale.html", image: SITE + "/img/black-friday.avif", ld: saleLd }) + body + FOOT);
+  urls.push("/sale.html");
+  console.log(`✓ صفحه‌ی حراج بلک فرایدی (${saleWorks.length} طرح)`);
+}
+
 /* ---------- JSON-LD گالری: همیشه از داده و قیمت‌گذاری مشترک ساخته می‌شود ---------- */
 const galleryLd = {
   "@context": "https://schema.org",
@@ -324,7 +414,7 @@ for (const p of PAL) {
   const near = PAL.filter((x) => x !== p)
     .sort((a, b) => dist(a, p) - dist(b, p))
     .slice(0, 6);
-  const title = `منجوق دلیکا میوکی ${p.code} ${p.name} | کد رنگ و عکس واقعی | کارا`;
+  const title = `منجوق دلیکا ${p.code} ${p.name} | رنگ و عکس | کارا`;
   const desc = `منجوق دلیکا میوکی کد ${p.code} با رنگ ${p.name} (${p.hex}). عکس واقعی، رنگ‌های نزدیک و طراحی آنلاین دستبند منجوقی با این رنگ.`;
   const ld = {
     "@context": "https://schema.org",
@@ -343,7 +433,7 @@ for (const p of PAL) {
     ],
   };
   const photo = beadFiles[p.code]
-    ? `<img src="/img/beads/${esc(beadFiles[p.code])}" alt="منجوق دلیکا ${p.code} ${esc(p.name)}" width="480" loading="eager" style="max-width:100%;height:auto;border-radius:20px;margin-top:10px">`
+    ? `<img src="/img/beads/${esc(beadFiles[p.code])}" alt="منجوق دلیکا ${p.code} ${esc(p.name)}" width="440" height="440" loading="eager" style="max-width:100%;height:auto;border-radius:20px;margin-top:10px">`
     : "";
   const body = `<div class="crumb"><a href="/">خانه</a> › <a href="/colors/">رنگ منجوق‌ها</a> › ${esc(p.name)}</div>
 <h1>منجوق دلیکا میوکی <span dir="ltr">${p.code}</span> · ${esc(p.name)}</h1>
@@ -412,7 +502,7 @@ function inject(file, block) {
   if (!/js\/sale\.js/.test(h))
     h = h.replace(
       "<head>",
-      '<head>\n<script src="/lib/works-pricing.js?v=4"></script><script src="/js/sale.js?v=4"></script>',
+      '<head>\n<script src="/lib/works-pricing.js?v=4"></script><script src="/js/sale.js?v=5"></script>',
     );
   fs.writeFileSync(f, crlf ? h.replace(/\n/g, "\r\n") : h);
 }
