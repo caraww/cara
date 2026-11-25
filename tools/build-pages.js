@@ -322,7 +322,7 @@ const starter = list
       <img src="/img/black-friday.gif?v=4" width="620" height="412" alt="حراج بلک فرایدی کارا: سی درصد تخفیف" loading="eager" fetchpriority="high" decoding="async" />
     </picture>
     <div class="bf__copy">
-      <p class="bf__kicker">فقط تا ۱۳ آذر</p>
+      <p class="bf__kicker">🔥 فقط تا ۱۳ آذر</p>
       <h2 id="saleBfTitle">۳۰٪ تخفیف روی همه‌ی دستبندهای گالری</h2>
       <p class="bf__lead"><span data-sale-countdown aria-live="polite"><b>۹</b> روز مونده؛</span> بعد از پایان حراج، قیمت‌ها به حالت قبل برمی‌گردند.</p>
       <a class="bf__cta" href="/gallery.html">دیدن همه‌ی دستبندها</a>

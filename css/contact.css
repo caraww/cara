@@ -5,9 +5,16 @@
 #cara-contact a{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;color:#fff;box-shadow:0 8px 20px rgba(0,0,0,.22);transition:transform .2s}
 #cara-contact a:hover{transform:scale(1.08)}
 #cara-contact svg{width:24px;height:24px}
-#cara-contact .cara-contact-toggle{width:54px;height:54px;border:0;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#5b3e7d,#2b2140);box-shadow:0 10px 26px rgba(24,16,36,.3),0 0 0 1px rgba(255,255,255,.18) inset;cursor:pointer;transition:transform .2s,box-shadow .2s}
-#cara-contact .cara-contact-toggle:hover{transform:translateY(-2px);box-shadow:0 14px 30px rgba(24,16,36,.34),0 0 0 1px rgba(255,255,255,.18) inset}
-#cara-contact.is-open .cara-contact-toggle{background:linear-gradient(145deg,#b8975a,#8c6b33)}
+#cara-contact .cara-contact-toggle{position:relative;width:58px;height:58px;border:0;border-radius:50%;display:grid;place-items:center;color:#fff;background:linear-gradient(145deg,#7c4f9f 0%,#4c2b6e 55%,#241633 100%);box-shadow:0 0 0 2px rgba(184,151,90,.55),0 0 0 6px rgba(184,151,90,.12),0 12px 30px rgba(24,16,36,.34),inset 0 1px rgba(255,255,255,.25);cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
+#cara-contact .cara-contact-toggle:after{content:"";position:absolute;inset:6px;border:1px solid rgba(255,255,255,.2);border-radius:inherit;pointer-events:none}
+#cara-contact .cara-contact-toggle:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 0 0 2px rgba(184,151,90,.72),0 0 0 7px rgba(184,151,90,.16),0 16px 34px rgba(24,16,36,.4),inset 0 1px rgba(255,255,255,.3)}
+#cara-contact .cara-contact-toggle:active{transform:translateY(0) scale(.97)}
+#cara-contact .cara-contact-toggle__icon{display:grid;place-items:center}
+#cara-contact .cara-contact-toggle__icon--close{display:none}
+#cara-contact.is-open .cara-contact-toggle__icon--open{display:none}
+#cara-contact.is-open .cara-contact-toggle__icon--close{display:grid}
+#cara-contact .cara-contact-toggle svg{width:28px;height:28px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.18))}
+#cara-contact.is-open .cara-contact-toggle{color:#241633;background:linear-gradient(145deg,#f0d8a4,#c6a35f 60%,#9d7a3b)}
 #cara-contact .cara-contact-instagram{background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)}
 #cara-contact .cara-contact-phone{background:#2e9b5a}
 @keyframes cara-contact-pop{from{opacity:0;transform:translateY(6px) scale(.96)}to{opacity:1;transform:none}}

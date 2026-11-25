@@ -29,6 +29,11 @@ test("contact FAB exposes an accessible toggle instead of two always-visible but
   assert.match(js, /aria-expanded="false"/);
   assert.match(js, /aria-controls="cara-contact-menu"/);
   assert.match(js, /menu\.hidden = !open/);
+  assert.match(js, /cara-contact-toggle__icon--close/);
+  assert.match(js, /toggle\.addEventListener\("click"/);
+  assert.match(js, /setOpen\(menu\.hidden\)/);
+  assert.match(js, /document\.activeElement/);
   assert.match(css, /#cara-contact \.cara-contact__menu\[hidden\]\{display:none\}/);
   assert.match(css, /#cara-contact \.cara-contact-toggle\{/);
+  assert.match(css, /#cara-contact\.is-open \.cara-contact-toggle__icon--close\{display:grid\}/);
 });
