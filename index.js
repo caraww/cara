@@ -7,6 +7,8 @@ import { handleTrackRequest, issueOrderToken } from "./lib/track.mjs";
 import { mirrorOrder, unmirrorOrder, backfillOrders, compareOrders } from "./lib/order-store.mjs";
 import { digipayConfigured, digipayCreateTicket, digipayVerify } from "./lib/digipay.mjs";
 import "./lib/works-pricing.js";
+import { clientIp } from "./lib/client-ip.mjs";
+import { verifiedAmountMatches } from "./lib/payment-policy.mjs";
 export { GameDO } from "./game-worker.js"; /* Durable Object بازی */
 
 /* API سایت cara روی Cloudflare Worker: پرداخت با زیبال (zibal.ir) + ثبت و مدیریت سفارش‌ها.
@@ -247,7 +249,7 @@ async function createPayment(request, env, ctx) {
   const C = cfg(env);
   if (!env.ORDERS) return json({ error: "ذخیره‌ساز سفارش (KV) به Worker وصل نشده." }, 500);
   /* جلوی انبار شدن سفارش‌های pending توسط ربات */
-  if (!(await rateLimit(env, "pay:" + (request.headers.get("CF-Connecting-IP") || "unknown"), 10, 10 * 60 * 1000)))
+  if (!(await rateLimit(env, "pay:" + clientIp(request), 10, 10 * 60 * 1000)))
     return json({ error: "تعداد تلاش‌ها زیاده؛ چند دقیقه بعد دوباره امتحان کن." }, 429);
   let body;
   try { body = await request.json(); } catch { return json({ error: "درخواست معتبر نیست." }, 400); }
@@ -313,7 +315,7 @@ async function createPayment(request, env, ctx) {
   let dc = null;
   if (body.discountCode) {
     /* جلوی حدس زدن کدها از این مسیر (همون سهمیه‌ی /api/game/code) */
-    if (!(await rateLimit(env, "code:" + (request.headers.get("CF-Connecting-IP") || "unknown"), 30, 60 * 1000)))
+    if (!(await rateLimit(env, "code:" + clientIp(request), 30, 60 * 1000)))
       return json({ error: "تعداد تلاش‌ها زیاده؛ یه دقیقه بعد دوباره امتحان کن." }, 429);
     dc = await checkCode(env, body.discountCode);
     if (!dc) return json({ error: "کد تخفیف نامعتبر یا قبلاً استفاده شده." }, 400);
@@ -402,12 +404,12 @@ async function settle(C, env, order, markFailed, ctx, pre) {
   order.verify = v;
   const paid = v && (v.result === 100 || v.result === 201); /* ۲۰۱ = قبلاً تأیید شده */
   const rial = order.priceToman * 10;
-  if (paid && v.amount != null && Number(v.amount) !== rial) {
-    order.status = "review"; /* پول گرفته شده ولی مبلغ با سفارش نمی‌خونه؛ دستی بررسی کن */
-    order.error = `amount mismatch: ${v.amount} != ${rial}`;
+  if (paid && !verifiedAmountMatches(v, rial)) {
+    order.status = "review"; /* مبلغ غایب یا متفاوت؛ هرگز paid نشود */
+    order.error = `amount missing or mismatch: ${v && v.amount} != ${rial}`;
     await saveOrder(env, order);
-    console.error("zibal amount mismatch", order.id, v.amount, rial);
-    await later(telegram(env, `⚠️ پرداخت با مبلغ نامطابق، نیاز به بررسی دستی\n#${order.id.slice(0, 8)}\nمبلغ سفارش: ${rial} ریال، مبلغ دریافتی: ${v.amount} ریال\n${C.site}/admin.html`));
+    console.error("payment amount mismatch", order.id, v && v.amount, rial);
+    await later(telegram(env, `⚠️ پرداخت با مبلغ نامطابق یا بدون مبلغ، نیاز به بررسی دستی\n#${order.id.slice(0, 8)}\nمبلغ سفارش: ${rial} ریال، مبلغ دریافتی: ${v && v.amount} ریال\n${C.site}/admin.html`));
     return order;
   }
   if (paid) {
@@ -480,7 +482,7 @@ async function digipayCallback(request, env, url, ctx) {
   const back = (result, order) =>
     Response.redirect(`${C.site}/checkout.html?result=${result}${order ? "&order=" + order.id : ""}`, 303);
   try {
-    if (!(await rateLimit(env, "dpcb:" + (request.headers.get("CF-Connecting-IP") || "unknown"), 30, 60 * 1000))) return back("failed");
+    if (!(await rateLimit(env, "dpcb:" + clientIp(request), 30, 60 * 1000))) return back("failed");
     let body = {};
     if (request.method === "POST") {
       const raw = await request.text();
@@ -676,7 +678,7 @@ async function notifyCreated(C, env, o) {
    POST /api/admin/orders {id, tracking, note}                     → کد رهگیری پست و یادداشت */
 /* سقف درخواست قبل از بررسی رمز، تا حدس زدن رمز عملاً ممکن نباشه */
 async function adminGate(request, env) {
-  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  const ip = clientIp(request);
   return (await rateLimit(env, "adm:" + ip, 120, 10 * 60 * 1000)) ? null : json({ error: "تعداد درخواست زیاده؛ چند دقیقه بعد دوباره امتحان کن." }, 429);
 }
 async function adminCustomers(request, env) {

@@ -7,8 +7,17 @@ jobs:
     steps:
       - name: Probe
         run: |
-          for u in https://caraw.ir/api/config https://api.caraw.ir/api/config https://caraw.ir/api/works; do
-            echo "== $u =="
-            curl -sS -o /tmp/body -w 'status=%{http_code} type=%{content_type} size=%{size_download}\n' --max-time 25 "$u" || true
-            head -c 300 /tmp/body; echo
-          done
+          probe() {
+            label="$1"; shift
+            echo "== $label =="
+            curl -sS -o /tmp/body -w 'status=%{http_code} type=%{content_type} size=%{size_download}\n' --max-time 25 "$@" || true
+            head -c 400 /tmp/body; echo
+          }
+          probe "config" https://caraw.ir/api/config
+          probe "works" https://caraw.ir/api/works
+          probe "cart" https://caraw.ir/api/cart
+          probe "game config" https://caraw.ir/api/game/config
+          probe "www config" https://www.caraw.ir/api/config
+          probe "create-payment invalid + Origin" -X POST -H "Origin: https://caraw.ir" -H "Content-Type: application/json" --data '{}' https://caraw.ir/api/create-payment
+          probe "cart item invalid + Origin" -X POST -H "Origin: https://caraw.ir" -H "Content-Type: application/json" --data '{}' https://caraw.ir/api/cart/items
+          probe "http root" http://caraw.ir/

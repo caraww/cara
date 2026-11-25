@@ -1,6 +1,10 @@
 # The storefront is served from the Iranian host, while the payment/account
 # API runs on the Cloudflare Worker at api.caraw.ir. Browser code always calls
 # same-origin /api/* paths, so proxy those requests to the Worker here.
+<IfModule mod_headers.c>
+  RequestHeader set X-Real-IP "%{REMOTE_ADDR}s"
+</IfModule>
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteCond %{REQUEST_FILENAME} !-f
