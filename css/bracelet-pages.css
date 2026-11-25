@@ -115,6 +115,10 @@ html body .pg .rel a {
   background: var(--panel, #fff);
   transition: transform .2s, box-shadow .2s;
 }
+html:not([data-theme="dark"]) body .pg .rel a {
+  border: 1px solid rgba(184, 151, 90, .32);
+  box-shadow: 0 2px 10px rgba(43, 30, 58, .05);
+}
 html body .pg .rel a:hover {
   transform: translateY(-3px);
   box-shadow: 0 10px 24px rgba(43, 30, 58, .1);

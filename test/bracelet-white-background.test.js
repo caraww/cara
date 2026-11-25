@@ -5,6 +5,7 @@ import { readFileSync } from "node:fs";
 const braceletCss = readFileSync(new URL("../css/bracelet-pages.css", import.meta.url), "utf8");
 const tokensCss = readFileSync(new URL("../css/tokens.css", import.meta.url), "utf8");
 const homeCss = readFileSync(new URL("../css/home.css", import.meta.url), "utf8");
+const themeCss = readFileSync(new URL("../css/theme.css", import.meta.url), "utf8");
 
 test("bracelet pages keep the page and product image plates white", () => {
   assert.match(braceletCss, /html body \{\s*background: #ffffff;/);
@@ -25,4 +26,12 @@ test("home bracelet cards are fully white with dark names in light mode", () => 
   assert.match(homeCss, /--paper-2:#ffffff/);
   assert.match(homeCss, /html:not\(\[data-theme="dark"\]\) \.mini-gal > a \{[^}]*background: #fff !important;/);
   assert.match(homeCss, /html:not\(\[data-theme="dark"\]\) \.mini-gal > a b \{ color: #221a2c; \}/);
+});
+
+test("related bracelet cards keep a visible border in day mode", () => {
+  assert.match(braceletCss, /html:not\(\[data-theme="dark"\]\) body \.pg \.rel a \{[^}]*border: 1px solid rgba\(184, 151, 90, \.32\)/);
+});
+
+test("dark mode home bracelet names are black on a white label", () => {
+  assert.match(themeCss, /html\[data-theme="dark"\] \.mini-gal > a b \{[^}]*color: #141019;[^}]*background: #fff;/);
 });

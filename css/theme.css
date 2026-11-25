@@ -427,7 +427,16 @@ html[data-theme="dark"] .mini-gal > a {
   box-shadow: var(--cara-panel-shadow);
 }
 html[data-theme="dark"] .mini-gal > a:hover { border-color: rgba(217, 187, 133, .55) !important; }
-html[data-theme="dark"] .mini-gal > a b { color: var(--cara-text); }
+html[data-theme="dark"] .mini-gal > a b {
+  color: #141019;
+  background: #fff;
+  padding: 3px 12px;
+  border-radius: 999px;
+  max-width: calc(100% - 20px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 html[data-theme="dark"] .mini-gal > a span { color: var(--cara-muted); }
 html[data-theme="dark"] .mini-gal img { filter: drop-shadow(0 10px 14px rgba(0, 0, 0, .55)); }
 
