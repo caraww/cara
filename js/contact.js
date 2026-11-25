@@ -5,7 +5,7 @@
   const path = location.pathname;
   const stylesheet = document.createElement("link");
   stylesheet.rel = "stylesheet";
-  stylesheet.href = "/css/contact.css?v=20261125-fab2";
+  stylesheet.href = "/css/contact.css?v=20261125-fab3";
   document.head.appendChild(stylesheet);
 
   const box = document.createElement("div");
@@ -17,15 +17,18 @@
 <button class="cara-contact-toggle" type="button" aria-expanded="false" aria-haspopup="true" aria-controls="cara-contact-menu" aria-label="تماس با من">
 <span class="cara-contact-toggle__icon cara-contact-toggle__icon--open" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6.6 3.6h3.2l1.6 4-2 1.2a11.4 11.4 0 0 0 4.9 4.9l1.2-2 4 1.6v3.2a2.2 2.2 0 0 1-2.4 2.2C10.1 18.1 3.9 11.9 3.4 6a2.2 2.2 0 0 1 2.2-2.4Z" fill="currentColor" fill-opacity=".12"/><path d="M6.6 3.6h3.2l1.6 4-2 1.2a11.4 11.4 0 0 0 4.9 4.9l1.2-2 4 1.6v3.2a2.2 2.2 0 0 1-2.4 2.2C10.1 18.1 3.9 11.9 3.4 6a2.2 2.2 0 0 1 2.2-2.4Z"/><path d="M15.2 4.2a5.6 5.6 0 0 1 4.6 4.6M15.7 7.5a2.4 2.4 0 0 1 1.7 1.7"/></svg></span>
 <span class="cara-contact-toggle__icon cara-contact-toggle__icon--close" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></span>
+<span class="cara-contact-toggle__label">تماس با من</span>
 </button>`;
   if (!/admin/.test(path)) document.body.appendChild(box);
 
   const toggle = box.querySelector(".cara-contact-toggle");
   const menu = box.querySelector(".cara-contact__menu");
+  const label = box.querySelector(".cara-contact-toggle__label");
   const setOpen = (open, restoreFocus) => {
     menu.hidden = !open;
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "بستن تماس با من" : "تماس با من");
+    if (label) label.textContent = open ? "بستن" : "تماس با من";
     box.classList.toggle("is-open", open);
     if (open) menu.querySelector("a")?.focus();
     else if (restoreFocus) toggle.focus();

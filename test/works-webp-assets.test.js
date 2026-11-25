@@ -49,3 +49,8 @@ test("the image builder keeps originals for photo-to-pattern and versions genera
   assert.match(source, /enc\(d\.view\) \+ "\?v=" \+ STAMP/);
   assert.match(source, /enc\(d0\.thumb\) \+ "\?v=" \+ STAMP/);
 });
+
+test("the gallery build prefers transparent cutouts so cream cards stay clean", () => {
+  const source = fs.readFileSync(path.join(root, "tools/build-works.js"), "utf8");
+  assert.match(source, /const DIR = process\.env\.CARA_USE_ORIGINAL === "1" \|\| !fs\.existsSync\(TRANSPARENT_DIR\) \? ORIGINAL_DIR : TRANSPARENT_DIR/);
+});

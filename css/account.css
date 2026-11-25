@@ -6,7 +6,16 @@
 .account-mark{width:58px;height:58px;margin:0 auto 14px;border-radius:20px;display:grid;place-items:center;background:#f0e7f8;color:#5b1f9a;font-size:28px;font-weight:900;direction:ltr}
 .account-login h2,.account-welcome h2{margin:0 0 8px;font-size:25px}
 .account-login>p{color:var(--muted);font-size:14px}
-.telegram-login{display:flex;justify-content:center;min-height:48px;margin:24px auto 12px}
+.account-auth-tabs{display:flex;gap:6px;margin:22px 0 16px;padding:4px;border-radius:14px;background:#f3edf8}
+.account-auth-tab{flex:1;min-height:40px;border:0;border-radius:10px;background:transparent;color:var(--muted);font:inherit;font-size:14px;font-weight:800;cursor:pointer}
+.account-auth-tab[aria-selected="true"]{background:#fff;color:#5b1f9a;box-shadow:0 3px 12px rgba(70,39,100,.12)}
+.account-auth-form{display:grid;gap:8px;margin-top:4px;text-align:right}
+.account-auth-form label{font-size:13px;font-weight:700}
+.account-auth-form input{width:100%;min-height:46px;padding:10px 13px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font:inherit}
+.account-auth-form input[dir="ltr"]{text-align:left}
+.account-auth-form button{justify-self:stretch;margin-top:8px}
+html[data-theme="dark"] .account-auth-tabs{background:#241f31}
+html[data-theme="dark"] .account-auth-tab[aria-selected="true"]{background:#332b45;color:#d9c5ff}
 .account-note{color:var(--muted);font-size:13px;margin:8px 0}
 .account-welcome{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .account-section{margin-top:42px}
@@ -34,3 +43,6 @@ html[data-theme="dark"] .account-design canvas{background:#241f31}
 .account-consent{display:flex;align-items:flex-start;gap:10px;margin:6px 0;color:var(--muted);font-size:13px;line-height:1.9}
 .account-consent input{width:18px;height:18px;flex:none;margin-top:5px;accent-color:#79549a}
 .account-profile-form button{justify-self:start}
+.account-help{margin:4px 0 0;color:var(--muted);font-size:12.5px;line-height:1.9}
+.account-help a{color:#6b3fa0;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+html[data-theme="dark"] .account-help a{color:#c9b6f2}

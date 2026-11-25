@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/css/fonts.css" />
     <link rel="stylesheet" href="/css/studio.css?v=20261121-pass6" />
     <link rel="stylesheet" href="/css/decor.css" />
-    <link rel="stylesheet" href="/css/account.css?v=2" />
+    <link rel="stylesheet" href="/css/account.css?v=4" />
     <title>حساب کاربری | cara</title>
     <link rel="stylesheet" href="/css/fixes.css?v=2" />
     <link rel="stylesheet" href="/css/site-footer.css?v=20261125-enamad">
@@ -73,8 +73,30 @@
       >
         <div class="account-mark" aria-hidden="true">c.</div>
         <h2 id="loginTitle">به cara خوش اومدی</h2>
-        <p>برای ساخت حساب یا ورود، از حساب تلگرامت استفاده کن.</p>
-        <div id="telegramLogin" class="telegram-login"></div>
+        <p>با ایمیل یا شماره موبایل و یک رمز، وارد شو یا حساب بساز. بدون نیاز به تلگرام.</p>
+        <div class="account-auth-tabs" role="tablist" aria-label="ورود یا ثبت نام">
+          <button class="account-auth-tab" type="button" id="loginTab" role="tab" aria-selected="true" aria-controls="loginForm">ورود</button>
+          <button class="account-auth-tab" type="button" id="registerTab" role="tab" aria-selected="false" aria-controls="registerForm">ثبت نام</button>
+        </div>
+        <form class="account-auth-form" id="loginForm" role="tabpanel" aria-labelledby="loginTab">
+          <label for="loginIdentifier">ایمیل یا شماره موبایل</label>
+          <input id="loginIdentifier" name="identifier" type="text" dir="ltr" autocomplete="username" autocapitalize="none" spellcheck="false" required />
+          <label for="loginPassword">رمز عبور</label>
+          <input id="loginPassword" name="password" type="password" dir="ltr" autocomplete="current-password" minlength="8" maxlength="128" required />
+          <button class="btn accent" type="submit" id="loginButton">ورود به حساب</button>
+          <p class="account-help">رمزت را فراموش کردی؟ <a href="https://instagram.com/_.caraw" target="_blank" rel="noopener">به من پیام بده</a>.</p>
+        </form>
+        <form class="account-auth-form" id="registerForm" role="tabpanel" aria-labelledby="registerTab" hidden>
+          <label for="registerName">نام</label>
+          <input id="registerName" name="name" type="text" autocomplete="name" maxlength="80" required />
+          <label for="registerIdentifier">ایمیل یا شماره موبایل</label>
+          <input id="registerIdentifier" name="identifier" type="text" dir="ltr" autocomplete="username" autocapitalize="none" spellcheck="false" required />
+          <label for="registerPassword">رمز عبور</label>
+          <input id="registerPassword" name="password" type="password" dir="ltr" autocomplete="new-password" minlength="8" maxlength="128" required />
+          <label for="registerPasswordConfirm">تکرار رمز عبور</label>
+          <input id="registerPasswordConfirm" name="passwordConfirm" type="password" dir="ltr" autocomplete="new-password" minlength="8" maxlength="128" required />
+          <button class="btn accent" type="submit" id="registerButton">ساخت حساب</button>
+        </form>
         <p
           class="account-note"
           id="loginMessage"
@@ -185,7 +207,7 @@
       </section>
     </main>
     <script src="/js/palette.js" defer></script>
-    <script src="/js/account.js?v=3" defer></script>
+    <script src="/js/account.js?v=4" defer></script>
     <script src="/js/nav-hero.js?v=1" defer></script>
     <script src="/js/decor.js" defer></script>
     <script src="/js/pwa.js" defer></script>

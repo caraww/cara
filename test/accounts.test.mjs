@@ -1,40 +1,26 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { webcrypto } from "node:crypto";
 
-const { verifyTelegramLogin, sha256, normalizePhone, SESSION_TTL } = await import("../lib/accounts.mjs");
+const { hashPassword, verifyPassword, normalizeLoginId, sha256, normalizePhone, SESSION_TTL } = await import("../lib/accounts.mjs");
 
-async function signedPayload(fields, token = "test-bot-token") {
-  const data = Object.entries(fields).sort(([a], [b]) => a.localeCompare(b))
-    .map(([key, value]) => `${key}=${value}`).join("\n");
-  const secret = await webcrypto.subtle.digest("SHA-256", new TextEncoder().encode(token));
-  const key = await webcrypto.subtle.importKey("raw", secret, { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-  const hash = [...new Uint8Array(await webcrypto.subtle.sign("HMAC", key, new TextEncoder().encode(data)))]
-    .map((v) => v.toString(16).padStart(2, "0")).join("");
-  return { ...fields, hash };
-}
-
-test("Telegram signed login payload is accepted and normalized", async () => {
-  const payload = await signedPayload({
-    id: "123456789", first_name: "Cara", last_name: "Customer",
-    username: "cara_user", auth_date: "2000000000",
-  });
-  const identity = await verifyTelegramLogin(payload, "test-bot-token", 2000000000);
-  assert.deepEqual(identity, { id: "123456789", firstName: "Cara", lastName: "Customer", username: "cara_user" });
+test("local passwords are salted, hashed, and verified in constant-time form", async () => {
+  const first = await hashPassword("correct horse battery");
+  const second = await hashPassword("correct horse battery");
+  assert.match(first, /^pbkdf2-sha256\$210000\$[a-f0-9]{32}\$[a-f0-9]{64}$/);
+  assert.notEqual(first, second, "each password gets a fresh salt");
+  assert.equal(await verifyPassword("correct horse battery", first), true);
+  assert.equal(await verifyPassword("wrong password", first), false);
+  assert.equal(await verifyPassword("correct horse battery", "not-a-hash"), false);
+  assert.equal(await verifyPassword("correct horse battery", "pbkdf2-sha256$1$00$" + "0".repeat(64)), false);
 });
 
-test("Telegram login rejects tampered or malformed payloads", async () => {
-  const payload = await signedPayload({ id: "123456789", first_name: "Cara", auth_date: "2000000000" });
-  payload.first_name = "Impersonator";
-  assert.equal(await verifyTelegramLogin(payload, "test-bot-token", 2000000000), null);
-  assert.equal(await verifyTelegramLogin({ id: "not-a-number", auth_date: "2000000000", hash: "0".repeat(64) }, "test-bot-token", 2000000000), null);
-});
-
-test("Telegram login rejects stale and future-dated authentication", async () => {
-  const stale = await signedPayload({ id: "123456789", auth_date: "1999999000" });
-  const future = await signedPayload({ id: "123456789", auth_date: "2000000100" });
-  assert.equal(await verifyTelegramLogin(stale, "test-bot-token", 2000000000), null);
-  assert.equal(await verifyTelegramLogin(future, "test-bot-token", 2000000000), null);
+test("local login identifiers accept normalized email or Iranian phone", () => {
+  assert.equal(normalizeLoginId("  User@Example.COM "), "user@example.com");
+  assert.equal(normalizeLoginId("09123456789"), "+989123456789");
+  assert.equal(normalizeLoginId("۰۹۱۲۳۴۵۶۷۸۹"), "+989123456789");
+  assert.equal(normalizeLoginId("not-an-email"), null);
+  assert.equal(normalizeLoginId("user@example"), null);
+  assert.equal(normalizeLoginId(""), null);
 });
 
 test("session token hashes are SHA-256 hex and sessions have bounded lifetime", async () => {

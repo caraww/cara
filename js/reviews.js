@@ -7,18 +7,8 @@
   const fa = (n) => Number(n || 0).toLocaleString("fa-IR");
   const esc = (value) => String(value == null ? "" : value).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
   const cache = new Map();
-  let accountPromise = null;
 
   const stars = (rating) => "★".repeat(Math.max(0, Math.min(5, Number(rating) || 0))) + "☆".repeat(Math.max(0, 5 - (Number(rating) || 0)));
-
-  function account() {
-    if (!accountPromise) {
-      accountPromise = fetch("/api/account/me", { credentials: "same-origin", cache: "no-store" })
-        .then((r) => (r.ok ? r.json() : null))
-        .catch(() => null);
-    }
-    return accountPromise;
-  }
 
   async function dataFor(workId) {
     if (cache.has(workId)) return cache.get(workId);
@@ -34,7 +24,10 @@
     wrap.className = "review-form";
     wrap.innerHTML = `
       <h3>نظرت را بنویس</h3>
-      <p class="review-hint">فقط خریداران همین دستبند می‌توانند نظر بدهند. نظر بعد از تأیید نمایش داده می‌شود.</p>
+      <p class="review-hint">هر کسی می‌تواند نظر بدهد. نظر بعد از تأیید نمایش داده می‌شود.</p>
+      <label>اسمت
+        <input class="review-author" type="text" maxlength="60" placeholder="مثلاً سارا" autocomplete="name">
+      </label>
       <label>امتیاز
         <select class="review-rating">
           <option value="5">۵ — عالی</option>
@@ -47,6 +40,7 @@
       <label>متن نظر
         <textarea class="review-body" rows="3" maxlength="600" placeholder="از کیفیت بافت، رنگ‌ها و بسته‌بندی بنویس…"></textarea>
       </label>
+      <input class="review-website" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
       <div class="btns"><button class="btn dark" type="button">ثبت نظر</button></div>
       <p class="review-msg" role="status" aria-live="polite"></p>`;
     const button = wrap.querySelector("button");
@@ -61,8 +55,10 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             workId,
+            author: wrap.querySelector(".review-author").value,
             rating: Number(wrap.querySelector(".review-rating").value),
             body: wrap.querySelector(".review-body").value,
+            website: wrap.querySelector(".review-website").value,
           }),
         });
         const data = await response.json().catch(() => ({}));
@@ -92,7 +88,7 @@
     const list = Array.isArray(data.reviews) ? data.reviews : [];
     const head = summary.count
       ? `<div class="review-summary"><b>${summary.average.toLocaleString("fa-IR", { maximumFractionDigits: 1 })}</b><span class="review-stars" aria-hidden="true">${stars(Math.round(summary.average))}</span><small>${fa(summary.count)} نظر تأییدشده</small></div>`
-      : '<p class="review-empty">هنوز نظری برای این دستبند ثبت نشده. <a href="/gallery.html">اولین خریدار باش!</a></p>';
+      : '<p class="review-empty">هنوز نظری برای این دستبند ثبت نشده. اولین نفر باش!</p>';
     const items = list.map((review) => `
       <article class="review-item">
         <div class="review-top"><b>${esc(review.author)}</b><span class="review-stars" aria-label="امتیاز ${fa(review.rating)} از ۵">${stars(review.rating)}</span></div>
@@ -100,14 +96,7 @@
         <small>${review.createdAt ? new Date(review.createdAt * 1000).toLocaleDateString("fa-IR", { dateStyle: "long" }) : ""}</small>
       </article>`).join("");
     container.innerHTML = head + items;
-    const user = await account();
-    if (user) form(container, workId);
-    else {
-      const login = document.createElement("p");
-      login.className = "review-hint";
-      login.innerHTML = 'برای ثبت نظر <a href="/account.html">با تلگرام وارد شو</a>.';
-      container.appendChild(login);
-    }
+    form(container, workId);
   }
 
   function scan() {

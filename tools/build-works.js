@@ -17,8 +17,9 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..");
 const ORIGINAL_DIR = path.join(ROOT, "img", "works-cutouts");
 const TRANSPARENT_DIR = path.join(ROOT, "img", "works-cutouts-transparent");
-/* Use untouched source photos by default. Background removal can erase bead edges and bracelet straps. */
-const DIR = process.env.CARA_USE_TRANSPARENT === "1" && fs.existsSync(TRANSPARENT_DIR) ? TRANSPARENT_DIR : ORIGINAL_DIR;
+/* Prefer the transparent cutouts so hero cards blend into their cream surface.
+   Set CARA_USE_ORIGINAL=1 only when debugging the untouched source photos. */
+const DIR = process.env.CARA_USE_ORIGINAL === "1" || !fs.existsSync(TRANSPARENT_DIR) ? ORIGINAL_DIR : TRANSPARENT_DIR;
 const OUT = path.join(ROOT, "js", "works.js");
 const OUT_JSON = path.join(ROOT, "data", "works.json"); /* server.js و Worker از این می‌خوانند */
 const STAMP = Date.now().toString(36); /* نسخه‌ی این بیلد؛ برای شکستن کش */

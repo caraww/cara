@@ -14,32 +14,55 @@
     return data;
   }
 
-  window.onTelegramAuth = async (telegramUser) => {
-    message("loginMessage", "در حال تأیید امن حساب تلگرام…");
-    try {
-      await api("/api/auth/telegram", { method: "POST", body: JSON.stringify(telegramUser) });
-      await loadAccount();
-    } catch (error) { message("loginMessage", error.message); }
-  };
+  const loginForm = $("loginForm"), registerForm = $("registerForm");
+  const loginTab = $("loginTab"), registerTab = $("registerTab");
 
-  async function installTelegramLogin() {
-    try {
-      const config = await api("/api/account/config");
-      if (!config.telegramBotUsername) {
-        message("loginMessage", "ورود تلگرام هنوز برای این محیط پیکربندی نشده است.");
-        return;
-      }
-      const script = document.createElement("script");
-      script.async = true;
-      script.src = "https://telegram.org/js/telegram-widget.js?22";
-      script.dataset.telegramLogin = config.telegramBotUsername;
-      script.dataset.size = "large";
-      script.dataset.radius = "12";
-      script.dataset.onauth = "onTelegramAuth(user)";
-      $("telegramLogin").append(script);
-      message("loginMessage", "ورود امن با تلگرام");
-    } catch (error) { message("loginMessage", error.message); }
+  function showAuth(mode = "login") {
+    const isLogin = mode !== "register";
+    loginForm.hidden = !isLogin;
+    registerForm.hidden = isLogin;
+    loginTab.setAttribute("aria-selected", String(isLogin));
+    registerTab.setAttribute("aria-selected", String(!isLogin));
+    loginTab.tabIndex = isLogin ? 0 : -1;
+    registerTab.tabIndex = isLogin ? -1 : 0;
+    message("loginMessage", "");
   }
+
+  async function submitAuth(path, payload, button, pendingText) {
+    button.disabled = true;
+    message("loginMessage", pendingText);
+    try {
+      await api(path, { method: "POST", body: JSON.stringify(payload) });
+      await loadAccount();
+    } catch (error) {
+      message("loginMessage", error.message);
+    } finally {
+      button.disabled = false;
+    }
+  }
+
+  loginTab.addEventListener("click", () => showAuth("login"));
+  registerTab.addEventListener("click", () => showAuth("register"));
+  loginForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    submitAuth("/api/auth/login", {
+      identifier: $("loginIdentifier").value.trim(),
+      password: $("loginPassword").value,
+    }, $("loginButton"), "در حال ورود…");
+  });
+  registerForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const password = $("registerPassword").value;
+    if (password !== $("registerPasswordConfirm").value) {
+      message("loginMessage", "رمز عبور و تکرار آن یکسان نیستند.");
+      return;
+    }
+    submitAuth("/api/auth/register", {
+      name: $("registerName").value.trim(),
+      identifier: $("registerIdentifier").value.trim(),
+      password,
+    }, $("registerButton"), "در حال ساخت حساب…");
+  });
 
   /* خانه‌های طرح کد رنگ‌اند (مثل DB0010)؛ CARA.palette شیء {code,name,hex} است نه آرایه */
   const beadHex = (code) => window.CARA?.byCode?.(code)?.hex || "#8b72a4";
@@ -149,8 +172,10 @@
     } catch (error) {
       loginPanel.hidden = false;
       dashboard.hidden = true;
-      if (error.status === 401) await installTelegramLogin();
-      else message("loginMessage", error.message || "فعلاً بررسی حساب ممکن نیست؛ کمی بعد دوباره تلاش کن.");
+      if (error.status === 401) {
+        showAuth("login");
+        message("loginMessage", "برای دیدن حساب، وارد شو یا یک حساب بساز.");
+      } else message("loginMessage", error.message || "فعلاً بررسی حساب ممکن نیست؛ کمی بعد دوباره تلاش کن.");
       return;
     }
 
@@ -160,7 +185,7 @@
     loginPanel.hidden = true;
     dashboard.hidden = false;
     $("welcomeName").textContent = "سلام " + (user.displayName || "دوست cara") + "!";
-    $("welcomeHandle").textContent = user.username ? "@" + user.username : "حساب تلگرام تأییدشده";
+    $("welcomeHandle").textContent = user.username ? "@" + user.username : "حساب کارا";
 
     /* شکست بارگذاری یک بخش نباید کاربر واردشده را از داشبورد بیرون بیندازد. */
     await Promise.allSettled([loadProfile(), loadDesigns(), loadOrders()]);

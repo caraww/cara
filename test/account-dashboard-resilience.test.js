@@ -7,7 +7,8 @@ const source = fs.readFileSync(path.join(__dirname, "../js/account.js"), "utf8")
 
 test("account API errors retain their HTTP status for correct auth handling", () => {
   assert.match(source, /error\.status = response\.status/);
-  assert.match(source, /if \(error\.status === 401\) await installTelegramLogin\(\)/);
+  assert.match(source, /if \(error\.status === 401\) \{/);
+  assert.match(source, /showAuth\("login"\)/);
 });
 
 test("an authenticated dashboard remains visible while profile, designs, and orders load independently", () => {
@@ -23,7 +24,14 @@ test("opening a saved design handles unavailable browser storage without navigat
   assert.match(source, /ذخیره‌سازی مرورگر در دسترس نیست/);
 });
 
-test("non-authentication account API failures show an error instead of starting Telegram login", () => {
+test("non-authentication account API failures show an error instead of starting login", () => {
   assert.match(source, /else message\("loginMessage", error\.message/);
   assert.match(source, /return;\s*\}\s*user = data\.user/);
+});
+
+test("account page offers local login and registration without Telegram", () => {
+  const html = fs.readFileSync(path.join(__dirname, "../account.html"), "utf8");
+  assert.match(html, /id="loginForm"/);
+  assert.match(html, /id="registerForm"/);
+  assert.doesNotMatch(html, /telegramLogin|telegram-widget|telegram\.org/);
 });

@@ -57,6 +57,7 @@
   font-weight: 700;
 }
 .review-form select,
+.review-form input,
 .review-form textarea {
   display: block;
   width: 100%;
@@ -67,6 +68,14 @@
   background: transparent;
   color: inherit;
   font: inherit;
+}
+.review-website {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }
 .review-msg {
   min-height: 1.6em;

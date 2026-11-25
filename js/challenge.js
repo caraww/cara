@@ -77,7 +77,7 @@
     const c = state.challenge, box = $("chlJoin"), body = $("chlJoinBody");
     box.hidden = !(c && c.open); if (box.hidden) return; body.replaceChildren();
     if (!state.loggedIn) {
-      body.append(el("p", "", "برای شرکت یا رأی‌دادن اول با تلگرام وارد شو؛ ثبت‌نام جدا لازم نیست."), Object.assign(el("a", "chl-btn chl-btn--primary", "ورود با تلگرام"), { href: "/account.html" }));
+      body.append(el("p", "", "برای شرکت یا رأی‌دادن اول وارد حساب کاربری شو؛ ثبت‌نام جدا لازم نیست."), Object.assign(el("a", "chl-btn chl-btn--primary", "ورود به حساب"), { href: "/account.html" }));
       return;
     }
     const mine = state.entries.find((e) => e.mine);
@@ -114,7 +114,7 @@
         await api("/api/challenge/entries", { method: "POST", body: JSON.stringify({ title: t.value, nickname: n.value, design }) });
         try { localStorage.setItem("cara-chl-nick", n.value); } catch {}
         await load(); say("طرحت ثبت شد و بعد از تأیید توی لیست میاد. 🎉");
-      } catch (e) { say(e.status === 401 ? "نشستت تموم شده؛ دوباره با تلگرام وارد شو." : e.message, true); btn.disabled = false; }
+      } catch (e) { say(e.status === 401 ? "نشستت تموم شده؛ دوباره وارد شو." : e.message, true); btn.disabled = false; }
     };
     body.append(form);
   }
@@ -131,7 +131,7 @@
     vote.setAttribute("aria-label", "رأی به " + e.title + "، الان " + fa(e.votes) + " رأی");
     vote.disabled = !open || e.mine || e.status === "pending" || e.status === "rejected";
     vote.onclick = async () => {
-      if (!state.loggedIn) { say("برای رأی‌دادن اول با تلگرام وارد شو.", true); return; }
+      if (!state.loggedIn) { say("برای رأی‌دادن اول وارد حساب شو.", true); return; }
       vote.disabled = true;
       try { const r = await api("/api/challenge/entries/" + e.id + "/vote", { method: "POST" }); e.voted = r.voted; e.votes = r.votes; vote.textContent = "♥ " + fa(r.votes); vote.setAttribute("aria-pressed", String(r.voted)); }
       catch (err) { say(err.message, true); } finally { vote.disabled = false; }

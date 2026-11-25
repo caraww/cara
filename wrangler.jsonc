@@ -17,7 +17,6 @@
     "GAME_GOAL": "12",
     "GAME_GOAL2": "20",
     "GAME_DAILY_CAP": "30",
-    "TELEGRAM_BOT_USERNAME": "Carawwbot",
   },
 
   // مقادیر فقط برای Preview؛ از درگاه و callback واقعی استفاده نمی‌شود.
@@ -31,8 +30,7 @@
       "GAME_GOAL": "12",
       "CALLBACK_URL": "https://preview.invalid/api/payment-callback",
       "RELAY_PAY_URL": "https://preview.invalid/pay.php",
-      "TELEGRAM_BOT_USERNAME": "Carawwbot",
-    },
+      },
   },
 
   // سفارش‌ها و داده‌های بازی همچنان در KV موجود ذخیره می‌شوند.

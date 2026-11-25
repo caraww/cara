@@ -92,7 +92,7 @@ Do not store raw session or public tracking tokens. Store a cryptographic hash a
 - A Node regression test checks the schema's core security and ownership constraints.
 - Production D1 migrations `0001_accounts.sql` and `0002_account_sessions.sql` were applied successfully by run `42461711915`; PR #129 added the `ACCOUNTS_DB` binding and the Worker was deployed by run `42462706615`. The earlier preview-only note is historical. Migration `0003_customer_contacts_and_sms_consent.sql`, added by PR #133, has not yet been confirmed on production.
 - Existing checkout, payment settlement, and the ORDERS KV namespace remain unchanged.
-- Telegram authentication uses the official Login Widget HMAC verification, a five-minute freshness window, replay-digest storage, rate limiting, and opaque HttpOnly/Secure/SameSite session cookies. The Worker needs `TELEGRAM_BOT_USERNAME` as a variable and a bot configured for the site domain in BotFather; `TELEGRAM_BOT_TOKEN` remains a secret.
+- Telegram authentication was the original login flow. It has been removed from the account UI and Worker API because it required a VPN for some customers; the Telegram bot token remains only for order notifications.
 - Account UI includes Telegram sign-in, saved-design preview/reopen/delete, and read-only history for orders created while signed in. Existing orders are not automatically linked because Telegram does not prove ownership of the checkout phone number.
 - PR #133 adds optional phone contact details and explicit SMS marketing consent to the account profile. Phone verification and SMS sending are not implemented; only contacts with both a verified phone and explicit consent are eligible for the separate marketing export. Profile work beyond these contact fields, Bale login, guest-cart merge, account-linked legacy orders, and public order tracking remain follow-up work. Bale is intentionally not enabled without a documented, verifiable identity flow.
 
@@ -132,3 +132,11 @@ Do not store raw session or public tracking tokens. Store a cryptographic hash a
 - Admin order cards, details, and CSV exports now display multi-item orders. Existing single-work and custom-pattern checkout paths remain available.
 - This branch uses the existing D1 cart tables from migration `0001_accounts.sql`; no production schema change is intended. Do not deploy the Worker or claim the feature is live until the PR tests pass, the PR is reviewed/merged, and the Worker deployment is separately confirmed.
 - Remaining release checks: run all tests/build, inspect generated navigation output, test guest add/update/remove and guest checkout in preview without a real payment, test Telegram login + guest merge + account cart persistence, test cart edits during a pending payment, and verify admin order details. Do not perform a real payment for acceptance testing.
+
+
+## Local authentication and guest reviews — 2026-11-21
+
+- Account login is now local: a customer registers with a display name plus either an email address or an Iranian mobile number, and a password. The Worker normalizes the identifier, hashes the password with PBKDF2-SHA-256 (210,000 iterations, per-user salt), rate-limits register/login attempts, and creates the same hashed HttpOnly session cookie used by the rest of the account area.
+- Migration `0009_local_auth.sql` adds `local_credentials`. It is separate from `identity_links`, so legacy Telegram identities remain readable for existing accounts without allowing new Telegram logins.
+- Migration `0010_guest_reviews.sql` adds `guest_reviews`. Any visitor can submit a rating, optional display name, and review text without an account. New reviews are always stored as `pending`; the existing admin moderation page approves or rejects them. Public reads merge approved guest reviews with approved legacy verified-purchase reviews.
+- Guest submissions are same-origin checked, rate-limited, length-limited, reject links, and use a hidden honeypot field. No email address, phone number, or IP address is stored with a guest review.

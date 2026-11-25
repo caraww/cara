@@ -80,7 +80,7 @@
 
   function exportCsv(list, filename) {
     if (!list.length) { $("toast").textContent = "موردی برای خروجی وجود ندارد."; return; }
-    const header = ["نام", "نام کاربری تلگرام", "شماره موبایل", "شناسه تلگرام", "شناسه حساب", "تاریخ ثبت‌نام", "رضایت پیامک تبلیغاتی", "تأیید شماره"];
+    const header = ["نام", "نام کاربری", "شماره موبایل", "شناسه تلگرام", "شناسه حساب", "تاریخ ثبت‌نام", "رضایت پیامک تبلیغاتی", "تأیید شماره"];
     const lines = list.map((item) => [
       item.displayName, item.username || "", item.phone, item.telegramId || "", item.id, date(item.createdAt),
       item.marketingSmsConsent ? "بله" : "خیر", item.phoneVerified ? "بله" : "خیر",

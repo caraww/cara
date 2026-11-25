@@ -1,5 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { validateReview, orderContainsWork } from "../lib/reviews.mjs";
 import { publicOrderView, TOKEN_RE, newOrderToken } from "../lib/track.mjs";
 import { requestIsSameOrigin } from "../lib/accounts.mjs";
@@ -66,4 +69,28 @@ test("tracking tokens are 64 lowercase hex characters", () => {
   const token = newOrderToken();
   assert.match(token, TOKEN_RE);
   assert.notEqual(token, newOrderToken());
+});
+
+test("guest reviews accept an optional display name and reject links", () => {
+  const named = validateReview({ workId: "w", rating: 5, body: "بافت خیلی تمیزی داشت و زود رسید.", author: "سارا" });
+  assert.equal(named.ok, true);
+  assert.equal(named.value.author, "سارا");
+  const anonymous = validateReview({ workId: "w", rating: 4, body: "رنگ‌ها دقیقاً مثل عکس بود." });
+  assert.equal(anonymous.ok, true);
+  assert.equal(anonymous.value.author, "مهمان کارا");
+  assert.equal(validateReview({ workId: "w", rating: 5, body: "برای دیدن کارها به https://spam.example برو" }).ok, false);
+});
+
+test("guest review storage and UI do not require an account", () => {
+  const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+  const migration = fs.readFileSync(path.join(root, "migrations/0010_guest_reviews.sql"), "utf8");
+  const api = fs.readFileSync(path.join(root, "lib/reviews.mjs"), "utf8");
+  const client = fs.readFileSync(path.join(root, "js/reviews.js"), "utf8");
+  assert.match(migration, /CREATE TABLE IF NOT EXISTS guest_reviews/);
+  assert.match(migration, /status IN \('pending', 'approved', 'rejected'\)/);
+  assert.match(api, /INSERT INTO guest_reviews/);
+  assert.match(api, /guest_reviews WHERE work_id = \? AND status = 'approved'/);
+  assert.doesNotMatch(client, /api\/account\/me|account\.html|با تلگرام وارد شو/);
+  assert.match(client, /review-author/);
+  assert.match(client, /هر کسی می‌تواند نظر بدهد/);
 });

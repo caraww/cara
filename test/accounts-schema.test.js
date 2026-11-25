@@ -7,6 +7,7 @@ const root = path.join(__dirname, "..");
 const schema = fs.readFileSync(path.join(root, "migrations/0001_accounts.sql"), "utf8");
 const auth = fs.readFileSync(path.join(root, "migrations/0002_account_sessions.sql"), "utf8");
 const contacts = fs.readFileSync(path.join(root, "migrations/0003_customer_contacts_and_sms_consent.sql"), "utf8");
+const localAuth = fs.readFileSync(path.join(root, "migrations/0009_local_auth.sql"), "utf8");
 const handler = fs.readFileSync(path.join(root, "lib/accounts.mjs"), "utf8");
 
 test("account schema separates identity, sessions, saved designs, and carts", () => {
@@ -48,12 +49,24 @@ test("account login replay protection and minimal profile metadata are persisted
   assert.ok(auth.includes("CREATE TABLE IF NOT EXISTS user_profiles"));
 });
 
-test("account API uses Telegram HMAC, fresh auth_date, hashed cookies, CSRF origin checks, and user-scoped design deletes", () => {
-  assert.ok(handler.includes('name: "HMAC", hash: "SHA-256"'));
-  assert.ok(handler.includes("TELEGRAM_MAX_AGE"));
+test("local credentials are unique and use password hashes instead of provider tokens", () => {
+  assert.ok(localAuth.includes("CREATE TABLE IF NOT EXISTS local_credentials"));
+  assert.ok(localAuth.includes("login_id TEXT NOT NULL UNIQUE"));
+  assert.ok(localAuth.includes("password_hash TEXT NOT NULL"));
+  assert.ok(handler.includes('path === "/api/auth/register"'));
+  assert.ok(handler.includes('path === "/api/auth/login"'));
+  assert.ok(handler.includes("hashPassword"));
+  assert.ok(handler.includes("verifyPassword"));
+  assert.ok(handler.includes("normalizeLoginId"));
+});
+
+test("account API uses hashed cookies, CSRF origin checks, rate limits, and user-scoped design deletes", () => {
   assert.ok(handler.includes("HttpOnly; Secure; SameSite=Lax"));
   assert.ok(handler.includes("requestIsSameOrigin"));
+  assert.ok(handler.includes('"account-register:" + ip'));
+  assert.ok(handler.includes('"account-login:" + ip'));
   assert.ok(handler.includes("DELETE FROM designs WHERE id = ? AND user_id = ?"));
+  assert.doesNotMatch(handler, /auth\/telegram/);
 });
 
 test("customer contacts store optional phone, verification, and auditable marketing consent", () => {
