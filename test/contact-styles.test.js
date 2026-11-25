@@ -29,9 +29,9 @@ test("contact FAB exposes an accessible toggle instead of two always-visible but
   assert.match(js, /aria-expanded="false"/);
   assert.match(js, /aria-controls="cara-contact-menu"/);
   assert.match(js, /aria-label="تماس با من"/);
-  assert.match(js, /cara-contact-toggle__label/);
-  assert.match(css, /cara-contact-toggle__label/);
-  assert.match(css, /border-radius:999px/);
+  assert.doesNotMatch(js, /cara-contact-toggle__label/);
+  assert.match(css, /#cara-contact \.cara-contact-toggle\{[^}]*width:60px;height:60px/);
+  assert.match(css, /#cara-contact \.cara-contact-toggle\{[^}]*border-radius:50%/);
   assert.match(js, /menu\.hidden = !open/);
   assert.match(js, /cara-contact-toggle__icon--close/);
   assert.match(js, /toggle\.addEventListener\("click"/);
