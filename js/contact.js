@@ -24,8 +24,5 @@
       seal.alt = "نماد اعتماد الکترونیکی؛ برای استعلام کلیک کن";
     };
     seal.addEventListener("error", useFallback);
-    setTimeout(() => {
-      if (seal.getBoundingClientRect().top < innerHeight * 2) useFallback();
-    }, 8000);
   }
 })();

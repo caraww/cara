@@ -22,3 +22,11 @@ test("hero and Black Friday images offer AVIF sources", () => {
   assert.ok(fs.existsSync(path.join(root, "img/black-friday.avif")));
   assert.match(index, /black-friday\.avif/);
 });
+
+test("Black Friday banner stays animated by default", () => {
+  assert.match(index, /<img[^>]+src="\/img\/black-friday\.gif\?v=\d+"/);
+  assert.match(
+    index,
+    /<source[^>]+media="\(prefers-reduced-motion: reduce\)"[^>]+black-friday\.avif/,
+  );
+});
