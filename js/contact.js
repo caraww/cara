@@ -5,7 +5,7 @@
   const path = location.pathname;
   const stylesheet = document.createElement("link");
   stylesheet.rel = "stylesheet";
-  stylesheet.href = "/css/contact.css?v=20261125-fab4";
+  stylesheet.href = "/css/contact.css?v=20261125-fab6";
   document.head.appendChild(stylesheet);
 
   const box = document.createElement("div");
