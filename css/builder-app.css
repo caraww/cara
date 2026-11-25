@@ -11,7 +11,7 @@
   /* زمینه‌ی ساده تا نقطه‌های تزئینی لای کارت‌ها دیده نشوند */
   body.builder-page {
     background-image: none;
-    background-color: #f3f0f8;
+    background-color: #ffffff;
   }
 
   body.builder-page::before,

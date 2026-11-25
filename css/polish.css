@@ -3,7 +3,7 @@
    Product bead colors remain exclusively defined in js/palette.js. */
 :root {
   color-scheme: light;
-  --cara-bg: #E9E9ED;
+  --cara-bg: #FFFFFF;
   --cara-surface: #FFFFFF;
   --cara-text: #242431;
   --cara-muted: #544f60;
@@ -574,7 +574,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { box-shadow: 
   --cara-plum: #343B64;
   --cara-plum-deep: #22243B;
   --cara-lilac: #EEEEF5;
-  --cara-paper: #E9E9ED;
+  --cara-paper: #FFFFFF;
   --cara-muted: #626273;
   --cara-line: #D4D4DF;
   --cara-gold: #9B8FC1;
@@ -589,10 +589,7 @@ input:focus-visible, select:focus-visible, textarea:focus-visible { box-shadow: 
 }
 html { scroll-behavior: smooth; scroll-padding-top: 88px; }
 body {
-  background:
-    radial-gradient(ellipse at 8% 0%, rgba(155,143,193,.12), transparent 32rem),
-    radial-gradient(ellipse at 94% 28%, rgba(52,59,100,.055), transparent 36rem),
-    var(--cara-bg);
+  background: var(--cara-bg);
   color: var(--cara-text);
 }
 header.top {

@@ -3,7 +3,7 @@
    Product bead colors remain exclusively defined in js/palette.js. */
 :root {
   color-scheme: light;
-  --cara-bg: #E9E9ED;
+  --cara-bg: #FFFFFF;
   --cara-surface: #FFFFFF;
   --cara-text: #242431;
   --cara-muted: #544f60;

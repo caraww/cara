@@ -65,6 +65,7 @@ test("account order actions cover tracking, reorder, and verified reviews", () =
   const js = read("js/account.js");
   assert.match(js, /track\.html\?t=/);
   assert.match(js, /review\.href = "\/bracelet\//);
+  assert.match(js, /review\.href = [^;]*#reviews/);
   assert.match(js, /سفارش دوباره/);
   assert.match(js, /checkout\.html\?work=/);
   assert.match(js, /workSlug/);

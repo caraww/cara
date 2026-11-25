@@ -21,10 +21,7 @@
 html { scroll-padding-top: 96px; }
 
 body {
-  background:
-    radial-gradient(ellipse at 100% 0%, rgba(198, 161, 95, .075), transparent 30rem),
-    radial-gradient(ellipse at 0% 24%, rgba(72, 57, 102, .055), transparent 34rem),
-    var(--cara-bg, #f5f1f6);
+  background: var(--cara-bg, #fff);
   color: var(--cp-ink);
 }
 

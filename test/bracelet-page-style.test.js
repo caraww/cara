@@ -18,7 +18,7 @@ test("gallery bracelet pages load their dedicated layout after the shared nav st
   assert.match(css, /\.pg-price/);
   assert.match(css, /\.rel/);
   const layout = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
-  assert.match(layout, /\/css\/bracelet-pages\.css\?v=8/);
+  assert.match(layout, /\/css\/bracelet-pages\.css\?v=9/);
   assert.match(layout, /\/css\/site-nav\.css\?v=20261113/);
   assert.match(layout, /\/css\/nav-hero\.css\?v=[\w.-]+/);
   assert.ok(layout.indexOf("/css/site-nav.css") > layout.indexOf("/css/bracelet-pages.css"));

@@ -74,7 +74,7 @@ h3,
 
 /* ۱۰) یکدست کردن رنگ صفحه‌های دستبند/رنگ/سبد/حساب با پالت اصلی (tokens.css) */
 html body:has(.pg) {
-  background: var(--cara-bg, #e9e9ed);
+  background: var(--cara-bg, #ffffff);
   color: var(--cara-text, #242431);
 }
 .pg {

@@ -156,7 +156,7 @@
       if (order.work && order.work.id && order.status === "paid") {
         const review = document.createElement("a");
         review.className = "btn sm";
-        review.href = "/bracelet/" + encodeURIComponent(workSlug(order.work.id)) + ".html";
+        review.href = "/bracelet/" + encodeURIComponent(workSlug(order.work.id)) + ".html#reviews";
         review.textContent = "ثبت نظر";
         actions.append(review);
       }

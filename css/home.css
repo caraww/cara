@@ -4,7 +4,7 @@
            ۲) نمونه‌های صفحه‌ی اصلی (mini-gal)
            ۳) موبایل و نوار پایین (m-cta) */
 :root {
-  --bg: #f6f4f8;
+  --bg: #ffffff;
   --ink: #221a2c;
   --muted: #6b6377;
   --line: #ddd6e6;
@@ -728,7 +728,7 @@ h3 {
    ====================================================================== */
 /* ===== نمونه‌های صفحه‌ی اصلی: کارت کاغذی (قبلاً توی gallery-editorial.css بود) =====
    مقدارهای نهایی: عکس ۴ به ۵، کامل دیده می‌شه (بریده نمی‌شه). */
-:root{--paper:#fbf9fd;--paper-2:#ece6f2;--hair:rgba(184,151,90,.38)}
+:root{--paper:#ffffff;--paper-2:#ece6f2;--hair:rgba(184,151,90,.38)}
 .mini-gal a{
   border-radius:26px;border-color:var(--hair);
   background:
@@ -923,7 +923,7 @@ a, button, [role="button"] { -webkit-tap-highlight-color: transparent; }
 /* Cara refinement — restrained polish, clearer hierarchy, and touch-friendly mobile.
    Appended intentionally so existing page sections and interactions remain intact. */
 :root {
-  --bg: #f8f6f9;
+  --bg: #ffffff;
   --line: #e4dce9;
   --tint: #f0eaf3;
   --gold: #c4a36a;

@@ -1,6 +1,6 @@
 /* Dedicated visual layer for the bracelet detail pages linked at the end of the gallery. */
 html body {
-  background: #f7f3f8;
+  background: #ffffff;
   color: #282238;
   font-family: "Vazir", Tahoma, system-ui, sans-serif;
 }
@@ -43,7 +43,7 @@ html body .pg-img img {
   max-height: 620px;
   object-fit: contain;
   border-radius: 22px;
-  background: #eee8f2;
+  background: #ffffff;
   box-shadow: 0 16px 44px rgba(43, 30, 58, .09);
 }
 html body .pg-grid > div:not(.pg-img) {
