@@ -36,14 +36,27 @@ jobs:
         run: rm -f dist/site/.htaccess
       - name: Install lftp
         run: sudo apt-get update && sudo apt-get install -y lftp
+      - name: Check FTP secrets
+        id: ftp
+        env:
+          FTP_HOST: ${{ secrets.IRAN_FTP_HOST }}
+          FTP_USER: ${{ secrets.IRAN_FTP_USER }}
+          FTP_PASS: ${{ secrets.IRAN_FTP_PASSWORD }}
+        run: |
+          if [ -n "$FTP_HOST" ] && [ -n "$FTP_USER" ] && [ -n "$FTP_PASS" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::FTP secrets are not configured; skipping upload."
+          fi
       - name: Upload changed files
+        if: steps.ftp.outputs.configured == 'true'
         env:
           FTP_HOST: ${{ secrets.IRAN_FTP_HOST }}
           FTP_USER: ${{ secrets.IRAN_FTP_USER }}
           FTP_PASS: ${{ secrets.IRAN_FTP_PASSWORD }}
           FTP_DIR: ${{ secrets.IRAN_FTP_DIR }}
         run: |
-          test -n "$FTP_HOST" && test -n "$FTP_USER" && test -n "$FTP_PASS"
           lftp -c "
             set ftp:ssl-allow yes;
             set ssl:verify-certificate no;
