@@ -728,7 +728,7 @@ h3 {
    ====================================================================== */
 /* ===== نمونه‌های صفحه‌ی اصلی: کارت کاغذی (قبلاً توی gallery-editorial.css بود) =====
    مقدارهای نهایی: عکس ۴ به ۵، کامل دیده می‌شه (بریده نمی‌شه). */
-:root{--paper:#ffffff;--paper-2:#ece6f2;--hair:rgba(184,151,90,.38)}
+:root{--paper:#ffffff;--paper-2:#ffffff;--hair:rgba(184,151,90,.38)}
 .mini-gal a{
   border-radius:26px;border-color:var(--hair);
   background:
@@ -1643,3 +1643,10 @@ button, .btn, a.btn {
     border-radius:14px;
   }
 }
+
+/* کارت‌های «ببین چی بافتم» در روشن: کل کارت، از جمله زیر نام، سفید است. */
+html:not([data-theme="dark"]) .mini-gal > a {
+  background: #fff !important;
+  background-image: none !important;
+}
+html:not([data-theme="dark"]) .mini-gal > a b { color: #221a2c; }

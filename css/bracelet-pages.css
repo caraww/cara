@@ -200,16 +200,25 @@ html body .pg .pg-help a:hover { color: #3f2c52; }
     inset: auto 0 0;
     z-index: 55;
     padding: 10px 14px calc(10px + env(safe-area-inset-bottom, 0px));
-    background: rgba(255, 255, 255, .96);
-    border-top: 1px solid #e9e0ec;
-    box-shadow: 0 -8px 26px rgba(43, 30, 58, .12);
+    color: #f6f1fa;
+    background: rgba(36, 29, 49, .97);
+    border-top: 1px solid rgba(201, 168, 107, .42);
+    box-shadow: 0 -10px 30px rgba(20, 12, 28, .28);
     backdrop-filter: blur(12px);
   }
   html body:has(.pg-cta) .pg { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   html body .pg-cta__info { display: grid; gap: 2px; min-width: 0; font-size: 14px; }
-  html body .pg-cta__info b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; }
+  html body .pg-cta__info b { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px; color: #fbf8ff; }
   html body .pg-cta__price .price-list { display: none; }
-  html body .pg-cta__price .price-now { color: #7b5a24; font-size: 15px; }
-  html body .pg-cta .btn { flex: 0 0 auto; min-height: 46px; padding: 0 18px; }
+  html body .pg-cta__price .price-now { color: #e0c48f; font-size: 15px; }
+  html body .pg-cta .btn {
+    flex: 0 0 auto;
+    min-height: 46px;
+    padding: 0 18px;
+    border-color: #c9a86b;
+    background: #c9a86b;
+    color: #241d31;
+  }
+  html body .pg-cta .btn:hover { background: #d8ba85; border-color: #d8ba85; }
 }
 @media (prefers-reduced-motion: reduce) { html body .pg-cta { backdrop-filter: none; } }
