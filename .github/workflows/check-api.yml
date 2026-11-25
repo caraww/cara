@@ -1,0 +1,14 @@
+name: Check live API
+on:
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe
+        run: |
+          for u in https://caraw.ir/api/config https://api.caraw.ir/api/config https://caraw.ir/api/works; do
+            echo "== $u =="
+            curl -sS -o /tmp/body -w 'status=%{http_code} type=%{content_type} size=%{size_download}\n' --max-time 25 "$u" || true
+            head -c 300 /tmp/body; echo
+          done
