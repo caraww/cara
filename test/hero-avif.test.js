@@ -8,6 +8,7 @@ const worksSource = fs.readFileSync(path.join(root, "js/works.js"), "utf8");
 const index = fs.readFileSync(path.join(root, "index.html"), "utf8");
 const heroCss = fs.readFileSync(path.join(root, "css/nav-hero.css"), "utf8");
 const heroJs = fs.readFileSync(path.join(root, "js/hero-stage.js"), "utf8");
+const sharp = require("sharp");
 
 test("every work has a generated AVIF thumbnail", () => {
   const matches = [...worksSource.matchAll(/"thumbAvif":\s*"([^"]+)"/g)];
@@ -38,4 +39,22 @@ test("hero images blend into the cream card instead of showing a white box", () 
   assert.doesNotMatch(heroCss, /\.hx__card > picture\s*\{[^}]*z-index/);
   assert.doesNotMatch(heroCss, /hx__card-bg/);
   assert.doesNotMatch(heroJs, /hx__card-bg/);
+});
+
+test("static hero thumbnails keep transparent backgrounds", async () => {
+  const files = [
+    ...new Set(
+      [...index.matchAll(/works-thumbs\/([^"?]+\.(?:webp|avif))/g)].map((m) =>
+        decodeURIComponent(m[1]),
+      ),
+    ),
+  ];
+  assert.ok(files.length >= 6);
+  for (const file of files) {
+    const { data } = await sharp(path.join(root, "img/works-thumbs", file))
+      .ensureAlpha()
+      .raw()
+      .toBuffer({ resolveWithObject: true });
+    assert.equal(data[3], 0, `${file} should have a transparent corner`);
+  }
 });

@@ -29,7 +29,8 @@ const fixFa = (s) => s.normalize("NFC").replace(/ي/g, "ی").replace(/ك/g, "ک"
 const isNum = (s) => /^[\s0-9۰-۹٠-٩.\-_)]+$/.test(s);
 const enc = (rel) => rel.split("/").map(encodeURIComponent).join("/");
 /* هر عکس با نسخه‌ی تاریخ تغییرش لینک می‌شه، پس عکس عوض‌شده یا قدیمی از کش نمیاد */
-const ver = (file) => { try { return "?v=" + Math.round(fs.statSync(path.join(DIR, file)).mtimeMs).toString(36); } catch { return ""; } };
+const verIn = (dir, file) => { try { return "?v=" + Math.round(fs.statSync(path.join(dir, file)).mtimeMs).toString(36); } catch { return ""; } };
+const ver = (file) => verIn(DIR, file);
 
 /* ابعاد عکس (با در نظر گرفتن چرخش EXIF موبایل) */
 function exifOrient(b, s) {
@@ -141,10 +142,17 @@ async function derive(files) {
 
 (async () => {
 let info = {};
-try {
-  const raw = JSON.parse(fs.readFileSync(path.join(DIR, "info.json"), "utf8"));
-  for (const k of Object.keys(raw)) info[fixFa(k)] = raw[k];
-} catch {}
+for (const infoDir of [...new Set([ORIGINAL_DIR, DIR])]) {
+  try {
+    const raw = JSON.parse(fs.readFileSync(path.join(infoDir, "info.json"), "utf8"));
+    for (const k of Object.keys(raw)) {
+      const key = fixFa(k);
+      info[key] = { ...(info[key] || {}), ...raw[k] };
+    }
+  } catch {}
+}
+const infoByBase = {};
+for (const [k, v] of Object.entries(info)) infoByBase[fixFa(k).replace(EXT, "").trim()] = v;
 
 const all = fs
   .readdirSync(DIR)
@@ -172,7 +180,7 @@ const used = new Set();
 const works = [...groups].map(([base, items]) => {
   items.sort((a, b) => a.n - b.n);
   const file = items[0].file;
-  const meta = info[fixFa(file)] || info[base] || {};
+  const meta = info[fixFa(file)] || infoByBase[fixFa(base)] || {};
   let id = base,
     n = 2;
   while (used.has(id)) id = `${base}-${n++}`;
@@ -187,7 +195,8 @@ const works = [...groups].map(([base, items]) => {
         it.file,
       );
   });
-  const original = enc("img/works-cutouts/" + file) + ver(file);
+  const originalName = DIR === ORIGINAL_DIR ? file : fs.readdirSync(ORIGINAL_DIR).find((f) => f.replace(EXT, "") === base) || file;
+  const original = enc("img/works-cutouts/" + originalName) + verIn(ORIGINAL_DIR, originalName);
   const images = items.map((it) => { const d = derived.get(it.file); return d ? enc(d.view) + "?v=" + STAMP : enc("img/works-cutouts/" + it.file) + ver(it.file); });
   const d0 = derived.get(items[0].file), thumb = d0 ? enc(d0.thumb) + "?v=" + STAMP : images[0];
   const thumbAvif = d0 && d0.thumbAvif ? enc(d0.thumbAvif) + "?v=" + STAMP : "";
