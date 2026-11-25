@@ -24,6 +24,8 @@ node tools/package-static.js
 - `dist/site/` — فایل‌های آماده‌ی آپلود
 - `dist/cara-static.tar.gz` — همان فایل‌ها به‌صورت فشرده
 
+اگر Node روی سیستم خودت نداری، از GitHub Actions → **Package static site** → Run workflow استفاده کن و فایل `cara-static` را از بخش Artifacts دانلود کن.
+
 این بسته فقط فایل‌های عمومی سایت را دارد؛ `.env`، تست‌ها، کد Worker و فایل‌های سرور داخلش نیست.
 
 ### ۲. آپلود در cPanel

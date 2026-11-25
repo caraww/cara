@@ -1,0 +1,33 @@
+name: Package static site
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "**.html"
+      - "css/**"
+      - "js/**"
+      - "img/**"
+      - "media/**"
+      - "fonts/**"
+      - "data/**"
+      - "lib/works-pricing.js"
+      - "manifest.webmanifest"
+      - "sw.js"
+      - "tools/package-static.js"
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm run package:static
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cara-static
+          path: dist/cara-static.tar.gz
+          retention-days: 14
