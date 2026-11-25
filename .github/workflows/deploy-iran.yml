@@ -1,0 +1,55 @@
+name: Deploy to Iranian host
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "**.html"
+      - "css/**"
+      - "js/**"
+      - "img/**"
+      - "media/**"
+      - "fonts/**"
+      - "data/**"
+      - "lib/works-pricing.js"
+      - "manifest.webmanifest"
+      - "sw.js"
+      - "tools/package-static.js"
+      - ".github/workflows/deploy-iran.yml"
+
+concurrency:
+  group: deploy-iran
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Build static bundle
+        run: node tools/package-static.js
+      - name: Remove server-only files from bundle
+        run: rm -f dist/site/.htaccess
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+      - name: Upload changed files
+        env:
+          FTP_HOST: ${{ secrets.IRAN_FTP_HOST }}
+          FTP_USER: ${{ secrets.IRAN_FTP_USER }}
+          FTP_PASS: ${{ secrets.IRAN_FTP_PASSWORD }}
+          FTP_DIR: ${{ secrets.IRAN_FTP_DIR }}
+        run: |
+          test -n "$FTP_HOST" && test -n "$FTP_USER" && test -n "$FTP_PASS"
+          lftp -c "
+            set ftp:ssl-allow yes;
+            set ssl:verify-certificate no;
+            set ftp:passive-mode yes;
+            set net:max-retries 3;
+            open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
+            mirror -R --parallel=4 --verbose=1 -x .htaccess dist/site/ \"${FTP_DIR:-public_html}\";
+            bye
+          "
