@@ -171,7 +171,10 @@ html[data-theme="dark"] body .featured-card {
 }
 html[data-theme="dark"] body .featured-card__body h3 { color: #241d31 !important; }
 html[data-theme="dark"] body .featured-card__body p { color: #5b5368 !important; }
-html[data-theme="dark"] body .featured-card__row b { color: #7b5a24 !important; }
+html[data-theme="dark"] body .featured-card { --sale: #c8102e; }
+html[data-theme="dark"] body .featured-card__row > b { color: #7b5a24 !important; }
+html[data-theme="dark"] body .featured-card .price-list { color: #8a7f92 !important; }
+html[data-theme="dark"] body .featured-card .price-now { color: #c8102e !important; }
 
 /* ---------- صفحه‌ی محصول ---------- */
 html[data-theme="dark"] body .pg .tags span {

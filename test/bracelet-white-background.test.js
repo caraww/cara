@@ -39,4 +39,5 @@ test("dark mode home bracelet names stay light on the dark card", () => {
 
 test("featured card keeps a white surface in dark mode", () => {
   assert.match(themeCss, /html\[data-theme="dark"\] body \.featured-card \{[^}]*background: #fff !important/);
+  assert.match(themeCss, /html\[data-theme="dark"\] body \.featured-card \.price-now \{ color: #c8102e !important; \}/);
 });
