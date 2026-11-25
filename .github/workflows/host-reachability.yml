@@ -1,0 +1,11 @@
+name: Host reachability
+on:
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: HTTP
+        run: curl -sS -I --max-time 20 http://caraw.ir || true
+      - name: HTTPS
+        run: curl -sS -I --max-time 20 https://caraw.ir || true
