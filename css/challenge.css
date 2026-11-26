@@ -68,3 +68,10 @@ html[data-theme="dark"] .chl-btn:hover { background: #342f4d; }
 html[data-theme="dark"] .chl-btn--primary { background: var(--cara-accent, #5b66ab); border-color: transparent; color: #fff; }
 html[data-theme="dark"] .chl-btn--primary:hover { background: #6d78bd; }
 html[data-theme="dark"] .chl-vote[aria-pressed="true"] { background: var(--cara-accent, #5b66ab); color: #fff; }
+
+/* دکمه‌های کارت چالش در گوشی: فشرده و در دو ستون، بدون سرریز از کارت */
+@media (max-width: 560px) {
+  .chl-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+  .chl-row .chl-btn { box-sizing: border-box; width: 100%; min-width: 0; min-height: 36px; padding: 6px 4px; font-size: 12.5px; line-height: 1.45; white-space: normal; }
+  .chl-row .chl-vote { grid-column: 1 / -1; }
+}

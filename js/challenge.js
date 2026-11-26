@@ -141,7 +141,7 @@
       const url = location.origin + "/challenge.html#e-" + e.id;
       try { if (navigator.share) await navigator.share({ title: e.title + " | چالش cara", url }); else { await navigator.clipboard.writeText(url); say("لینک طرح کپی شد."); } } catch {}
     };
-    const remix = el("button", "chl-btn", "ویرایش این طرح"); remix.type = "button";
+    const remix = el("button", "chl-btn", "ویرایش"); remix.type = "button"; remix.setAttribute("aria-label", "ویرایش این طرح");
     remix.onclick = () => {
       const api = window.CARA_PATTERN_SHARE;
       if (!api || !e.design) { say("این طرح قابل ویرایش نیست.", true); return; }
