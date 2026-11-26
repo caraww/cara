@@ -169,6 +169,7 @@ html[data-theme="dark"] body .featured-card {
   background: #fff !important;
   border-color: rgba(184, 151, 90, .28) !important;
 }
+html[data-theme="dark"] body .featured-card .featured-card__img { background: #fff !important; }
 html[data-theme="dark"] body .featured-card__body h3 { color: #241d31 !important; }
 html[data-theme="dark"] body .featured-card__body p { color: #5b5368 !important; }
 html[data-theme="dark"] body .featured-card { --sale: #c8102e; }

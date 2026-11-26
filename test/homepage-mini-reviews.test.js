@@ -10,10 +10,13 @@ test("the home gallery lists all works, with reviewed works first", () => {
   assert.match(js, /mini-gal__quote/);
   assert.match(js, /works\.filter\(hasReviews\)\.sort/);
   assert.match(js, /works\.filter\(\(s\) => !hasReviews\(s\)\)/);
-  assert.match(js, /renderCards\(\[\.\.\.commented, \.\.\.rest\], reviewMap\)/);
+  assert.match(js, /slice\(0, 4\)/);
+  assert.match(js, /mini-gal__media/);
+  assert.match(js, /mini-gal__quote-card/);
 });
 
 test("the weekly featured card is white in both themes", () => {
   const css = fs.readFileSync("css/home.css", "utf8");
   assert.match(css, /\.featured-card \{[^}]*background: #fff;/);
+  assert.match(css, /\.featured-card__img \{[^}]*background: #fff;/);
 });

@@ -118,14 +118,14 @@ try {
             .map((s, index) => {
               const reviews = (reviewMap[workKey(s)] && reviewMap[workKey(s)].reviews) || [];
               const quote = reviews[0]
-                ? `<span class="mini-gal__quote" style="--q-delay:${(index * 0.9).toFixed(1)}s"><span class="mini-gal__quote-text">«${esc(reviews[0].body)}»</span><small>— ${esc(reviews[0].author)}</small></span>`
+                ? `<span class="mini-gal__quote" style="--q-delay:${(index * 0.9).toFixed(1)}s"><span class="mini-gal__quote-card"><span class="mini-gal__quote-text">«${esc(reviews[0].body)}»</span><small>— ${esc(reviews[0].author)}</small></span></span>`
                 : "";
-              return `<a href="${workPath(s)}"><picture>${s.thumbAvif ? `<source type="image/avif" srcset="/${esc(s.thumbAvif)}">` : ""}<img src="${esc(s.thumb)}"${s.thumb240 ? ` srcset="/${esc(s.thumb240)} 240w, /${esc(s.thumb480)} 480w, /${esc(s.thumb)} 700w" sizes="(max-width:850px) 45vw, 220px"` : ""} alt="${esc(s.title)}"${s.w ? ` width="${s.w}" height="${s.h}"` : ""} loading="lazy" decoding="async"></picture><b>${esc(s.title)}</b>${quote}</a>`;
+              return `<a href="${workPath(s)}"><span class="mini-gal__media"><picture>${s.thumbAvif ? `<source type="image/avif" srcset="/${esc(s.thumbAvif)}">` : ""}<img src="${esc(s.thumb)}"${s.thumb240 ? ` srcset="/${esc(s.thumb240)} 240w, /${esc(s.thumb480)} 480w, /${esc(s.thumb)} 700w" sizes="(max-width:850px) 45vw, 220px"` : ""} alt="${esc(s.title)}"${s.w ? ` width="${s.w}" height="${s.h}"` : ""} loading="lazy" decoding="async"></picture>${quote}</span><b>${esc(s.title)}</b></a>`;
             })
             .join("");
         };
 
-        renderCards(works);
+        renderCards([...works].sort(() => Math.random() - 0.5).slice(0, 4));
         mg.addEventListener(
           "error",
           (e) => {
@@ -142,7 +142,8 @@ try {
             const newest = (s) => Number((reviewMap[workKey(s)].reviews && reviewMap[workKey(s)].reviews[0] && reviewMap[workKey(s)].reviews[0].createdAt) || 0);
             const commented = works.filter(hasReviews).sort((a, b) => newest(b) - newest(a) || reviewMap[workKey(b)].summary.count - reviewMap[workKey(a)].summary.count);
             const rest = works.filter((s) => !hasReviews(s));
-            renderCards([...commented, ...rest], reviewMap);
+            const pool = commented.length >= 4 ? commented : [...commented, ...rest];
+            renderCards([...pool].sort(() => Math.random() - 0.5).slice(0, 4), reviewMap);
           })
           .catch(() => {});
       }
