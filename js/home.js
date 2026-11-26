@@ -91,7 +91,7 @@ try {
       );
     }
 
-    /* چند عکس تصادفی از کارهای خودم (js/works.js با tools/build-works.js ساخته می‌شه) */
+    /* دستبندهای بافته‌شده؛ آن‌هایی که نظر تأییدشده دارند اول می‌آیند. */
     const mg = document.getElementById("miniGal"),
       works = CARA.works || [];
     const esc = (t) =>
@@ -99,23 +99,55 @@ try {
         /[&<>"]/g,
         (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[m],
       );
+    const fa = (n) => Number(n || 0).toLocaleString("fa-IR");
+    const stars = (rating) => {
+      const n = Math.max(0, Math.min(5, Number(rating) || 0));
+      return "★".repeat(n) + "☆".repeat(5 - n);
+    };
+    const workKey = (s) => String(s.id).trim();
+    const workPath = (s) =>
+      `/bracelet/${encodeURIComponent(
+        String(s.id)
+          .trim()
+          .replace(/[\s\u200c]+/g, "-")
+          .replace(/[\/\\?#%.]+/g, ""),
+      )}.html`;
+    const reviewDate = (value) =>
+      value ? new Date(Number(value) * 1000).toLocaleDateString("fa-IR", { dateStyle: "medium" }) : "";
+
     if (mg) {
       if (!works.length) {
         const s = document.getElementById("samples");
         if (s) s.hidden = true;
       } else {
-        const pick = [...works].sort(() => Math.random() - 0.5).slice(0, 4);
-        mg.innerHTML = pick
-          .map(
-            (s) =>
-              `<a href="/bracelet/${encodeURIComponent(
-                String(s.id)
-                  .trim()
-                  .replace(/[\s\u200c]+/g, "-")
-                  .replace(/[\/\\?#%.]+/g, ""),
-              )}.html"><picture>${s.thumbAvif ? `<source type="image/avif" srcset="/${esc(s.thumbAvif)}">` : ""}<img src="${esc(s.thumb)}"${s.thumb240 ? ` srcset="/${esc(s.thumb240)} 240w, /${esc(s.thumb480)} 480w, /${esc(s.thumb)} 700w" sizes="(max-width:850px) 45vw, 220px"` : ""} alt="${esc(s.title)}"${s.w ? ` width="${s.w}" height="${s.h}"` : ""} loading="lazy" decoding="async"></picture><b>${esc(s.title)}</b></a>`,
-          )
-          .join("");
+        const renderCards = (list, reviewMap = {}, target = mg) => {
+          target.innerHTML = list
+            .map((s) => {
+              const count = Number(reviewMap[workKey(s)] && reviewMap[workKey(s)].summary && reviewMap[workKey(s)].summary.count) || 0;
+              return `<a href="${workPath(s)}"><picture>${s.thumbAvif ? `<source type="image/avif" srcset="/${esc(s.thumbAvif)}">` : ""}<img src="${esc(s.thumb)}"${s.thumb240 ? ` srcset="/${esc(s.thumb240)} 240w, /${esc(s.thumb480)} 480w, /${esc(s.thumb)} 700w" sizes="(max-width:850px) 45vw, 220px"` : ""} alt="${esc(s.title)}"${s.w ? ` width="${s.w}" height="${s.h}"` : ""} loading="lazy" decoding="async"></picture><b>${esc(s.title)}</b>${count ? `<span class="mini-gal__reviews">${fa(count)} نظر</span>` : ""}</a>`;
+            })
+            .join("");
+        };
+
+        const renderComments = (list, reviewMap) => {
+          const box = document.getElementById("miniGalComments");
+          if (!box || !list.length) return;
+          box.hidden = false;
+          box.innerHTML = `<h3>نظرهای دستبندها</h3><div class="mini-comments__list">${list
+            .map((s) => {
+              const data = reviewMap[workKey(s)];
+              const count = Number(data.summary.count) || 0;
+              const items = (data.reviews || []).slice(0, 3)
+                .map((r) => `<div class="mini-comment__item"><div class="mini-comment__top"><b>${esc(r.author)}</b><span class="mini-comment__stars" aria-label="امتیاز ${fa(r.rating)} از ۵">${stars(r.rating)}</span></div><p>${esc(r.body)}</p>${r.createdAt ? `<small>${reviewDate(r.createdAt)}</small>` : ""}</div>`)
+                .join("");
+              return `<article class="mini-comment"><header><a href="${workPath(s)}">${esc(s.title)}</a><span>${fa(count)} نظر</span></header>${items}${count > 3 ? `<a class="mini-comment__more" href="${workPath(s)}#reviews">همه‌ی نظرها</a>` : ""}</article>`;
+            })
+            .join("")}</div>`;
+        };
+
+        const restGrid = document.getElementById("miniGalRest");
+        const restTitle = document.getElementById("miniGalRestTitle");
+        renderCards(works);
         mg.addEventListener(
           "error",
           (e) => {
@@ -123,6 +155,26 @@ try {
           },
           true,
         );
+
+        fetch("/api/reviews?all=1", { cache: "no-store" })
+          .then((r) => (r.ok ? r.json() : null))
+          .then((data) => {
+            const reviewMap = (data && data.works) || {};
+            const hasReviews = (s) => Number(reviewMap[workKey(s)] && reviewMap[workKey(s)].summary && reviewMap[workKey(s)].summary.count) > 0;
+            const newest = (s) => Number((reviewMap[workKey(s)].reviews && reviewMap[workKey(s)].reviews[0] && reviewMap[workKey(s)].reviews[0].createdAt) || 0);
+            const commented = works.filter(hasReviews).sort((a, b) => newest(b) - newest(a) || reviewMap[workKey(b)].summary.count - reviewMap[workKey(a)].summary.count);
+            const rest = works.filter((s) => !hasReviews(s));
+            if (commented.length) {
+              renderCards(commented, reviewMap);
+              renderComments(commented, reviewMap);
+              if (restGrid && rest.length) {
+                renderCards(rest, reviewMap, restGrid);
+                restGrid.hidden = false;
+                if (restTitle) restTitle.hidden = false;
+              }
+            }
+          })
+          .catch(() => {});
       }
     }
 

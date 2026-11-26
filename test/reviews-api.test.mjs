@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { handleReviewRequest } from "../lib/reviews.mjs";
 
-function db(guestRows = []) {
+function db(guestRows = [], verifiedRows = []) {
   const inserted = [];
   return {
     inserted,
@@ -13,6 +13,7 @@ function db(guestRows = []) {
         async run() { inserted.push({ sql: sql.replace(/\s+/g, " ").trim(), args: statement.args }); return { meta: { changes: 1 } }; },
         async all() {
           if (sql.includes("FROM guest_reviews")) return { results: guestRows };
+          if (sql.includes("FROM reviews")) return { results: verifiedRows };
           return { results: [] };
         },
       };
@@ -53,4 +54,23 @@ test("the public review list includes approved guest reviews", async () => {
   const data = await response.json();
   assert.equal(data.summary.count, 1);
   assert.equal(data.reviews[0].author, "مهمان کارا");
+});
+
+test("all approved reviews are grouped by work for the home page", async () => {
+  const env = {
+    BASE_URL: "https://caraw.ir",
+    ACCOUNTS_DB: db(
+      [{ work_id: "قلب-طلا", id: "g1", rating: 4, body: "قشنگ بود.", author_name: "مهمان کارا", created_at: 100 }],
+      [{ work_id: "خطر", id: "v1", rating: 5, body: "عالی بود.", author_name: "سارا", created_at: 200 }],
+    ),
+  };
+  const response = await handleReviewRequest(
+    { method: "GET", headers: { get: () => null } },
+    env, new URL("https://caraw.ir/api/reviews?all=1"), { rateLimit: null },
+  );
+  assert.equal(response.status, 200);
+  const data = await response.json();
+  assert.equal(data.works["قلب-طلا"].summary.count, 1);
+  assert.equal(data.works["خطر"].summary.count, 1);
+  assert.equal(data.works["خطر"].reviews[0].author, "سارا");
 });
