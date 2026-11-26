@@ -64,7 +64,11 @@ jobs:
             set ftp:passive-mode yes;
             set net:max-retries 3;
             open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
-            mirror -R --only-newer --parallel=8 --verbose=1 dist/site/ \"${FTP_DIR:-public_html}\";
+            mirror -R --only-newer --parallel=8 --verbose=1 \
+              --exclude-glob '*.webp' --exclude-glob '*.avif' \
+              --exclude-glob '*.png' --exclude-glob '*.jpg' --exclude-glob '*.jpeg' \
+              --exclude-glob '*.gif' --exclude-glob '*.mp4' --exclude-glob '*.webm' \
+              dist/site/ \"${FTP_DIR:-public_html}\";
             bye
           "
       - name: Verify API proxy
