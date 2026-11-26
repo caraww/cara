@@ -84,7 +84,7 @@
     el.replaceChildren(document.createTextNode("قیمت: "));
     const strong = document.createElement("b");
     if (!cfg || !cfg.pricePerBead) {
-      strong.textContent = "بعد از بررسی اعلام می‌شه";
+      strong.textContent = "قیمت بعد از بررسی طرح مشخص می‌شه.";
     } else {
       const listPrice = Math.round(cfg.baseFee + total * cfg.pricePerBead);
       const sale = window.CARA_SALE, now = sale ? sale.final(listPrice) : listPrice;
@@ -120,10 +120,10 @@
     try {
       if (document.fonts && document.fonts.load) await document.fonts.load('900 40px "Vazir"', name);
       const mask = textMask(name, across - 2);
-      if (!mask) { grid = null; return msg("این اسم رو نتونستم بکشم؛ حروف ساده‌تری امتحان کن."); }
+      if (!mask) { grid = null; return msg("این نوشته رو نتونستم به الگو تبدیل کنم؛ متن ساده‌تری امتحان کن."); }
       rows = mask.width + 4;
       if (rows > L.MAX_H) { grid = null; return msg("اسم خیلی بلنده؛ کوتاه‌ترش کن یا پهنای دستبند رو کمتر کن."); }
-      if (across > L.MAX_W) { grid = null; return msg("پهنا زیاده."); }
+      if (across > L.MAX_W) { grid = null; return msg("این تعداد ردیف برای دستبند زیاده؛ پهنا رو کمتر کن."); }
       const fg = fgSelect.value, bg = bgSelect.value;
       if (fg === bg) msg("رنگ اسم و زمینه یکیه؛ اسم دیده نمی‌شه.");
       const visible = Array.from({ length: across }, (_, y) =>
@@ -154,7 +154,7 @@
       updatePrice(rows * across);
     } catch (error) {
       grid = null;
-      msg("ساخت پیش‌نمایش با خطا روبه‌رو شد؛ دوباره امتحان کن.");
+      msg("پیش‌نمایش ساخته نشد؛ دوباره امتحان کن.");
     }
   }
 

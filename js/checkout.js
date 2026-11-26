@@ -164,7 +164,7 @@ try {
     const customer = {};
     for (const k of ["firstName", "lastName", "phone", "address"]) customer[k] = String(f[k] || "").trim();
     customer.phone = phoneFix(customer.phone);
-    if (!customer.firstName || !customer.lastName || !customer.address) return showErr("اسم، فامیلی و آدرس رو کامل بنویس.");
+    if (!customer.firstName || !customer.lastName || !customer.address) return showErr("نام، نام خانوادگی و آدرس رو کامل وارد کن.");
     if (!/^09\d{9}$/.test(customer.phone)) return showErr("شماره موبایل باید شبیه 09123456789 باشه.");
     if (pay) pay.disabled = true;
     window.CARA && CARA.track && CARA.track("checkout_start", { mode: "work", provider: window.CARA_GATEWAY });
@@ -319,12 +319,12 @@ try {
       C.drawPattern(mini.getContext("2d"), p.data, cw, ch);
     }
     fetch("/api/config").then((r) => r.json()).then((cfg) => {
-      if (!cfg.pricePerBead) { $("price").textContent = "بعد از بررسی بهت خبر می‌دم"; return; }
+      if (!cfg.pricePerBead) { $("price").textContent = "قیمت این طرح بعد از بررسی مشخص می‌شه."; return; }
       const listPrice = Math.round(cfg.baseFee + total * cfg.pricePerBead);
       $("price").innerHTML = saleHTML(listPrice, window.CARA_SALE ? CARA_SALE.final(listPrice) : listPrice);
     }).catch(() => { $("price").textContent = "—"; });
   } else {
-    $("sum").innerHTML = `<div class="sum-empty"><div class="sum-empty__art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p>هنوز الگویی نساختی. یه دستبند از گالری انتخاب کن یا خودت توی استودیو بکش.</p><div class="sum-empty__actions"><a class="btn sm dark" href="builder.html">ساخت الگو</a><a class="btn sm line" href="gallery.html">دیدن گالری</a></div></div>`;
+    $("sum").innerHTML = `<div class="sum-empty"><div class="sum-empty__art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p>هنوز الگویی برای سفارش نداری. می‌تونی از گالری دستبند انتخاب کنی یا طرح خودت رو در استودیو بسازی.</p><div class="sum-empty__actions"><a class="btn sm dark" href="builder.html">ساخت الگو</a><a class="btn sm line" href="gallery.html">دیدن گالری</a></div></div>`;
     $("pay").disabled = true;
   }
 
@@ -335,7 +335,7 @@ try {
     fd.phone = phoneFix(fd.phone);
     if (cartMode && (!cartReady || !cartData?.items?.length)) return showErr("سبد خرید هنوز آماده نیست؛ دوباره بررسیش کن.");
     if (!cartMode && (!p || !total)) return showErr("اول یه الگو بساز و چندتا منجوق بچین.");
-    if (!fd.firstName.trim() || !fd.lastName.trim() || !fd.address.trim()) return showErr("اسم، فامیلی و آدرس رو کامل بنویس.");
+    if (!fd.firstName.trim() || !fd.lastName.trim() || !fd.address.trim()) return showErr("نام، نام خانوادگی و آدرس رو کامل وارد کن.");
     if (!/^09\d{9}$/.test(fd.phone)) return showErr("شماره موبایل باید شبیه 09123456789 باشه.");
     const btn = $("pay"); btn.disabled = true; btn.textContent = "دارم می‌برمت به درگاه…";
     const mode = cartMode ? "cart" : "pattern";
@@ -351,8 +351,8 @@ try {
         window.CARA && CARA.track && CARA.track("payment_redirect", { mode, provider: window.CARA_GATEWAY });
         return (location.href = j.paymentUrl);
       }
-      showErr(j.error || "وصل شدن به درگاه نشد، یه کم بعد دوباره امتحان کن.");
-    } catch { showErr("به سرور وصل نشدم."); }
+      showErr(j.error || "ارتباط با درگاه برقرار نشد؛ کمی بعد دوباره امتحان کن.");
+    } catch { showErr("اتصال به سرور برقرار نشد؛ دوباره امتحان کن."); }
     btn.disabled = false; btn.textContent = "ادامه و پرداخت";
   });
 })();

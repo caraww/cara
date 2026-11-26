@@ -64,7 +64,7 @@
   (async function fromShareTarget() {
     const sp = new URLSearchParams(location.search);
     if (sp.get("shared") !== "1") {
-      if (sp.get("shared") === "none") { msg.hidden = false; msg.textContent = "عکسی همراه اشتراک‌گذاری نیامد؛ می‌تونی خودت انتخابش کنی."; }
+      if (sp.get("shared") === "none") { msg.hidden = false; msg.textContent = "فایلی همراه این اشتراک‌گذاری دریافت نشد؛ خودت یک عکس انتخاب کن."; }
       return;
     }
     try {
@@ -328,7 +328,7 @@
         window.CARA && CARA.track && CARA.track("photo_convert", { beads: w * h, colors: used });
       }
     } catch (err) {
-      console.error(err); msg.hidden = false; msg.textContent = "تبدیل عکس به مشکل خورد؛ یه عکس دیگه امتحان کن.";
+      console.error(err); msg.hidden = false; msg.textContent = "تبدیل عکس انجام نشد؛ یک عکس دیگه امتحان کن.";
     }
   }
 })();
