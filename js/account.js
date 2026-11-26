@@ -61,7 +61,7 @@
     event.preventDefault();
     const password = $("registerPassword").value;
     if (password !== $("registerPasswordConfirm").value) {
-      message("loginMessage", "رمز عبور و تکرار آن یکسان نیستند.");
+      message("loginMessage", "رمز و تکرارش یکی نیستن.");
       return;
     }
     submitAuth("/api/auth/register", {
@@ -92,7 +92,7 @@
       const profile = await api("/api/account/profile");
       $("profilePhone").value = profile.phone || "";
       $("marketingSmsConsent").checked = !!profile.marketingSmsConsent;
-      message("profileMessage", profile.phoneVerified ? "شماره موبایل تأیید شده است." : (profile.phone ? "شماره ذخیره شده؛ هنوز تأیید پیامکی نشده است." : ""));
+      message("profileMessage", profile.phoneVerified ? "شماره موبایل تأیید شده است." : (profile.phone ? "شماره ثبت شده، اما هنوز با پیامک تأیید نشده." : ""));
     } catch (error) { message("profileMessage", error.message); }
   }
 
@@ -113,12 +113,12 @@
           localStorage.setItem("cara-pattern", JSON.stringify(item.design));
           location.href = "/builder.html";
         } catch {
-          message("designMessage", "ذخیره‌سازی مرورگر در دسترس نیست؛ فضای ذخیره‌سازی را بررسی کن و دوباره امتحان کن.");
+          message("designMessage", "ذخیره‌ی طرح در مرورگر انجام نشد. فضای ذخیره‌سازی رو بررسی کن و دوباره امتحان کن.");
         }
       });
       const remove = document.createElement("button"); remove.className = "btn sm"; remove.type = "button"; remove.textContent = "حذف طرح";
       remove.addEventListener("click", async () => {
-        if (!confirm("این طرح از حساب کاربری حذف شود؟")) return;
+        if (!confirm("این طرح رو از حسابت حذف کنم؟")) return;
         try { await api("/api/account/designs/" + encodeURIComponent(item.id), { method: "DELETE" }); await loadDesigns(); }
         catch (error) { message("designMessage", error.message); }
       });
@@ -182,7 +182,7 @@
       if (error.status === 401) {
         showAuth("login");
         message("loginMessage", "برای دیدن حساب، وارد شو یا یک حساب بساز.");
-      } else message("loginMessage", error.message || "فعلاً بررسی حساب ممکن نیست؛ کمی بعد دوباره تلاش کن.");
+      } else message("loginMessage", error.message || "الان نتونستم حسابت رو بررسی کنم. چند لحظه‌ی دیگه دوباره امتحان کن.");
       return;
     }
 
@@ -213,7 +213,7 @@
       });
       $("profilePhone").value = profile.phone || "";
       message("profileMessage", profile.marketingSmsConsent
-        ? "اطلاعات ذخیره شد. برای استفاده تبلیغاتی، شماره هنوز باید تأیید پیامکی شود."
+        ? "اطلاعاتت ذخیره شد. برای فرستادن پیامک تبلیغاتی، شماره باید تأیید بشه."
         : "اطلاعات ذخیره شد. رضایت پیامک تبلیغاتی فعال نیست.");
     } catch (error) { message("profileMessage", error.message); }
     finally { button.disabled = false; }
