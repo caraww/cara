@@ -470,17 +470,22 @@ html[data-theme="dark"] .sh__logo .is-dark { filter: brightness(0) invert(1); }
     height: 44px;
     justify-content: flex-start;
     gap: 10px;
-    margin-top: auto;
-    padding: 6px 4px 0;
+    margin-top: 4px;
+    padding: 6px 8px 0;
     border: 0;
-    border-top: 1px solid rgba(244, 241, 250, .18);
+    border-top: 1px solid var(--nh-line, #e4dfea);
     border-radius: 0;
     background: transparent;
     box-shadow: none;
-    color: #f4f1fa;
+    color: var(--nh-ink, #242431);
     opacity: 1;
   }
-  .sh__nav .theme-toggle:hover { background: rgba(255, 255, 255, .06); border-color: transparent; }
+  html[data-theme="dark"] .sh__nav .theme-toggle {
+    color: var(--nh-ink, #242431);
+    border-top-color: var(--nh-line, #e4dfea);
+    background: transparent;
+  }
+  .sh__nav .theme-toggle:hover { background: var(--cara-accent-soft, #eeeef5); border-color: transparent; }
   .sh__nav .theme-toggle::after {
     content: "حالت نمایش";
     font-size: 15px;
