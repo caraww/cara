@@ -113,7 +113,7 @@
           localStorage.setItem("cara-pattern", JSON.stringify(item.design));
           location.href = "/builder.html";
         } catch {
-          message("designMessage", "ذخیره‌ی طرح در مرورگر انجام نشد. فضای ذخیره‌سازی رو بررسی کن و دوباره امتحان کن.");
+          message("designMessage", "ذخیره‌سازی مرورگر در دسترس نیست؛ فضای ذخیره‌سازی را بررسی کن و دوباره امتحان کن.");
         }
       });
       const remove = document.createElement("button"); remove.className = "btn sm"; remove.type = "button"; remove.textContent = "حذف طرح";
