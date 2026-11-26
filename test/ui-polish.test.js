@@ -52,7 +52,7 @@ test("generated bracelet and color pages share the same navigation and visual sy
   assert.ok(layout.includes("/css/premium.css?v=2"));
   assert.match(layout, /\/js\/contact\.js\?v=[\w.-]+/);
   assert.match(layout, /\/css\/nav-hero\.css\?v=[\w.-]+/);
-  assert.ok(layout.includes("/js/nav-hero.js?v=1"));
+  assert.match(layout, /\/js\/nav-hero\.js\?v=[\w.-]+/);
 });
 
 test("navigation places account first and the designer CTA at the opposite edge", () => {

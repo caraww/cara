@@ -53,15 +53,4 @@
     }, 0);
   });
 
-  // نماد اعتماد الکترونیکی از دامنه‌ی بیرونی می‌آید؛ اگر لود نشد جای خالی نماند.
-  const seal = document.querySelector(".sf__seal img");
-  if (seal) {
-    const useFallback = () => {
-      if (seal.naturalWidth || seal.dataset.fb) return;
-      seal.dataset.fb = "1";
-      seal.src = "/img/enamad-fallback.svg?v=1";
-      seal.alt = "نماد اعتماد الکترونیکی؛ برای استعلام کلیک کن";
-    };
-    seal.addEventListener("error", useFallback);
-  }
 })();

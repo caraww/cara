@@ -54,6 +54,7 @@
 .cara-weaving__link {
   display: inline-flex;
   align-items: center;
+  min-height: 44px;
   gap: 12px;
   color: #625331;
   font-weight: 800;

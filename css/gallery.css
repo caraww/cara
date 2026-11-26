@@ -1424,6 +1424,13 @@ html body main.wrap #wkGrid > .wk-card:hover {
   .wk-stage {
     height: min(62vh, 520px);
   }
+  /* جزئیات داخل دیالوگ اسکرول می‌شود؛ دکمه‌ی بستن باید همیشه در دید بماند. */
+  .wk-x {
+    position: fixed;
+    top: calc(env(safe-area-inset-top, 0px) + 18px);
+    inset-inline-start: max(18px, calc(50vw - 185px + 14px));
+    z-index: 20;
+  }
 }
 
 

@@ -174,7 +174,7 @@ html[data-theme="dark"] body .featured-card__body h3 { color: #241d31 !important
 html[data-theme="dark"] body .featured-card__body p { color: #5b5368 !important; }
 html[data-theme="dark"] body .featured-card { --sale: #c8102e; }
 html[data-theme="dark"] body .featured-card__row > b { color: #7b5a24 !important; }
-html[data-theme="dark"] body .featured-card .price-list { color: #8a7f92 !important; }
+html[data-theme="dark"] body .featured-card .price-list { color: #6b6274 !important; }
 html[data-theme="dark"] body .featured-card .price-now { color: #c8102e !important; }
 
 /* ---------- صفحه‌ی محصول ---------- */
@@ -323,8 +323,8 @@ html[data-theme="dark"] :is(.pg, .cp, .quiz__card) :is(.pg-price, .price, .cp__e
   align-items: center;
   justify-content: center;
   flex: none;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border: 1px solid rgba(52, 59, 100, .18);
   border-radius: 999px;
@@ -470,14 +470,17 @@ html[data-theme="dark"] .sh__logo .is-dark { filter: brightness(0) invert(1); }
     height: 44px;
     justify-content: flex-start;
     gap: 10px;
-    padding: 0 13px;
+    margin-top: auto;
+    padding: 6px 4px 0;
     border: 0;
-    border-top: 1px solid var(--nh-line, rgba(52, 59, 100, .12));
+    border-top: 1px solid rgba(244, 241, 250, .18);
     border-radius: 0;
-    margin-top: 6px;
-    padding-top: 6px;
-    opacity: .9;
+    background: transparent;
+    box-shadow: none;
+    color: #f4f1fa;
+    opacity: 1;
   }
+  .sh__nav .theme-toggle:hover { background: rgba(255, 255, 255, .06); border-color: transparent; }
   .sh__nav .theme-toggle::after {
     content: "حالت نمایش";
     font-size: 15px;

@@ -950,7 +950,7 @@ h6,
 }
 
 /* بلوک لینک‌های سئو در انتهای گالری: لینک‌های بلندتر و راحت‌تر برای لمس. */
-nav.seo-links a { display: inline-flex; align-items: center; min-height: 40px; }
+nav.seo-links a { display: inline-flex; align-items: center; min-height: 44px; }
 
 /* صفحه‌ی «عکس به الگو»: حالت خالی پیش‌نمایش، به‌جای یک کادر بی‌متن. */
 .preview { display: grid; place-items: center; min-height: 200px; padding: 18px; }
@@ -1118,7 +1118,7 @@ html.is-sale .hx__sale {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-height: 40px;
+  min-height: 44px;
   margin: 0 0 14px;
   padding: 6px 16px;
   font-size: 14px;

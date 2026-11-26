@@ -43,6 +43,13 @@
 
   loginTab.addEventListener("click", () => showAuth("login"));
   registerTab.addEventListener("click", () => showAuth("register"));
+  [loginTab, registerTab].forEach((tab) => tab.addEventListener("keydown", (event) => {
+    const next = { ArrowLeft: "register", ArrowRight: "login", Home: "login", End: "register" }[event.key];
+    if (!next) return;
+    event.preventDefault();
+    showAuth(next);
+    (next === "login" ? loginTab : registerTab).focus();
+  }));
   loginForm.addEventListener("submit", (event) => {
     event.preventDefault();
     submitAuth("/api/auth/login", {

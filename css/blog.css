@@ -1,4 +1,4 @@
-:root{--ink:#343b64;--muted:#77758a;--paper:#fbf8f4;--line:#e9e2dc;--peach:#edb7a4;--plum:#8d718f;--sage:#aab7a1;--butter:#e8d79e}
+:root{--ink:#343b64;--muted:#6b687d;--paper:#fbf8f4;--line:#e9e2dc;--peach:#edb7a4;--plum:#8d718f;--sage:#aab7a1;--butter:#e8d79e}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:24px}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:"Vazir", Tahoma, system-ui, sans-serif;line-height:1.8}

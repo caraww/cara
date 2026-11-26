@@ -21,6 +21,7 @@ function head({ title, desc, p, ld }) {
   return `<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
+  <script>try{var t=localStorage.getItem("cara-theme")||"auto",d=t==="dark"||(t==="auto"&&matchMedia("(prefers-color-scheme: dark)").matches),e=document.documentElement;e.setAttribute("data-theme",d?"dark":"light");e.setAttribute("data-theme-mode",t)}catch(n){}</script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(title)}</title>
@@ -43,10 +44,12 @@ function head({ title, desc, p, ld }) {
   <link rel="stylesheet" href="/css/accessibility.css">
   <link rel="stylesheet" href="/css/content-pages.css?v=1">
   ${footerCSS}
-  <link rel="stylesheet" href="/css/polish.css?v=20261124-perf">
+  <link rel="stylesheet" href="/css/polish.css?v=20261126-ui-audit">
   <link rel="stylesheet" href="/css/site-nav.css?v=20261113">
-  <link rel="stylesheet" href="/css/nav-hero.css?v=20261125-wide2">
+  <link rel="stylesheet" href="/css/nav-hero.css?v=20261126-ui-audit2">
   <link rel="stylesheet" href="/css/premium.css?v=20261125-empty-art">
+  <link rel="stylesheet" href="/css/theme.css?v=20261126-ui-audit">
+  <script src="/js/theme.js?v=3" defer></script>
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
 </head>
 <body>
@@ -88,7 +91,7 @@ function page({ p, title, desc, h1, lead, body, faqs, related }) {
   <div class="cp__contact">${relHtml}</div>
 </main>
 ${footerHTML()}
-<script src="/js/nav-hero.js?v=1" defer></script>
+<script src="/js/nav-hero.js?v=20261126-ui-audit" defer></script>
 <script src="/js/analytics.js?v=1" defer></script>
 </body>
 </html>`;
@@ -233,5 +236,5 @@ const indexBody = `<div class="crumb"><a href="/">خانه</a> › راهنما�
   <a class="cp__card" href="/category/gift-valentine.html"><b>هدیه ولنتاین</b><span>طرح قلب و رنگ‌های عاشقانه</span></a>
   <a class="cp__card" href="/category/gift-anniversary.html"><b>هدیه سالگرد</b><span>اسم، تاریخ و خاطره‌ی مشترک</span></a>
 </div>`;
-fs.writeFileSync(path.join(ROOT, "category/index.html"), head({ title: indexTitle, desc: indexDesc, p: "/category/", ld: indexLd }) + `<main class="cp" id="main-content" tabindex="-1">${indexBody}</main>${footerHTML()}<script src="/js/nav-hero.js?v=1" defer></script><script src="/js/analytics.js?v=1" defer></script></body></html>`);
+fs.writeFileSync(path.join(ROOT, "category/index.html"), head({ title: indexTitle, desc: indexDesc, p: "/category/", ld: indexLd }) + `<main class="cp" id="main-content" tabindex="-1">${indexBody}</main>${footerHTML()}<script src="/js/nav-hero.js?v=20261126-ui-audit" defer></script><script src="/js/analytics.js?v=1" defer></script></body></html>`);
 console.log("✓ /category/");

@@ -74,9 +74,20 @@ try {
     .catch(() => {});
   pay.addEventListener("click", () => { window.CARA_GATEWAY = "zibal"; });
   dp.addEventListener("click", () => { window.CARA_GATEWAY = "digipay"; });
-  const sync = () => { dp.disabled = pay.disabled; };
+  /* تا وقتی سفارش آماده نیست، انتخاب درگاه را پنهان نگه دار تا دکمه‌ی غیرفعال بی‌دلیل دیده نشود. */
+  let settled = false, ready = false;
+  const sync = () => {
+    dp.disabled = pay.disabled;
+    if (!pay.disabled) {
+      picker.hidden = false;
+      if (settled) ready = true;
+    } else if (!ready) {
+      picker.hidden = true;
+    }
+  };
   new MutationObserver(sync).observe(pay, { attributes: true, attributeFilter: ["disabled"] });
   sync();
+  setTimeout(() => { settled = true; if (!pay.disabled) ready = true; sync(); }, 0);
 })();
 } catch (e) { console.error("checkout:gateway", e); }
 
@@ -143,8 +154,6 @@ try {
         `<div>${work.title && !NUM.test(work.title) ? `<b>${esc(work.title)}</b>` : ""}<div class="muted" style="font-size:16px">دقیقاً همین دستبند برات بافته می‌شه.</div></div></div>` +
         `<div class="stat"><span>قیمت</span><strong>${saleHTML(work.listPrice, work.price)}</strong></div>`;
     }
-    if (pay) pay.querySelector(".checkout-payment-choice__title").innerHTML =
-      `پرداخت ${saleHTML(work.listPrice, work.price)} با زیبال`;
   }
 
   form.addEventListener("submit", async (e) => {
@@ -261,6 +270,8 @@ try {
 
   const cartMode = q.get("cart") === "1" && !res;
   const workMode = q.get("work") && !res; /* سفارش مستقیم از گالری: checkout-work.js مدیریتش می‌کنه */
+  const patternMode = !!(p && p.data.flat().some(Boolean));
+  if (!cartMode && !workMode && !patternMode && !res) $("formCard").hidden = true;
   let total = 0, cartReady = false, cartData = null;
   if (cartMode) {
     $("pay").disabled = true;

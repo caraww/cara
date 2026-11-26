@@ -29,7 +29,7 @@
       headers: { ...(options.body ? { "Content-Type": "application/json" } : {}), ...(options.headers || {}) },
     });
     const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || "درخواست انجام نشد (کد " + response.status + ").");
+    if (!response.ok) throw new Error(data.error || "سبد خریدت فعلاً در دسترس نیست؛ چند لحظه دیگه دوباره امتحان کن.");
     return data;
   }
 
@@ -119,7 +119,7 @@
   }
 
   async function load() {
-    try { const cart = await api("/api/cart"); render(cart); message(cart.items.length ? "" : (addError || "سبد خریدت خالیه.")); }
+    try { const cart = await api("/api/cart"); render(cart); message(cart.items.length ? "" : addError); }
     catch (error) { message(error.message); }
   }
 

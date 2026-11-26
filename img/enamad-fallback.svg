@@ -1,7 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="88" height="88" viewBox="0 0 88 88" role="img" aria-label="نماد اعتماد الکترونیکی">
-  <rect x="0.5" y="0.5" width="87" height="87" rx="12" fill="#ffffff" stroke="#b8975a" stroke-width="1.5"/>
-  <path d="M44 14l20 7v20c0 13-8.6 23.4-20 27-11.4-3.6-20-14-20-27V21l20-7z" fill="#f7f2e8" stroke="#3b2a52" stroke-width="2.2" stroke-linejoin="round"/>
-  <path d="M34 44.5l7 7 14-14" fill="none" stroke="#1f8a54" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="44" y="72" text-anchor="middle" font-family="Tahoma, sans-serif" font-size="9.5" fill="#3b2a52">نماد اعتماد</text>
-  <text x="44" y="82" text-anchor="middle" font-family="Tahoma, sans-serif" font-size="8.5" fill="#6c6478">الکترونیکی</text>
-</svg>

@@ -59,7 +59,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 34px;
+  min-height: 44px;
   color: var(--sf-muted);
   font-size: 14.5px;
   line-height: 1.8;
@@ -96,7 +96,7 @@
   color: var(--sf-dim);
   font-size: 12.5px;
 }
-.sf__bottom a { min-height: auto; font-size: 12.5px; }
+.sf__bottom a { min-height: 44px; font-size: 12.5px; }
 
 @media (max-width: 1024px) {
   .sf__in { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 28px; }

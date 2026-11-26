@@ -37,7 +37,7 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   for (const page of pages) {
     const html = fs.readFileSync(path.join(root, page), "utf8");
     const navCss = html.indexOf("/css/nav-hero.css?v=");
-    const navScript = html.indexOf("js/nav-hero.js?v=1");
+    const navScript = html.indexOf("js/nav-hero.js?v=");
     const polishCss = html.search(/\/css\/polish\.css\?v=\d+/);
     assert.ok(navCss >= 0, page + " loads the current shared header stylesheet");
     assert.ok(navScript >= 0, page + " loads the current shared header behavior");
@@ -52,7 +52,7 @@ test("all primary and generated pages receive the shared mobile menu", () => {
   const template = fs.readFileSync(path.join(root, "lib/generated-page-layout.js"), "utf8");
   assert.ok(template.includes("/css/site-nav.css?v=20261113"));
   assert.ok(template.includes("/css/nav-hero.css?v="));
-  assert.ok(template.includes("/js/nav-hero.js?v=1"));
+  assert.ok(template.includes("/js/nav-hero.js?v="));
   assert.match(template, /\/js\/contact\.js\?v=[\w.-]+/);
   const templateBraceletCss = template.indexOf("/css/bracelet-pages.css?v=12");
   const templateSiteNavCss = template.indexOf("/css/site-nav.css?v=20261113");
@@ -71,7 +71,7 @@ test("all generated bracelet and color pages load current shared navigation asse
       const navCss = html.indexOf("/css/site-nav.css?v=20261113");
       assert.ok(braceletCss >= 0 && navCss > braceletCss, page + " loads shared navigation after the bracelet page styles");
       assert.match(html, /\/js\/contact\.js\?v=[\w.-]+/, page + " uses the fresh contact fallback URL");
-      assert.ok(html.includes("/js/nav-hero.js?v=1"), page + " loads the shared menu behavior");
+      assert.ok(html.includes("/js/nav-hero.js?v="), page + " loads the shared menu behavior");
     }
   }
 });
@@ -157,6 +157,7 @@ test("current nav-hero closes on lost keyboard focus and restores focus on Escap
   };
   const nav = {
     addEventListener: (name, fn) => { handlers.nav[name] = fn; },
+    querySelectorAll: () => [],
   };
   const header = {
     dataset: { sh: "solid" },
@@ -169,6 +170,7 @@ test("current nav-hero closes on lost keyboard focus and restores focus on Escap
     addEventListener: (name, fn) => { handlers.header[name] = fn; },
   };
   const document = {
+    body: { classList: { toggle() {} } },
     querySelector: () => header,
     addEventListener: (name, fn) => { handlers.document[name] = fn; },
   };

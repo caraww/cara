@@ -121,5 +121,5 @@ test("cart quantity and removal changes are announced through the live status re
   assert.ok(page.includes('id="cartMessage" role="status" aria-live="polite"'));
   assert.ok(client.includes('message(updatedItem ? `تعداد ${updatedItem.title} به ${fa(updatedItem.quantity)} تغییر کرد.` : "سبد خرید به‌روزرسانی شد.");'));
   assert.ok(client.includes('message("کالا از سبد خرید حذف شد.");'));
-  assert.ok(page.includes("/js/cart.js?v=4"));
+  assert.match(page, /\/js\/cart\.js\?v=[\w.-]+/);
 });

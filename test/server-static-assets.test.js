@@ -42,6 +42,18 @@ test("local fallback server serves media, fonts, and generated pages", async (t)
   assert.equal(sale.status, 200);
   assert.match(sale.headers.get("content-type") || "", /^text\/html/);
 
+  const manifest = await fetch(`${base}/manifest.webmanifest`);
+  assert.equal(manifest.status, 200);
+  assert.match(manifest.headers.get("content-type") || "", /^application\/manifest\+json/);
+
+  const serviceWorker = await fetch(`${base}/sw.js`);
+  assert.equal(serviceWorker.status, 200);
+  assert.match(serviceWorker.headers.get("content-type") || "", /^text\/javascript/);
+
+  const blogIndex = await fetch(`${base}/blog/`);
+  assert.equal(blogIndex.status, 200);
+  assert.match(blogIndex.headers.get("content-type") || "", /^text\/html/);
+
   const malformed = await fetch(`${base}/%E0%A4%A`);
   assert.equal(malformed.status, 400, "malformed percent-encoding must be a 400, not a crash");
   const nul = await fetch(`${base}/%00`);

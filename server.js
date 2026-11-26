@@ -188,7 +188,11 @@ const MIME = {
   ".woff2": "font/woff2",
   ".woff": "font/woff",
   ".ttf": "font/ttf",
+  ".webmanifest": "application/manifest+json; charset=utf-8",
+  ".txt": "text/plain; charset=utf-8",
+  ".xml": "application/xml; charset=utf-8",
 };
+const ROOT_FILES = new Set(["favicon.ico", "manifest.webmanifest", "robots.txt", "sitemap.xml", "sw.js"]);
 const PAGES = new Set(["index", "builder", "upload", "gallery", "checkout", "game", "quiz", "sale"]);
 /* فایل‌های سمت سرور که نباید از طریق مسیر جایگزین ریشه سرو بشن */
 const PRIVATE = new Set(["server.js", "index.js", "game-worker.js", "zibal-relay.js", "sync-valid.js"]);
@@ -429,17 +433,31 @@ http
           promo: globalThis.CARA_WORK_PRICING.sale.info(),
         });
       }
+      /* The local preview has no D1 database; return empty public collections instead of 404
+         so gallery/home pages stay quiet while the Worker remains authoritative. */
+      if (p === "/api/account/favorites" && req.method === "GET")
+        return json(res, 200, { favorites: [] });
+      if (p === "/api/cart" && req.method === "GET")
+        return json(res, 200, { items: [], totalItems: 0, totalToman: 0, originalTotalToman: 0 });
+      if (p === "/api/reviews" && req.method === "GET") {
+        if (url.searchParams.get("all") === "1") return json(res, 200, { works: {} });
+        return json(res, 200, { reviews: [], summary: { count: 0, average: 0 } });
+      }
       if (p === "/api/create-payment" && req.method === "POST")
         return createPayment(req, res);
       if (p === "/api/payment-callback") return paymentCallback(req, res, url);
 
       if (req.method === "GET" || req.method === "HEAD") {
+        if (ROOT_FILES.has(p.slice(1))) {
+          const file = path.join(__dirname, p.slice(1));
+          if (fs.existsSync(file) && fs.statSync(file).isFile()) return sendFile(res, file);
+        }
         const page =
           p === "/" ? "index" : (p.match(/^\/([a-z]+)\.html$/) || [])[1];
         if (page && PAGES.has(page))
           return sendFile(res, path.join(__dirname, page + ".html"));
-        if (p.endsWith(".html")) {
-          const rel = path.normalize(p.replace(/^\/+/, ""));
+        if (p.endsWith(".html") || p.endsWith("/")) {
+          const rel = path.normalize(p.replace(/^\/+/, "") + (p.endsWith("/") ? "index.html" : ""));
           const file = path.join(__dirname, rel);
           if (!rel.startsWith("..") && !path.isAbsolute(rel) && file.startsWith(__dirname + path.sep) && fs.existsSync(file) && fs.statSync(file).isFile())
             return sendFile(res, file);

@@ -8,12 +8,21 @@
 
   const setOpen = (open, restoreFocus = false) => {
     header.classList.toggle("is-open", open);
+    document.body.classList.toggle("cara-nav-open", open);
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "بستن منو" : "باز کردن منو");
     if (!open && restoreFocus) toggle.focus();
   };
   const alwaysSolid = header.dataset.sh === "solid";
   const onScroll = () => { if (!alwaysSolid) header.classList.toggle("is-solid", scrollY > 20); };
+  const normalizePath = (value) => value.replace(/\/index\.html$/, "/");
+  const origin = typeof location !== "undefined" ? location.origin : "https://caraw.ir";
+  const currentPath = normalizePath(typeof location !== "undefined" ? location.pathname : "/");
+  nav.querySelectorAll("a[href]").forEach((link) => {
+    if (link.getAttribute("href").startsWith("#")) return;
+    const target = normalizePath(new URL(link.href, origin).pathname);
+    if (target === currentPath) link.setAttribute("aria-current", "page");
+  });
 
   toggle.addEventListener("click", () => setOpen(!header.classList.contains("is-open")));
   nav.addEventListener("click", (e) => { if (e.target.closest("a")) setOpen(false); });

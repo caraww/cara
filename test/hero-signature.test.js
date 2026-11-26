@@ -14,7 +14,7 @@ test("homepage uses the hx hero with the photo stage and the shared header", () 
   assert.match(html, /class="hx__stage"/);
   assert.match(html, /id="heroStage"/);
   assert.match(html, /nav-hero\.css\?v=[\w.-]+/);
-  assert.match(html, /nav-hero\.js\?v=1/);
+  assert.match(html, /nav-hero\.js\?v=[\w.-]+/);
   assert.match(css, /\.hx__in/);
   assert.match(css, /\.hx__copy/);
   assert.match(css, /\.hx__stage/);
