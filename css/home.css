@@ -1657,6 +1657,10 @@ html:not([data-theme="dark"]) .mini-gal > a b { color: #221a2c; }
 .mini-gal__quote {
   position: absolute;
   z-index: 2;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   inset: 0;
   display: flex;
   align-items: flex-end;
