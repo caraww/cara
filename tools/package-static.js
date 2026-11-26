@@ -70,18 +70,18 @@ fs.rmSync(dist, { recursive: true, force: true });
 fs.mkdirSync(out, { recursive: true });
 
 for (const name of fs.readdirSync(root)) {
-  if (name.endsWith(".html")) fs.copyFileSync(path.join(root, name), path.join(out, name));
+  if (name.endsWith(".html")) fs.cpSync(path.join(root, name), path.join(out, name), { preserveTimestamps: true });
 }
 for (const dir of dirs) {
   const from = path.join(root, dir);
-  if (fs.existsSync(from)) fs.cpSync(from, path.join(out, dir), { recursive: true });
+  if (fs.existsSync(from)) fs.cpSync(from, path.join(out, dir), { recursive: true, preserveTimestamps: true });
 }
 for (const name of files) {
   const from = path.join(root, name);
   if (!fs.existsSync(from)) continue;
   const to = path.join(out, name);
   fs.mkdirSync(path.dirname(to), { recursive: true });
-  fs.copyFileSync(from, to);
+  fs.cpSync(from, to, { preserveTimestamps: true });
 }
 fs.writeFileSync(path.join(out, ".htaccess"), htaccess);
 
