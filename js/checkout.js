@@ -313,7 +313,7 @@ try {
       $("price").innerHTML = saleHTML(listPrice, window.CARA_SALE ? CARA_SALE.final(listPrice) : listPrice);
     }).catch(() => { $("price").textContent = "—"; });
   } else {
-    $("sum").innerHTML = `<div class="sum-empty"><div class="sum-empty__art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p>هنوز الگویی نساختی. یه دستبند از گالری انتخاب کن یا خودت توی استودیو بکش.</p><div class="sum-empty__actions"><a class="btn sm dark" href="builder.html">ساخت الگو</a><a class="btn sm line" href="gallery.html">دیدن گالری</a></div></div>`;
+    $("sum").innerHTML = `<div class="sum-empty"><div class="sum-empty__art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p>هنوز الگویی برای سفارش نداری. می‌تونی از گالری دستبند انتخاب کنی یا طرح خودت رو در استودیو بسازی.</p><div class="sum-empty__actions"><a class="btn sm dark" href="builder.html">ساخت الگو</a><a class="btn sm line" href="gallery.html">دیدن گالری</a></div></div>`;
     $("pay").disabled = true;
   }
 
@@ -326,7 +326,7 @@ try {
     if (!cartMode && (!p || !total)) return showErr("اول یه الگو بساز و چندتا منجوق بچین.");
     if (!fd.firstName.trim() || !fd.lastName.trim() || !fd.address.trim()) return showErr("اسم، فامیلی و آدرس رو کامل بنویس.");
     if (!/^09\d{9}$/.test(fd.phone)) return showErr("شماره موبایل باید شبیه 09123456789 باشه.");
-    const btn = $("pay"); btn.disabled = true; btn.textContent = "دارم می‌برمت به درگاه…";
+    const btn = $("pay"); btn.disabled = true; btn.textContent = "در حال انتقال به درگاه پرداخت…";
     const mode = cartMode ? "cart" : "pattern";
     window.CARA && CARA.track && CARA.track("checkout_start", { mode, provider: window.CARA_GATEWAY });
     try {
