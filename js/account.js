@@ -94,7 +94,7 @@
     try { designs = await api("/api/account/designs"); }
     catch (error) { message("designMessage", error.message); return; }
     const list = $("designList"); list.replaceChildren();
-    if (!designs.length) { list.innerHTML = '<p class="account-empty">هنوز طرحی ذخیره نکردی.</p>'; return; }
+    if (!designs.length) { list.innerHTML = '<p class="account-empty">هنوز طرحی ذخیره نکردی. وقتی طرحی ساختی، می‌تونی از همین‌جا نگهش داری.</p>'; return; }
     designs.forEach((item) => {
       const card = document.createElement("article"); card.className = "account-design";
       const canvas = document.createElement("canvas"); renderPattern(canvas, item.design);
@@ -106,7 +106,7 @@
           localStorage.setItem("cara-pattern", JSON.stringify(item.design));
           location.href = "/builder.html";
         } catch {
-          message("designMessage", "ذخیره‌سازی مرورگر در دسترس نیست؛ فضای ذخیره‌سازی را بررسی کن و دوباره امتحان کن.");
+          message("designMessage", "ذخیره‌ی طرح در مرورگر انجام نشد. فضای ذخیره‌سازی رو بررسی کن و دوباره امتحان کن.");
         }
       });
       const remove = document.createElement("button"); remove.className = "btn sm"; remove.type = "button"; remove.textContent = "حذف طرح";
@@ -175,7 +175,7 @@
       if (error.status === 401) {
         showAuth("login");
         message("loginMessage", "برای دیدن حساب، وارد شو یا یک حساب بساز.");
-      } else message("loginMessage", error.message || "فعلاً بررسی حساب ممکن نیست؛ کمی بعد دوباره تلاش کن.");
+      } else message("loginMessage", error.message || "الان نتونستم حسابت رو بررسی کنم. چند لحظه‌ی دیگه دوباره امتحان کن.");
       return;
     }
 
@@ -184,7 +184,7 @@
     try { await api("/api/cart/merge", { method: "POST", body: "{}" }); } catch (error) { console.warn("cart merge deferred", error); }
     loginPanel.hidden = true;
     dashboard.hidden = false;
-    $("welcomeName").textContent = "سلام " + (user.displayName || "دوست cara") + "!";
+    $("welcomeName").textContent = "سلام " + (user.displayName || "دوست کارا") + "!";
     $("welcomeHandle").textContent = user.username ? "@" + user.username : "حساب کارا";
 
     /* شکست بارگذاری یک بخش نباید کاربر واردشده را از داشبورد بیرون بیندازد. */
