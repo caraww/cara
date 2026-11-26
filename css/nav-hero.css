@@ -129,6 +129,8 @@
     box-sizing: border-box;
     width: min(240px, calc(100vw - 24px));
     max-height: min(70svh, 480px);
+    max-height: min(calc(100vh - var(--nh-h) - 16px), 620px);
+    max-height: min(calc(100svh - var(--nh-h) - 16px), 620px);
     flex-direction: column;
     align-items: stretch;
     gap: 4px;

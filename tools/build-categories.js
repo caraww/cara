@@ -46,9 +46,9 @@ function head({ title, desc, p, ld }) {
   ${footerCSS}
   <link rel="stylesheet" href="/css/polish.css?v=20261126-ui-audit">
   <link rel="stylesheet" href="/css/site-nav.css?v=20261113">
-  <link rel="stylesheet" href="/css/nav-hero.css?v=20261127-navcompact">
+  <link rel="stylesheet" href="/css/nav-hero.css?v=20261127-navcompact2">
   <link rel="stylesheet" href="/css/premium.css?v=20261125-empty-art">
-  <link rel="stylesheet" href="/css/theme.css?v=20261127-navcompact">
+  <link rel="stylesheet" href="/css/theme.css?v=20261127-navcompact2">
   <script src="/js/theme.js?v=3" defer></script>
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
 </head>
