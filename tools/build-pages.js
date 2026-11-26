@@ -189,7 +189,7 @@ ${
   <div class="trust-strip__item"><b>پرداخت امن</b><span>درگاه بانکی زیبال / دیجی‌پی</span></div>
   <div class="trust-strip__item"><b>پیگیری سفارش</b><span><a href="/track.html">لینک اختصاصی</a></span></div>
 </section>
-<p style="margin-top:16px;color:var(--muted);font-size:16px">دست‌باف با منجوق دلیکای میوکی ژاپنی. حداکثر تا یک هفته بعد از سفارش آماده و برات پست می‌شه. می‌تونی همین طرح رو توی <a href="/builder.html" style="text-decoration:underline">استودیو</a> عوض کنی یا طرح خودت رو بسازی. اگر دنبال یک شروع کم‌خطرتر هستی، <a href="/starter.html" style="text-decoration:underline">دستبندهای شروع</a> رو ببین.</p>
+<p style="margin-top:16px;color:var(--muted);font-size:16px">دست‌باف با منجوق دلیکای میوکی ژاپنی. حداکثر تا یک هفته بعد از سفارش آماده و برات پست می‌شه. می‌تونی همین طرح رو توی <a href="/builder.html" style="text-decoration:underline">استودیو</a> عوض کنی یا طرح خودت رو بسازی. اگر دنبال یک دستبندهای خوش‌قیمتتر هستی، <a href="/starter.html" style="text-decoration:underline">دستبندهای خوش‌قیمت</a> رو ببین.</p>
 <div class="pg-help"><a href="/size.html">راهنمای اندازه‌ی مچ</a><a href="https://instagram.com/_.caraw" target="_blank" rel="noopener">پیام در اینستاگرام</a><a href="tel:+989352528201" dir="ltr">تماس تلفنی</a></div></div></div>
 <h2>دستبندهای دیگه</h2><div class="rel">${rel.map((x) => `<a href="${urlOf(x)}"><img src="${esc(abs(x.thumb || x.src))}"${x.thumb240 ? ` srcset="${esc(abs(x.thumb240))} 240w, ${esc(abs(x.thumb480))} 480w, ${esc(abs(x.thumb))} 700w" sizes="(max-width:560px) 45vw, 150px"` : ""} alt="دستبند منجوقی ${esc(titleOf(x))}"${x.w ? ` width="${x.w}" height="${x.h}"` : ""} loading="lazy">${esc(titleOf(x))}</a>`).join("")}</div>
 <h2 id="reviews">نظر خریداران</h2><div class="reviews" data-reviews data-work="${esc(w.id)}"></div>
@@ -200,14 +200,14 @@ ${orderable ? `<div class="pg-cta" role="region" aria-label="سفارش سریع
   );
   urls.push(urlOf(w));
 }
-/* ---------- صفحه‌ی شروع کم‌خطر ---------- */
+/* ---------- صفحه‌ی دستبندهای خوش‌قیمت ---------- */
 const STARTER_MAX = 1200000;
 const starter = list
   .filter((w) => !w.noOrder && Number(prices[String(w.id)]) > 0 && Number(prices[String(w.id)]) <= STARTER_MAX)
   .sort((a, b) => Number(prices[String(a.id)]) - Number(prices[String(b.id)]));
 {
-  const title = "دستبند منجوقی شروع کم‌خطر | انتخاب ساده و قیمت واقعی | کارا";
-  const desc = "اگه اولین خریدته، از دستبندهای ساده‌تر و کم‌هزینه‌تر کارا شروع کن. قیمت‌ها از گالری واقعی میاد و دستبند با منجوق دلیکای میوکی دست‌باف می‌شه.";
+  const title = "دستبندهای منجوقی خوش‌قیمت | مدل‌های ساده‌تر برای شروع | کارا";
+  const desc = "اگر اولین بارته از کارا خرید می‌کنی، این مدل‌های ساده‌تر و خوش‌قیمت‌تر رو ببین. قیمت هر دستبند از قبل مشخصه و همه با منجوق دلیکای میوکی بافته می‌شن.";
   const starterLd = {
     "@context": "https://schema.org",
     "@graph": [
@@ -227,7 +227,7 @@ const starter = list
           name: `دستبند منجوقی ${titleOf(w)}`,
         })),
       },
-      crumbLd([["خانه", "/"], ["شروع کم‌خطر", "/starter.html"]]),
+      crumbLd([["خانه", "/"], ["دستبندهای خوش‌قیمت", "/starter.html"]]),
     ],
   };
   const cards = starter.length
@@ -235,16 +235,16 @@ const starter = list
         const price = Number(prices[String(w.id)]);
         return `<a class="starter-card" href="${urlOf(w)}"><img src="${esc(abs(w.thumb || w.src))}"${w.thumb240 ? ` srcset="${esc(abs(w.thumb240))} 240w, ${esc(abs(w.thumb480))} 480w, ${esc(abs(w.thumb))} 700w" sizes="(max-width:760px) 90vw, 300px"` : ""} alt="دستبند منجوقی ${esc(titleOf(w))}"${w.w ? ` width="${w.w}" height="${w.h}"` : ""} loading="lazy"><b>${esc(titleOf(w))}</b><span>${priceHTML(w.id, true)}</span><small>${esc((w.note || "").slice(0, 80))}</small></a>`;
       }).join("")
-    : `<p class="cp__note">فعلاً دستبند آماده‌ای زیر سقف قیمت شروع نداریم. می‌تونی توی استودیو یه طرح ساده بسازی و قیمت رو همون‌جا ببینی.</p>`;
-  const body = `<div class="crumb"><a href="/">خانه</a> › <a href="/gallery.html">گالری</a> › شروع کم‌خطر</div>
+    : `<p class="cp__note">فعلاً دستبندی در بازه‌ی قیمت این صفحه ثبت نشده. می‌تونی توی استودیو یه طرح ساده بسازی و قیمت رو همون‌جا ببینی.</p>`;
+  const body = `<div class="crumb"><a href="/">خانه</a> › <a href="/gallery.html">گالری</a> › دستبندهای خوش‌قیمت</div>
 <h1>برای اولین دستبندت از کجا شروع کنی؟</h1>
 <p class="cp__lead">اگه اولین باره می‌خوای دستبند منجوقی سفارش بدی، از همین‌جا شروع کنیم. چندتا از طرح‌های ساده‌تر و خوش‌قیمت‌تر گالری رو برات جدا کردم تا با خیال راحت‌تر بافت، رنگ و اندازه رو بشناسی؛ قیمت‌ها هم همون قیمت‌های واقعی گالری‌ان.</p>
 <div class="starter-grid">${cards}</div>
-<h2>یه شروع ساده و دوست‌داشتنی</h2>
-<p>برای سفارش اول لازم نیست سراغ طرح‌های شلوغ یا بزرگ بری. یه مدل ساده کمک می‌کنه با ظرافت منجوق‌ها، رنگ واقعی و فرم بافت آشنا بشی. بعدش اگر دلت خواست، می‌تونی سراغ طرح‌های پرجزئیات‌تر یا حتی ایده‌ی کاملاً شخصی خودت بری.</p>
+<h2>برای شروع، ساده انتخاب کن</h2>
+<p>برای سفارش اول می‌تونی از یک طرح ساده‌تر شروع کنی تا با اندازه، رنگ و فرم بافت آشنا بشی. هر وقت خواستی هم می‌تونی سراغ طرح‌های پرجزئیات‌تر یا ایده‌ی خودت بری.</p>
 <p>همه‌ی این دستبندها با همون منجوق دلیکای میوکی ژاپنی بافته می‌شن که توی بقیه‌ی گالری استفاده می‌شه. تفاوت توی پیچیدگی طرح و تعداد منجوقه، نه توی جنس مواد. اگه بعد از خرید اول خواستی طرح بزرگ‌تری سفارش بدی، می‌تونی همون رنگ‌های موردعلاقه‌ات رو توی استودیو نگه داری.</p>
 <h2>اگه سایز مچم رو ندونم چی؟</h2>
-<p>قبل از سفارش، <a href="/size.html">راهنمای اندازه‌ی مچ</a> رو ببین. با متر خیاطی یا نوار کاغذی دور مچ رو اندازه بگیر و عدد رو برای ما بنویس. دستبندهای کارا گره قابل تنظیم دارن، ولی دونستن دور مچ کمک می‌کنه طول مناسب‌تری انتخاب بشه. اگه بین دو اندازه بودی، بزرگ‌تر رو انتخاب کن.</p>
+<p>قبل از سفارش، <a href="/size.html">راهنمای اندازه‌ی مچ</a> رو ببین. با متر خیاطی یا نوار کاغذی دور مچ رو اندازه بگیر و عدد رو برای ما بنویس. دستبندهای کارا گره قابل تنظیم دارن، ولی دونستن دور مچ کمک می‌کنه طول مناسب‌تری انتخاب بشه. اگر بین دو اندازه مرددی، عدد واقعی دور مچت رو وارد کن؛ گره‌ی آسانسوری برای تنظیم اندازه‌ی دستبند کمک می‌کنه.</p>
 <h2>سفارش با رنگ‌های خودم</h2>
 <p>هیچ‌کدوم از این طرح‌ها به دلت ننشست؟ توی <a href="/builder.html">استودیوی طراحی</a> می‌تونی رنگ‌ها رو خودت بچینی و طرح دلخواهت رو بسازی؛ قیمت همون‌جا بر اساس تعداد منجوق و زمان بافت حساب می‌شه. اگر قبل از سفارش سوالی داشتی، توی <a href="https://instagram.com/_.caraw" target="_blank" rel="noopener">اینستاگرام</a> پیام بده یا باهام تماس بگیر.</p>
 <div class="cp__note"><p><b>یه نکته‌ی صادقانه:</b> این صفحه فقط طرح‌هایی رو نشون می‌ده که قیمتشون از قبل توی گالری ثبت شده. اگه طرحی قیمت نداشته باشه، اینجا نمایش داده نمی‌شه؛ چون قیمت‌سازی حدسی به نفع هیچ‌کدوم از ما نیست.</p></div>`;
@@ -253,7 +253,7 @@ const starter = list
     HEAD({ title, desc, path: "/starter.html", ld: starterLd }) + body + FOOT,
   );
   urls.push("/starter.html");
-  console.log(`✓ صفحه‌ی شروع کم‌خطر (${starter.length} طرح)`);
+  console.log(`✓ صفحه‌ی دستبندهای خوش‌قیمت (${starter.length} طرح)`);
 }
 /* ---------- صفحه‌ی حراج بلک‌فرایدی ---------- */
 {
@@ -333,7 +333,7 @@ const starter = list
 <div class="starter-grid">${cards}</div>
 <h2>سوال‌های پرتکرار حراج</h2>
 <div class="cp__faq"><details><summary>تخفیف تا چه زمانی است؟</summary><div><p>تخفیف ۳۰٪ تا پایان ۱۳ آذر فعال است و بعد از آن قیمت‌ها به حالت قبل برمی‌گردند.</p></div></details><details><summary>قیمت صفحه با درگاه یکی است؟</summary><div><p>بله. قیمت نمایش‌داده‌شده و مبلغ درگاه از یک منبع مشترک محاسبه می‌شوند.</p></div></details><details><summary>سفارش چند روزه آماده می‌شود؟</summary><div><p>بافت و بسته‌بندی با دست انجام می‌شود و حداکثر تا یک هفته آماده است؛ زمان ارسال هم به پست اضافه می‌شود.</p></div></details></div>
-<div class="cp__note"><p><b>هدیه می‌خوای؟</b> از <a href="/quiz.html">کوییز انتخاب دستبند</a> کمک بگیر یا <a href="/starter.html">دستبندهای شروع کم‌خطر</a> رو ببین. برای سفارش شخصی هم <a href="/builder.html">استودیوی طراحی</a> باز است.</p></div>`;
+<div class="cp__note"><p><b>هدیه می‌خوای؟</b> از <a href="/quiz.html">کوییز انتخاب دستبند</a> کمک بگیر یا <a href="/starter.html">دستبندهای دستبندهای خوش‌قیمت</a> رو ببین. برای سفارش شخصی هم <a href="/builder.html">استودیوی طراحی</a> باز است.</p></div>`;
   write("sale.html", HEAD({ title, desc, path: "/sale.html", image: SITE + "/img/black-friday.avif", ld: saleLd }) + body + FOOT);
   urls.push("/sale.html");
   console.log(`✓ صفحه‌ی حراج بلک فرایدی (${saleWorks.length} طرح)`);
@@ -519,7 +519,7 @@ inject(
 );
 inject(
   "index.html",
-  `${css}<nav class="seo-links" aria-label="لینک‌های مفید"><h2>دستبندها</h2><a href="/gallery.html">همه‌ی دستبندهای منجوقی</a><a href="/starter.html">شروع کم‌خطر</a><a href="/name-bracelet.html">دستبند منجوقی اسم</a><h2>راهنما</h2><a href="/size.html">اندازه‌ی مچ</a><a href="/faq.html">سوال‌های پرتکرار</a><a href="/about.html">درباره کارا</a><a href="/blog/">دفتر کارا</a><h2>رنگ‌ها</h2><a href="/colors/">همه‌ی رنگ‌های دلیکای میوکی</a></nav>`,
+  `${css}<nav class="seo-links" aria-label="لینک‌های مفید"><h2>دستبندها</h2><a href="/gallery.html">همه‌ی دستبندهای منجوقی</a><a href="/starter.html">دستبندهای خوش‌قیمت</a><a href="/name-bracelet.html">دستبند منجوقی اسم</a><h2>راهنما</h2><a href="/size.html">اندازه‌ی مچ</a><a href="/faq.html">سوال‌های پرتکرار</a><a href="/about.html">درباره کارا</a><a href="/blog/">دفتر کارا</a><h2>رنگ‌ها</h2><a href="/colors/">همه‌ی رنگ‌های دلیکای میوکی</a></nav>`,
 );
 for (const f of [
   "builder.html",
