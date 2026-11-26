@@ -625,7 +625,7 @@
                 type="button"
                 class="tool ib"
                 id="printPattern"
-                aria-label="چاپ الگو و لیست منجوق‌ها"
+                aria-label="چاپ الگو و فهرست منجوق‌ها"
                 data-tip="چاپ الگو"
               >
                 <svg class="ic" aria-hidden="true">
@@ -765,7 +765,7 @@
               <p class="sp-h">
                 رنگ متن
                 <button type="button" class="tool sp-mini" id="txtFgPen">
-                  همرنگ قلمِ الان
+                  استفاده از رنگ فعلی قلم
                 </button>
               </p>
               <div class="sp-pal" id="txtFg"></div>
@@ -1038,7 +1038,7 @@
             <b
               ><svg class="ic" aria-hidden="true"><use href="#i-folder" /></svg
               >فایل و نسخه‌ها</b
-            ><small>طرح‌هات گم نشن</small
+            ><small>ذخیره و مدیریت طرح‌ها</small
             ><button type="button" class="sp-x" data-close aria-label="بستن">
               <svg class="ic" aria-hidden="true"><use href="#i-close" /></svg>
             </button>
@@ -1048,37 +1048,37 @@
               <div class="grp">
                 <button type="button" class="tool" id="fsSave">
                   <svg class="ic" aria-hidden="true"><use href="#i-save" /></svg
-                  >ذخیره‌ی فایل</button
+                  >ذخیره‌ی الگو</button
                 ><label class="tool" style="cursor: pointer"
                   ><svg class="ic" aria-hidden="true">
                     <use href="#i-folder" /></svg
-                  >باز کردن فایل<input
+                  >باز کردن الگو<input
                     id="fsFile"
                     type="file"
                     accept=".json,application/json"
                     hidden /></label
                 ><button type="button" class="tool" id="fsCsv">
                   <svg class="ic" aria-hidden="true"><use href="#i-csv" /></svg
-                  >لیست منجوق‌ها
+                  >فهرست منجوق‌ها
                 </button>
               </div>
             </div>
             <details class="sp-sub">
               <summary>
                 <svg class="ic" aria-hidden="true"><use href="#i-layers" /></svg
-                >نسخه‌های توی مرورگر
+                >نسخه‌های ذخیره‌شده در مرورگر
               </summary>
               <div class="sp-inner">
                 <div class="sp-row">
                   <label class="sp-f"
-                    >اسم نسخه<input
+                    >نام نسخه<input
                       id="slotName"
                       type="text"
                       maxlength="40"
                       placeholder="مثلاً: دستبند اسم مریم"
                   /></label>
                   <button type="button" class="btn dark" id="slotSave">
-                    ذخیره‌ی نسخه
+                    ذخیره‌ی این نسخه
                   </button>
                 </div>
                 <ul class="sp-slots" id="slotList"></ul>
