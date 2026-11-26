@@ -95,7 +95,7 @@ jobs:
             set ftp:passive-mode yes;
             set net:max-retries 3;
             open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
-            mirror -R --no-remove --parallel=8 --verbose=1 dist/upload/ \"${FTP_DIR:-public_html}\";
+            mirror -R --parallel=8 --verbose=1 dist/upload/ \"${FTP_DIR:-public_html}\";
             bye
           "
       - name: Verify API proxy
