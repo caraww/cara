@@ -28,6 +28,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
@@ -57,18 +59,43 @@ jobs:
           FTP_USER: ${{ secrets.IRAN_FTP_USER }}
           FTP_PASS: ${{ secrets.IRAN_FTP_PASSWORD }}
           FTP_DIR: ${{ secrets.IRAN_FTP_DIR }}
+          BASE_SHA: ${{ vars.DEPLOY_BASE_SHA }}
         run: |
+          set -euo pipefail
+          BASE_SHA="${BASE_SHA:-d971329}"
+          rm -rf dist/upload
+          mkdir -p dist/upload
+          if ! git cat-file -e "${BASE_SHA}^{commit}" 2>/dev/null; then
+            echo "::warning::Base commit $BASE_SHA not found; uploading text assets only."
+            lftp -c "
+              set ftp:ssl-allow yes;
+              set ssl:verify-certificate no;
+              set ftp:passive-mode yes;
+              set net:max-retries 3;
+              open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
+              mirror -R --only-newer --parallel=8 --verbose=1 --exclude-glob '*.webp' --exclude-glob '*.avif' --exclude-glob '*.png' --exclude-glob '*.jpg' --exclude-glob '*.jpeg' --exclude-glob '*.gif' --exclude-glob '*.mp4' --exclude-glob '*.webm' dist/site/ \"${FTP_DIR:-public_html}\";
+              bye
+            "
+            exit 0
+          fi
+          : > /tmp/deploy-files
+          git diff --name-only -z "${BASE_SHA}..${GITHUB_SHA}" | while IFS= read -r -d '' path; do
+            [ -f "dist/site/$path" ] && printf '%s\0' "$path" >> /tmp/deploy-files
+          done
+          find dist/site/fonts -type f -printf 'fonts/%P\0' >> /tmp/deploy-files 2>/dev/null || true
+          [ -f dist/site/css/fonts.css ] && printf 'css/fonts.css\0' >> /tmp/deploy-files
+          while IFS= read -r -d '' path; do
+            mkdir -p "dist/upload/$(dirname "$path")"
+            cp -p "dist/site/$path" "dist/upload/$path"
+          done < /tmp/deploy-files
+          echo "Uploading $(find dist/upload -type f | wc -l) changed files."
           lftp -c "
             set ftp:ssl-allow yes;
             set ssl:verify-certificate no;
             set ftp:passive-mode yes;
             set net:max-retries 3;
             open -u \"$FTP_USER\",\"$FTP_PASS\" \"$FTP_HOST\";
-            mirror -R --only-newer --parallel=8 --verbose=1 \
-              --exclude-glob '*.webp' --exclude-glob '*.avif' \
-              --exclude-glob '*.png' --exclude-glob '*.jpg' --exclude-glob '*.jpeg' \
-              --exclude-glob '*.gif' --exclude-glob '*.mp4' --exclude-glob '*.webm' \
-              dist/site/ \"${FTP_DIR:-public_html}\";
+            mirror -R --no-remove --parallel=8 --verbose=1 dist/upload/ \"${FTP_DIR:-public_html}\";
             bye
           "
       - name: Verify API proxy
