@@ -21,3 +21,24 @@ jobs:
           probe "create-payment invalid + Origin" -X POST -H "Origin: https://caraw.ir" -H "Content-Type: application/json" --data '{}' https://caraw.ir/api/create-payment
           probe "cart item invalid + Origin" -X POST -H "Origin: https://caraw.ir" -H "Content-Type: application/json" --data '{}' https://caraw.ir/api/cart/items
           probe "http root" http://caraw.ir/
+  analytics:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Public pages carry GTM and keep the funnel events
+        run: |
+          fail=0
+          for page in "index.html" "gallery.html" "checkout.html" "bracelet/%DA%A9%D9%88%DA%A9%D8%A7.html" "colors/index.html" "blog/index.html"; do
+            code=$(curl -sS -o /tmp/page -w '%{http_code}' --max-time 25 "https://caraw.ir/$page" || true)
+            if [ "$code" != "200" ]; then echo "::error::$page -> $code"; fail=1; continue; fi
+            grep -q "GTM-P54M67FG" /tmp/page || { echo "::error::$page has no GTM container"; fail=1; }
+          done
+          curl -sS --max-time 25 "https://caraw.ir/bracelet/%DA%A9%D9%88%DA%A9%D8%A7.html" | grep -q 'event:"view_item"' \
+            || { echo "::error::product page has no view_item"; fail=1; }
+          curl -sS --max-time 25 "https://caraw.ir/js/analytics.js?v=2" | grep -q "begin_checkout" \
+            || { echo "::error::live analytics.js has no ecommerce helper"; fail=1; }
+          for page in "track.html" "customers.html" "admin.html"; do
+            if curl -sS --max-time 25 "https://caraw.ir/$page" | grep -q "GTM-"; then
+              echo "::error::$page must stay without analytics"; fail=1
+            fi
+          done
+          exit $fail
