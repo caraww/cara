@@ -333,7 +333,7 @@ const starter = list
 <div class="starter-grid">${cards}</div>
 <h2>سوال‌های پرتکرار حراج</h2>
 <div class="cp__faq"><details><summary>تخفیف تا چه زمانی است؟</summary><div><p>تخفیف ۳۰٪ تا پایان ۱۳ آذر فعال است و بعد از آن قیمت‌ها به حالت قبل برمی‌گردند.</p></div></details><details><summary>قیمت صفحه با درگاه یکی است؟</summary><div><p>بله. قیمت نمایش‌داده‌شده و مبلغ درگاه از یک منبع مشترک محاسبه می‌شوند.</p></div></details><details><summary>سفارش چند روزه آماده می‌شود؟</summary><div><p>بافت و بسته‌بندی با دست انجام می‌شود و حداکثر تا یک هفته آماده است؛ زمان ارسال هم به پست اضافه می‌شود.</p></div></details></div>
-<div class="cp__note"><p><b>هدیه می‌خوای؟</b> از <a href="/quiz.html">کوییز انتخاب دستبند</a> کمک بگیر یا <a href="/starter.html">دستبندهای دستبندهای خوش‌قیمت</a> رو ببین. برای سفارش شخصی هم <a href="/builder.html">استودیوی طراحی</a> باز است.</p></div>`;
+<div class="cp__note"><p><b>هدیه می‌خوای؟</b> از <a href="/quiz.html">کوییز انتخاب دستبند</a> کمک بگیر یا <a href="/starter.html">دستبندهای خوش‌قیمت</a> رو ببین. برای سفارش شخصی هم <a href="/builder.html">استودیوی طراحی</a> باز است.</p></div>`;
   write("sale.html", HEAD({ title, desc, path: "/sale.html", image: SITE + "/img/black-friday.avif", ld: saleLd }) + body + FOOT);
   urls.push("/sale.html");
   console.log(`✓ صفحه‌ی حراج بلک فرایدی (${saleWorks.length} طرح)`);

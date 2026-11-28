@@ -44,12 +44,12 @@ function head({ title, desc, p, ld }) {
   <link rel="stylesheet" href="/css/accessibility.css">
   <link rel="stylesheet" href="/css/content-pages.css?v=1">
   ${footerCSS}
-  <link rel="stylesheet" href="/css/polish.css?v=20261126-ui-audit">
+  <link rel="stylesheet" href="/css/polish.css?v=20261128-polish">
   <link rel="stylesheet" href="/css/site-nav.css?v=20261113">
   <link rel="stylesheet" href="/css/nav-hero.css?v=20261127-navcompact2">
-  <link rel="stylesheet" href="/css/premium.css?v=20261125-empty-art">
+  <link rel="stylesheet" href="/css/premium.css?v=20261128-galtools">
   <link rel="stylesheet" href="/css/theme.css?v=20261127-navcompact2">
-  <script src="/js/theme.js?v=3" defer></script>
+  <script src="/js/theme.js?v=5" defer></script>
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
 </head>
 <body>
@@ -155,7 +155,7 @@ const pages = [
 <h2>چه طرحی برای تولد مناسبه؟</h2>
 <p>اگه سلیقه‌اش مینیماله، ${work("زنجیر", "زنجیر")} یا ${work("شطرنج", "شطرنج")} انتخاب امنیه. اگه عاشق رنگ و طرح‌های شاده، ${work("آبشار رنگی", "آبشار رنگی")} یا ${work("کوکا", "کوکا")} حس تولد رو بیشتر منتقل می‌کنه. برای هدیه‌ی شخصی‌تر، دستبند اسم با اسم کوچیک او یا یه کلمه‌ی کوتاه گزینه‌ی خوبیه. توی <a href="/gallery.html">گالری</a> می‌تونی همه‌ی طرح‌ها رو کنار هم ببینی.</p>
 <h2>بودجه و زمان تحویل</h2>
-<p>قیمت دستبندها بر اساس تعداد منجوق و پیچیدگی طرح فرق داره. اگه بودجه‌ی محدودی داری، از <a href="/starter.html">دستبندهای دستبندهای خوش‌قیمت</a> شروع کن. برای تولد، زمان رو هم در نظر بگیر: بافت حداکثر یه هفته طول می‌کشه و بعدش ارسال با پست اضافه می‌شه. اگه تولد نزدیکه، قبل از سفارش پیام بده تا زمان واقعی رو بگم.</p>
+<p>قیمت دستبندها بر اساس تعداد منجوق و پیچیدگی طرح فرق داره. اگه بودجه‌ی محدودی داری، از <a href="/starter.html">دستبندهای خوش‌قیمت</a> شروع کن. برای تولد، زمان رو هم در نظر بگیر: بافت حداکثر یه هفته طول می‌کشه و بعدش ارسال با پست اضافه می‌شه. اگه تولد نزدیکه، قبل از سفارش پیام بده تا زمان واقعی رو بگم.</p>
 <h2>بسته‌بندی هدیه</h2>
 <p>توی مرحله‌ی سفارش می‌تونی گزینه‌ی بسته‌بندی هدیه رو انتخاب کنی و یه پیام کوتاه بنویسی. اگه می‌خوای قیمت روی بسته نوشته نشه، همون گزینه رو فعال کن. این کار هدیه رو کامل‌تر می‌کنه و لازم نیست خودت دنبال بسته‌بندی اضافه باشی.</p>
 <h2>اگه سایز او رو نمی‌دونی؟</h2>

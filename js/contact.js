@@ -5,7 +5,7 @@
   const path = location.pathname;
   const stylesheet = document.createElement("link");
   stylesheet.rel = "stylesheet";
-  stylesheet.href = "/css/contact.css?v=20261125-fab6";
+  stylesheet.href = "/css/contact.css?v=20261128-fab7";
   document.head.appendChild(stylesheet);
 
   const box = document.createElement("div");
@@ -44,6 +44,16 @@
   document.addEventListener("pointerdown", (e) => {
     if (!menu.hidden && !box.contains(e.target)) setOpen(false);
   });
+  /* نزدیک فوتر، دکمه کنار می‌رود تا روی لینک‌های تماس و نوار پایین نیفتد. */
+  const footer = document.querySelector("footer.sf");
+  if (footer && "IntersectionObserver" in window) {
+    new IntersectionObserver((entries) => {
+      const near = entries[0].isIntersecting;
+      box.classList.toggle("is-away", near);
+      if (near && !menu.hidden) setOpen(false);
+    }, { rootMargin: "0px 0px 48px 0px" }).observe(footer);
+  }
+
   box.addEventListener("focusout", (e) => {
     if (menu.hidden || box.contains(e.relatedTarget)) return;
     /* On touch, relatedTarget can be null and the click on the toggle lands after
