@@ -54,7 +54,7 @@ for (const d of ["", "colors", "bracelet"]) {
     const current = d === "" && f !== "index.html" ? "/" + f : "";
     let out = src.replace(HEADER_RE, () => header(current).replace(/\n/g, eol));
     if (!/js\/mobile-nav\.js/.test(out))
-      out = out.replace("</body>", `  <script src="/js/mobile-nav.js?v=20261113" defer></script>${eol}</body>`);
+      out = out.replace("</body>", `  <script src="/js/mobile-nav.js?v=20261128-cache1" defer></script>${eol}</body>`);
     if (out !== src) { changed++; if (!dry) fs.writeFileSync(p, out); }
   }
 }

@@ -39,18 +39,18 @@ function head({ title, desc, p, ld }) {
   <meta property="og:image" content="${SITE}/img/og-image.png?v=2">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="/img/cara-favicon.png?v=2">
-  <link rel="stylesheet" href="/css/fonts.css?v=20261118-restore">
-  <link rel="stylesheet" href="/css/studio.css?v=20261113-nav">
+  <link rel="stylesheet" href="/css/fonts.css?v=20261128-cache1">
+  <link rel="stylesheet" href="/css/studio.css?v=20261128-cache1">
   <link rel="stylesheet" href="/css/decor.css?v=2">
   <link rel="stylesheet" href="/css/accessibility.css">
-  <link rel="stylesheet" href="/css/content-pages.css?v=1">
+  <link rel="stylesheet" href="/css/content-pages.css?v=20261128-cache1">
   ${footerCSS}
   <link rel="stylesheet" href="/css/polish.css?v=20261128-polish">
-  <link rel="stylesheet" href="/css/site-nav.css?v=20261113">
-  <link rel="stylesheet" href="/css/nav-hero.css?v=20261127-navcompact2">
+  <link rel="stylesheet" href="/css/site-nav.css?v=20261128-cache1">
+  <link rel="stylesheet" href="/css/nav-hero.css?v=20261128-cache1">
   <link rel="stylesheet" href="/css/premium.css?v=20261128-galtools">
-  <link rel="stylesheet" href="/css/theme.css?v=20261127-navcompact2">
-  <script src="/js/theme.js?v=5" defer></script>
+  <link rel="stylesheet" href="/css/theme.css?v=20261128-cache1">
+  <script src="/js/theme.js?v=20261128-cache1" defer></script>
   ${gtmSnippet()}
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
 </head>
@@ -93,8 +93,8 @@ function page({ p, title, desc, h1, lead, body, faqs, related }) {
   <div class="cp__contact">${relHtml}</div>
 </main>
 ${footerHTML()}
-<script src="/js/nav-hero.js?v=20261126-ui-audit" defer></script>
-<script src="/js/analytics.js?v=1" defer></script>
+<script src="/js/nav-hero.js?v=20261128-cache1" defer></script>
+<script src="/js/analytics.js?v=20261128-cache1" defer></script>
 </body>
 </html>`;
 }
@@ -238,5 +238,5 @@ const indexBody = `<div class="crumb"><a href="/">خانه</a> › راهنما�
   <a class="cp__card" href="/category/gift-valentine.html"><b>هدیه ولنتاین</b><span>طرح قلب و رنگ‌های عاشقانه</span></a>
   <a class="cp__card" href="/category/gift-anniversary.html"><b>هدیه سالگرد</b><span>اسم، تاریخ و خاطره‌ی مشترک</span></a>
 </div>`;
-fs.writeFileSync(path.join(ROOT, "category/index.html"), head({ title: indexTitle, desc: indexDesc, p: "/category/", ld: indexLd }) + `<main class="cp" id="main-content" tabindex="-1">${indexBody}</main>${footerHTML()}<script src="/js/nav-hero.js?v=20261126-ui-audit" defer></script><script src="/js/analytics.js?v=1" defer></script></body></html>`);
+fs.writeFileSync(path.join(ROOT, "category/index.html"), head({ title: indexTitle, desc: indexDesc, p: "/category/", ld: indexLd }) + `<main class="cp" id="main-content" tabindex="-1">${indexBody}</main>${footerHTML()}<script src="/js/nav-hero.js?v=20261128-cache1" defer></script><script src="/js/analytics.js?v=20261128-cache1" defer></script></body></html>`);
 console.log("✓ /category/");
