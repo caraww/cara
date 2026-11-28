@@ -117,7 +117,7 @@
   /* صفحه‌های دارای نوار ثابت پایین (m-cta) نباید آخرین خط فوتر را زیر نوار گم کنند.
      ۱۱۰px اضافه، ارتفاع دو دکمه‌ی شناور تماس/اینستاگرام است که روی «بازگشت به بالا» می‌افتادند. */
   body:has(.m-cta) .sf__bottom {
-    padding-block-end: calc(240px + env(safe-area-inset-bottom, 0px));
+    padding-block-end: calc(96px + env(safe-area-inset-bottom, 0px));
   }
   body:has(.m-cta) .sf__bottom a { position: relative; z-index: 41; }
 }

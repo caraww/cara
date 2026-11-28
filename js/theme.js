@@ -96,3 +96,19 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
   else mount();
 })();
+
+// اگر نماد اعتماد لود نشد (ادبلاک یا شبکه)، قاب سفید خالی زیر برند نماند.
+(function () {
+  function drop(box) { if (box) box.hidden = true; }
+  function guard() {
+    document.querySelectorAll(".sf__seal img").forEach(function (im) {
+      var box = im.closest(".sf__seal");
+      if (im.complete && !im.naturalWidth) return drop(box);
+      im.addEventListener("error", function () { drop(box); });
+      im.addEventListener("load", function () { if (box) box.hidden = false; });
+      setTimeout(function () { if (!im.complete || !im.naturalWidth) drop(box); }, 3500);
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", guard);
+  else guard();
+})();
