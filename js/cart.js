@@ -7,7 +7,26 @@
     return S && before > Number(current) ? S.priceHTML(before) : money(current);
   };
   const message = (value) => { $("cartMessage").textContent = value || ""; };
-  let busy = false, addError = "";
+  let busy = false, addError = "", lastCart = null;
+
+  /* GA4 ecommerce payloads: only ids, titles and amounts — no customer data. */
+  function ecomItems(items) {
+    return (items || []).filter((i) => i.available).map((i) => ({
+      item_id: String(i.workId || i.id),
+      item_name: i.title || "دستبند",
+      item_category: i.type === "design" ? "طرح سفارشی" : "دستبند منجوقی",
+      price: Number(i.unitPrice) || 0,
+      quantity: Number(i.quantity) || 1,
+    }));
+  }
+  function ecom(name, cart, items) {
+    if (!window.CARA || !CARA.ecom) return;
+    CARA.ecom(name, {
+      currency: "IRT",
+      value: Number(cart && cart.totalToman) || 0,
+      items: items || ecomItems(cart && cart.items),
+    });
+  }
   $("checkoutButton").addEventListener("click", (event) => { if ($("checkoutButton").getAttribute("aria-disabled") === "true") event.preventDefault(); });
 
   function drawDesign(canvas, design) {
@@ -34,6 +53,7 @@
   }
 
   function render(cart) {
+    lastCart = cart;
     try { localStorage.setItem("cara-cart-count", String(cart.totalItems || 0)); } catch {}
     const root = $("cartItems");
     const active = document.activeElement;
@@ -151,9 +171,11 @@
     catch (error) { failure = error; }
     finally { busy = false; }
     if (updatedCart && Array.isArray(updatedCart.items)) {
+      const removed = lastCart ? (lastCart.items || []).find((item) => String(item.id) === String(id)) : null;
       render(updatedCart);
       message("کالا از سبد خرید حذف شد.");
       window.CARA && CARA.track && CARA.track("cart_remove");
+      ecom("remove_from_cart", updatedCart, removed ? ecomItems([{ ...removed, quantity: 1 }]) : []);
     } else {
       await load();
       if (failure) message(failure.message);
@@ -166,15 +188,17 @@
     history.replaceState(null, "", location.pathname);
     message("دارم به سبد خرید اضافه می‌کنم…");
     try {
-      if (type === "work") await api("/api/cart/items", { method: "POST", body: JSON.stringify({ type: "work", workId: q.get("id"), quantity: 1 }) });
+      let updatedCart = null;
+      if (type === "work") updatedCart = await api("/api/cart/items", { method: "POST", body: JSON.stringify({ type: "work", workId: q.get("id"), quantity: 1 }) });
       else if (type === "design") {
         let design;
         try { design = JSON.parse(localStorage.getItem("cara-pattern") || "null"); } catch {}
         if (!design) throw new Error("اول توی استودیو یه طرح بساز یا بازش کن.");
-        await api("/api/cart/items", { method: "POST", body: JSON.stringify({ type: "design", title: "طرح من", design, quantity: 1 }) });
+        updatedCart = await api("/api/cart/items", { method: "POST", body: JSON.stringify({ type: "design", title: "طرح من", design, quantity: 1 }) });
       } else throw new Error("نوع کالا معتبر نیست.");
       message("به سبد خرید اضافه شد.");
       window.CARA && CARA.track && CARA.track("cart_add", { type });
+      ecom("add_to_cart", updatedCart);
       return true;
     } catch (error) { addError = "به سبد اضافه نشد: " + error.message; message(addError); return false; }
   }

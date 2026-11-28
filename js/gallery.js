@@ -202,7 +202,17 @@ try {
     document.querySelectorAll("[data-tag]").forEach((x) => x.setAttribute("aria-pressed", x === b)); render();
   });
   $("favOnly").onclick = (e) => { onlyFav = !onlyFav; e.currentTarget.setAttribute("aria-pressed", onlyFav); render(); };
-  $("q").addEventListener("input", (e) => { q = e.target.value.trim().toLowerCase(); render(); });
+  let searchTimer;
+  $("q").addEventListener("input", (e) => {
+    q = e.target.value.trim().toLowerCase();
+    render();
+    clearTimeout(searchTimer);
+    const term = e.target.value.trim();
+    if (term.length < 2) return;
+    searchTimer = setTimeout(() => {
+      window.CARA && CARA.ecom && CARA.ecom("search", { search_term: term });
+    }, 900);
+  });
   $("surprise").onclick = () => { setPanel(false); if (W.length) { tag = "همه"; q = ""; onlyFav = false; render(); open(W[Math.floor(Math.random() * W.length)].id); } };
 
   render();
@@ -240,10 +250,30 @@ try {
       cap.appendChild(s);
     });
   }
+  let trackedId = "";
   function lightbox() {
     let id = "";
     try { id = decodeURIComponent(location.hash.slice(1)); } catch {}
     const p = prices[id], o = $("lbOrder"), add = $("lbAddCart");
+    if (id && p && trackedId !== id && window.CARA && CARA.ecom) {
+      trackedId = id;
+      const w = ((window.CARA && CARA.works) || []).find((x) => String(x.id).trim() === id) || {};
+      const before = Number(listPrices[id]) || p;
+      CARA.ecom("view_item", {
+        currency: "IRT",
+        value: p,
+        items: [
+          {
+            item_id: id,
+            item_name: w.title || id,
+            item_category: "دستبند منجوقی",
+            price: p,
+            discount: Math.max(0, before - p),
+            quantity: 1,
+          },
+        ],
+      });
+    }
     const sale = window.CARA_SALE, before = Number(listPrices[id]) || p;
     $("lbPrice").innerHTML = !p ? "" : sale && sale.active() && before > p ? sale.priceHTML(before) : fa(p) + " تومان";
     o.href = id ? "checkout.html?work=" + encodeURIComponent(id) : "checkout.html";
@@ -288,7 +318,22 @@ try {
         }
       } catch (e) { /* بدون قیمت پایه هم قیمت روز نشون داده می‌شه */ }
       loaded = true;
-      cards(); lightbox(); /* JSON-LD محصول‌ها ثابت توی gallery.html و صفحه‌ی هر محصوله؛ نسخه‌ی پویا دوبار تعریفشون می‌کرد */
+      cards(); lightbox();
+      if (window.CARA && CARA.ecom) {
+        const items = Object.keys(prices)
+          .map((id) => {
+            const w = ((window.CARA && CARA.works) || []).find((x) => String(x.id).trim() === id) || {};
+            return { item_id: id, item_name: w.title || id, price: prices[id], quantity: 1 };
+          })
+          .filter((x) => x.price);
+        if (items.length) {
+          CARA.ecom("view_item_list", {
+            item_list_id: "gallery",
+            item_list_name: "گالری دستبندها",
+            items,
+          });
+        }
+      } /* JSON-LD محصول‌ها ثابت توی gallery.html و صفحه‌ی هر محصوله؛ نسخه‌ی پویا دوبار تعریفشون می‌کرد */
     })
     .catch(() => {}); /* اگه Worker جواب نداد، گالری بدون قیمت کار می‌کنه */
 })();

@@ -168,6 +168,15 @@ try {
     if (!/^09\d{9}$/.test(customer.phone)) return showErr("شماره موبایل باید شبیه 09123456789 باشه.");
     if (pay) pay.disabled = true;
     window.CARA && CARA.track && CARA.track("checkout_start", { mode: "work", provider: window.CARA_GATEWAY });
+    const workValue = Number(work && work.price) || 0;
+    const workPayload = {
+      currency: "IRT",
+      value: workValue,
+      items: workValue
+        ? [{ item_id: String(id), item_name: (work && work.title) || id, item_category: "دستبند منجوقی", price: workValue, quantity: 1 }]
+        : [],
+    };
+    window.CARA && CARA.ecom && CARA.ecom("begin_checkout", { ...workPayload, payment_type: window.CARA_GATEWAY });
     try {
       const r = await fetch("/api/create-payment", {
         method: "POST", headers: { "Content-Type": "application/json" },
@@ -176,6 +185,8 @@ try {
       const j = await r.json().catch(() => ({}));
       if (j.paymentUrl) {
         if (j.orderId && j.trackToken) { try { localStorage.setItem("cara-track-" + j.orderId, j.trackToken); } catch {} }
+        /* مبلغ سفارش برای رویداد purchase؛ order-status مبلغ برنمی‌گرداند */
+        if (j.orderId) { try { sessionStorage.setItem("cara-order-" + j.orderId, JSON.stringify(workPayload)); } catch {} }
         window.CARA && CARA.track && CARA.track("payment_redirect", { mode: "work", provider: window.CARA_GATEWAY });
         return (location.href = j.paymentUrl);
       }
@@ -216,12 +227,19 @@ try {
   }
   const res = q.get("result");
   if (res) {
+    /* شناسه‌ی سفارش را از نوار آدرس برمی‌داریم تا در گزارش‌های تحلیلی ثبت نشود؛
+       برای رفرش همان شناسه در sessionStorage می‌ماند. */
+    if (q.get("order")) {
+      try { sessionStorage.setItem("cara-last-order", q.get("order")); } catch {}
+      try { history.replaceState(null, "", location.pathname + "?result=" + encodeURIComponent(res)); } catch {}
+    }
     const box = $("result");
     box.hidden = false;
     if (res === "success") {
       box.textContent = "دارم وضعیت پرداخت رو از سرور بررسی می‌کنم…";
       (async () => {
-        const id = q.get("order") || "";
+        let id = q.get("order") || "";
+        if (!id) { try { id = sessionStorage.getItem("cara-last-order") || ""; } catch {} }
         try {
           const response = await fetch("/api/order-status?id=" + encodeURIComponent(id), { cache: "no-store" });
           const data = await response.json();
@@ -252,6 +270,17 @@ try {
           }
           box.append(paragraph);
           window.CARA && CARA.track && CARA.track("purchase", { code });
+          let snapshot = null;
+          try { snapshot = JSON.parse(sessionStorage.getItem("cara-order-" + id) || "null"); } catch {}
+          window.CARA && CARA.ecom && CARA.ecom("purchase", {
+            transaction_id: id,
+            currency: (snapshot && snapshot.currency) || "IRT",
+            value: Number(snapshot && snapshot.value) || 0,
+            tax: 0,
+            shipping: 0,
+            items: (snapshot && snapshot.items) || [],
+          });
+          try { sessionStorage.removeItem("cara-order-" + id); } catch {}
           $("formCard").hidden = true;
           $("sumCard").hidden = true;
           try {
@@ -272,7 +301,32 @@ try {
   const workMode = q.get("work") && !res; /* سفارش مستقیم از گالری: checkout-work.js مدیریتش می‌کنه */
   const patternMode = !!(p && p.data.flat().some(Boolean));
   if (!cartMode && !workMode && !patternMode && !res) $("formCard").hidden = true;
-  let total = 0, cartReady = false, cartData = null;
+  let total = 0, cartReady = false, cartData = null, patternValue = 0;
+
+  /* داده‌ی رویدادهای GA4: فقط شناسه، عنوان و مبلغ؛ هیچ اطلاعات هویتی مشتری. */
+  function ecomPayload() {
+    if (cartMode && cartData && Array.isArray(cartData.items)) {
+      return {
+        currency: "IRT",
+        value: Number(cartData.totalToman) || 0,
+        items: cartData.items.map((item) => ({
+          item_id: String(item.workId || item.id),
+          item_name: item.title || "دستبند",
+          item_category: item.type === "design" ? "طرح سفارشی" : "دستبند منجوقی",
+          price: Number(item.unitPrice) || 0,
+          quantity: Number(item.quantity) || 1,
+        })),
+      };
+    }
+    const value = Number(patternValue) || 0;
+    return {
+      currency: "IRT",
+      value,
+      items: value
+        ? [{ item_id: "custom-pattern", item_name: "دستبند با الگوی سفارشی", item_category: "طرح سفارشی", price: value, quantity: 1 }]
+        : [],
+    };
+  }
   if (cartMode) {
     $("pay").disabled = true;
     $("sum").textContent = "در حال دریافت سبد خرید…";
@@ -321,7 +375,8 @@ try {
     fetch("/api/config").then((r) => r.json()).then((cfg) => {
       if (!cfg.pricePerBead) { $("price").textContent = "قیمت این طرح بعد از بررسی مشخص می‌شه."; return; }
       const listPrice = Math.round(cfg.baseFee + total * cfg.pricePerBead);
-      $("price").innerHTML = saleHTML(listPrice, window.CARA_SALE ? CARA_SALE.final(listPrice) : listPrice);
+      patternValue = window.CARA_SALE ? CARA_SALE.final(listPrice) : listPrice;
+      $("price").innerHTML = saleHTML(listPrice, patternValue);
     }).catch(() => { $("price").textContent = "—"; });
   } else {
     $("sum").innerHTML = `<div class="sum-empty"><div class="sum-empty__art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p>هنوز الگویی برای سفارش نداری. می‌تونی از گالری دستبند انتخاب کنی یا طرح خودت رو در استودیو بسازی.</p><div class="sum-empty__actions"><a class="btn sm dark" href="builder.html">ساخت الگو</a><a class="btn sm line" href="gallery.html">دیدن گالری</a></div></div>`;
@@ -340,6 +395,8 @@ try {
     const btn = $("pay"); btn.disabled = true; btn.textContent = "دارم می‌برمت به درگاه…";
     const mode = cartMode ? "cart" : "pattern";
     window.CARA && CARA.track && CARA.track("checkout_start", { mode, provider: window.CARA_GATEWAY });
+    const snapshot = ecomPayload();
+    window.CARA && CARA.ecom && CARA.ecom("begin_checkout", { ...snapshot, payment_type: window.CARA_GATEWAY });
     try {
       const r = await fetch("/api/create-payment", { method: "POST", headers: { "Content-Type": "application/json" },
         body: JSON.stringify(cartMode
@@ -348,6 +405,7 @@ try {
       const j = await r.json().catch(() => ({}));
       if (r.ok && j.paymentUrl) {
         if (j.orderId && j.trackToken) { try { localStorage.setItem("cara-track-" + j.orderId, j.trackToken); } catch {} }
+        if (j.orderId) { try { sessionStorage.setItem("cara-order-" + j.orderId, JSON.stringify(snapshot)); } catch {} }
         window.CARA && CARA.track && CARA.track("payment_redirect", { mode, provider: window.CARA_GATEWAY });
         return (location.href = j.paymentUrl);
       }
