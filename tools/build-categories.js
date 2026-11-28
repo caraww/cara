@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const { footerHTML, footerCSS } = require("../lib/site-footer.js");
+const gtmSnippet = require("../lib/analytics-snippet.js");
 const ROOT = path.resolve(__dirname, "..");
 const SITE = "https://caraw.ir";
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -50,6 +51,7 @@ function head({ title, desc, p, ld }) {
   <link rel="stylesheet" href="/css/premium.css?v=20261128-galtools">
   <link rel="stylesheet" href="/css/theme.css?v=20261127-navcompact2">
   <script src="/js/theme.js?v=5" defer></script>
+  ${gtmSnippet()}
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
 </head>
 <body>

@@ -3,6 +3,7 @@
 const fs = require("fs");
 const path = require("path");
 const { footerHTML, footerCSS } = require("../lib/site-footer.js");
+const gtmSnippet = require("../lib/analytics-snippet.js");
 const ROOT = path.resolve(__dirname, "..");
 const SITE = "https://caraw.ir";
 const FA_DIGITS = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
@@ -86,6 +87,7 @@ function article({ slug, title, desc, h1, kicker, date, body, faqs }) {
   <link rel="stylesheet" href="/css/premium.css?v=20261128-galtools">
   <link rel="alternate" type="application/rss+xml" title="دفتر کارا | cara journal" href="/feed.xml">
   <script type="application/ld+json">${JSON.stringify(ld)}</script>
+  ${gtmSnippet()}
 </head>
 <body>
 <main class="blog-article">
