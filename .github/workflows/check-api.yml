@@ -21,6 +21,32 @@ jobs:
           probe "create-payment invalid + Origin" -X POST -H "Origin: https://caraw.ir" -H "Content-Type: application/json" --data '{}' https://caraw.ir/api/create-payment
           probe "cart item invalid + Origin" -X POST -H "Origin: https://caraw.ir" -H "Content-Type: application/json" --data '{}' https://caraw.ir/api/cart/items
           probe "http root" http://caraw.ir/
+  hosts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compare apex and www
+        run: |
+          for host in https://caraw.ir https://www.caraw.ir; do
+            echo "########## $host"
+            echo "--- redirect chain"
+            curl -sS -o /dev/null -D - --max-time 25 -L "$host/" | grep -Ei "^(HTTP/|location:|server:|cache-control:|content-type:|cf-cache-status:|x-cache:|age:)" || true
+            echo "--- html head (first links)"
+            curl -sS --max-time 25 "$host/" | grep -Eo '<link[^>]*(stylesheet|\.css)[^>]*>' | head -12 || true
+            echo "--- css fetch status"
+            for css in /css/home.css /css/theme.css /css/fonts.css /css/site-footer.css; do
+              printf '%-24s ' "$css"
+              curl -sS -o /dev/null -w 'code=%{http_code} type=%{content_type} size=%{size_download}\n' --max-time 25 "$host$css" || true
+            done
+            echo
+          done
+          echo "########## dns"
+          for h in caraw.ir www.caraw.ir; do echo "$h -> $(getent hosts "$h" | awk '{print $1}' | tr '\n' ' ')"; done
+          echo "########## body diff"
+          curl -sS --max-time 25 https://caraw.ir/ -o /tmp/apex.html || true
+          curl -sS --max-time 25 https://www.caraw.ir/ -o /tmp/www.html || true
+          wc -c /tmp/apex.html /tmp/www.html
+          diff <(sed 's/></>\n</g' /tmp/apex.html) <(sed 's/></>\n</g' /tmp/www.html) | head -40 || true
+
   analytics:
     runs-on: ubuntu-latest
     steps:
