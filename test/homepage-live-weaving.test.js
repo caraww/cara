@@ -28,9 +28,9 @@ test("homepage contains one interactive live-weaving section and all controls", 
 test("weaving script loads after the shared palette and before decor", () => {
   const html = read("index.html");
   const pos = (re) => { const m = html.match(re); return m ? m.index : -1; };
-  const palette = pos(/src="js\/palette\.js\?v=[\w.]+"/);
-  const weave = pos(/src="js\/weave\.js\?v=[\w.]+"/);
-  const decor = pos(/src="js\/decor\.js\?v=[\w.]+"/);
+  const palette = pos(/src="js\/palette\.js\?v=[\w.-]+"/);
+  const weave = pos(/src="js\/weave\.js\?v=[\w.-]+"/);
+  const decor = pos(/src="js\/decor\.js\?v=[\w.-]+"/);
   assert.ok(palette >= 0 && weave > palette && decor > weave);
   assert.match(html, /href="css\/weave\.css\?v=[\w.-]+"/);
 });
