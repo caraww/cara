@@ -110,6 +110,7 @@ test("the real page generator creates a non-orderable Album page with alternativ
     fs.mkdirSync(path.join(temp, "lib"), { recursive: true });
     fs.copyFileSync(path.join(root, "lib/works-pricing.js"), path.join(temp, "lib/works-pricing.js"));
     fs.copyFileSync(path.join(root, "lib/generated-page-layout.js"), path.join(temp, "lib/generated-page-layout.js"));
+    fs.copyFileSync(path.join(root, "lib/analytics-snippet.js"), path.join(temp, "lib/analytics-snippet.js"));
     fs.copyFileSync(path.join(root, "lib/works-pricing.js"), path.join(temp, "lib/works-pricing.js"));
     fs.copyFileSync(path.join(root, "js/palette.js"), path.join(temp, "js/palette.js"));
     fs.copyFileSync(path.join(root, "js/beads.js"), path.join(temp, "js/beads.js"));
