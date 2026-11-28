@@ -193,7 +193,11 @@ ${
 <div class="pg-help"><a href="/size.html">راهنمای اندازه‌ی مچ</a><a href="https://instagram.com/_.caraw" target="_blank" rel="noopener">پیام در اینستاگرام</a><a href="tel:+989352528201" dir="ltr">تماس تلفنی</a></div></div></div>
 <h2>دستبندهای دیگه</h2><div class="rel">${rel.map((x) => `<a href="${urlOf(x)}"><img src="${esc(abs(x.thumb || x.src))}"${x.thumb240 ? ` srcset="${esc(abs(x.thumb240))} 240w, ${esc(abs(x.thumb480))} 480w, ${esc(abs(x.thumb))} 700w" sizes="(max-width:560px) 45vw, 150px"` : ""} alt="دستبند منجوقی ${esc(titleOf(x))}"${x.w ? ` width="${x.w}" height="${x.h}"` : ""} loading="lazy">${esc(titleOf(x))}</a>`).join("")}</div>
 <h2 id="reviews">نظر خریداران</h2><div class="reviews" data-reviews data-work="${esc(w.id)}"></div>
-${orderable ? `<div class="pg-cta" role="region" aria-label="سفارش سریع"><div class="pg-cta__info"><b>${esc(t)}</b><span class="pg-cta__price">${priceHTML(w.id, true)}</span></div><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a></div>` : ""}`;
+${orderable ? `<div class="pg-cta" role="region" aria-label="سفارش سریع"><div class="pg-cta__info"><b>${esc(t)}</b><span class="pg-cta__price">${priceHTML(w.id, true)}</span></div><a class="btn dark" href="/checkout.html?work=${encodeURIComponent(w.id)}">سفارش این دستبند</a></div>` : ""}${
+  orderable
+    ? `<script>(function(){try{var el=document.querySelector(".pg-cta [data-price],.pg-price [data-price]");var v=el?Number(el.getAttribute("data-price")):0;if(!v||!window.dataLayer)return;var before=Number(el.getAttribute("data-price-list"))||v;window.dataLayer.push({event:"view_item",ecommerce:{currency:"IRT",value:v,items:[{item_id:${JSON.stringify(String(w.id))},item_name:${JSON.stringify(String(t))},item_category:"دستبند منجوقی",price:v,discount:Math.max(0,before-v),quantity:1}]}});}catch(e){}})();</script>`
+    : ""
+}`;
   write(
     `bracelet/${slug(w.id)}.html`,
     HEAD({ title, desc, path: urlOf(w), image: imgs[0], ld }) + body + FOOT,

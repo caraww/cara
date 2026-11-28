@@ -23,6 +23,29 @@
     send(event, props);
     if (queue.length < 40) queue.push([event, props]);
   };
+  /* GA4 ecommerce events. Canonical GA4 names, so one GTM "GA4 Event" tag with
+     event name {{Event}} forwards all of them without a tag per event.
+     Callers pass anonymous data only: ids, titles, amounts — never a customer
+     name, phone or address. */
+  const ECOM_EVENTS = {
+    add_to_cart: 1,
+    begin_checkout: 1,
+    purchase: 1,
+    remove_from_cart: 1,
+    select_item: 1,
+    view_item: 1,
+    view_item_list: 1,
+  };
+  window.CARA.ecom = function (name, payload) {
+    const data = payload || {};
+    try {
+      const layer = (window.dataLayer = window.dataLayer || []);
+      if (ECOM_EVENTS[name]) layer.push({ event: name, ecommerce: data });
+      else if (name === "search") layer.push({ event: "search", search_term: String(data.search_term || "") });
+      else return;
+    } catch {}
+    try { if (typeof window.clarity === "function") window.clarity("event", name); } catch {}
+  };
   /* Clarity may load after this file; flush once when it appears. */
   let tries = 0;
   const timer = setInterval(function () {
