@@ -46,7 +46,7 @@ test("shared cara visual system is loaded after page styles on primary pages", (
 test("generated bracelet and color pages share the same navigation and visual system", () => {
   const layout = read("lib/generated-page-layout.js");
   assert.ok(layout.includes("/css/accessibility.css"));
-  assert.ok(layout.includes("/css/site-nav.css?v=20261113"));
+  assert.match(layout, /\/css\/site-nav\.css\?v=[\w.-]+/);
   assert.ok(layout.includes("/css/bracelet-pages.css?v=12"));
   assert.match(layout, /\/css\/polish\.css\?v=[\w.-]+/);
   assert.ok(layout.includes("/css/premium.css?v=2"));

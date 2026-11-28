@@ -17,7 +17,8 @@
     "build:home-css": "node tools/build-home-css.js",
     "build:home-js": "node tools/build-home-js.js",
     "package:static": "node tools/package-static.js",
-    "visual:check": "node tools/visual-audit.js"
+    "visual:check": "node tools/visual-audit.js",
+    "check:cache": "node tools/asset-versions.js check"
   },
   "engines": {
     "node": ">=18"

@@ -85,7 +85,7 @@ test("build-pages generates gallery JSON-LD and bracelet pages from the same cat
       assert.match(page, /href="\/checkout\.html">سفارش<\/a>/);
       assert.match(page, /href="\/account\.html">حساب کاربری<\/a>/);
       assert.match(page, /<script src="\/js\/contact\.js\?v=[\w.-]+" defer><\/script>/);
-      assert.match(page, /\/css\/site-nav\.css\?v=20261113/);
+      assert.match(page, /\/css\/site-nav\.css\?v=[\w.-]+/);
       assert.match(page, /\/css\/bracelet-pages\.css\?v=12/);
       assert.match(page, /\/css\/polish\.css\?v=[\w.-]+/);
       assert.match(page, /\/js\/nav-hero\.js\?v=[\w.-]+/);

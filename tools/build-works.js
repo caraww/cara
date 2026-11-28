@@ -23,7 +23,18 @@ const DIR = process.env.CARA_USE_ORIGINAL === "1" || !fs.existsSync(TRANSPARENT_
 const OUT = path.join(ROOT, "js", "works.js");
 const OUT_JSON = path.join(ROOT, "data", "works.json"); /* server.js و Worker از این می‌خوانند */
 const STAMP = Date.now().toString(36); /* نسخه‌ی این بیلد؛ برای شکستن کش */
-const PAGES = ["index.html", "gallery.html", "sale.html"];
+function pagesLoadingWorks(dir = ROOT, found = []) {
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    if (entry.name.startsWith(".") || entry.name === "node_modules") continue;
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) pagesLoadingWorks(full, found);
+    else if (entry.name.endsWith(".html") && fs.readFileSync(full, "utf8").includes("js/works.js")) {
+      found.push(path.relative(ROOT, full));
+    }
+  }
+  return found;
+}
+const PAGES = pagesLoadingWorks();
 const EXT = /\.(jpe?g|png|webp|gif|avif)$/i;
 
 const fixFa = (s) => s.normalize("NFC").replace(/ي/g, "ی").replace(/ك/g, "ک");
