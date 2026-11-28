@@ -1,0 +1,59 @@
+name: Check live analytics
+
+on:
+  schedule:
+    - cron: "30 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: The deployed pages carry the GTM container and product tracking
+        run: |
+          set -u
+          base="https://caraw.ir"
+          fail=0
+          for page in index.html gallery.html checkout.html "bracelet/کوکا.html" colors/index.html blog/index.html; do
+            url="$base/$(node -e 'console.log(encodeURI(process.argv[1]))' "$page")"
+            html="$(curl -fsS -m 25 "$url" || true)"
+            if [ -z "$html" ]; then
+              echo "::warning::$page did not load"
+              continue
+            fi
+            if ! printf '%s' "$html" | grep -q "GTM-P54M67FG"; then
+              echo "::error::$page is missing the GTM container"
+              fail=1
+            fi
+            if printf '%s' "$html" | grep -q "window.dataLayer.push({\"gtm.start\""; then :; fi
+          done
+
+          for page in "bracelet/کوکا.html"; do
+            html="$(curl -fsS -m 25 "$base/$(node -e 'console.log(encodeURI(process.argv[1]))' "$page")" || true)"
+            if ! printf '%s' "$html" | grep -q 'event:"view_item"'; then
+              echo "::error::$page is missing the view_item event"
+              fail=1
+            fi
+          done
+
+          for page in track.html customers.html admin.html; do
+            html="$(curl -fsS -m 25 "$base/$page" || true)"
+            if printf '%s' "$html" | grep -q "GTM-"; then
+              echo "::error::$page must stay without analytics"
+              fail=1
+            fi
+          done
+
+          exit "$fail"
+
+      - name: The live gallery keeps the funnel helper
+        run: |
+          curl -fsS -m 25 "https://caraw.ir/js/analytics.js?v=2" | grep -q "begin_checkout" || {
+            echo "::error::live js/analytics.js does not expose the ecommerce helper"
+            exit 1
+          }
