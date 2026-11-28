@@ -156,7 +156,7 @@ if (typeof module !== "undefined") {
     g.roundRect(x, y, w, h, r);
     g.fill();
     /* سطح منجوق: شفاف نور را از خودش رد می‌کند، مات بازتاب تیز ندارد */
-    if (finish === "glass" || finish === "matte") {
+    if ((finish === "glass" || finish === "matte") && Math.min(w, h) >= 8) {
       const body = g.createLinearGradient(x, y, x, y + h);
       if (finish === "glass") {
         body.addColorStop(0, "rgba(255,255,255,.34)");

@@ -68,7 +68,7 @@ try {
     const h = data.length, w = data[0].length, d = Math.min(2, devicePixelRatio || 1), s = Math.min(12, (W - 8) / h), H = w * s + 8;
     cv.width = W * d; cv.height = H * d; cv.style.width = W + "px"; cv.style.height = H + "px";
     const g = cv.getContext("2d"); g.setTransform(d, 0, 0, d, 0, 0);
-    for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) { const x = 4 + r * s, y = 4 + c * s, hex = C.byCode(data[r][c]).hex; if (s >= 5) C.drawBead(g, x, y, s, s, hex); else { g.fillStyle = hex; g.fillRect(x, y, s + 0.5, s + 0.5); } }
+    for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) { const bead = C.byCode(data[r][c]), x = 4 + r * s, y = 4 + c * s, hex = bead.hex; if (s >= 5) C.drawBead(g, x, y, s, s, hex, bead.finish); else { g.fillStyle = hex; g.fillRect(x, y, s + 0.5, s + 0.5); } }
   };
 
   /* الگوی خودت: با حروف بالا بنویس (هر حرف = یک رنگ از جدول K) و اینجا اضافه کن، مثل:
@@ -243,7 +243,7 @@ try {
     /* پاک‌کردن خانه پیش از هر نقاشی؛ وگرنه منجوقِ پاک‌شده روی بوم می‌ماند */
     g.fillStyle = "#FFFFFF";
     g.fillRect(x, y, cw + 0.5, ch + 0.5);
-    if (code) { C.drawBead(g, x + 1, y + 1, cw - 1, ch - 1, C.byCode(code).hex); return; }
+    if (code) { const bead = C.byCode(code); C.drawBead(g, x + 1, y + 1, cw - 1, ch - 1, bead.hex, bead.finish); return; }
     /* خانه‌ی خالی: نقطه‌ی محو روی بوم سفید، مثل دفتر الگو */
     const rad = clamp(Math.min(cw, ch) * 0.1, 0.7, 1.6);
     g.fillStyle = "#CFC7DA";
@@ -625,7 +625,7 @@ try {
     g.font = "14px 'Vazir',Tahoma,sans-serif"; g.textAlign = "left"; g.textBaseline = "middle";
     rows.forEach(([code, n], i) => {
       const p = C.byCode(code), y = 30 + i * 30;
-      C.drawBead(g, gw + 24, y - 10, 26, 20, p.hex); g.fillStyle = "#1B1226"; g.fillText(`${p.code}  ${p.name}  ${C.faNum(n)} دونه`, gw + 60, y);
+      C.drawBead(g, gw + 24, y - 10, 26, 20, p.hex, p.finish); g.fillStyle = "#1B1226"; g.fillText(`${p.code}  ${p.name}  ${C.faNum(n)} دونه`, gw + 60, y);
     });
     const a = document.createElement("a"); a.download = "cara-pattern.png"; a.href = c.toDataURL("image/png"); a.click();
   };
@@ -699,7 +699,7 @@ try {
     for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) {
       const code = data[r][c]; if (!code) continue;
       const x = x0 + (FLIP_ROWS ? h - 1 - r : r) * s, y = y0 + (FLIP_COLS ? w - 1 - c : c) * s, hex = C.byCode(code).hex;
-      if (s >= 5) C.drawBead(g, x, y, s, s, hex); else { g.fillStyle = hex; g.fillRect(x, y, s + 0.6, s + 0.6); }
+      if (s >= 5) C.drawBead(g, x, y, s, s, hex, C.byCode(code).finish); else { g.fillStyle = hex; g.fillRect(x, y, s + 0.6, s + 0.6); }
     }
     const sh = g.createLinearGradient(0, y0, 0, y0 + wid);
     sh.addColorStop(0, "rgba(255,255,255,.45)"); sh.addColorStop(0.3, "rgba(255,255,255,0)"); sh.addColorStop(0.65, "rgba(0,0,0,0)"); sh.addColorStop(1, "rgba(0,0,0,.42)");
@@ -861,7 +861,7 @@ try {
     const s = clamp(Math.floor((box.clientWidth - 24) / IW), 4, 14), d = devicePixelRatio || 1, W = IW * s, H = IH * s;
     cv.width = W * d; cv.height = H * d; cv.style.width = W + "px"; cv.style.height = H + "px";
     const g = cv.getContext("2d"); g.setTransform(d, 0, 0, d, 0, 0); g.fillStyle = "#EFECF4"; g.fillRect(0, 0, W, H);
-    for (let y = 0; y < IH; y++) for (let x = 0; x < IW; x++) { const c = im[y][x]; if (c) C.drawBead(g, x * s, y * s, s, s, C.byCode(c).hex); }
+    for (let y = 0; y < IH; y++) for (let x = 0; x < IW; x++) { const c = im[y][x]; if (c) { const bead = C.byCode(c); C.drawBead(g, x * s, y * s, s, s, bead.hex, bead.finish); } }
   }
   let deb;
   function refresh() { clearTimeout(deb); deb = setTimeout(update, 120); }
