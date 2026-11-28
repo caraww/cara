@@ -1,5 +1,16 @@
 /* منبع واحد رنگ‌ها: هم مرورگر و هم server.js از همین فایل می‌خوانند.
    کدهای hex برای رنگ‌هایی که عکس واقعی دارند (پوشه‌ی img/beads) از روی همان عکس‌ها گرفته شده؛ بقیه هنوز تقریبی‌اند. */
+/* سطح منجوق از روی اسمش: شفاف، مات، براق، ابریشمی، متالیک، صدفی.
+   پالت نباید فقط مربع رنگی باشد؛ «قرمز شفاف» و «قرمز آجری» با همین سطح از هم جدا دیده می‌شوند. */
+const finishOf = (name) =>
+  /شفاف/.test(name) ? "glass"
+  : /مات/.test(name) ? "matte"
+  : /ابریشمی/.test(name) ? "satin"
+  : /متالیک|نقره/.test(name) ? "metal"
+  : /صدفی/.test(name) ? "pearl"
+  : /براق/.test(name) ? "gloss"
+  : "solid";
+
 const CARA_PALETTE = [
   ["FGB0370", "سفید ابریشمی", "#E9E6E3"],
   ["DB0010", "مشکی براق", "#171717"],
@@ -40,7 +51,7 @@ const CARA_PALETTE = [
   ["DB0209", "خاکستری صدفی", "#BCC0CE"],
   ["DB1139", "خاکستری دودی", "#9595A0"],
   ["DB2119", "قرمز آجری", "#8D312A"],
-].map(([code, name, hex]) => ({ code, name, hex }));
+].map(([code, name, hex]) => ({ code, name, hex, finish: finishOf(name) }));
 
 /* BEAD_ASPECT = عرض خانه ÷ ارتفاع خانه. اگر بافتت با پهلوی منجوق فرق دارد این عدد را عوض کن (مثلاً 0.8) */
 const CARA_LIMITS = {
@@ -138,24 +149,60 @@ if (typeof module !== "undefined") {
       return false;
     }
   }
-  function drawBead(g, x, y, w, h, hex) {
+  function drawBead(g, x, y, w, h, hex, finish = "solid") {
     const r = Math.min(w, h) * 0.28;
     g.fillStyle = hex;
     g.beginPath();
     g.roundRect(x, y, w, h, r);
     g.fill();
+    /* سطح منجوق: شفاف نور را از خودش رد می‌کند، مات بازتاب تیز ندارد */
+    if ((finish === "glass" || finish === "matte") && Math.min(w, h) >= 8) {
+      const body = g.createLinearGradient(x, y, x, y + h);
+      if (finish === "glass") {
+        body.addColorStop(0, "rgba(255,255,255,.34)");
+        body.addColorStop(.46, "rgba(255,255,255,.06)");
+        body.addColorStop(.8, "rgba(0,0,0,.12)");
+        body.addColorStop(1, "rgba(255,255,255,.28)");
+      } else {
+        body.addColorStop(0, "rgba(255,255,255,.1)");
+        body.addColorStop(1, "rgba(0,0,0,.07)");
+      }
+      g.fillStyle = body;
+      g.fill();
+    }
     /* منجوق روشن روی بوم سفید محو می‌شود؛ یک خط دور نازک می‌گیرد */
     const n = parseInt(hex.replace("#", ""), 16);
     if ((n >> 16 & 255) * 0.299 + (n >> 8 & 255) * 0.587 + (n & 255) * 0.114 > 228) {
       g.strokeStyle = "rgba(74, 58, 90, .3)";
       g.lineWidth = 1;
       g.stroke();
+    } else if (finish !== "solid" && finish !== "glass") {
+      g.strokeStyle = "rgba(0,0,0,.12)";
+      g.lineWidth = Math.max(1, Math.min(w, h) * 0.02);
+      g.stroke();
     }
-    g.fillStyle = "rgba(255,255,255,.38)";
+    if (finish === "metal") {
+      const sheen = g.createLinearGradient(x, y, x, y + h);
+      sheen.addColorStop(0, "rgba(255,255,255,.18)");
+      sheen.addColorStop(.32, "rgba(255,255,255,.5)");
+      sheen.addColorStop(.5, "rgba(255,255,255,.12)");
+      sheen.addColorStop(1, "rgba(0,0,0,.28)");
+      g.fillStyle = sheen;
+      g.fill();
+    }
+    const hi = finish === "matte" ? 0.16 : finish === "glass" ? 0.5 : finish === "gloss" ? 0.46 : 0.38;
+    const hiW = finish === "glass" ? 0.64 : 0.76;
+    g.fillStyle = `rgba(255,255,255,${hi})`;
     g.beginPath();
-    g.roundRect(x + w * 0.12, y + h * 0.1, w * 0.76, h * 0.26, r);
+    g.roundRect(x + w * 0.12, y + h * 0.1, w * hiW, h * (finish === "glass" ? 0.2 : 0.26), r);
     g.fill();
-    g.fillStyle = "rgba(0,0,0,.16)";
+    if (finish === "pearl") {
+      g.fillStyle = "rgba(255,255,255,.22)";
+      g.beginPath();
+      g.roundRect(x + w * 0.08, y + h * 0.06, w * 0.84, h * 0.5, r);
+      g.fill();
+    }
+    g.fillStyle = finish === "matte" ? "rgba(0,0,0,.1)" : "rgba(0,0,0,.16)";
     g.beginPath();
     g.roundRect(x + w * 0.1, y + h * 0.72, w * 0.8, h * 0.2, r * 0.6);
     g.fill();
@@ -187,5 +234,6 @@ if (typeof module !== "undefined") {
     savePattern,
     drawBead,
     drawPattern,
+    finishOf,
   });
 }

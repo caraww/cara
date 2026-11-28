@@ -68,7 +68,7 @@ try {
     const h = data.length, w = data[0].length, d = Math.min(2, devicePixelRatio || 1), s = Math.min(12, (W - 8) / h), H = w * s + 8;
     cv.width = W * d; cv.height = H * d; cv.style.width = W + "px"; cv.style.height = H + "px";
     const g = cv.getContext("2d"); g.setTransform(d, 0, 0, d, 0, 0);
-    for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) { const x = 4 + r * s, y = 4 + c * s, hex = C.byCode(data[r][c]).hex; if (s >= 5) C.drawBead(g, x, y, s, s, hex); else { g.fillStyle = hex; g.fillRect(x, y, s + 0.5, s + 0.5); } }
+    for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) { const bead = C.byCode(data[r][c]), x = 4 + r * s, y = 4 + c * s, hex = bead.hex; if (s >= 5) C.drawBead(g, x, y, s, s, hex, bead.finish); else { g.fillStyle = hex; g.fillRect(x, y, s + 0.5, s + 0.5); } }
   };
 
   /* الگوی خودت: با حروف بالا بنویس (هر حرف = یک رنگ از جدول K) و اینجا اضافه کن، مثل:
@@ -142,7 +142,14 @@ try {
   C.palette.forEach((p) => {
     const b = document.createElement("button");
     b.className = "swatch"; b.style.setProperty("--c", p.hex); b.title = `${p.code} — ${p.name}`;
-    b.setAttribute("aria-label", b.title); b.setAttribute("aria-pressed", p.code === sel); b.dataset.code = p.code;
+    /* عکس واقعی منجوق: چند رنگ (مثل کرم‌ها و قرمزها) فقط با کد رنگی از هم جدا نمی‌شن */
+    const thumb = document.createElement("img");
+    thumb.src = `img/beads/thumbs/${p.code}.webp`;
+    thumb.alt = ""; thumb.width = 96; thumb.height = 96; thumb.loading = "lazy"; thumb.decoding = "async";
+    thumb.onload = () => b.classList.add("has-photo");
+    thumb.onerror = () => thumb.remove();
+    b.appendChild(thumb);
+    b.setAttribute("aria-label", b.title); b.setAttribute("aria-pressed", p.code === sel); b.dataset.code = p.code; b.dataset.finish = p.finish || "solid";
     b.onclick = () => selectColor(p.code);
     pal.appendChild(b);
   });
@@ -158,8 +165,17 @@ try {
     const p = C.byCode(sel);
     pal.querySelectorAll(".swatch").forEach((b) => b.setAttribute("aria-pressed", b.dataset.code === sel));
     $("curDot").style.setProperty("--c", p.hex); $("curName").textContent = p.name; $("curCode").textContent = p.code;
+    const ph = $("curPhoto");
+    if (ph) {
+      const file = (CARA.beadFiles && CARA.beadFiles[p.code]) || `${p.code}.jpg`;
+      ph.onerror = () => { ph.hidden = true; if ($("curDot")) $("curDot").hidden = false; };
+      ph.hidden = false;
+      ph.alt = `منجوق ${p.name}، کد ${p.code}`;
+      ph.src = `img/beads/${file}`;
+      $("curDot").hidden = true;
+    }
     const rc = $("recent");
-    if (rc) rc.innerHTML = recent.map((c) => { const q = C.byCode(c); return `<button type="button" class="sp-rc" data-code="${c}" style="--c:${q.hex}" title="${c} — ${q.name}" aria-label="${c} ${q.name}" aria-pressed="${c === sel}"></button>`; }).join("");
+    if (rc) rc.innerHTML = recent.map((c) => { const q = C.byCode(c); return `<button type="button" class="sp-rc" data-code="${c}" data-finish="${q.finish || "solid"}" style="--c:${q.hex}" title="${c} — ${q.name}" aria-label="${c} ${q.name}" aria-pressed="${c === sel}"><img src="img/beads/thumbs/${c}.webp" alt="" width="96" height="96" loading="lazy" decoding="async" onerror="this.remove()"></button>`; }).join("");
     document.dispatchEvent(new CustomEvent("studio:color"));
   }
   if ($("recent")) $("recent").addEventListener("click", (e) => { const b = e.target.closest("[data-code]"); if (b) selectColor(b.dataset.code); });
@@ -227,7 +243,7 @@ try {
     /* پاک‌کردن خانه پیش از هر نقاشی؛ وگرنه منجوقِ پاک‌شده روی بوم می‌ماند */
     g.fillStyle = "#FFFFFF";
     g.fillRect(x, y, cw + 0.5, ch + 0.5);
-    if (code) { C.drawBead(g, x + 1, y + 1, cw - 1, ch - 1, C.byCode(code).hex); return; }
+    if (code) { const bead = C.byCode(code); C.drawBead(g, x + 1, y + 1, cw - 1, ch - 1, bead.hex, bead.finish); return; }
     /* خانه‌ی خالی: نقطه‌ی محو روی بوم سفید، مثل دفتر الگو */
     const rad = clamp(Math.min(cw, ch) * 0.1, 0.7, 1.6);
     g.fillStyle = "#CFC7DA";
@@ -546,7 +562,7 @@ try {
     $("total").textContent = total ? `${C.faNum(total)} دونه` : "—"; $("dimText").innerHTML = `<bdi dir="ltr">${C.faNum(w)} × ${C.faNum(h)}</bdi>`;
     $("warn").hidden = w <= L.WARN_W;
     $("colors").innerHTML = Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([code, n]) => {
-      const p = C.byCode(code); return `<div class="color-row" data-code="${code}" role="button" tabindex="0" title="انتخاب این رنگ"><i class="dot" style="--c:${p.hex}"></i><small>${p.code} · ${p.name}</small><b>${C.faNum(n)}</b></div>`;
+      const p = C.byCode(code); return `<div class="color-row" data-code="${code}" role="button" tabindex="0" title="انتخاب این رنگ"><i class="dot" data-finish="${p.finish || "solid"}" style="--c:${p.hex}"></i><small>${p.code} · ${p.name}</small><b>${C.faNum(n)}</b></div>`;
     }).join("");
     drawWrist();
     return { counts, total };
@@ -609,7 +625,7 @@ try {
     g.font = "14px 'Vazir',Tahoma,sans-serif"; g.textAlign = "left"; g.textBaseline = "middle";
     rows.forEach(([code, n], i) => {
       const p = C.byCode(code), y = 30 + i * 30;
-      C.drawBead(g, gw + 24, y - 10, 26, 20, p.hex); g.fillStyle = "#1B1226"; g.fillText(`${p.code}  ${p.name}  ${C.faNum(n)} دونه`, gw + 60, y);
+      C.drawBead(g, gw + 24, y - 10, 26, 20, p.hex, p.finish); g.fillStyle = "#1B1226"; g.fillText(`${p.code}  ${p.name}  ${C.faNum(n)} دونه`, gw + 60, y);
     });
     const a = document.createElement("a"); a.download = "cara-pattern.png"; a.href = c.toDataURL("image/png"); a.click();
   };
@@ -683,7 +699,7 @@ try {
     for (let r = 0; r < h; r++) for (let c = 0; c < w; c++) {
       const code = data[r][c]; if (!code) continue;
       const x = x0 + (FLIP_ROWS ? h - 1 - r : r) * s, y = y0 + (FLIP_COLS ? w - 1 - c : c) * s, hex = C.byCode(code).hex;
-      if (s >= 5) C.drawBead(g, x, y, s, s, hex); else { g.fillStyle = hex; g.fillRect(x, y, s + 0.6, s + 0.6); }
+      if (s >= 5) C.drawBead(g, x, y, s, s, hex, C.byCode(code).finish); else { g.fillStyle = hex; g.fillRect(x, y, s + 0.6, s + 0.6); }
     }
     const sh = g.createLinearGradient(0, y0, 0, y0 + wid);
     sh.addColorStop(0, "rgba(255,255,255,.45)"); sh.addColorStop(0.3, "rgba(255,255,255,0)"); sh.addColorStop(0.65, "rgba(0,0,0,0)"); sh.addColorStop(1, "rgba(0,0,0,.42)");
@@ -845,7 +861,7 @@ try {
     const s = clamp(Math.floor((box.clientWidth - 24) / IW), 4, 14), d = devicePixelRatio || 1, W = IW * s, H = IH * s;
     cv.width = W * d; cv.height = H * d; cv.style.width = W + "px"; cv.style.height = H + "px";
     const g = cv.getContext("2d"); g.setTransform(d, 0, 0, d, 0, 0); g.fillStyle = "#EFECF4"; g.fillRect(0, 0, W, H);
-    for (let y = 0; y < IH; y++) for (let x = 0; x < IW; x++) { const c = im[y][x]; if (c) C.drawBead(g, x * s, y * s, s, s, C.byCode(c).hex); }
+    for (let y = 0; y < IH; y++) for (let x = 0; x < IW; x++) { const c = im[y][x]; if (c) { const bead = C.byCode(c); C.drawBead(g, x * s, y * s, s, s, bead.hex, bead.finish); } }
   }
   let deb;
   function refresh() { clearTimeout(deb); deb = setTimeout(update, 120); }

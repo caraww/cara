@@ -9,7 +9,7 @@ const paletteSource = fs.readFileSync(path.join(__dirname, "../js/palette.js"), 
 /* CARA.palette entries are {code,name,hex} objects; reading them as arrays
    (p[0]/p[2]) made every cell fall back to the purple placeholder. */
 test("saved-design thumbnails resolve bead colors through CARA.byCode", () => {
-  assert.match(paletteSource, /\.map\(\(\[code, name, hex\]\) => \(\{ code, name, hex \}\)\)/);
+  assert.match(paletteSource, /\.map\(\(\[code, name, hex\]\) => \(\{ code, name, hex, finish: finishOf\(name\) \}\)\)/);
   assert.match(accountSource, /CARA\?\.byCode\?\.\(code\)\?\.hex/);
   assert.doesNotMatch(accountSource, /palette\?\.find\(\(p\) => p\[0\]/);
 });

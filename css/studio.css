@@ -221,6 +221,64 @@ button, input, select, textarea{
   outline-offset: 2px;
 }
 
+.swatch{ overflow: hidden; }
+
+.swatch > img{
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+/* عکس خودش سوراخ منجوق را دارد؛ سوراخ CSS رویش نمی‌نشیند */
+.swatch.has-photo::before{ display: none; }
+
+/* سطح منجوق روی پالت: شفاف نور را رد می‌کند، مات بازتاب تیز ندارد، براق برق می‌زند.
+   بدون این تفکیک، دو رنگ نزدیک مثل «قرمز شفاف» و «قرمز آجری» یکسان دیده می‌شوند. */
+:is(.swatch, .dot, .sp-rc, .current i)[data-finish="glass"]{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.42) 0%, rgba(255,255,255,.06) 44%, rgba(0,0,0,.14) 76%, rgba(255,255,255,.26) 100%),
+    var(--c);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.4), inset 0 -4px 7px rgba(0,0,0,.14);
+}
+
+:is(.swatch, .dot, .sp-rc, .current i)[data-finish="matte"]{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.13), rgba(0,0,0,.09)),
+    var(--c);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.18), inset 0 -2px 3px rgba(0,0,0,.12);
+}
+
+:is(.swatch, .dot, .sp-rc, .current i)[data-finish="gloss"]{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.46) 0%, rgba(255,255,255,.06) 34%, rgba(255,255,255,0) 46%, rgba(0,0,0,.2) 100%),
+    var(--c);
+  box-shadow: inset 0 2px 0 rgba(255,255,255,.55), inset 0 -4px 6px rgba(0,0,0,.24);
+}
+
+:is(.swatch, .dot, .sp-rc, .current i)[data-finish="satin"]{
+  background:
+    linear-gradient(115deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.3) 38%, rgba(255,255,255,.04) 62%, rgba(0,0,0,.14) 100%),
+    var(--c);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.16), inset 0 -3px 5px rgba(0,0,0,.16);
+}
+
+:is(.swatch, .dot, .sp-rc, .current i)[data-finish="metal"]{
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.2) 0%, rgba(255,255,255,.62) 28%, rgba(255,255,255,.1) 46%, rgba(0,0,0,.24) 84%, rgba(255,255,255,.24) 100%),
+    var(--c);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.28), inset 0 -3px 5px rgba(0,0,0,.2);
+}
+
+:is(.swatch, .dot, .sp-rc, .current i)[data-finish="pearl"]{
+  background:
+    radial-gradient(120% 80% at 32% 22%, rgba(255,255,255,.6) 0%, rgba(255,255,255,.1) 52%, rgba(255,255,255,0) 70%),
+    linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.1)),
+    var(--c);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.5), inset 0 -3px 5px rgba(0,0,0,.14);
+}
+
 .current{
   display: flex;
   gap: 10px;
@@ -242,6 +300,18 @@ button, input, select, textarea{
     inset 0 2px rgba(255, 255, 255, 0.45),
     inset 0 -3px 4px rgba(0, 0, 0, 0.2);
 }
+
+.current__photo{
+  width: 40px;
+  height: 32px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex: none;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,.16), inset 0 0 0 1px rgba(0,0,0,.06);
+}
+
+.current :is(i, img)[hidden]{ display: none !important; }
 
 .current small{
   display: block;

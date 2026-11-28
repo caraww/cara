@@ -158,9 +158,10 @@
 /* ===== رنگ‌های اخیر، بزرگ‌نمایی، کادر انتخاب ===== */
 .sp-recent{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;min-height:26px}
 .sp-recent:empty{display:none}
-.sp-rc{width:28px;height:22px;padding:0;border:0;border-radius:7px;background:var(--c);cursor:pointer;
+.sp-rc{width:28px;height:22px;padding:0;border:0;border-radius:7px;background:var(--c);cursor:pointer;overflow:hidden;
   box-shadow:inset 0 2px rgba(255,255,255,.45),inset 0 -3px 4px rgba(0,0,0,.2)}
 .sp-rc[aria-pressed="true"]{outline:3px solid var(--ink);outline-offset:2px}
+.sp-rc img{display:block;width:100%;height:100%;object-fit:cover}
 .sp-zoom{display:inline-flex;align-items:center;gap:8px}
 .sp-zoom input{width:120px;accent-color:var(--accent)}
 .sp-zoom output{min-width:44px;text-align:center;font-variant-numeric:tabular-nums}
