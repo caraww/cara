@@ -142,7 +142,14 @@ try {
   C.palette.forEach((p) => {
     const b = document.createElement("button");
     b.className = "swatch"; b.style.setProperty("--c", p.hex); b.title = `${p.code} — ${p.name}`;
-    b.setAttribute("aria-label", b.title); b.setAttribute("aria-pressed", p.code === sel); b.dataset.code = p.code;
+    /* عکس واقعی منجوق: چند رنگ (مثل کرم‌ها و قرمزها) فقط با کد رنگی از هم جدا نمی‌شن */
+    const thumb = document.createElement("img");
+    thumb.src = `img/beads/thumbs/${p.code}.webp`;
+    thumb.alt = ""; thumb.width = 96; thumb.height = 96; thumb.loading = "lazy"; thumb.decoding = "async";
+    thumb.onload = () => b.classList.add("has-photo");
+    thumb.onerror = () => thumb.remove();
+    b.appendChild(thumb);
+    b.setAttribute("aria-label", b.title); b.setAttribute("aria-pressed", p.code === sel); b.dataset.code = p.code; b.dataset.finish = p.finish || "solid";
     b.onclick = () => selectColor(p.code);
     pal.appendChild(b);
   });
@@ -158,8 +165,17 @@ try {
     const p = C.byCode(sel);
     pal.querySelectorAll(".swatch").forEach((b) => b.setAttribute("aria-pressed", b.dataset.code === sel));
     $("curDot").style.setProperty("--c", p.hex); $("curName").textContent = p.name; $("curCode").textContent = p.code;
+    const ph = $("curPhoto");
+    if (ph) {
+      const file = (CARA.beadFiles && CARA.beadFiles[p.code]) || `${p.code}.jpg`;
+      ph.onerror = () => { ph.hidden = true; if ($("curDot")) $("curDot").hidden = false; };
+      ph.hidden = false;
+      ph.alt = `منجوق ${p.name}، کد ${p.code}`;
+      ph.src = `img/beads/${file}`;
+      $("curDot").hidden = true;
+    }
     const rc = $("recent");
-    if (rc) rc.innerHTML = recent.map((c) => { const q = C.byCode(c); return `<button type="button" class="sp-rc" data-code="${c}" style="--c:${q.hex}" title="${c} — ${q.name}" aria-label="${c} ${q.name}" aria-pressed="${c === sel}"></button>`; }).join("");
+    if (rc) rc.innerHTML = recent.map((c) => { const q = C.byCode(c); return `<button type="button" class="sp-rc" data-code="${c}" data-finish="${q.finish || "solid"}" style="--c:${q.hex}" title="${c} — ${q.name}" aria-label="${c} ${q.name}" aria-pressed="${c === sel}"><img src="img/beads/thumbs/${c}.webp" alt="" width="96" height="96" loading="lazy" decoding="async" onerror="this.remove()"></button>`; }).join("");
     document.dispatchEvent(new CustomEvent("studio:color"));
   }
   if ($("recent")) $("recent").addEventListener("click", (e) => { const b = e.target.closest("[data-code]"); if (b) selectColor(b.dataset.code); });
@@ -546,7 +562,7 @@ try {
     $("total").textContent = total ? `${C.faNum(total)} دونه` : "—"; $("dimText").innerHTML = `<bdi dir="ltr">${C.faNum(w)} × ${C.faNum(h)}</bdi>`;
     $("warn").hidden = w <= L.WARN_W;
     $("colors").innerHTML = Object.entries(counts).sort((a, b) => b[1] - a[1]).map(([code, n]) => {
-      const p = C.byCode(code); return `<div class="color-row" data-code="${code}" role="button" tabindex="0" title="انتخاب این رنگ"><i class="dot" style="--c:${p.hex}"></i><small>${p.code} · ${p.name}</small><b>${C.faNum(n)}</b></div>`;
+      const p = C.byCode(code); return `<div class="color-row" data-code="${code}" role="button" tabindex="0" title="انتخاب این رنگ"><i class="dot" data-finish="${p.finish || "solid"}" style="--c:${p.hex}"></i><small>${p.code} · ${p.name}</small><b>${C.faNum(n)}</b></div>`;
     }).join("");
     drawWrist();
     return { counts, total };

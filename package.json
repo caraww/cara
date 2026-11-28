@@ -16,6 +16,7 @@
     "check:seo": "node tools/seo-audit.js",
     "build:home-css": "node tools/build-home-css.js",
     "build:home-js": "node tools/build-home-js.js",
+    "build:bead-thumbs": "node tools/build-bead-thumbs.js",
     "package:static": "node tools/package-static.js",
     "visual:check": "node tools/visual-audit.js",
     "check:cache": "node tools/asset-versions.js check"
