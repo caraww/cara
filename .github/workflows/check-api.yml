@@ -34,11 +34,13 @@ jobs:
           done
           curl -sS --max-time 25 "https://caraw.ir/bracelet/%DA%A9%D9%88%DA%A9%D8%A7.html" | grep -q 'event:"view_item"' \
             || { echo "::error::product page has no view_item"; fail=1; }
-          curl -sS --max-time 25 "https://caraw.ir/js/analytics.js?v=2" | grep -q "begin_checkout" \
+          curl -sS --max-time 25 "https://caraw.ir/js/analytics.js?v=20261128-cache1" | grep -q "begin_checkout" \
             || { echo "::error::live analytics.js has no ecommerce helper"; fail=1; }
           for page in "track.html" "customers.html" "admin.html"; do
             if curl -sS --max-time 25 "https://caraw.ir/$page" | grep -q "GTM-"; then
               echo "::error::$page must stay without analytics"; fail=1
             fi
           done
+          curl -sS --max-time 25 "https://caraw.ir/index.html" | grep -q "?v=20261128-cache1" \
+            || { echo "::error::live homepage still serves old cache tokens"; fail=1; }
           exit $fail
